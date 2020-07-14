@@ -1,0 +1,116 @@
+import net.minecraftforge.gradle.common.util.ModConfig
+import net.minecraftforge.gradle.common.util.RunConfig
+
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+    }
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'maven-publish'
+
+version = "${mod_version}"
+def env = System.getenv()
+if (env.BUILD_NUMBER) {
+    version = version + "+" + "${env.BUILD_NUMBER}"
+}
+group = "de.melanx.${modid}"
+archivesBaseName = "${modid}-${mc_version}"
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
+minecraft {
+    mappings("snapshot", mappings_version)
+//     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    createRunConfig("client")
+    createRunConfig("server")
+    createRunConfig("data", { RunConfig run ->
+        run.args "--mod", modid, "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources")
+    })
+}
+
+def createRunConfig(String name, Closure extra = {}) {
+    minecraft.runs.create(name) { RunConfig run ->
+        run.workingDirectory project.file("run_" + name)
+        run.property "forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP"
+        run.property "forge.logging.console.level", "debug"
+        run.mods.create(modid) { ModConfig mod ->
+            source sourceSets.main
+        }
+    }.with(extra)
+}
+
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : "modid",
+                "Specification-Vendor"    : "MelanX",
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${version}",
+                "Implementation-Vendor"   : "MelanX",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier 'deobf'
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives deobfJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = project.group
+            artifactId = project.archivesBaseName
+            version = project.version
+            artifact jar
+            artifact sourcesJar
+            artifact deobfJar
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url "/var/www/maven"
+        }
+    }
+}
+
+repositories {
+    maven {
+        name = "JEI"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+}

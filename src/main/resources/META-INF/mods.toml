@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+issueTrackerURL="http://www.github.com/MelanX/modid/issues/"
+
+[[mods]]
+modId="modid"
+version="${file.jarVersion}"
+displayName="Mod ID"
+updateJSONURL="https://raw.githubusercontent.com/MelanX/mod-updatechecker-files/master/modid.json"
+displayURL="www.curseforge.com/members/melanx/"
+#logoFile="modid.png"
+credits=""
+authors="MelanX"
+description='''
+
+'''
+
+[[dependencies.modid]]
+    modId="forge"
+    mandatory=true
+    versionRange="[31.2,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.modid]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"
