@@ -3,7 +3,7 @@ loaderVersion="[32,)"
 issueTrackerURL="http://www.github.com/MelanX/botanical-machinery/issues/"
 
 [[mods]]
-modId="modid"
+modId="botanicalmachinery"
 version="${file.jarVersion}"
 displayName="Botanical Machinery"
 updateJSONURL="https://raw.githubusercontent.com/MelanX/mod-updatechecker-files/master/botanicalmachinery.json"
@@ -12,7 +12,7 @@ displayURL="www.curseforge.com/members/melanx/"
 credits=""
 authors="MelanX"
 description='''
-
+A Minecraft addon mod for Botania which makes automation easier.
 '''
 
 [[dependencies.botanicalmachinery]]
