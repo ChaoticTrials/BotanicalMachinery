@@ -108,9 +108,26 @@ repositories {
         name = "JEI"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+    maven {
+        name = "botania"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        name = "curios"
+        url = "https://maven.theillusivec4.top/"
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+
+    compile fg.deobf("vazkii.botania:Botania:${botania_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-${mc_version}-${curios_version}")
+    compile fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 }

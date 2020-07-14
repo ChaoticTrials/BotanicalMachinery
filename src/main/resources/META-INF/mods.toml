@@ -23,6 +23,13 @@ description='''
     side="BOTH"
 
 [[dependencies.botanicalmachinery]]
+    modId="botania"
+    mandatory=true
+    versionRange="[r1.16,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.botanicalmachinery]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.16.1,)"
