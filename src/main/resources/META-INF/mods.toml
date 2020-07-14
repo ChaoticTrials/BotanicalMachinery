@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[32,)"
+loaderVersion="[31,)"
 issueTrackerURL="http://www.github.com/MelanX/botanical-machinery/issues/"
 
 [[mods]]
@@ -18,20 +18,20 @@ A Minecraft addon mod for Botania which makes automation easier.
 [[dependencies.botanicalmachinery]]
     modId="forge"
     mandatory=true
-    versionRange="[32,)"
+    versionRange="[31.2.0,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.botanicalmachinery]]
     modId="botania"
     mandatory=true
-    versionRange="[r1.16,)"
+    versionRange="[r1.15-387, r1.16)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.botanicalmachinery]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.1,)"
+    versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"
