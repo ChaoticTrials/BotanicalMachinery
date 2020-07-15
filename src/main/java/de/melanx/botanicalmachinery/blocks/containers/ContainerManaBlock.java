@@ -19,7 +19,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class ContainerManaBlock extends Container {
 
-    private final TileEntity tile;
+    public final TileEntity tile;
     private final PlayerEntity player;
     private final IItemHandler playerInventory;
 

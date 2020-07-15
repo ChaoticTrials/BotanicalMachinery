@@ -1,23 +1,26 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
+import com.google.common.base.Predicates;
 import com.mojang.blaze3d.systems.RenderSystem;
+import de.melanx.botanicalmachinery.blocks.BlockManaBlock;
 import de.melanx.botanicalmachinery.core.Registration;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.DyeColor;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.lwjgl.opengl.GL11;
+import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.api.mana.IKeyLocked;
-import vazkii.botania.api.mana.IManaPool;
 import vazkii.botania.api.mana.IThrottledPacket;
 import vazkii.botania.api.mana.spark.ISparkAttachable;
 import vazkii.botania.api.mana.spark.ISparkEntity;
@@ -31,13 +34,24 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileManaBlock extends TileMod implements IManaPool, IKeyLocked, ISparkAttachable, IThrottledPacket, ITickableTileEntity {
+public class TileManaBlock extends TileMod implements IKeyLocked, ISparkAttachable, IThrottledPacket, ITickableTileEntity {
 
     public static boolean enoughMana = true;
-    private final IItemHandler itemHandler = createHandler();
-    private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
+    private final ItemStackHandler itemHandler = createHandler();
+
+    private final LazyOptional<ItemStackHandler> handler = LazyOptional.of(() -> itemHandler);
     public int manaCap = 10_000_000;
     private int mana;
+    private String inputKey = "";
+    private final String outputKey = "";
+
+    private boolean sendPacket = false;
+
+    private static final String TAG_INV = "inv";
+    private static final String TAG_MANA = "mana";
+    private static final String TAG_MANA_CAP = "manaCap";
+    private static final String TAG_INPUT_KEY = "inputKey";
+    private static final String TAG_OUTPUT_KEY = "outputKey";
 
     public TileManaBlock() {
         super(Registration.TILE_MANA_BLOCK.get());
@@ -48,7 +62,7 @@ public class TileManaBlock extends TileMod implements IManaPool, IKeyLocked, ISp
         ItemStack block = new ItemStack(getBlockState().getBlock());
         String name = block.getDisplayName().getString();
         int color = 0x4444FF;
-        HUDHandler.drawSimpleManaHUD(color, getCurrentMana(), manaCap, name);
+        HUDHandler.drawSimpleManaHUD(color, this.getCurrentMana(), this.manaCap, name);
 
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -59,34 +73,13 @@ public class TileManaBlock extends TileMod implements IManaPool, IKeyLocked, ISp
         RenderSystem.disableBlend();
     }
 
-    private IItemHandler createHandler() {
+    private ItemStackHandler createHandler() {
         return new ItemStackHandler(64) {
 
             @Override
             protected void onContentsChanged(int slot) {
                 markDirty();
             }
-
-            @Override
-            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return stack.getDamage() <= 0 && stack.getItem() != Blocks.SPAWNER.asItem();
-            }
-
-//            @Nonnull
-//            @Override
-//            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-//                if (stack.getDamage() > 0 && slot != 0) {
-//                    return stack;
-//                }
-//                return super.insertItem(slot, stack, simulate);
-//            }
-//
-//            @Nonnull
-//            @Override
-//            public ItemStack extractItem(int slot, int amount, boolean simulate) {
-//                if (slot < 2 && simulate) return ItemStack.EMPTY;
-//                return super.extractItem(slot, amount, simulate);
-//            }
         };
     }
 
@@ -97,6 +90,25 @@ public class TileManaBlock extends TileMod implements IManaPool, IKeyLocked, ISp
             return handler.cast();
         }
         return super.getCapability(cap, side);
+    }
+
+    @Override
+    public void writePacketNBT(CompoundNBT cmp) {
+        cmp.put(TAG_INV, this.itemHandler.serializeNBT());
+        cmp.putInt(TAG_MANA, this.mana);
+        cmp.putInt(TAG_MANA_CAP, this.manaCap);
+        cmp.putString(TAG_INPUT_KEY, this.inputKey);
+        cmp.putString(TAG_OUTPUT_KEY, this.outputKey);
+    }
+
+    @Override
+    public void readPacketNBT(CompoundNBT cmp) {
+        this.itemHandler.deserializeNBT(cmp.getCompound(TAG_INV));
+        this.mana = cmp.getInt(TAG_MANA);
+        this.manaCap = cmp.getInt(TAG_MANA_CAP);
+
+        if (cmp.contains(TAG_INPUT_KEY)) this.inputKey = cmp.getString(TAG_INPUT_KEY);
+        if (cmp.contains(TAG_OUTPUT_KEY)) this.inputKey = cmp.getString(TAG_OUTPUT_KEY);
     }
 
     public IManaInfusionRecipe getMatchingRecipe(@Nonnull ItemStack stack, @Nonnull ItemStack cat) {
@@ -141,56 +153,48 @@ public class TileManaBlock extends TileMod implements IManaPool, IKeyLocked, ISp
                     if (!stack.isEmpty()) enoughMana = false;
                 }
             }
+            if (sendPacket) {
+                VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
+                sendPacket = false;
+            }
         }
     }
 
     @Override
     public String getInputKey() {
-        return null;
+        return this.inputKey;
     }
 
     @Override
     public String getOutputKey() {
-        return null;
-    }
-
-    @Override
-    public boolean isOutputtingPower() {
-        return false;
-    }
-
-    @Override
-    public DyeColor getColor() {
-        return null;
-    }
-
-    @Override
-    public void setColor(DyeColor dyeColor) {
-
+        return this.outputKey;
     }
 
     @Override
     public void markDispatchable() {
-
+        sendPacket = true;
     }
 
     @Override
     public boolean canAttachSpark(ItemStack itemStack) {
-        return false;
+        return true;
     }
 
     @Override
-    public void attachSpark(ISparkEntity iSparkEntity) {
-
-    }
+    public void attachSpark(ISparkEntity iSparkEntity) {}
 
     @Override
     public int getAvailableSpaceForMana() {
-        return 0;
+        return Math.max(Math.max(0, manaCap - this.getCurrentMana()), 0);
     }
 
     @Override
     public ISparkEntity getAttachedSpark() {
+        List<Entity> sparks = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.up(), pos.up().add(1, 1, 1)), Predicates.instanceOf(ISparkEntity.class));
+        if (sparks.size() == 1) {
+            Entity entity = sparks.get(0);
+            return (ISparkEntity) entity;
+        }
         return null;
     }
 
@@ -201,21 +205,26 @@ public class TileManaBlock extends TileMod implements IManaPool, IKeyLocked, ISp
 
     @Override
     public boolean isFull() {
-        return false;
+        return this.getCurrentMana() >= this.manaCap;
     }
 
     @Override
     public void receiveMana(int i) {
-
+        int old = this.mana;
+        this.mana = Math.max(0, Math.min(this.getCurrentMana() + i, this.manaCap));
+        if (old != this.mana) {
+            markDirty();
+            markDispatchable();
+        }
     }
 
     @Override
     public boolean canReceiveManaFromBursts() {
-        return false;
+        return true;
     }
 
     @Override
     public int getCurrentMana() {
-        return 1000000;
+        return this.getBlockState().getBlock() instanceof BlockManaBlock ? this.mana : 0;
     }
 }
