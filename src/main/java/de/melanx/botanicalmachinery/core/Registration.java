@@ -2,8 +2,8 @@ package de.melanx.botanicalmachinery.core;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.BlockManaBlock;
-import de.melanx.botanicalmachinery.blocks.tiles.TileManaBlock;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerManaBlock;
+import de.melanx.botanicalmachinery.blocks.tiles.TileManaBlock;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
@@ -20,10 +20,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class Registration {
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BotanicalMachinery.MODID);
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, BotanicalMachinery.MODID);
-    public static final DeferredRegister<TileEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, BotanicalMachinery.MODID);
-    public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, BotanicalMachinery.MODID);
+    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, BotanicalMachinery.MODID);
+    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, BotanicalMachinery.MODID);
+    public static final DeferredRegister<TileEntityType<?>> TILES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, BotanicalMachinery.MODID);
+    public static final DeferredRegister<ContainerType<?>> CONTAINERS = new DeferredRegister<>(ForgeRegistries.CONTAINERS, BotanicalMachinery.MODID);
     private static final Item.Properties  itemProps  = new Item.Properties().group(BotanicalMachinery.itemGroup);
 
     public static final RegistryObject<Block> BLOCK_MANA_BLOCK = BLOCKS.register("mana_block", BlockManaBlock::new);

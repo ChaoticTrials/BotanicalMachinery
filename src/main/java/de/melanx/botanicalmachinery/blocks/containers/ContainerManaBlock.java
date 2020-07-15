@@ -1,6 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.containers;
 
 import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.inventory.SlotCatalyst;
 import de.melanx.botanicalmachinery.inventory.SlotOutputOnly;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -18,8 +19,8 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class ContainerManaBlock extends Container {
 
-    private TileEntity tile;
-    private PlayerEntity player;
+    private final TileEntity tile;
+    private final PlayerEntity player;
     private final IItemHandler playerInventory;
 
     public ContainerManaBlock(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
@@ -28,11 +29,13 @@ public class ContainerManaBlock extends Container {
         this.player = player;
         this.playerInventory = new InvWrapper(playerInventory);
 
-        this.tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
-            addSlot(new SlotItemHandler(handler, 0, 55, 24));
-            addSlot(new SlotOutputOnly(handler, 1, 109, 24));
-        });
-        layoutPlayerInventorySlots(10, 70);
+        if (tile != null)
+            this.tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
+                addSlot(new SlotCatalyst(handler, 0, 53, 47));
+                addSlot(new SlotItemHandler(handler, 1, 53, 25));
+                addSlot(new SlotOutputOnly(handler, 2, 111, 37));
+            });
+        layoutPlayerInventorySlots(8, 84);
     }
 
     @Override
@@ -48,18 +51,18 @@ public class ContainerManaBlock extends Container {
             ItemStack stack = slot.getStack();
             itemstack = stack.copy();
 
-            final int inventorySize = 2;
+            final int inventorySize = 3;
             final int playerInventoryEnd = inventorySize + 27;
             final int playerHotbarEnd = playerInventoryEnd + 9;
 
-            if (index == 1) {
+            if (index == 2) {
                 if (!this.mergeItemStack(stack, inventorySize, playerHotbarEnd, true)) {
                     return ItemStack.EMPTY;
                 }
 
                 slot.onSlotChange(stack, itemstack);
-            } else if (index != 0) {
-                if (!this.mergeItemStack(stack, 0, 1, false)) {
+            } else if (index != 1 && index != 0) {
+                if (!this.mergeItemStack(stack, 0, 2, false)) {
                     return ItemStack.EMPTY;
                 } else if (index < playerInventoryEnd) {
                     if (!this.mergeItemStack(stack, playerInventoryEnd, playerHotbarEnd, false)) {
@@ -101,7 +104,7 @@ public class ContainerManaBlock extends Container {
         return index;
     }
 
-    protected void layoutPlayerInventorySlots(int leftCol, int topRow) {
+    private void layoutPlayerInventorySlots(int leftCol, int topRow) {
         addSlotBox(playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
 
         topRow += 58;

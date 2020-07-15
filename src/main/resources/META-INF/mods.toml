@@ -18,7 +18,7 @@ A Minecraft addon mod for Botania which makes automation easier.
 [[dependencies.botanicalmachinery]]
     modId="forge"
     mandatory=true
-    versionRange="[31.2.0,)"
+    versionRange="[31.2.13,)"
     ordering="NONE"
     side="BOTH"
 

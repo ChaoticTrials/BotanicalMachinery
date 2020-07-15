@@ -1,9 +1,8 @@
 package de.melanx.botanicalmachinery.blocks;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.blocks.tiles.TileManaBlock;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerManaBlock;
+import de.melanx.botanicalmachinery.blocks.tiles.TileManaBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
@@ -23,8 +22,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 import vazkii.botania.api.wand.IWandHUD;
 
@@ -40,12 +37,6 @@ public class BlockManaBlock extends Block implements ITileEntityProvider, IWandH
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileManaBlock();
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void renderHUD(MatrixStack ms, Minecraft mc, World world, BlockPos pos) {
-        ((TileManaBlock) world.getTileEntity(pos)).renderHUD(ms, mc);
     }
 
     @Override
@@ -76,5 +67,10 @@ public class BlockManaBlock extends Block implements ITileEntityProvider, IWandH
     public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         return tile instanceof INamedContainerProvider ? (INamedContainerProvider) tile : null;
+    }
+
+    @Override
+    public void renderHUD(Minecraft mc, World world, BlockPos pos) {
+        ((TileManaBlock) world.getTileEntity(pos)).renderHUD(mc);
     }
 }
