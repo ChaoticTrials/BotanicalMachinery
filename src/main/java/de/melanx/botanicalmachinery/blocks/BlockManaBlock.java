@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 public class BlockManaBlock extends Block implements ITileEntityProvider, IWandHUD {
 
     public BlockManaBlock() {
-        super(Properties.create(Material.ROCK));
+        super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10));
     }
 
     @Nullable
