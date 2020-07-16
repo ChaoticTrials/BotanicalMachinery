@@ -3,7 +3,6 @@ package de.melanx.botanicalmachinery.blocks.containers;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.inventory.SlotCatalyst;
 import de.melanx.botanicalmachinery.inventory.SlotOutputOnly;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

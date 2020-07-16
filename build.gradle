@@ -31,7 +31,7 @@ minecraft {
     createRunConfig("client")
     createRunConfig("server")
     createRunConfig("data", { RunConfig run ->
-        run.args "--mod", modid, "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources")
+        run.args "--mod", modid, "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources"), "--existing", file("libs/resources")
     })
 }
 

@@ -22,5 +22,8 @@ build
 eclipse
 run*
 
+# botania textures for data run
+libs/resources
+
 # Files from Forge MDK
 forge*changelog.txt

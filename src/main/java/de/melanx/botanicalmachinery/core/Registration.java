@@ -26,10 +26,10 @@ public class Registration {
     public static final DeferredRegister<ContainerType<?>> CONTAINERS = new DeferredRegister<>(ForgeRegistries.CONTAINERS, BotanicalMachinery.MODID);
     private static final Item.Properties  itemProps  = new Item.Properties().group(BotanicalMachinery.itemGroup);
 
-    public static final RegistryObject<Block> BLOCK_MANA_BLOCK = BLOCKS.register("mana_block", BlockManaBlock::new);
-    public static final RegistryObject<Item> ITEM_MANA_BLOCK = ITEMS.register("mana_block", () -> new BlockItem(BLOCK_MANA_BLOCK.get(), itemProps));
-    public static final RegistryObject<TileEntityType<?>> TILE_MANA_BLOCK = TILES.register("mana_block", () -> TileEntityType.Builder.create(TileManaBlock::new, Registration.BLOCK_MANA_BLOCK.get()).build(null));
-    public static final RegistryObject<ContainerType<ContainerManaBlock>> CONTAINER_MANA_BLOCK = CONTAINERS.register("mana_block", () -> IForgeContainerType.create(((windowId, inv, data) -> {
+    public static final RegistryObject<Block> BLOCK_MANA_BLOCK = BLOCKS.register(LibNames.MANA_BLOCK, BlockManaBlock::new);
+    public static final RegistryObject<Item> ITEM_MANA_BLOCK = ITEMS.register(LibNames.MANA_BLOCK, () -> new BlockItem(BLOCK_MANA_BLOCK.get(), itemProps));
+    public static final RegistryObject<TileEntityType<?>> TILE_MANA_BLOCK = TILES.register(LibNames.MANA_BLOCK, () -> TileEntityType.Builder.create(TileManaBlock::new, Registration.BLOCK_MANA_BLOCK.get()).build(null));
+    public static final RegistryObject<ContainerType<ContainerManaBlock>> CONTAINER_MANA_BLOCK = CONTAINERS.register(LibNames.MANA_BLOCK, () -> IForgeContainerType.create(((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
         World world = inv.player.getEntityWorld();
         return new ContainerManaBlock(windowId, world, pos, inv, inv.player);
