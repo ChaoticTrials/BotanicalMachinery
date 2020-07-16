@@ -3,6 +3,7 @@ package de.melanx.botanicalmachinery.blocks.containers;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.inventory.SlotCatalyst;
 import de.melanx.botanicalmachinery.inventory.SlotOutputOnly;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -22,12 +23,16 @@ public class ContainerManaBlock extends Container {
     public final TileEntity tile;
     private final PlayerEntity player;
     private final IItemHandler playerInventory;
+    private final BlockPos pos;
+    private final World world;
 
     public ContainerManaBlock(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
         super(Registration.CONTAINER_MANA_BLOCK.get(), windowId);
         this.tile = world.getTileEntity(pos);
         this.player = player;
         this.playerInventory = new InvWrapper(playerInventory);
+        this.pos = pos;
+        this.world = world;
 
         if (tile != null)
             this.tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
@@ -109,5 +114,13 @@ public class ContainerManaBlock extends Container {
 
         topRow += 58;
         addSlotRange(playerInventory, 0, leftCol, topRow, 9, 18);
+    }
+
+    public BlockPos getPos() {
+        return this.pos;
+    }
+
+    public World getWorld() {
+        return this.world;
     }
 }
