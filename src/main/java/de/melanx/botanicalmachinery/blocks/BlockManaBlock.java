@@ -3,6 +3,7 @@ package de.melanx.botanicalmachinery.blocks;
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerManaBlock;
 import de.melanx.botanicalmachinery.blocks.tiles.TileManaBlock;
+import de.melanx.botanicalmachinery.core.LibNames;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
@@ -13,6 +14,9 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -47,7 +51,7 @@ public class BlockManaBlock extends Block implements ITileEntityProvider, IWandH
                 INamedContainerProvider containerProvider = new INamedContainerProvider() {
                     @Override
                     public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + ".mana_block");
+                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.MANA_BLOCK);
                     }
 
                     @Nullable
@@ -67,6 +71,17 @@ public class BlockManaBlock extends Block implements ITileEntityProvider, IWandH
     public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         return tile instanceof INamedContainerProvider ? (INamedContainerProvider) tile : null;
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, context.getPlacementHorizontalFacing().getOpposite());
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(BlockStateProperties.HORIZONTAL_FACING);
     }
 
     @Override

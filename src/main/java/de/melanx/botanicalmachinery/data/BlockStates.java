@@ -2,14 +2,11 @@ package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.core.Registration;
-import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ExistingFileHelper;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.client.model.generators.*;
 import vazkii.botania.common.lib.LibMisc;
 
 public class BlockStates extends BlockStateProvider {
@@ -19,10 +16,13 @@ public class BlockStates extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        for (RegistryObject<Block> blockObject : Registration.BLOCKS.getEntries()) {
-            Block block = blockObject.get();
+        Registration.BLOCKS.getEntries().stream().map(block -> block.get()).forEach(block -> {
+            VariantBlockStateBuilder builder = getVariantBuilder(block);
             ModelFile model = models().orientable(block.getRegistryName().getPath(), new ResourceLocation(LibMisc.MOD_ID, "blocks/livingrock0"), modLoc("block/" + block.getRegistryName().getPath()), new ResourceLocation(LibMisc.MOD_ID, "blocks/livingrock0"));
-            getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(model).build());
-        }
+            for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getAllowedValues()) {
+                builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, direction)
+                        .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));
+            }
+        });
     }
 }
