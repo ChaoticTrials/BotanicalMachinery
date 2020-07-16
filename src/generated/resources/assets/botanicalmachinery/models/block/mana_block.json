@@ -1,8 +1,8 @@
 {
   "parent": "block/orientable",
   "textures": {
-    "side": "botania:blocks/livingrock0",
-    "front": "botanicalmachinery:block/mana_block",
-    "top": "botania:blocks/livingrock0"
+    "side": "botanicalmachinery:block/mana_block_side",
+    "front": "botanicalmachinery:block/mana_block_front",
+    "top": "botanicalmachinery:block/mana_block_top"
   }
 }
