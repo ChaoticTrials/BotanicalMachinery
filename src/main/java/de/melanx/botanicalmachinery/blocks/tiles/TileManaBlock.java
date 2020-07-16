@@ -6,6 +6,7 @@ import de.melanx.botanicalmachinery.blocks.BlockManaBlock;
 import de.melanx.botanicalmachinery.core.Registration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -20,6 +21,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.lwjgl.opengl.GL11;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.api.mana.IKeyLocked;
+import vazkii.botania.api.mana.IManaPool;
 import vazkii.botania.api.mana.IThrottledPacket;
 import vazkii.botania.api.mana.ManaNetworkEvent;
 import vazkii.botania.api.mana.spark.ISparkAttachable;
@@ -35,7 +37,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileManaBlock extends TileMod implements IManaMachineTile, IKeyLocked, ISparkAttachable, IThrottledPacket, ITickableTileEntity {
+public class TileManaBlock extends TileMod implements IManaPool, IManaMachineTile, IKeyLocked, ISparkAttachable, IThrottledPacket, ITickableTileEntity {
 
     public boolean validRecipe = true;
     private final ItemStackHandler itemHandler = createHandler();
@@ -143,7 +145,7 @@ public class TileManaBlock extends TileMod implements IManaMachineTile, IKeyLock
     @Override
     public void tick() {
         if (!ManaNetworkHandler.instance.isPoolIn(this) && !isRemoved()) {
-            ManaNetworkEvent.addPool(this);
+            ManaNetworkEvent.addCollector(this);
         }
 
         if (world != null) {
@@ -247,5 +249,19 @@ public class TileManaBlock extends TileMod implements IManaMachineTile, IKeyLock
     @Override
     public int getManaCap() {
         return manaCap;
+    }
+
+    @Override
+    public boolean isOutputtingPower() {
+        return false;
+    }
+
+    @Override
+    public DyeColor getColor() {
+        return null;
+    }
+
+    @Override
+    public void setColor(DyeColor dyeColor) {
     }
 }
