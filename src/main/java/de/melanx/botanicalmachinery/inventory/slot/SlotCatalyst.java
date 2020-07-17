@@ -1,16 +1,14 @@
-package de.melanx.botanicalmachinery.inventory;
+package de.melanx.botanicalmachinery.inventory.slot;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
+import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class SlotCatalyst extends SlotItemHandler {
-
-    public SlotCatalyst(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-        super(itemHandler, index, xPosition, yPosition);
+public class SlotCatalyst extends BaseItemHandlerSlot {
+    public SlotCatalyst(BaseItemStackHandler inventory, int index, int xPosition, int yPosition) {
+        super(inventory, index, xPosition, yPosition);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerManaBlock;
 import de.melanx.botanicalmachinery.blocks.tiles.IManaMachineTile;
+import de.melanx.botanicalmachinery.blocks.tiles.TileBase;
 import de.melanx.botanicalmachinery.blocks.tiles.TileManaBlock;
 import de.melanx.botanicalmachinery.core.LibResources;
 import de.melanx.botanicalmachinery.gui.ManaBar;
@@ -49,7 +50,7 @@ public class ScreenManaBlock extends ContainerScreen<ContainerManaBlock> {
         this.blit(relX, relY, 0, 0, this.xSize, this.ySize);
         BlockPos tilePos = this.getContainer().getPos();
         TileEntity tile = this.getContainer().getWorld().getTileEntity(tilePos);
-        if (tile instanceof IManaMachineTile && !((IManaMachineTile) tile).hasValidRecipe()) {
+        if (tile instanceof TileBase && !((TileBase) tile).hasValidRecipe()) {
             int x = relX + 81;
             int y = relY + 37;
 
@@ -62,6 +63,6 @@ public class ScreenManaBlock extends ContainerScreen<ContainerManaBlock> {
             RenderSystem.disableLighting();
             RenderSystem.disableBlend();
         }
-        manaBar.draw(((TileManaBlock) this.getContainer().tile).getCurrentMana());
+        manaBar.draw(((TileBase) this.getContainer().tile).getCurrentMana());
     }
 }
