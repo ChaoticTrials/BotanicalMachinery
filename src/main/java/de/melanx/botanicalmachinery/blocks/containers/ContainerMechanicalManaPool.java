@@ -19,7 +19,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class ContainerManaBlock extends Container {
+public class ContainerMechanicalManaPool extends Container {
 
     public final TileEntity tile;
     private final PlayerEntity player;
@@ -27,8 +27,8 @@ public class ContainerManaBlock extends Container {
     private final BlockPos pos;
     private final World world;
 
-    public ContainerManaBlock(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
-        super(Registration.CONTAINER_MANA_BLOCK.get(), windowId);
+    public ContainerMechanicalManaPool(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
+        super(Registration.CONTAINER_MECHANICAL_MANA_POOL.get(), windowId);
         this.tile = world.getTileEntity(pos);
         this.player = player;
         this.playerInventory = new InvWrapper(playerInventory);
@@ -46,7 +46,7 @@ public class ContainerManaBlock extends Container {
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(IWorldPosCallable.of(tile.getWorld(), tile.getPos()), player, Registration.BLOCK_MANA_BLOCK.get());
+        return isWithinUsableDistance(IWorldPosCallable.of(tile.getWorld(), tile.getPos()), player, Registration.BLOCK_MECHANICAL_MANA_POOL.get());
     }
 
     @Override

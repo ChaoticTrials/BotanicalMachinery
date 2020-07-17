@@ -10,6 +10,6 @@ public class ModGroup extends ItemGroup {
 
     @Override
     public ItemStack createIcon() {
-        return new ItemStack(Registration.ITEM_MANA_BLOCK.get());
+        return new ItemStack(Registration.ITEM_MECHANICAL_MANA_POOL.get());
     }
 }

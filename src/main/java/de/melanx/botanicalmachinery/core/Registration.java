@@ -1,9 +1,9 @@
 package de.melanx.botanicalmachinery.core;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.blocks.BlockManaBlock;
-import de.melanx.botanicalmachinery.blocks.containers.ContainerManaBlock;
-import de.melanx.botanicalmachinery.blocks.tiles.TileManaBlock;
+import de.melanx.botanicalmachinery.blocks.BlockMechanicalManaPool;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalManaPool;
+import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalManaPool;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
@@ -26,13 +26,13 @@ public class Registration {
     public static final DeferredRegister<ContainerType<?>> CONTAINERS = new DeferredRegister<>(ForgeRegistries.CONTAINERS, BotanicalMachinery.MODID);
     private static final Item.Properties  itemProps  = new Item.Properties().group(BotanicalMachinery.itemGroup);
 
-    public static final RegistryObject<Block> BLOCK_MANA_BLOCK = BLOCKS.register(LibNames.MANA_BLOCK, BlockManaBlock::new);
-    public static final RegistryObject<Item> ITEM_MANA_BLOCK = ITEMS.register(LibNames.MANA_BLOCK, () -> new BlockItem(BLOCK_MANA_BLOCK.get(), itemProps));
-    public static final RegistryObject<TileEntityType<?>> TILE_MANA_BLOCK = TILES.register(LibNames.MANA_BLOCK, () -> TileEntityType.Builder.create(TileManaBlock::new, Registration.BLOCK_MANA_BLOCK.get()).build(null));
-    public static final RegistryObject<ContainerType<ContainerManaBlock>> CONTAINER_MANA_BLOCK = CONTAINERS.register(LibNames.MANA_BLOCK, () -> IForgeContainerType.create(((windowId, inv, data) -> {
+    public static final RegistryObject<Block> BLOCK_MECHANICAL_MANA_POOL = BLOCKS.register(LibNames.MECHANICAL_MANA_POOL, BlockMechanicalManaPool::new);
+    public static final RegistryObject<Item> ITEM_MECHANICAL_MANA_POOL = ITEMS.register(LibNames.MECHANICAL_MANA_POOL, () -> new BlockItem(BLOCK_MECHANICAL_MANA_POOL.get(), itemProps));
+    public static final RegistryObject<TileEntityType<?>> TILE_MECHANICAL_MANA_POOL = TILES.register(LibNames.MECHANICAL_MANA_POOL, () -> TileEntityType.Builder.create(TileMechanicalManaPool::new, Registration.BLOCK_MECHANICAL_MANA_POOL.get()).build(null));
+    public static final RegistryObject<ContainerType<ContainerMechanicalManaPool>> CONTAINER_MECHANICAL_MANA_POOL = CONTAINERS.register(LibNames.MECHANICAL_MANA_POOL, () -> IForgeContainerType.create(((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
         World world = inv.player.getEntityWorld();
-        return new ContainerManaBlock(windowId, world, pos, inv, inv.player);
+        return new ContainerMechanicalManaPool(windowId, world, pos, inv, inv.player);
     })));
 
     public static void init() {

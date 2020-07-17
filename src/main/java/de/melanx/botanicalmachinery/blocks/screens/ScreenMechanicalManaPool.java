@@ -2,10 +2,10 @@ package de.melanx.botanicalmachinery.blocks.screens;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import de.melanx.botanicalmachinery.blocks.containers.ContainerManaBlock;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalManaPool;
 import de.melanx.botanicalmachinery.blocks.tiles.IManaMachineTile;
 import de.melanx.botanicalmachinery.blocks.tiles.TileBase;
-import de.melanx.botanicalmachinery.blocks.tiles.TileManaBlock;
+import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalManaPool;
 import de.melanx.botanicalmachinery.core.LibResources;
 import de.melanx.botanicalmachinery.gui.ManaBar;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -15,11 +15,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.opengl.GL11;
 
-public class ScreenManaBlock extends ContainerScreen<ContainerManaBlock> {
+public class ScreenMechanicalManaPool extends ContainerScreen<ContainerMechanicalManaPool> {
 
     private final ManaBar manaBar;
 
-    public ScreenManaBlock(ContainerManaBlock container, PlayerInventory inv, ITextComponent titleIn) {
+    public ScreenMechanicalManaPool(ContainerMechanicalManaPool container, PlayerInventory inv, ITextComponent titleIn) {
         super(container, inv, titleIn);
         this.manaBar = new ManaBar(this, ((IManaMachineTile) container.tile).getManaCap());
     }
@@ -31,7 +31,7 @@ public class ScreenManaBlock extends ContainerScreen<ContainerManaBlock> {
         this.renderBackground();
         super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
-        this.manaBar.renderHoveredToolTip(mouseX, mouseY, ((TileManaBlock) this.getContainer().tile).getCurrentMana());
+        this.manaBar.renderHoveredToolTip(mouseX, mouseY, ((TileMechanicalManaPool) this.getContainer().tile).getCurrentMana());
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ScreenManaBlock extends ContainerScreen<ContainerManaBlock> {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(LibResources.MANA_BLOCK_GUI);
+        this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_MANA_POOL_GUI);
         int relX = (this.width - this.xSize) / 2;
         int relY = (this.height - this.ySize) / 2;
         this.blit(relX, relY, 0, 0, this.xSize, this.ySize);

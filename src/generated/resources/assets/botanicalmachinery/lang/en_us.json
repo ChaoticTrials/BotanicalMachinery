@@ -1,5 +1,5 @@
 {
-  "block.botanicalmachinery.mana_block": "Machanical Mana Pool",
+  "block.botanicalmachinery.mechanical_mana_pool": "Machanical Mana Pool",
   "itemGroup.botanicalmachinery": "Botanical Machinery",
-  "screen.botanicalmachinery.mana_block": "Machanical Mana Pool"
+  "screen.botanicalmachinery.mechanical_mana_pool": "Machanical Mana Pool"
 }

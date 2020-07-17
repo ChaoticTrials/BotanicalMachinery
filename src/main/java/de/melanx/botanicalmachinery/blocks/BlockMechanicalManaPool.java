@@ -1,8 +1,8 @@
 package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.blocks.containers.ContainerManaBlock;
-import de.melanx.botanicalmachinery.blocks.tiles.TileManaBlock;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalManaPool;
+import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalManaPool;
 import de.melanx.botanicalmachinery.core.LibNames;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,33 +31,33 @@ import vazkii.botania.api.wand.IWandHUD;
 
 import javax.annotation.Nullable;
 
-public class BlockManaBlock extends Block implements ITileEntityProvider, IWandHUD {
+public class BlockMechanicalManaPool extends Block implements ITileEntityProvider, IWandHUD {
 
-    public BlockManaBlock() {
+    public BlockMechanicalManaPool() {
         super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10));
     }
 
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return new TileManaBlock();
+        return new TileMechanicalManaPool();
     }
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileManaBlock) {
+            if (tile instanceof TileMechanicalManaPool) {
                 INamedContainerProvider containerProvider = new INamedContainerProvider() {
                     @Override
                     public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.MANA_BLOCK);
+                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.MECHANICAL_MANA_POOL);
                     }
 
                     @Nullable
                     @Override
                     public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player) {
-                        return new ContainerManaBlock(windowId, worldIn, pos, playerInventory, player);
+                        return new ContainerMechanicalManaPool(windowId, worldIn, pos, playerInventory, player);
                     }
                 };
                 NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, pos);
@@ -86,6 +86,6 @@ public class BlockManaBlock extends Block implements ITileEntityProvider, IWandH
 
     @Override
     public void renderHUD(Minecraft mc, World world, BlockPos pos) {
-        ((TileManaBlock) world.getTileEntity(pos)).renderHUD(mc);
+        ((TileMechanicalManaPool) world.getTileEntity(pos)).renderHUD(mc);
     }
 }

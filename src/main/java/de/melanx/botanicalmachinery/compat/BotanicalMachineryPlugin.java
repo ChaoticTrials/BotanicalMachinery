@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.compat;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.blocks.screens.ScreenManaBlock;
+import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalManaPool;
 import de.melanx.botanicalmachinery.core.Registration;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -20,11 +20,11 @@ public class BotanicalMachineryPlugin implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addRecipeClickArea(ScreenManaBlock.class, 77, 36, 22, 15, ManaPoolRecipeCategory.UID);
+        registration.addRecipeClickArea(ScreenMechanicalManaPool.class, 77, 36, 22, 15, ManaPoolRecipeCategory.UID);
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_MANA_BLOCK.get()), ManaPoolRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_MECHANICAL_MANA_POOL.get()), ManaPoolRecipeCategory.UID);
     }
 }

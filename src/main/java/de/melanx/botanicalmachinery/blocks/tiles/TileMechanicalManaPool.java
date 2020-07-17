@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileManaBlock extends TileBase {
+public class TileMechanicalManaPool extends TileBase {
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(3, (slot) -> {
         if (slot == 1) {
             ItemStack stack = this.getInventory().getStackInSlot(1);
@@ -38,8 +38,8 @@ public class TileManaBlock extends TileBase {
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory, this::canInsertStack, null);
     public boolean validRecipe = true;
 
-    public TileManaBlock() {
-        super(Registration.TILE_MANA_BLOCK.get(), 10_000_000);
+    public TileMechanicalManaPool() {
+        super(Registration.TILE_MECHANICAL_MANA_POOL.get(), 10_000_000);
         this.inventory.addSlotLimit(0, 1);
         this.inventory.setOutputSlots(2);
     }

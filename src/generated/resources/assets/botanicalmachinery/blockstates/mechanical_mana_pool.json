@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "botanicalmachinery:block/mechanical_mana_pool"
+    },
+    "facing=south": {
+      "model": "botanicalmachinery:block/mechanical_mana_pool",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "botanicalmachinery:block/mechanical_mana_pool",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "botanicalmachinery:block/mechanical_mana_pool",
+      "y": 90
+    }
+  }
+}

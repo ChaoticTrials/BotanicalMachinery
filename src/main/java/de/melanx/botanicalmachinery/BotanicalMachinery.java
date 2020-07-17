@@ -1,6 +1,6 @@
 package de.melanx.botanicalmachinery;
 
-import de.melanx.botanicalmachinery.blocks.screens.ScreenManaBlock;
+import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalManaPool;
 import de.melanx.botanicalmachinery.core.ModGroup;
 import de.melanx.botanicalmachinery.core.Registration;
 import net.minecraft.client.gui.ScreenManager;
@@ -38,7 +38,7 @@ public class BotanicalMachinery {
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
-        ScreenManager.registerFactory(Registration.CONTAINER_MANA_BLOCK.get(), ScreenManaBlock::new);
+        ScreenManager.registerFactory(Registration.CONTAINER_MECHANICAL_MANA_POOL.get(), ScreenMechanicalManaPool::new);
     }
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)

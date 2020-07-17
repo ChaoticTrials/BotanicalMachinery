@@ -14,7 +14,7 @@ public class Languages extends LanguageProvider {
     @Override
     protected void addTranslations() {
         add("itemGroup." + BotanicalMachinery.MODID, "Botanical Machinery");
-        addTileWithScreen(Registration.BLOCK_MANA_BLOCK.get(), "Machanical Mana Pool");
+        addTileWithScreen(Registration.BLOCK_MECHANICAL_MANA_POOL.get(), "Machanical Mana Pool");
     }
 
     private void addTileWithScreen(Block key, String name) {

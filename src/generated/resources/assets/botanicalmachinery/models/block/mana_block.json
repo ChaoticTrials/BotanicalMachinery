@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "side": "botanicalmachinery:block/mana_block_side",
-    "front": "botanicalmachinery:block/mana_block_front",
-    "top": "botanicalmachinery:block/mana_block_top"
-  }
-}
