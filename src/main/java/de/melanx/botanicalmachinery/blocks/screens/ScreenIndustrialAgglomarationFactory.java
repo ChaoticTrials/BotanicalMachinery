@@ -23,11 +23,15 @@ public class ScreenIndustrialAgglomarationFactory extends ScreenBase<ContainerIn
         this.drawDefaultGuiBackgroundLayer(LibResources.INDUSTRIAL_AGGLOMARATION_FACTORY_GUI, 81, 37);
         int relX = (this.width - this.xSize) / 2;
         int relY = (this.height - this.ySize) / 2;
-        this.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(new ItemStack(ModItems.manaSteel), relX + 53, relY + 47);
+        this.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(new ItemStack(ModItems.manaSteel), relX + 61, relY + 83);
+        this.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(new ItemStack(ModItems.manaDiamond), relX + 80, relY + 83);
+        this.minecraft.getItemRenderer().renderItemAndEffectIntoGUI(new ItemStack(ModItems.manaPearl), relX + 99, relY + 83);
         GlStateManager.enableBlend();
         GlStateManager.disableDepthTest();
         this.minecraft.getTextureManager().bindTexture(LibResources.HUD);
-        RenderHelper.drawTexturedModalRect(relX + 53, relY + 47, 16, 0, 16, 16);
+        RenderHelper.drawTexturedModalRect(relX + 61, relY + 83, 16, 0, 16, 16);
+        RenderHelper.drawTexturedModalRect(relX + 80, relY + 83, 16, 0, 16, 16);
+        RenderHelper.drawTexturedModalRect(relX + 99, relY + 83, 16, 0, 16, 16);
     }
 
 }

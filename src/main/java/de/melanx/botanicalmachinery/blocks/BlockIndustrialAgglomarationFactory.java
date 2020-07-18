@@ -4,7 +4,6 @@ import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.BlockBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerIndustrialAgglomarationFactory;
 import de.melanx.botanicalmachinery.blocks.tiles.TileIndustrialAgglomarationFactory;
-import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalManaPool;
 import de.melanx.botanicalmachinery.core.LibNames;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;

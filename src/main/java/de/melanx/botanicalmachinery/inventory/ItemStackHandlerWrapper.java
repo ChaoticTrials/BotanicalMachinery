@@ -14,13 +14,11 @@ import java.util.function.Function;
  */
 public class ItemStackHandlerWrapper implements IItemHandlerModifiable {
     private final BaseItemStackHandler inventory;
-    private final BiFunction<Integer, ItemStack, Boolean> canInsert;
-    private final Function<Integer, Boolean> canExtract;
+    private final BiFunction<Integer, ItemStack, Boolean> canInsert = null;
+    private final Function<Integer, Boolean> canExtract = null;
 
-    public ItemStackHandlerWrapper(BaseItemStackHandler inventory, BiFunction<Integer, ItemStack, Boolean> canInsert, Function<Integer, Boolean> canExtract) {
+    public ItemStackHandlerWrapper(BaseItemStackHandler inventory) {
         this.inventory = inventory;
-        this.canInsert = canInsert;
-        this.canExtract = canExtract;
     }
 
     @Override
@@ -66,7 +64,7 @@ public class ItemStackHandlerWrapper implements IItemHandlerModifiable {
         return this.canInsert == null || this.canInsert.apply(slot, stack);
     }
 
-    public static LazyOptional<IItemHandlerModifiable> create(BaseItemStackHandler inv, BiFunction<Integer, ItemStack, Boolean> canInsert, Function<Integer, Boolean> canExtract) {
-        return LazyOptional.of(() -> new ItemStackHandlerWrapper(inv, canInsert, canExtract));
+    public static LazyOptional<IItemHandlerModifiable> create(BaseItemStackHandler inv) {
+        return LazyOptional.of(() -> new ItemStackHandlerWrapper(inv));
     }
 }

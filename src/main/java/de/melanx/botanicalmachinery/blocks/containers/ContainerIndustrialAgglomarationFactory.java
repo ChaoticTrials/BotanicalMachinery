@@ -5,7 +5,6 @@ import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.inventory.slot.BaseItemHandlerSlot;
-import de.melanx.botanicalmachinery.inventory.slot.SlotCatalyst;
 import de.melanx.botanicalmachinery.inventory.slot.SlotOutputOnly;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -22,11 +21,12 @@ public class ContainerIndustrialAgglomarationFactory extends ContainerBase {
         super(Registration.CONTAINER_INDUSTRIAL_AGGLOMARATION_FACTORY.get(), windowId, world, pos, playerInventory, player);
         if (this.tile instanceof TileBase) {
             BaseItemStackHandler inventory = ((TileBase) tile).getInventory();
-            this.addSlot(new SlotCatalyst(inventory, 0, 53, 47));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 1, 53, 25));
-            this.addSlot(new SlotOutputOnly(inventory, 2, 111, 37));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 0, 61, 83));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 1, 80, 83));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 2, 99, 83));
+            this.addSlot(new SlotOutputOnly(inventory, 3, 80, 25));
         }
-        layoutPlayerInventorySlots(8, 84);
+        this.layoutPlayerInventorySlots(8, 113);
     }
 
     @Override
@@ -37,18 +37,18 @@ public class ContainerIndustrialAgglomarationFactory extends ContainerBase {
             ItemStack stack = slot.getStack();
             itemstack = stack.copy();
 
-            final int inventorySize = 3;
+            final int inventorySize = 4;
             final int playerInventoryEnd = inventorySize + 27;
             final int playerHotbarEnd = playerInventoryEnd + 9;
 
-            if (index == 2) {
+            if (index == 3) {
                 if (!this.mergeItemStack(stack, inventorySize, playerHotbarEnd, true)) {
                     return ItemStack.EMPTY;
                 }
 
                 slot.onSlotChange(stack, itemstack);
-            } else if (index != 1 && index != 0) {
-                if (!this.mergeItemStack(stack, 0, 2, false)) {
+            } else if (index > 2) {
+                if (!this.mergeItemStack(stack, 0, 3, false)) {
                     return ItemStack.EMPTY;
                 } else if (index < playerInventoryEnd) {
                     if (!this.mergeItemStack(stack, playerInventoryEnd, playerHotbarEnd, false)) {
