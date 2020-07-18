@@ -19,22 +19,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class TileMechanicalManaPool extends TileBase {
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(3, (slot) -> {
-        if (slot == 1) {
-            ItemStack stack = this.getInventory().getStackInSlot(1);
-            ItemStack cat = this.getInventory().getStackInSlot(0);
-            IManaInfusionRecipe recipe = getMatchingRecipe(stack, cat);
-            if (recipe != null) {
-                validRecipe = recipe.getManaToConsume() <= getCurrentMana();
-            } else {
-                validRecipe = stack.isEmpty();
-            }
-        }
-        markDirty();
-        return null;
-    });
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(3, this.onContentsChanged());
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory, this::canInsertStack, null);
     public boolean validRecipe = true;
 
@@ -42,6 +30,23 @@ public class TileMechanicalManaPool extends TileBase {
         super(Registration.TILE_MECHANICAL_MANA_POOL.get(), 10_000_000);
         this.inventory.addSlotLimit(0, 1);
         this.inventory.setOutputSlots(2);
+    }
+
+    private Function<Integer, Void> onContentsChanged() {
+        return slot -> {
+            if (slot == 1) {
+                ItemStack stack = getInventory().getStackInSlot(1);
+                ItemStack cat = getInventory().getStackInSlot(0);
+                IManaInfusionRecipe recipe = getMatchingRecipe(stack, cat);
+                if (recipe != null) {
+                    validRecipe = recipe.getManaToConsume() <= getCurrentMana();
+                } else {
+                    validRecipe = stack.isEmpty();
+                }
+            }
+            markDirty();
+            return null;
+        };
     }
 
     public IManaInfusionRecipe getMatchingRecipe(@Nonnull ItemStack stack, @Nonnull ItemStack cat) {
