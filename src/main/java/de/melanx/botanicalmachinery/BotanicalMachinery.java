@@ -1,5 +1,6 @@
 package de.melanx.botanicalmachinery;
 
+import de.melanx.botanicalmachinery.blocks.screens.ScreenIndustrialAgglomarationFactory;
 import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalManaPool;
 import de.melanx.botanicalmachinery.core.ModGroup;
 import de.melanx.botanicalmachinery.core.Registration;
@@ -39,6 +40,7 @@ public class BotanicalMachinery {
 
     private void onClientSetup(final FMLClientSetupEvent event) {
         ScreenManager.registerFactory(Registration.CONTAINER_MECHANICAL_MANA_POOL.get(), ScreenMechanicalManaPool::new);
+        ScreenManager.registerFactory(Registration.CONTAINER_INDUSTRIAL_AGGLOMARATION_FACTORY.get(), ScreenIndustrialAgglomarationFactory::new);
     }
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)

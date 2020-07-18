@@ -2,7 +2,8 @@ package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.BlockBase;
-import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalManaPool;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerIndustrialAgglomarationFactory;
+import de.melanx.botanicalmachinery.blocks.tiles.TileIndustrialAgglomarationFactory;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalManaPool;
 import de.melanx.botanicalmachinery.core.LibNames;
 import net.minecraft.block.BlockState;
@@ -25,33 +26,32 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class BlockMechanicalManaPool extends BlockBase {
-
-    public BlockMechanicalManaPool() {
+public class BlockIndustrialAgglomarationFactory extends BlockBase {
+    public BlockIndustrialAgglomarationFactory() {
         super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10));
     }
 
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return new TileMechanicalManaPool();
+        return new TileIndustrialAgglomarationFactory();
     }
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileMechanicalManaPool) {
+            if (tile instanceof TileIndustrialAgglomarationFactory) {
                 INamedContainerProvider containerProvider = new INamedContainerProvider() {
                     @Override
                     public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.MECHANICAL_MANA_POOL);
+                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.INDUSTRIAL_AGGLOMARATION_FACTORY);
                     }
 
                     @Nullable
                     @Override
                     public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player) {
-                        return new ContainerMechanicalManaPool(windowId, worldIn, pos, playerInventory, player);
+                        return new ContainerIndustrialAgglomarationFactory(windowId, worldIn, pos, playerInventory, player);
                     }
                 };
                 NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, pos);

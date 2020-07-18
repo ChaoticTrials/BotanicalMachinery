@@ -9,8 +9,8 @@ import net.minecraft.client.gui.screen.Screen;
 public class ManaBar {
 
     private final Screen parent;
-    private final int x = 154;
-    private final int y = 8;
+    public int x = 153;
+    public int y = 15;
     public int capacity;
     private final int width = 16;
     private final int height = 62;
@@ -43,7 +43,7 @@ public class ManaBar {
 
     public void renderHoveredToolTip(int mouseX, int mouseY, int mana) {
         if (this.isMouseOver(mouseX, mouseY)) {
-            parent.renderTooltip(mana + "/" + this.capacity, mouseX, mouseY);
+            parent.renderTooltip(mana + " / " + this.capacity + " Mana", mouseX, mouseY);
         }
     }
 }

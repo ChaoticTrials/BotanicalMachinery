@@ -1,6 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
+import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;

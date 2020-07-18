@@ -1,7 +1,8 @@
-package de.melanx.botanicalmachinery.blocks.tiles;
+package de.melanx.botanicalmachinery.blocks.base;
 
 import com.google.common.base.Predicates;
 import com.mojang.blaze3d.systems.RenderSystem;
+import de.melanx.botanicalmachinery.blocks.tiles.IManaMachineTile;
 import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
