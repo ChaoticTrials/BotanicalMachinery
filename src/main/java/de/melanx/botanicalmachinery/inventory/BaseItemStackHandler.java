@@ -38,8 +38,6 @@ public class BaseItemStackHandler extends ItemStackHandler {
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
         if (this.outputSlots != null && ArrayUtils.contains(this.outputSlots, slot))
             return stack;
-        if (!this.isItemValid(slot, stack))
-            return stack;
         return super.insertItem(slot, stack, simulate);
     }
 

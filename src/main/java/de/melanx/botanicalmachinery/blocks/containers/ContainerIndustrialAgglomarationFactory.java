@@ -24,7 +24,7 @@ public class ContainerIndustrialAgglomarationFactory extends ContainerBase {
             this.addSlot(new BaseItemHandlerSlot(inventory, 0, 61, 83));
             this.addSlot(new BaseItemHandlerSlot(inventory, 1, 80, 83));
             this.addSlot(new BaseItemHandlerSlot(inventory, 2, 99, 83));
-            this.addSlot(new SlotOutputOnly(inventory, 3, 80, 25));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 3, 80, 25));
         }
         this.layoutPlayerInventorySlots(8, 113);
     }

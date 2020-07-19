@@ -5,11 +5,13 @@ import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.item.ModItems;
 import vazkii.botania.common.lib.ModTags;
 
@@ -19,6 +21,13 @@ import javax.annotation.Nullable;
 public class TileIndustrialAgglomarationFactory extends TileBase {
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(4);
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
+    private final int recipeCost = TilePool.MAX_MANA / 2;
+    private final int workingDuration = 100;
+    private int progress;
+    private boolean recipe;
+
+    private static final String TAG_PROGRESS = "progress";
+
     public TileIndustrialAgglomarationFactory() {
         super(Registration.TILE_INDUSTRIAL_AGGLOMARATION_FACTORY.get(), 10_000_000);
         this.inventory.setOutputSlots(3);
@@ -35,7 +44,51 @@ public class TileIndustrialAgglomarationFactory extends TileBase {
     public boolean canInsertStack(int slot, ItemStack stack) {
         return (slot == 0 && ModTags.Items.INGOTS_MANASTEEL.contains(stack.getItem())) ||
                 (slot == 1 && ModTags.Items.GEMS_MANA_DIAMOND.contains(stack.getItem())) ||
-                (slot == 2 && ModItems.manaPearl == stack.getItem());
+                (slot == 2 && ModItems.manaPearl == stack.getItem()) ||
+                (slot == 3 && ModItems.terrasteel == stack.getItem());
+    }
+
+    @Override
+    public void writePacketNBT(CompoundNBT cmp) {
+        super.writePacketNBT(cmp);
+        cmp.putInt(TAG_PROGRESS, this.progress);
+    }
+
+    @Override
+    public void readPacketNBT(CompoundNBT cmp) {
+        super.readPacketNBT(cmp);
+        this.progress = cmp.getInt(TAG_PROGRESS);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.world != null && !this.world.isRemote) {
+            ItemStack manasteel = this.inventory.getStackInSlot(0);
+            ItemStack manadiamond = this.inventory.getStackInSlot(1);
+            ItemStack manapearl = this.inventory.getStackInSlot(2);
+            ItemStack output = this.inventory.getStackInSlot(3);
+            if (!manasteel.isEmpty() && !manadiamond.isEmpty() &&
+                    !manapearl.isEmpty() && output.getCount() < 64) {
+                this.recipe = true;
+                if (this.getCurrentMana() >= this.recipeCost || this.progress > 0 && this.progress <= this.workingDuration) {
+                    ++this.progress;
+                    this.receiveMana(-(this.recipeCost / this.workingDuration));
+                    if (this.progress >= this.workingDuration) {
+                        manasteel.shrink(1);
+                        manadiamond.shrink(1);
+                        manapearl.shrink(1);
+                        this.inventory.insertItemSuper(3, new ItemStack(ModItems.terrasteel), false);
+                        this.recipe = false;
+                    }
+                    this.markDirty();
+                }
+            }
+            if (!this.recipe && this.progress > 0) {
+                this.progress = 0;
+                this.markDirty();
+            }
+        }
     }
 
     @Nonnull
