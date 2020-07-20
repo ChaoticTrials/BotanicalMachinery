@@ -42,10 +42,11 @@ public class TileIndustrialAgglomarationFactory extends TileBase {
 
     @Override
     public boolean canInsertStack(int slot, ItemStack stack) {
-        return (slot == 0 && ModTags.Items.INGOTS_MANASTEEL.contains(stack.getItem())) ||
-                (slot == 1 && ModTags.Items.GEMS_MANA_DIAMOND.contains(stack.getItem())) ||
-                (slot == 2 && ModItems.manaPearl == stack.getItem()) ||
-                (slot == 3 && ModItems.terrasteel == stack.getItem());
+        if ((slot == 0 && !ModTags.Items.INGOTS_MANASTEEL.contains(stack.getItem())) ||
+                (slot == 1 && !ModTags.Items.GEMS_MANA_DIAMOND.contains(stack.getItem())) ||
+                (slot == 2 && ModItems.manaPearl != stack.getItem()))
+                return false;
+        return true;
     }
 
     @Override

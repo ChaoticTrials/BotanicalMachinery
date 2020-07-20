@@ -77,9 +77,8 @@ public class TileMechanicalManaPool extends TileBase {
 
     @Override
     public boolean canInsertStack(int slot, ItemStack stack) {
-        if (slot == 1) return true;
         if (slot == 0) return BotanicalMachinery.catalysts.contains(stack.getItem());
-        return false;
+        return true;
     }
 
     @Override
