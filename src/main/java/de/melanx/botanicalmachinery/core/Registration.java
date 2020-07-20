@@ -20,10 +20,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class Registration {
 
-    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, BotanicalMachinery.MODID);
-    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, BotanicalMachinery.MODID);
-    public static final DeferredRegister<TileEntityType<?>> TILES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, BotanicalMachinery.MODID);
-    public static final DeferredRegister<ContainerType<?>> CONTAINERS = new DeferredRegister<>(ForgeRegistries.CONTAINERS, BotanicalMachinery.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BotanicalMachinery.MODID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, BotanicalMachinery.MODID);
+    public static final DeferredRegister<TileEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, BotanicalMachinery.MODID);
+    public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, BotanicalMachinery.MODID);
     private static final Item.Properties itemProps = new Item.Properties().group(BotanicalMachinery.itemGroup);
 
     public static final RegistryObject<Block> BLOCK_MECHANICAL_MANA_POOL = BLOCKS.register(LibNames.MECHANICAL_MANA_POOL, BlockMechanicalManaPool::new);
