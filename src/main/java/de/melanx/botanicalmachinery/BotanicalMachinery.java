@@ -27,7 +27,7 @@ public class BotanicalMachinery {
 
     public static final String MODID = "botanicalmachinery";
     public static final ItemGroup itemGroup = new ModGroup(MODID);
-    private static final Logger LOGGER = LogManager.getLogger(MODID);
+    public static final Logger LOGGER = LogManager.getLogger(MODID);
     public static List<Item> catalysts = new ArrayList<>();
     public BotanicalMachinery instance;
 

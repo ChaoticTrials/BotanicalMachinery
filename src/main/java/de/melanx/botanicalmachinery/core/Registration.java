@@ -41,8 +41,12 @@ public class Registration {
     public static void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         ITEMS.register(bus);
+        BotanicalMachinery.LOGGER.info(ITEMS.getEntries().size() + " items registered.");
         BLOCKS.register(bus);
+        BotanicalMachinery.LOGGER.info(BLOCKS.getEntries().size() + " blocks registered.");
         TILES.register(bus);
+        BotanicalMachinery.LOGGER.info(TILES.getEntries().size() + " tiles registered.");
         CONTAINERS.register(bus);
+        BotanicalMachinery.LOGGER.info(CONTAINERS.getEntries().size() + " containers registered.");
     }
 }
