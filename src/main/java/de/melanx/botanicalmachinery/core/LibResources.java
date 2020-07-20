@@ -11,7 +11,7 @@ public class LibResources {
     public static final ResourceLocation MANA_BAR = loc(GUI_PREFIX + "misc/mana_bar");
     public static final ResourceLocation MANA_BAR_CURRENT = loc(GUI_PREFIX + "misc/current_mana");
     public static final ResourceLocation MECHANICAL_MANA_POOL_GUI = loc(GUI_PREFIX + LibNames.MECHANICAL_MANA_POOL);
-    public static final ResourceLocation INDUSTRIAL_AGGLOMARATION_FACTORY_GUI = loc(GUI_PREFIX + LibNames.INDUSTRIAL_AGGLOMARATION_FACTORY);
+    public static final ResourceLocation INDUSTRIAL_AGGLOMERATION_FACTORY_GUI = loc(GUI_PREFIX + LibNames.INDUSTRIAL_AGGLOMERATION_FACTORY);
 
     private static ResourceLocation loc(String id) {
         return new ResourceLocation(BotanicalMachinery.MODID, id + ".png");

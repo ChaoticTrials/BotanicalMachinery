@@ -18,7 +18,7 @@ import vazkii.botania.common.lib.ModTags;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileIndustrialAgglomarationFactory extends TileBase {
+public class TileIndustrialAgglomerationFactory extends TileBase {
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(4);
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
     private final int recipeCost = TilePool.MAX_MANA / 2;
@@ -28,8 +28,8 @@ public class TileIndustrialAgglomarationFactory extends TileBase {
 
     private static final String TAG_PROGRESS = "progress";
 
-    public TileIndustrialAgglomarationFactory() {
-        super(Registration.TILE_INDUSTRIAL_AGGLOMARATION_FACTORY.get(), 10_000_000);
+    public TileIndustrialAgglomerationFactory() {
+        super(Registration.TILE_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), 10_000_000);
         this.inventory.setOutputSlots(3);
         this.inventory.setSlotValidator(this::canInsertStack);
     }

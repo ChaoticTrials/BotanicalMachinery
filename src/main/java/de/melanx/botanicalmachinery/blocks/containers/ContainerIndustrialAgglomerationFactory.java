@@ -16,9 +16,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 
-public class ContainerIndustrialAgglomarationFactory extends ContainerBase {
-    public ContainerIndustrialAgglomarationFactory(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
-        super(Registration.CONTAINER_INDUSTRIAL_AGGLOMARATION_FACTORY.get(), windowId, world, pos, playerInventory, player);
+public class ContainerIndustrialAgglomerationFactory extends ContainerBase {
+    public ContainerIndustrialAgglomerationFactory(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
+        super(Registration.CONTAINER_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), windowId, world, pos, playerInventory, player);
         if (this.tile instanceof TileBase) {
             BaseItemStackHandler inventory = ((TileBase) tile).getInventory();
             this.addSlot(new BaseItemHandlerSlot(inventory, 0, 61, 83));
@@ -77,7 +77,7 @@ public class ContainerIndustrialAgglomarationFactory extends ContainerBase {
         ContainerType<Container> containerType = IForgeContainerType.create((windowId, inv, data) -> {
             BlockPos pos = data.readBlockPos();
             World world = inv.player.getEntityWorld();
-            return new ContainerIndustrialAgglomarationFactory(windowId, world, pos, inv, inv.player);
+            return new ContainerIndustrialAgglomerationFactory(windowId, world, pos, inv, inv.player);
         });
         return (ContainerType<T>) containerType;
     }
