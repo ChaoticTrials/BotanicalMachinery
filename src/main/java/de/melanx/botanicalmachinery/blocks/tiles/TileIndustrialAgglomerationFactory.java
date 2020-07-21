@@ -88,6 +88,8 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
             if (!this.recipe && this.progress > 0) {
                 this.progress = 0;
                 this.markDirty();
+            } else if (this.recipe) {
+                this.recipe = false;
             }
         }
     }
