@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "side": "botanicalmachinery:block/industrial_agglomeration_factory_side",
+    "front": "botanicalmachinery:block/industrial_agglomeration_factory_front",
+    "top": "botanicalmachinery:block/industrial_agglomeration_factory_top"
+  }
+}

@@ -1,5 +1,7 @@
 {
+  "block.botanicalmachinery.industrial_agglomeration_factory": "Industrial Agglomeration Factory",
   "block.botanicalmachinery.mechanical_mana_pool": "Machanical Mana Pool",
   "itemGroup.botanicalmachinery": "Botanical Machinery",
+  "screen.botanicalmachinery.industrial_agglomeration_factory": "Industrial Agglomeration Factory",
   "screen.botanicalmachinery.mechanical_mana_pool": "Machanical Mana Pool"
 }
