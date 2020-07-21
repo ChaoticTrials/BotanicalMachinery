@@ -39,7 +39,7 @@ def createRunConfig(String name, Closure extra = {}) {
     minecraft.runs.create(name) { RunConfig run ->
         run.workingDirectory project.file("run_" + name)
         run.property "forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP"
-        run.property "forge.logging.console.level", "debug"
+        run.property "forge.logging.console.level", "info"
         run.mods.create(modid) { ModConfig mod ->
             source sourceSets.main
         }
