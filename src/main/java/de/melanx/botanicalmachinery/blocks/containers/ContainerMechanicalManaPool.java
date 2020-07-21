@@ -74,12 +74,12 @@ public class ContainerMechanicalManaPool extends ContainerBase {
         return itemstack;
     }
 
-    public static <T extends Container> ContainerType<T> createContainerType() {
+    public static <X extends Container> ContainerType<X> createContainerType() {
         ContainerType<Container> containerType = IForgeContainerType.create((windowId, inv, data) -> {
             BlockPos pos = data.readBlockPos();
             World world = inv.player.getEntityWorld();
             return new ContainerMechanicalManaPool(windowId, world, pos, inv, inv.player);
         });
-        return (ContainerType<T>) containerType;
+        return (ContainerType<X>) containerType;
     }
 }
