@@ -88,6 +88,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
             if (!this.recipe && this.progress > 0) {
                 this.progress = 0;
                 this.markDirty();
+                this.markDispatchable();
             } else if (this.recipe) {
                 this.recipe = false;
             }
@@ -101,5 +102,9 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
             return this.handler.cast();
         }
         return super.getCapability(cap, side);
+    }
+
+    public int getProgress() {
+        return this.progress;
     }
 }

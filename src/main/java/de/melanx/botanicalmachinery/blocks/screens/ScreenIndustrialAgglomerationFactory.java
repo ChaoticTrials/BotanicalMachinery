@@ -3,11 +3,14 @@ package de.melanx.botanicalmachinery.blocks.screens;
 import com.mojang.blaze3d.platform.GlStateManager;
 import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerIndustrialAgglomerationFactory;
+import de.melanx.botanicalmachinery.blocks.tiles.TileIndustrialAgglomerationFactory;
 import de.melanx.botanicalmachinery.core.LibResources;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import vazkii.botania.client.core.helper.RenderHelper;
+import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.item.ModItems;
 
 public class ScreenIndustrialAgglomerationFactory extends ScreenBase<ContainerIndustrialAgglomerationFactory> {
@@ -32,6 +35,12 @@ public class ScreenIndustrialAgglomerationFactory extends ScreenBase<ContainerIn
         RenderHelper.drawTexturedModalRect(relX + 61, relY + 83, 16, 0, 16, 16);
         RenderHelper.drawTexturedModalRect(relX + 80, relY + 83, 16, 0, 16, 16);
         RenderHelper.drawTexturedModalRect(relX + 99, relY + 83, 16, 0, 16, 16);
+        TileIndustrialAgglomerationFactory tile = (TileIndustrialAgglomerationFactory) this.container.tile;
+        if (tile.getProgress() > 0) {
+            float pct = Math.min(tile.getProgress() / 100.0F, 1.0F);
+            this.minecraft.getTextureManager().bindTexture(LibResources.INDUSTRIAL_AGGLOMERATION_FACTORY_GUI);
+            RenderHelper.drawTexturedModalRect(relX + 73, relY + 76, 176, 25, 30, (int) -(25 * pct));
+        }
     }
 
 }
