@@ -5,12 +5,10 @@ import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerIndustrialAgglomerationFactory;
 import de.melanx.botanicalmachinery.blocks.tiles.TileIndustrialAgglomerationFactory;
 import de.melanx.botanicalmachinery.core.LibResources;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import vazkii.botania.client.core.helper.RenderHelper;
-import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.item.ModItems;
 
 public class ScreenIndustrialAgglomerationFactory extends ScreenBase<ContainerIndustrialAgglomerationFactory> {
