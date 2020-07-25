@@ -17,7 +17,7 @@ public class BlockStates extends BlockStateProvider {
         Registration.BLOCKS.getEntries().stream().map(block -> block.get()).forEach(block -> {
             VariantBlockStateBuilder builder = getVariantBuilder(block);
             String name = block.getRegistryName().getPath();
-            ModelFile model = models().orientable(block.getRegistryName().getPath(), modLoc("block/" + name + "_side"), modLoc("block/" + name + "_front"), modLoc("block/" + name + "_top"));
+            ModelFile model = models().orientable(block.getRegistryName().getPath(), modLoc("block/" + name + "_side"), modLoc("block/" + name + "_front"), modLoc("block/machine_top"));
             for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getAllowedValues()) {
                 builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, direction)
                         .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));
