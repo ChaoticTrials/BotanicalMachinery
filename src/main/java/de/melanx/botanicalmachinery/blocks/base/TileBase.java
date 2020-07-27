@@ -18,6 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.lwjgl.opengl.GL11;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.api.mana.IKeyLocked;
@@ -108,6 +109,10 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
                 sendPacket = false;
             }
         }
+    }
+
+    public RecipeWrapper getRecipeWrapper() {
+        return new RecipeWrapper(this.getInventory());
     }
 
     @Override

@@ -1,35 +1,32 @@
 package de.melanx.botanicalmachinery.blocks.containers;
 
-import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.ContainerBase;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
-import de.melanx.botanicalmachinery.inventory.slot.BaseItemHandlerSlot;
-import de.melanx.botanicalmachinery.inventory.slot.SlotOutputOnly;
+import de.melanx.botanicalmachinery.inventory.slot.SlotSpecialExclude;
 import de.melanx.botanicalmachinery.inventory.slot.SlotSpecialInclude;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeContainerType;
+import vazkii.botania.common.block.ModBlocks;
 
-public class ContainerMechanicalManaPool extends ContainerBase {
-    public ContainerMechanicalManaPool(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
-        super(Registration.CONTAINER_MECHANICAL_MANA_POOL.get(), windowId, world, pos, playerInventory, player);
-
+public class ContainerMechanicalRunicAltar extends ContainerBase {
+    public ContainerMechanicalRunicAltar(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
+        super(Registration.CONTAINER_MECHANICAL_RUNIC_ALTAR.get(), windowId, world, pos, playerInventory, player);
         if (this.tile instanceof TileBase) {
-            BaseItemStackHandler inventory = ((TileBase) tile).getInventory();
-            this.addSlot(new SlotSpecialInclude(inventory, 0, 53, 47, (Item[]) BotanicalMachinery.catalysts.toArray()));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 1, 53, 25));
-            this.addSlot(new SlotOutputOnly(inventory, 2, 111, 37));
+            BaseItemStackHandler inventory = ((TileBase) this.tile).getInventory();
+            this.addSlot(new SlotSpecialInclude(inventory, 0, 90, 43, ModBlocks.livingrock.asItem()));
+            int index = this.addSlotBox(inventory, 1, 8, 26, 4, 18, 4, 18);
+            this.addSlotBox(inventory, index, 118, 26, 4, 18, 4, 18);
         }
-        this.layoutPlayerInventorySlots(8, 84);
+        this.layoutPlayerInventorySlots(28, 113);
     }
 
     @Override
@@ -40,7 +37,7 @@ public class ContainerMechanicalManaPool extends ContainerBase {
             ItemStack stack = slot.getStack();
             itemstack = stack.copy();
 
-            final int inventorySize = 3;
+            final int inventorySize = 33;
             final int playerInventoryEnd = inventorySize + 27;
             final int playerHotbarEnd = playerInventoryEnd + 9;
 
@@ -50,8 +47,8 @@ public class ContainerMechanicalManaPool extends ContainerBase {
                 }
 
                 slot.onSlotChange(stack, itemstack);
-            } else if (index != 1 && index != 0) {
-                if (!this.mergeItemStack(stack, 0, 2, false)) {
+            } else if (index > 32) {
+                if (!this.mergeItemStack(stack, 0, 17, false)) {
                     return ItemStack.EMPTY;
                 } else if (index < playerInventoryEnd) {
                     if (!this.mergeItemStack(stack, playerInventoryEnd, playerHotbarEnd, false)) {
@@ -80,8 +77,25 @@ public class ContainerMechanicalManaPool extends ContainerBase {
         ContainerType<Container> containerType = IForgeContainerType.create((windowId, inv, data) -> {
             BlockPos pos = data.readBlockPos();
             World world = inv.player.getEntityWorld();
-            return new ContainerMechanicalManaPool(windowId, world, pos, inv, inv.player);
+            return new ContainerMechanicalRunicAltar(windowId, world, pos, inv, inv.player);
         });
         return (ContainerType<X>) containerType;
+    }
+
+    private int addSlotRange(BaseItemStackHandler handler, int index, int x, int y, int amount, int dx) {
+        for (int i = 0; i < amount; i++) {
+            this.addSlot(new SlotSpecialExclude(handler, index, x, y, ModBlocks.livingrock.asItem()));
+            x += dx;
+            index++;
+        }
+        return index;
+    }
+
+    private int addSlotBox(BaseItemStackHandler handler, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
+        for (int j = 0; j < verAmount; j++) {
+            index = this.addSlotRange(handler, index, x, y, horAmount, dx);
+            y += dy;
+        }
+        return index;
     }
 }

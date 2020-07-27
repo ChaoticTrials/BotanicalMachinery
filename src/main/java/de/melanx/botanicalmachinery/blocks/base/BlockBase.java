@@ -3,6 +3,7 @@ package de.melanx.botanicalmachinery.blocks.base;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
@@ -16,8 +17,8 @@ import vazkii.botania.api.wand.IWandHUD;
 import javax.annotation.Nullable;
 
 public abstract class BlockBase extends Block implements ITileEntityProvider, IWandHUD {
-    public BlockBase(Properties properties) {
-        super(properties);
+    public BlockBase() {
+        super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10));
     }
 
     @Nullable

@@ -26,9 +26,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nullable;
 
 public class BlockIndustrialAgglomerationFactory extends BlockBase {
-    public BlockIndustrialAgglomerationFactory() {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10));
-    }
+    public BlockIndustrialAgglomerationFactory() {}
 
     @Nullable
     @Override

@@ -3,10 +3,11 @@ package de.melanx.botanicalmachinery.blocks;
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.BlockBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalManaPool;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalRunicAltar;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalManaPool;
+import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalRunicAltar;
 import de.melanx.botanicalmachinery.core.LibNames;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -25,31 +26,30 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class BlockMechanicalManaPool extends BlockBase {
-
-    public BlockMechanicalManaPool() {}
+public class BlockMechanicalRunicAltar extends BlockBase {
+    public BlockMechanicalRunicAltar() {}
 
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return new TileMechanicalManaPool();
+        return new TileMechanicalRunicAltar();
     }
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileMechanicalManaPool) {
+            if (tile instanceof TileMechanicalRunicAltar) {
                 INamedContainerProvider containerProvider = new INamedContainerProvider() {
                     @Override
                     public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.MECHANICAL_MANA_POOL);
+                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.MECHANICAL_RUNIC_ALTAR);
                     }
 
                     @Nullable
                     @Override
                     public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player) {
-                        return new ContainerMechanicalManaPool(windowId, worldIn, pos, playerInventory, player);
+                        return new ContainerMechanicalRunicAltar(windowId, worldIn, pos, playerInventory, player);
                     }
                 };
                 NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, pos);
