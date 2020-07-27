@@ -19,6 +19,7 @@ public class RecipeHelper {
     public static final List<Item> manaPoolCatalysts = new ArrayList<>();
     public static final List<Item> manaPoolIngredients = new ArrayList<>();
     public static final List<Item> runeAltarIngredients = new ArrayList<>();
+    public static final List<IRuneAltarRecipe> runeAltarRecipes = new ArrayList<>();
 
     @SubscribeEvent
     public static void onRecipesUpdated(final RecipesUpdatedEvent event) {
@@ -38,6 +39,7 @@ public class RecipeHelper {
                 }
             } else if (r instanceof IRuneAltarRecipe) {
                 IRuneAltarRecipe recipe = (IRuneAltarRecipe) r;
+                runeAltarRecipes.add(recipe);
                 for (Ingredient ingredient : recipe.getIngredients()) {
                     for (ItemStack stack : ingredient.getMatchingStacks()) {
                         if (!runeAltarIngredients.contains(stack.getItem())) {
