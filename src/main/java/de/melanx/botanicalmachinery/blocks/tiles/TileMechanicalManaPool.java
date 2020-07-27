@@ -3,9 +3,11 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -77,7 +79,8 @@ public class TileMechanicalManaPool extends TileBase {
 
     @Override
     public boolean canInsertStack(int slot, ItemStack stack) {
-        if (slot == 0) return BotanicalMachinery.catalysts.contains(stack.getItem());
+        if (slot == 0) return RecipeHelper.manaPoolCatalysts.contains(stack.getItem());
+        if (slot == 1) return RecipeHelper.manaPoolIngredients.contains(stack.getItem());
         return true;
     }
 

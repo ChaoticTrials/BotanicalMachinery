@@ -2,6 +2,7 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
@@ -37,7 +38,7 @@ public class TileMechanicalRunicAltar extends TileBase {
     @Override
     public boolean canInsertStack(int slot, ItemStack stack) {
         if (slot == 0) return stack.getItem() == ModBlocks.livingrock.asItem();
-        else if (slot <= 16) return stack.getItem() != ModBlocks.livingrock.asItem();
+        else if (slot <= 16) return RecipeHelper.runeAltarIngredients.contains(stack.getItem());
         return true;
     }
 
