@@ -1,19 +1,16 @@
 package de.melanx.botanicalmachinery.blocks.containers;
 
-import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.ContainerBase;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.inventory.slot.BaseItemHandlerSlot;
 import de.melanx.botanicalmachinery.inventory.slot.SlotOutputOnly;
-import de.melanx.botanicalmachinery.inventory.slot.SlotSpecialInclude;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,7 +22,7 @@ public class ContainerMechanicalManaPool extends ContainerBase {
 
         if (this.tile instanceof TileBase) {
             BaseItemStackHandler inventory = ((TileBase) tile).getInventory();
-            this.addSlot(new SlotSpecialInclude(inventory, 0, 53, 47, (Item[]) BotanicalMachinery.catalysts.toArray()));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 0, 53, 47));
             this.addSlot(new BaseItemHandlerSlot(inventory, 1, 53, 25));
             this.addSlot(new SlotOutputOnly(inventory, 2, 111, 37));
         }

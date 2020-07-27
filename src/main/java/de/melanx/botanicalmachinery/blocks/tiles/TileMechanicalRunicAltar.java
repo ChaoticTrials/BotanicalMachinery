@@ -25,6 +25,7 @@ public class TileMechanicalRunicAltar extends TileBase {
         super(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), 10_000_000);
         this.input = NonNullList.withSize(16, ItemStack.EMPTY);
         this.inventory.setOutputSlots(IntStream.range(17, 34).toArray());
+        this.inventory.setSlotValidator(this::canInsertStack);
     }
 
     @Nonnull
@@ -35,7 +36,9 @@ public class TileMechanicalRunicAltar extends TileBase {
 
     @Override
     public boolean canInsertStack(int slot, ItemStack stack) {
-        return false;
+        if (slot == 0) return stack.getItem() == ModBlocks.livingrock.asItem();
+        else if (slot <= 16) return stack.getItem() != ModBlocks.livingrock.asItem();
+        return true;
     }
 
     private IRuneAltarRecipe getRecipe() {

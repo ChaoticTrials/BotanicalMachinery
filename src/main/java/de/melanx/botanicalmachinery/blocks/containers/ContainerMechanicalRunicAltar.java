@@ -4,8 +4,7 @@ import de.melanx.botanicalmachinery.blocks.base.ContainerBase;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
-import de.melanx.botanicalmachinery.inventory.slot.SlotSpecialExclude;
-import de.melanx.botanicalmachinery.inventory.slot.SlotSpecialInclude;
+import de.melanx.botanicalmachinery.inventory.slot.BaseItemHandlerSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -15,14 +14,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeContainerType;
-import vazkii.botania.common.block.ModBlocks;
 
 public class ContainerMechanicalRunicAltar extends ContainerBase {
     public ContainerMechanicalRunicAltar(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
         super(Registration.CONTAINER_MECHANICAL_RUNIC_ALTAR.get(), windowId, world, pos, playerInventory, player);
         if (this.tile instanceof TileBase) {
             BaseItemStackHandler inventory = ((TileBase) this.tile).getInventory();
-            this.addSlot(new SlotSpecialInclude(inventory, 0, 90, 43, ModBlocks.livingrock.asItem()));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 0, 90, 43));
             int index = this.addSlotBox(inventory, 1, 8, 26, 4, 18, 4, 18);
             this.addSlotBox(inventory, index, 118, 26, 4, 18, 4, 18);
         }
@@ -84,7 +82,7 @@ public class ContainerMechanicalRunicAltar extends ContainerBase {
 
     private int addSlotRange(BaseItemStackHandler handler, int index, int x, int y, int amount, int dx) {
         for (int i = 0; i < amount; i++) {
-            this.addSlot(new SlotSpecialExclude(handler, index, x, y, ModBlocks.livingrock.asItem()));
+            this.addSlot(new BaseItemHandlerSlot(handler, index, x, y));
             x += dx;
             index++;
         }
