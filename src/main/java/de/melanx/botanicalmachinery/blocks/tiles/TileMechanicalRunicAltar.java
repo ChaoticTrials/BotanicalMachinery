@@ -121,6 +121,7 @@ public class TileMechanicalRunicAltar extends TileBase {
         super.tick();
         if (world != null && !world.isRemote) {
             if (this.recipe != null) {
+                ItemStack output = this.recipe.getRecipeOutput().copy();
                 for (Ingredient ingredient : this.recipe.getIngredients()) {
                     for (ItemStack stack : this.inventory.getStacks()) {
                         if (ingredient.test(stack)) {
@@ -135,7 +136,7 @@ public class TileMechanicalRunicAltar extends TileBase {
                     }
                 }
                 this.inventory.getStackInSlot(0).shrink(1);
-                this.putIntoOutput(this.recipe.getRecipeOutput().copy());
+                this.putIntoOutput(output);
                 this.updateRecipe();
             }
         }
