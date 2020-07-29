@@ -10,6 +10,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -20,7 +21,6 @@ import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.material.ItemRune;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -29,14 +29,17 @@ public class TileMechanicalRunicAltar extends TileBase {
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, this.onContentsChanged());
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
     private IRuneAltarRecipe recipe = null;
-    private boolean validRecipe;
-    private NonNullList<ItemStack> input;
+    private boolean initDone;
+    private final int workingDuration = 100;
+    private int progress;
+
+    private static final String TAG_PROGRESS = "progress";
 
     public TileMechanicalRunicAltar() {
         super(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), 10_000_000);
-        this.input = NonNullList.withSize(16, ItemStack.EMPTY);
         this.inventory.setOutputSlots(IntStream.range(17, 33).toArray());
         this.inventory.setSlotValidator(this::canInsertStack);
+        this.updateRecipe();
     }
 
     @Nonnull
@@ -121,27 +124,56 @@ public class TileMechanicalRunicAltar extends TileBase {
     }
 
     @Override
+    public void writePacketNBT(CompoundNBT cmp) {
+        super.writePacketNBT(cmp);
+        cmp.putInt(TAG_PROGRESS, this.progress);
+    }
+
+    @Override
+    public void readPacketNBT(CompoundNBT cmp) {
+        super.readPacketNBT(cmp);
+        this.progress = cmp.getInt(TAG_PROGRESS);
+    }
+
+    @Override
     public void tick() {
         super.tick();
         if (world != null && !world.isRemote) {
-            if (this.recipe != null) {
-                ItemStack output = this.recipe.getRecipeOutput().copy();
-                for (Ingredient ingredient : this.recipe.getIngredients()) {
-                    for (ItemStack stack : this.inventory.getStacks()) {
-                        if (ingredient.test(stack)) {
-                            if (stack.getItem() instanceof ItemRune) {
-                                ItemStack rune = stack.copy();
-                                rune.setCount(1);
-                                this.putIntoOutput(rune);
-                            }
-                            stack.shrink(1);
-                            break;
-                        }
-                    }
-                }
-                this.inventory.getStackInSlot(0).shrink(1);
-                this.putIntoOutput(output);
+            if (!this.initDone) {
                 this.updateRecipe();
+                this.initDone = true;
+            }
+            boolean done = false;
+            if (this.recipe != null) {
+                if (this.getCurrentMana() >= this.recipe.getManaUsage() || this.progress > 0 && this.progress <= this.workingDuration) {
+                    ++this.progress;
+                    this.receiveMana(-(this.recipe.getManaUsage() / this.workingDuration));
+                    if (this.progress >= this.workingDuration) {
+                        ItemStack output = this.recipe.getRecipeOutput().copy();
+                        for (Ingredient ingredient : this.recipe.getIngredients()) {
+                            for (ItemStack stack : this.inventory.getStacks()) {
+                                if (ingredient.test(stack)) {
+                                    if (stack.getItem() instanceof ItemRune) {
+                                        ItemStack rune = stack.copy();
+                                        rune.setCount(1);
+                                        this.putIntoOutput(rune);
+                                    }
+                                    stack.shrink(1);
+                                    break;
+                                }
+                            }
+                        }
+                        this.inventory.getStackInSlot(0).shrink(1);
+                        this.putIntoOutput(output);
+                        this.updateRecipe();
+                        done = true;
+                    }
+                    this.markDirty();
+                    this.markDispatchable();
+                }
+            }
+            if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
+                this.progress = 0;
                 this.markDirty();
                 this.markDispatchable();
             }
@@ -161,6 +193,10 @@ public class TileMechanicalRunicAltar extends TileBase {
                 else break;
             }
         }
+    }
+
+    public int getProgress() {
+        return this.progress;
     }
 
     @Nonnull
