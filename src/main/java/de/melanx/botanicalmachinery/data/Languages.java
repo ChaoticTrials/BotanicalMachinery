@@ -16,6 +16,7 @@ public class Languages extends LanguageProvider {
         add("itemGroup." + BotanicalMachinery.MODID, "Botanical Machinery");
         addTileWithScreen(Registration.BLOCK_MECHANICAL_MANA_POOL.get(), "Machanical Mana Pool");
         addTileWithScreen(Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), "Industrial Agglomeration Factory");
+        addTileWithScreen(Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get(), "Mechanical Runic Altar");
     }
 
     private void addTileWithScreen(Block key, String name) {
