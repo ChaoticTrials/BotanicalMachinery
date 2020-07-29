@@ -6,7 +6,6 @@ import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -16,7 +15,6 @@ import vazkii.botania.common.item.ModItems;
 import vazkii.botania.common.lib.ModTags;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class TileIndustrialAgglomerationFactory extends TileBase {
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(4);
@@ -97,11 +95,11 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
 
     @Nonnull
     @Override
-    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, @Nullable Direction side) {
-        if (!this.removed && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap) {
+        if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return this.handler.cast();
         }
-        return super.getCapability(cap, side);
+        return super.getCapability(cap);
     }
 
     public int getProgress() {

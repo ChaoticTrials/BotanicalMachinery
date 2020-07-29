@@ -1,14 +1,11 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
-import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -19,7 +16,6 @@ import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.core.handler.ManaNetworkHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -115,11 +111,11 @@ public class TileMechanicalManaPool extends TileBase {
 
     @Nonnull
     @Override
-    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, @Nullable Direction side) {
-        if (!this.removed && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap) {
+        if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return this.handler.cast();
         }
-        return super.getCapability(cap, side);
+        return super.getCapability(cap);
     }
 
     @Override

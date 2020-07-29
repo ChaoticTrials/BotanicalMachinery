@@ -5,11 +5,16 @@ import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
+import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.recipe.IRuneAltarRecipe;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.material.ItemRune;
@@ -21,6 +26,7 @@ import java.util.stream.IntStream;
 
 public class TileMechanicalRunicAltar extends TileBase {
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, this.onContentsChanged());
+    private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
     private IRuneAltarRecipe recipe = null;
     private boolean validRecipe;
     private NonNullList<ItemStack> input;
@@ -178,5 +184,14 @@ public class TileMechanicalRunicAltar extends TileBase {
                 else break;
             }
         }
+    }
+
+    @Nonnull
+    @Override
+    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap) {
+        if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return this.handler.cast();
+        }
+        return super.getCapability(cap);
     }
 }
