@@ -11,8 +11,10 @@ import net.minecraftforge.fml.common.Mod;
 import vazkii.botania.api.recipe.IManaInfusionRecipe;
 import vazkii.botania.api.recipe.IRuneAltarRecipe;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = BotanicalMachinery.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class RecipeHelper {
@@ -53,5 +55,38 @@ public class RecipeHelper {
                 }
             }
         }
+    }
+
+    /**
+     * Used to find the matching ingredient to an inventorys {@link ItemStack}
+     *
+     * @param ingredients {@link Map} with the {@link Ingredient} ingredient and {@link Integer} amount to search the matching one
+     * @param items       {@link Map} with {@link Item} item and {@link Integer} amount of all items to be checked
+     * @param input       specific {@link ItemStack} to be tested
+     * @return matching {@link Ingredient}
+     */
+    @Nullable
+    public static Ingredient getMatchingIngredient(Map<Ingredient, Integer> ingredients, Map<Item, Integer> items, ItemStack input) {
+        for (Map.Entry<Ingredient, Integer> entry : ingredients.entrySet()) {
+            Ingredient ingredient = entry.getKey();
+            int count = entry.getValue();
+            if (ingredient.test(input)) {
+
+                for (Map.Entry<Item, Integer> itemEntry : items.entrySet()) {
+                    Item item = itemEntry.getKey();
+                    int itemCount = itemEntry.getValue();
+                    for (Ingredient.IItemList iItemList : ingredient.acceptedItems) {
+                        for (ItemStack stack : iItemList.getStacks()) {
+                            if (stack.getItem() == item) {
+                                if (itemCount >= count) {
+                                    return ingredient;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

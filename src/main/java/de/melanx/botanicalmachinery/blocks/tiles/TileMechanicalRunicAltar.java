@@ -20,6 +20,7 @@ import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.material.ItemRune;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -84,10 +85,8 @@ public class TileMechanicalRunicAltar extends TileBase {
                     if (!done) recipeIngredients.put(ingredient, 1);
                 }
 
-                for (int i = 0; i < stacks.size(); i++) {
-                    ItemStack input = stacks.get(i);
-
-                    Ingredient remove = this.getIngredient(recipeIngredients, items, input);
+                for (ItemStack input : stacks) {
+                    Ingredient remove = RecipeHelper.getMatchingIngredient(recipeIngredients, items, input);
                     if (remove != null) {
                         recipeIngredients.remove(remove);
                     }
@@ -98,28 +97,6 @@ public class TileMechanicalRunicAltar extends TileBase {
             }
         }
         this.recipe = null;
-        return null;
-    }
-
-    private Ingredient getIngredient(Map<Ingredient, Integer> recipeIngredients, Map<Item, Integer> items, ItemStack input) {
-        for (Map.Entry<Ingredient, Integer> entry : recipeIngredients.entrySet()) {
-            Ingredient ingredient = entry.getKey();
-            int count = entry.getValue();
-            if (ingredient.test(input)) {
-
-                for (Map.Entry<Item, Integer> itemEntry : items.entrySet()) {
-                    Item item = itemEntry.getKey();
-                    int itemCount = itemEntry.getValue();
-                    for (Ingredient.IItemList iItemList : Arrays.asList(ingredient.acceptedItems)) {
-                        for (ItemStack stack : iItemList.getStacks()) {
-                            if (stack.getItem() == item) {
-                                if (itemCount >= count) {
-                                    return ingredient;
-                                }
-                            }
-                        }
-                    }
-                }}}
         return null;
     }
 
