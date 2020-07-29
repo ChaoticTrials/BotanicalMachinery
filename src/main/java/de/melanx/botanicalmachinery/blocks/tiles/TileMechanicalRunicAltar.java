@@ -15,10 +15,7 @@ import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.material.ItemRune;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -67,33 +64,57 @@ public class TileMechanicalRunicAltar extends TileBase {
             items.forEach((name, count) -> BotanicalMachinery.LOGGER.debug(count + "x " + name)); // todo remove after debugging
 
             for (IRuneAltarRecipe recipe : RecipeHelper.runeAltarRecipes) {
-                List<Ingredient> recipeIngredients = new ArrayList<>(recipe.getIngredients());
+                Map<Ingredient, Integer> recipeIngredients = new LinkedHashMap<>();
+                for (int i = 0; i < recipe.getIngredients().size(); i++) {
+                    Ingredient ingredient = recipe.getIngredients().get(i);
+                    boolean done = false;
+                    for (Ingredient ingredient1 : recipeIngredients.keySet()) {
+                        if (ingredient.serialize().equals(ingredient1.serialize())) {
+                            recipeIngredients.replace(ingredient1, recipeIngredients.get(ingredient1) + 1);
+                            done = true;
+                            break;
+                        }
+                    }
+                    if (!done) recipeIngredients.put(ingredient, 1);
+                }
 
                 for (int i = 0; i < stacks.size(); i++) {
                     ItemStack input = stacks.get(i);
 
-                    int stackIndex = -1;
-
-                    for (int j = 0; j < recipeIngredients.size(); j++) {
-                        Ingredient ingredient = recipeIngredients.get(j);
-                        if (ingredient.test(input)) {
-                            stackIndex = j;
-                            break;
-                        }
-                    }
-
-                    if (stackIndex != -1) {
-                        recipeIngredients.remove(stackIndex);
+                    Ingredient remove = this.getIngredient(recipeIngredients, items, input);
+                    if (remove != null) {
+                        recipeIngredients.remove(remove);
                     }
                 }
-                if (recipeIngredients.isEmpty() && this.inventory.getStackInSlot(0) != ItemStack.EMPTY) {
+                if (recipeIngredients.isEmpty() && !this.inventory.getStackInSlot(0).isEmpty()) {
                     return this.recipe = recipe;
                 }
             }
         }
         this.recipe = null;
         return null;
-//        return this.recipe;
+    }
+
+    private Ingredient getIngredient(Map<Ingredient, Integer> recipeIngredients, Map<Item, Integer> items, ItemStack input) {
+        for (Map.Entry<Ingredient, Integer> entry : recipeIngredients.entrySet()) {
+            Ingredient ingredient = entry.getKey();
+            int count = entry.getValue();
+            if (ingredient.test(input)) {
+
+                for (Map.Entry<Item, Integer> itemEntry : items.entrySet()) {
+                    Item item = itemEntry.getKey();
+                    int itemCount = itemEntry.getValue();
+                    for (Ingredient.IItemList iItemList : Arrays.asList(ingredient.acceptedItems)) {
+                        for (ItemStack stack : iItemList.getStacks()) {
+                            if (stack.getItem() == item) {
+                                if (itemCount >= count) {
+                                    return ingredient;
+                                }
+                            }
+                        }
+                    }
+                }}}
+        return null;
     }
 
     private Function<Integer, Void> onContentsChanged() {
@@ -138,6 +159,8 @@ public class TileMechanicalRunicAltar extends TileBase {
                 this.inventory.getStackInSlot(0).shrink(1);
                 this.putIntoOutput(output);
                 this.updateRecipe();
+                this.markDirty();
+                this.markDispatchable();
             }
         }
     }
