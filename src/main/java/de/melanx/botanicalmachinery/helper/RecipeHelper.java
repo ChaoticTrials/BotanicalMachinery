@@ -23,6 +23,10 @@ public class RecipeHelper {
 
     @SubscribeEvent
     public static void onRecipesUpdated(final RecipesUpdatedEvent event) {
+        manaPoolCatalysts.clear();
+        manaPoolIngredients.clear();
+        runeAltarIngredients.clear();
+        runeAltarRecipes.clear();
         for (IRecipe<?> r : event.getRecipeManager().getRecipes()) {
             if (r instanceof IManaInfusionRecipe) {
                 IManaInfusionRecipe recipe = (IManaInfusionRecipe) r;
