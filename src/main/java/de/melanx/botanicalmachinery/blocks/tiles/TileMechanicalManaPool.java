@@ -26,7 +26,7 @@ public class TileMechanicalManaPool extends TileBase {
     public boolean validRecipe = true;
 
     public TileMechanicalManaPool() {
-        super(Registration.TILE_MECHANICAL_MANA_POOL.get(), 10_000_000);
+        super(Registration.TILE_MECHANICAL_MANA_POOL.get(), 100_000);
         this.inventory.addSlotLimit(0, 1);
         this.inventory.setOutputSlots(2);
         this.inventory.setSlotValidator(this::canInsertStack);

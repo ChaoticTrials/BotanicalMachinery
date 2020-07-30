@@ -35,7 +35,7 @@ public class TileMechanicalRunicAltar extends TileBase {
     private static final String TAG_PROGRESS = "progress";
 
     public TileMechanicalRunicAltar() {
-        super(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), 10_000_000);
+        super(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), 500_000);
         this.inventory.setInputSlots(IntStream.range(1, 17).toArray());
         this.inventory.setOutputSlots(IntStream.range(17, 33).toArray());
         this.inventory.setSlotValidator(this::canInsertStack);

@@ -27,7 +27,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
     private static final String TAG_PROGRESS = "progress";
 
     public TileIndustrialAgglomerationFactory() {
-        super(Registration.TILE_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), 10_000_000);
+        super(Registration.TILE_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), 1_000_000);
         this.inventory.setOutputSlots(3);
         this.inventory.setSlotValidator(this::canInsertStack);
     }
