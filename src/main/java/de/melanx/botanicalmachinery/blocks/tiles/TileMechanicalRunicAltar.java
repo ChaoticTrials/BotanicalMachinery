@@ -1,6 +1,5 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
-import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
@@ -114,7 +113,7 @@ public class TileMechanicalRunicAltar extends TileBase {
     public boolean hasValidRecipe() {
         for (int i : this.inventory.getInputSlots()) {
             if (!this.inventory.getStackInSlot(i).isEmpty()) {
-                return this.recipe != null;
+                return !this.inventory.getStackInSlot(0).isEmpty();
             }
         }
         return true;

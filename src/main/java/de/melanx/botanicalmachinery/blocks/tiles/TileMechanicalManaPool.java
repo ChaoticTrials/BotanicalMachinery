@@ -39,9 +39,9 @@ public class TileMechanicalManaPool extends TileBase {
                 ItemStack cat = getInventory().getStackInSlot(0);
                 IManaInfusionRecipe recipe = getMatchingRecipe(stack, cat);
                 if (recipe != null) {
-                    validRecipe = recipe.getManaToConsume() <= getCurrentMana();
+                    this.validRecipe = recipe.getManaToConsume() <= this.getCurrentMana();
                 } else {
-                    validRecipe = stack.isEmpty();
+                    this.validRecipe = stack.isEmpty();
                 }
             }
             markDirty();
@@ -87,7 +87,7 @@ public class TileMechanicalManaPool extends TileBase {
             ManaNetworkEvent.addCollector(this);
         }
 
-        if (world != null) {
+        if (this.world != null) {
             ItemStack stack = this.getInventory().getStackInSlot(1);
             ItemStack cat = this.getInventory().getStackInSlot(0);
             IManaInfusionRecipe recipe = getMatchingRecipe(stack, cat);
@@ -120,6 +120,6 @@ public class TileMechanicalManaPool extends TileBase {
 
     @Override
     public boolean hasValidRecipe() {
-        return validRecipe;
+        return this.validRecipe;
     }
 }
