@@ -16,7 +16,7 @@ import vazkii.botania.api.mana.IManaItem;
 import javax.annotation.Nonnull;
 
 public class TileManaBattery extends TileBase {
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, null);
+    private final ManaBatteryHandler inventory = new ManaBatteryHandler(2);
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
 
     public TileManaBattery() {
@@ -32,6 +32,11 @@ public class TileManaBattery extends TileBase {
 
     @Override
     public boolean canInsertStack(int slot, ItemStack stack) {
+        if (stack.getItem() instanceof IManaItem) {
+            IManaItem item = (IManaItem) stack.getItem();
+            if (slot == 0 && item.getMana(stack) >= item.getMaxMana(stack)) return false;
+            if (slot == 1 && item.getMana(stack) <= 0) return false;
+        }
         return stack.getItem() instanceof IManaItem;
     }
 
@@ -84,5 +89,31 @@ public class TileManaBattery extends TileBase {
             return this.handler.cast();
         }
         return super.getCapability(cap);
+    }
+
+    private static class ManaBatteryHandler extends BaseItemStackHandler {
+        public ManaBatteryHandler(int size) {
+            super(size);
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            ItemStack minus = this.getStackInSlot(0);
+            ItemStack plus = this.getStackInSlot(1);
+            IManaItem manaItem;
+            if (slot == 0 && minus.getItem() instanceof IManaItem) {
+                manaItem = (IManaItem) minus.getItem();
+                if (manaItem.getMana(minus) < manaItem.getMaxMana(minus)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (slot == 1 && plus.getItem() instanceof IManaItem) {
+                manaItem = (IManaItem) plus.getItem();
+                if (manaItem.getMana(plus) > 0) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            return super.extractItem(slot, amount, simulate);
+        }
     }
 }

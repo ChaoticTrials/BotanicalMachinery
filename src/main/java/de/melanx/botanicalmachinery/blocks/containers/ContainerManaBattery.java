@@ -39,24 +39,18 @@ public class ContainerManaBattery extends ContainerBase {
             final int playerInventoryEnd = inventorySize + 27;
             final int playerHotbarEnd = playerInventoryEnd + 9;
 
-            if (index == 2) {
-                if (!this.mergeItemStack(stack, inventorySize, playerHotbarEnd, true)) {
-                    return ItemStack.EMPTY;
-                }
-
-                slot.onSlotChange(stack, itemstack);
-            } else if (index != 1 && index != 0) {
+            if (index > 1) {
                 if (!this.mergeItemStack(stack, 0, 2, false)) {
                     return ItemStack.EMPTY;
-                } else if (index < playerInventoryEnd) {
+                }
+            } else {
+                if (!this.mergeItemStack(stack, 2, playerHotbarEnd, false)) {
+                    return ItemStack.EMPTY;
+                } else {
                     if (!this.mergeItemStack(stack, playerInventoryEnd, playerHotbarEnd, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index < playerHotbarEnd && !this.mergeItemStack(stack, inventorySize, playerInventoryEnd, false)) {
-                    return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(stack, inventorySize, playerHotbarEnd, false)) {
-                return ItemStack.EMPTY;
             }
             if (stack.isEmpty()) {
                 slot.putStack(ItemStack.EMPTY);
