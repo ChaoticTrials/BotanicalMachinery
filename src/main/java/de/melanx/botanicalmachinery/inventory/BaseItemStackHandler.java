@@ -7,6 +7,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -23,6 +24,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
     private BiFunction<Integer, ItemStack, Boolean> slotValidator = null;
     private int maxStackSize = 64;
     private int[] outputSlots = null;
+    private int[] inputSlots = null;
 
     public BaseItemStackHandler(int size) {
         this(size, null);
@@ -76,6 +78,10 @@ public class BaseItemStackHandler extends ItemStackHandler {
         return this.stacks;
     }
 
+    public int[] getInputSlots() {
+        return this.inputSlots;
+    }
+
     public int[] getOutputSlots() {
         return this.outputSlots;
     }
@@ -90,6 +96,11 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     public void setSlotValidator(BiFunction<Integer, ItemStack, Boolean> validator) {
         this.slotValidator = validator;
+    }
+
+    public void setInputSlots(int... slots) {
+        Arrays.sort(slots);
+        this.inputSlots = slots;
     }
 
     public void setOutputSlots(int... slots) {

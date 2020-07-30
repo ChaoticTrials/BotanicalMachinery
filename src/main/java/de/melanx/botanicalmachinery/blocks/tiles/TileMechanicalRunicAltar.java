@@ -11,7 +11,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -37,6 +36,7 @@ public class TileMechanicalRunicAltar extends TileBase {
 
     public TileMechanicalRunicAltar() {
         super(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), 10_000_000);
+        this.inventory.setInputSlots(IntStream.range(1, 17).toArray());
         this.inventory.setOutputSlots(IntStream.range(17, 33).toArray());
         this.inventory.setSlotValidator(this::canInsertStack);
         this.updateRecipe();
@@ -106,21 +106,18 @@ public class TileMechanicalRunicAltar extends TileBase {
     private Function<Integer, Void> onContentsChanged() {
         return slot -> {
             this.updateRecipe();
-            if (this.recipe != null) {
-//                    validRecipe = recipe.getManaToConsume() <= getCurrentMana();
-                System.out.println("recipe for: " + this.recipe.getRecipeOutput());
-            } else {
-//                    validRecipe = stack.isEmpty();
-                System.out.println("no recipe found");
-            }
-            markDirty();
             return null;
         };
     }
 
     @Override
     public boolean hasValidRecipe() {
-        return true; //this.validRecipe;
+        for (int i : this.inventory.getInputSlots()) {
+            if (!this.inventory.getStackInSlot(i).isEmpty()) {
+                return this.recipe != null;
+            }
+        }
+        return true;
     }
 
     @Override
