@@ -1,6 +1,7 @@
 package de.melanx.botanicalmachinery;
 
 import de.melanx.botanicalmachinery.blocks.screens.ScreenIndustrialAgglomerationFactory;
+import de.melanx.botanicalmachinery.blocks.screens.ScreenManaBattery;
 import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalManaPool;
 import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalRunicAltar;
 import de.melanx.botanicalmachinery.core.ModGroup;
@@ -31,8 +32,9 @@ public class BotanicalMachinery {
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
+        ScreenManager.registerFactory(Registration.CONTAINER_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), ScreenIndustrialAgglomerationFactory::new);
+        ScreenManager.registerFactory(Registration.CONTAINER_MANA_BATTERY.get(), ScreenManaBattery::new);
         ScreenManager.registerFactory(Registration.CONTAINER_MECHANICAL_MANA_POOL.get(), ScreenMechanicalManaPool::new);
         ScreenManager.registerFactory(Registration.CONTAINER_MECHANICAL_RUNIC_ALTAR.get(), ScreenMechanicalRunicAltar::new);
-        ScreenManager.registerFactory(Registration.CONTAINER_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), ScreenIndustrialAgglomerationFactory::new);
     }
 }

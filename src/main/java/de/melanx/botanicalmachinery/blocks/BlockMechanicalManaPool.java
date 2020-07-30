@@ -6,7 +6,6 @@ import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalManaPoo
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalManaPool;
 import de.melanx.botanicalmachinery.core.LibNames;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -26,8 +25,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nullable;
 
 public class BlockMechanicalManaPool extends BlockBase {
-
-    public BlockMechanicalManaPool() {}
 
     @Nullable
     @Override

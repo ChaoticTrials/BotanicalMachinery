@@ -2,8 +2,8 @@ package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.BlockBase;
-import de.melanx.botanicalmachinery.blocks.containers.ContainerIndustrialAgglomerationFactory;
-import de.melanx.botanicalmachinery.blocks.tiles.TileIndustrialAgglomerationFactory;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerManaBattery;
+import de.melanx.botanicalmachinery.blocks.tiles.TileManaBattery;
 import de.melanx.botanicalmachinery.core.LibNames;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,29 +24,29 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class BlockIndustrialAgglomerationFactory extends BlockBase {
+public class BlockManaBattery extends BlockBase {
 
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return new TileIndustrialAgglomerationFactory();
+        return new TileManaBattery();
     }
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (!worldIn.isRemote) {
             TileEntity tile = worldIn.getTileEntity(pos);
-            if (tile instanceof TileIndustrialAgglomerationFactory) {
+            if (tile instanceof TileManaBattery) {
                 INamedContainerProvider containerProvider = new INamedContainerProvider() {
                     @Override
                     public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.INDUSTRIAL_AGGLOMERATION_FACTORY);
+                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.MANA_BATTERY);
                     }
 
                     @Nullable
                     @Override
                     public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player) {
-                        return new ContainerIndustrialAgglomerationFactory(windowId, worldIn, pos, playerInventory, player);
+                        return new ContainerManaBattery(windowId, worldIn, pos, playerInventory, player);
                     }
                 };
                 NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, pos);

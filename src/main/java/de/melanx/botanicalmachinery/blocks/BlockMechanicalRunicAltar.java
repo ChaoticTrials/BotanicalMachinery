@@ -2,9 +2,7 @@ package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.BlockBase;
-import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalManaPool;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalRunicAltar;
-import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalManaPool;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalRunicAltar;
 import de.melanx.botanicalmachinery.core.LibNames;
 import net.minecraft.block.BlockState;
@@ -27,7 +25,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nullable;
 
 public class BlockMechanicalRunicAltar extends BlockBase {
-    public BlockMechanicalRunicAltar() {}
 
     @Nullable
     @Override
