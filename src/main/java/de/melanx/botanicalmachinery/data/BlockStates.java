@@ -21,7 +21,7 @@ public class BlockStates extends BlockStateProvider {
         Registration.BLOCKS.getEntries().stream().map(block -> block.get()).forEach(block -> {
             VariantBlockStateBuilder builder = getVariantBuilder(block);
             if (block instanceof BlockManaBattery) {
-                this.createModels(builder, block, modLoc("block/" + LibNames.MANA_BATTERY + "_side"));
+                this.createModels(builder, block, modLoc("block/" + LibNames.MANA_BATTERY + "_top"));
             } else {
                 this.createModels(builder, block);
             }
