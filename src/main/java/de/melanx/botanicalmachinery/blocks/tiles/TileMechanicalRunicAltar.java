@@ -31,6 +31,7 @@ public class TileMechanicalRunicAltar extends TileBase {
     private boolean initDone;
     private final int workingDuration = 100;
     private int progress;
+    private boolean update;
 
     private static final String TAG_PROGRESS = "progress";
 
@@ -39,7 +40,7 @@ public class TileMechanicalRunicAltar extends TileBase {
         this.inventory.setInputSlots(IntStream.range(1, 17).toArray());
         this.inventory.setOutputSlots(IntStream.range(17, 33).toArray());
         this.inventory.setSlotValidator(this::canInsertStack);
-        this.updateRecipe();
+        this.update = true;
     }
 
     @Nonnull
@@ -55,7 +56,7 @@ public class TileMechanicalRunicAltar extends TileBase {
         return true;
     }
 
-    private IRuneAltarRecipe updateRecipe() {
+    private void updateRecipe() {
         if (world != null && !world.isRemote) {
             List<ItemStack> stacks = new ArrayList<>(this.inventory.getStacks());
             stacks.subList(17, stacks.size() - 1).clear();
@@ -71,7 +72,6 @@ public class TileMechanicalRunicAltar extends TileBase {
                     items.replace(item, prevCount, prevCount + stack.getCount());
                 }
             });
-            items.forEach((name, count) -> BotanicalMachinery.LOGGER.debug(count + "x " + name)); // todo remove after debugging
 
             for (IRuneAltarRecipe recipe : RecipeHelper.runeAltarRecipes) {
                 Map<Ingredient, Integer> recipeIngredients = new LinkedHashMap<>();
@@ -95,17 +95,17 @@ public class TileMechanicalRunicAltar extends TileBase {
                     }
                 }
                 if (recipeIngredients.isEmpty() && !this.inventory.getStackInSlot(0).isEmpty()) {
-                    return this.recipe = recipe;
+                    this.recipe = recipe;
+                    return;
                 }
             }
         }
         this.recipe = null;
-        return null;
     }
 
     private Function<Integer, Void> onContentsChanged() {
         return slot -> {
-            this.updateRecipe();
+            this.update = true;
             return null;
         };
     }
@@ -137,7 +137,7 @@ public class TileMechanicalRunicAltar extends TileBase {
         super.tick();
         if (world != null && !world.isRemote) {
             if (!this.initDone) {
-                this.updateRecipe();
+                this.update = true;
                 this.initDone = true;
             }
             boolean done = false;
@@ -162,7 +162,7 @@ public class TileMechanicalRunicAltar extends TileBase {
                         }
                         this.inventory.getStackInSlot(0).shrink(1);
                         this.putIntoOutput(output);
-                        this.updateRecipe();
+                        this.update = true;
                         done = true;
                     }
                     this.markDirty();
@@ -173,6 +173,10 @@ public class TileMechanicalRunicAltar extends TileBase {
                 this.progress = 0;
                 this.markDirty();
                 this.markDispatchable();
+            }
+            if (this.update) {
+                this.updateRecipe();
+                this.update = false;
             }
         }
     }
