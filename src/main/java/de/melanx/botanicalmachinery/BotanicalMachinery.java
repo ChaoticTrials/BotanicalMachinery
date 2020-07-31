@@ -1,9 +1,6 @@
 package de.melanx.botanicalmachinery;
 
-import de.melanx.botanicalmachinery.blocks.screens.ScreenIndustrialAgglomerationFactory;
-import de.melanx.botanicalmachinery.blocks.screens.ScreenManaBattery;
-import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalManaPool;
-import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalRunicAltar;
+import de.melanx.botanicalmachinery.blocks.screens.*;
 import de.melanx.botanicalmachinery.core.ModGroup;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
@@ -32,6 +29,7 @@ public class BotanicalMachinery {
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
+        ScreenManager.registerFactory(Registration.CONTAINER_ALFHEIM_MARKET.get(), ScreenAlfheimMarket::new);
         ScreenManager.registerFactory(Registration.CONTAINER_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), ScreenIndustrialAgglomerationFactory::new);
         ScreenManager.registerFactory(Registration.CONTAINER_MANA_BATTERY.get(), ScreenManaBattery::new);
         ScreenManager.registerFactory(Registration.CONTAINER_MECHANICAL_MANA_POOL.get(), ScreenMechanicalManaPool::new);
