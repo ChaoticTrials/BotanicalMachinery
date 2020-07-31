@@ -107,6 +107,28 @@ public class BaseItemStackHandler extends ItemStackHandler {
         this.outputSlots = slots;
     }
 
+    public boolean isInputEmpty() {
+        if (this.inputSlots != null) {
+            for (int i : this.inputSlots) {
+                if (!this.getStackInSlot(i).isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isOutputputEmpty() {
+        if (this.outputSlots != null) {
+            for (int i : this.outputSlots) {
+                if (!this.getStackInSlot(i).isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public IInventory toIInventory() {
         return new Inventory(this.stacks.toArray(new ItemStack[0]));
     }

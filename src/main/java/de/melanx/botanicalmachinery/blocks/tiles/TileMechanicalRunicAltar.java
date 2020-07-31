@@ -111,10 +111,8 @@ public class TileMechanicalRunicAltar extends TileBase {
 
     @Override
     public boolean hasValidRecipe() {
-        for (int i : this.inventory.getInputSlots()) {
-            if (!this.inventory.getStackInSlot(i).isEmpty()) {
-                return !this.inventory.getStackInSlot(0).isEmpty();
-            }
+        if (!this.inventory.isInputEmpty()) {
+            return !this.inventory.getStackInSlot(0).isEmpty();
         }
         return true;
     }
