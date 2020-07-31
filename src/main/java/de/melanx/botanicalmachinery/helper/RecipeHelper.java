@@ -8,6 +8,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import vazkii.botania.api.recipe.IElvenTradeRecipe;
 import vazkii.botania.api.recipe.IManaInfusionRecipe;
 import vazkii.botania.api.recipe.IRuneAltarRecipe;
 
@@ -21,14 +22,18 @@ public class RecipeHelper {
     public static final List<Item> manaPoolCatalysts = new ArrayList<>();
     public static final List<Item> manaPoolIngredients = new ArrayList<>();
     public static final List<Item> runeAltarIngredients = new ArrayList<>();
+    public static final List<Item> elvenTradeIngredients = new ArrayList<>();
     public static final List<IRuneAltarRecipe> runeAltarRecipes = new ArrayList<>();
+    public static final List<IElvenTradeRecipe> elvenTradeRecipes = new ArrayList<>();
 
     @SubscribeEvent
     public static void onRecipesUpdated(final RecipesUpdatedEvent event) {
         manaPoolCatalysts.clear();
         manaPoolIngredients.clear();
         runeAltarIngredients.clear();
+        elvenTradeIngredients.clear();
         runeAltarRecipes.clear();
+        elvenTradeRecipes.clear();
         for (IRecipe<?> r : event.getRecipeManager().getRecipes()) {
             if (r instanceof IManaInfusionRecipe) {
                 IManaInfusionRecipe recipe = (IManaInfusionRecipe) r;
@@ -50,6 +55,16 @@ public class RecipeHelper {
                     for (ItemStack stack : ingredient.getMatchingStacks()) {
                         if (!runeAltarIngredients.contains(stack.getItem())) {
                             runeAltarIngredients.add(stack.getItem());
+                        }
+                    }
+                }
+            } else if (r instanceof IElvenTradeRecipe) {
+                IElvenTradeRecipe recipe = (IElvenTradeRecipe) r;
+                elvenTradeRecipes.add(recipe);
+                for (Ingredient ingredient : recipe.getIngredients()) {
+                    for (ItemStack stack : ingredient.getMatchingStacks()) {
+                        if (!elvenTradeIngredients.contains(stack.getItem())) {
+                            elvenTradeIngredients.add(stack.getItem());
                         }
                     }
                 }
