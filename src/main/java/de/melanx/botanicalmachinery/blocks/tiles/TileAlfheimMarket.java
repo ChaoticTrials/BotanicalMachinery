@@ -22,7 +22,7 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 
 public class TileAlfheimMarket extends TileBase {
-    public static final int WORKING_DURATION = 500;
+    public static final int WORKING_DURATION = 20;
     private static final int RECIPE_COST = 500;
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(5, this.onContentsChanged());
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);

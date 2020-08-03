@@ -24,11 +24,11 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 
 public class TileMechanicalRunicAltar extends TileBase {
+    private static final int WORKING_DURATION = 100;
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, this.onContentsChanged());
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
     private IRuneAltarRecipe recipe = null;
     private boolean initDone;
-    private final int workingDuration = 100;
     private int progress;
     private boolean update = true;
 
@@ -50,7 +50,7 @@ public class TileMechanicalRunicAltar extends TileBase {
     @Override
     public boolean canInsertStack(int slot, ItemStack stack) {
         if (slot == 0) return stack.getItem() == ModBlocks.livingrock.asItem();
-        else if (slot <= 16) return RecipeHelper.runeAltarIngredients.contains(stack.getItem());
+        else if (Arrays.stream(this.inventory.getInputSlots()).anyMatch(x -> x == slot)) return RecipeHelper.runeAltarIngredients.contains(stack.getItem());
         return true;
     }
 
@@ -138,10 +138,10 @@ public class TileMechanicalRunicAltar extends TileBase {
             }
             boolean done = false;
             if (this.recipe != null) {
-                if (this.getCurrentMana() >= this.recipe.getManaUsage() || this.progress > 0 && this.progress <= this.workingDuration) {
+                if (this.getCurrentMana() >= this.recipe.getManaUsage() || this.progress > 0 && this.progress <= WORKING_DURATION) {
                     ++this.progress;
-                    this.receiveMana(-(this.recipe.getManaUsage() / this.workingDuration));
-                    if (this.progress >= this.workingDuration) {
+                    this.receiveMana(-(this.recipe.getManaUsage() / WORKING_DURATION));
+                    if (this.progress >= WORKING_DURATION) {
                         ItemStack output = this.recipe.getRecipeOutput().copy();
                         for (Ingredient ingredient : this.recipe.getIngredients()) {
                             for (ItemStack stack : this.inventory.getStacks()) {
