@@ -29,7 +29,7 @@ public class ScreenIndustrialAgglomerationFactory extends ScreenBase<ContainerIn
         if (tile.getProgress() > 0) {
             float pct = Math.min(tile.getProgress() / 100.0F, 1.0F);
             this.minecraft.getTextureManager().bindTexture(LibResources.INDUSTRIAL_AGGLOMERATION_FACTORY_GUI);
-            vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(relX + 73, relY + 76, 176, 25, 30, (int) -(25 * pct));
+            vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(relX + 73, relY + 76, 176, 25, 30, Math.round(-(25 * pct)));
         }
     }
 
