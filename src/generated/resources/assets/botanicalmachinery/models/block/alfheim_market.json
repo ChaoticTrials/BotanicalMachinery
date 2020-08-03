@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "side": "botanicalmachinery:block/alfheim_market_side",
+    "front": "botanicalmachinery:block/alfheim_market_front",
+    "top": "botanicalmachinery:block/machine_top"
+  }
+}

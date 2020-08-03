@@ -18,6 +18,7 @@ public class Languages extends LanguageProvider {
         addTileWithScreen(Registration.BLOCK_MANA_BATTERY.get(), "Mana Battery");
         addTileWithScreen(Registration.BLOCK_MECHANICAL_MANA_POOL.get(), "Machanical Mana Pool");
         addTileWithScreen(Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get(), "Mechanical Runic Altar");
+        addTileWithScreen(Registration.BLOCK_ALFHEIM_MARKET.get(), "Alfheim Market");
     }
 
     private void addTileWithScreen(Block key, String name) {
