@@ -17,10 +17,10 @@ import vazkii.botania.common.lib.ModTags;
 import javax.annotation.Nonnull;
 
 public class TileIndustrialAgglomerationFactory extends TileBase {
+    private static final int recipeCost = TilePool.MAX_MANA / 2;
+    private static final int workingDuration = 100;
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(4);
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
-    private final int recipeCost = TilePool.MAX_MANA / 2;
-    private final int workingDuration = 100;
     private int progress;
     private boolean recipe;
 
@@ -70,10 +70,10 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
             if (!manasteel.isEmpty() && !manadiamond.isEmpty() &&
                     !manapearl.isEmpty() && output.getCount() < 64) {
                 this.recipe = true;
-                if (this.getCurrentMana() >= this.recipeCost || this.progress > 0 && this.progress <= this.workingDuration) {
+                if (this.getCurrentMana() >= recipeCost || this.progress > 0 && this.progress <= workingDuration) {
                     ++this.progress;
-                    this.receiveMana(-(this.recipeCost / this.workingDuration));
-                    if (this.progress >= this.workingDuration) {
+                    this.receiveMana(-(recipeCost / workingDuration));
+                    if (this.progress >= workingDuration) {
                         manasteel.shrink(1);
                         manadiamond.shrink(1);
                         manapearl.shrink(1);

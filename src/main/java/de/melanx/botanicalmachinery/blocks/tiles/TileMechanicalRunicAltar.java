@@ -30,7 +30,7 @@ public class TileMechanicalRunicAltar extends TileBase {
     private boolean initDone;
     private final int workingDuration = 100;
     private int progress;
-    private boolean update;
+    private boolean update = true;
 
     private static final String TAG_PROGRESS = "progress";
 
@@ -39,7 +39,6 @@ public class TileMechanicalRunicAltar extends TileBase {
         this.inventory.setInputSlots(IntStream.range(1, 17).toArray());
         this.inventory.setOutputSlots(IntStream.range(17, 33).toArray());
         this.inventory.setSlotValidator(this::canInsertStack);
-        this.update = true;
     }
 
     @Nonnull
