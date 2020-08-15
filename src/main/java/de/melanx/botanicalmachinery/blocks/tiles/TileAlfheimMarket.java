@@ -8,8 +8,10 @@ import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.Explosion;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -49,7 +51,7 @@ public class TileAlfheimMarket extends TileBase {
 
     @Override
     public boolean canInsertStack(int slot, ItemStack stack) {
-        return Arrays.stream(this.inventory.getOutputSlots()).anyMatch(x -> x == slot) || RecipeHelper.elvenTradeIngredients.contains(stack.getItem());
+        return Arrays.stream(this.inventory.getOutputSlots()).noneMatch(x -> x == slot) || RecipeHelper.elvenTradeIngredients.contains(stack.getItem());
     }
 
     private void updateRecipe() {
@@ -160,6 +162,13 @@ public class TileAlfheimMarket extends TileBase {
                 this.progress = 0;
                 this.markDirty();
                 this.markDispatchable();
+            }
+            for (int i : this.inventory.getInputSlots()) {
+                if (this.inventory.getStackInSlot(i).getItem() == Items.BREAD) {
+                    this.world.setBlockState(this.pos, Blocks.AIR.getDefaultState());
+                    this.world.createExplosion(null, this.pos.getX(), this.pos.getY(), this.pos.getZ(), 3F, Explosion.Mode.BREAK);
+                    break;
+                }
             }
         }
     }
