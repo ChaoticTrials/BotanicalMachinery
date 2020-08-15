@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import de.melanx.botanicalmachinery.blocks.tiles.IManaMachineTile;
 import de.melanx.botanicalmachinery.core.LibResources;
 import de.melanx.botanicalmachinery.gui.ManaBar;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -16,16 +17,27 @@ import org.lwjgl.opengl.GL11;
 
 public abstract class ScreenBase<X extends Container> extends ContainerScreen<X> {
     public ManaBar manaBar;
+    public int relX;
+    public int relY;
+    public final ContainerBase container;
 
     public ScreenBase(X container, PlayerInventory inv, ITextComponent titleIn) {
         super(container, inv, titleIn);
         this.manaBar = new ManaBar(this, ((IManaMachineTile) ((ContainerBase) container).tile).getManaCap());
+        this.container = (ContainerBase) this.getContainer();
+    }
+
+    @Override
+    public void init(Minecraft p_init_1_, int p_init_2_, int p_init_3_) {
+        super.init(p_init_1_, p_init_2_, p_init_3_);
+        this.relX = (p_init_2_ - this.xSize) / 2;
+        this.relY = (p_init_3_ - this.ySize) / 2;
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        manaBar.guiTop = this.guiTop;
-        manaBar.guiLeft = this.guiLeft;
+        this.manaBar.guiTop = this.guiTop;
+        this.manaBar.guiLeft = this.guiLeft;
         this.renderBackground();
         super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
@@ -39,18 +51,21 @@ public abstract class ScreenBase<X extends Container> extends ContainerScreen<X>
         this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float) (this.ySize - 96 + 2), 4210752);
     }
 
-    public void drawDefaultGuiBackgroundLayer(ResourceLocation screenLocation, int crossX, int crossY) {
+    public void drawDefaultGuiBackgroundLayer(ResourceLocation screenLocation) {
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(screenLocation);
-        int relX = (this.width - this.xSize) / 2;
-        int relY = (this.height - this.ySize) / 2;
         this.blit(relX, relY, 0, 0, this.xSize, this.ySize);
-        ContainerBase container = (ContainerBase) this.getContainer();
-        BlockPos tilePos = container.getPos();
-        TileEntity tile = container.getWorld().getTileEntity(tilePos);
+        this.manaBar.draw(((TileBase) container.tile).getCurrentMana());
+    }
+
+    public void drawDefaultGuiBackgroundLayer(ResourceLocation screenLocation, int crossX, int crossY) {
+        this.drawDefaultGuiBackgroundLayer(screenLocation);
+
+        BlockPos tilePos = this.container.getPos();
+        TileEntity tile = this.container.getWorld().getTileEntity(tilePos);
         if (tile instanceof TileBase && !((TileBase) tile).hasValidRecipe()) {
-            int x = relX + crossX;
-            int y = relY + crossY;
+            int x = this.relX + crossX;
+            int y = this.relY + crossY;
 
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -61,6 +76,5 @@ public abstract class ScreenBase<X extends Container> extends ContainerScreen<X>
             RenderSystem.disableLighting();
             RenderSystem.disableBlend();
         }
-        manaBar.draw(((TileBase) container.tile).getCurrentMana());
     }
 }
