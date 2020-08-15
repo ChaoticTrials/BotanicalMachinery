@@ -164,11 +164,13 @@ public class TileAlfheimMarket extends TileBase {
                 this.markDirty();
                 this.markDispatchable();
             }
-            for (int i : this.inventory.getInputSlots()) {
-                if (this.inventory.getStackInSlot(i).getItem() == Items.BREAD) {
-                    this.world.setBlockState(this.pos, Blocks.AIR.getDefaultState());
-                    this.world.createExplosion(null, this.pos.getX(), this.pos.getY(), this.pos.getZ(), 3F, Explosion.Mode.BREAK);
-                    break;
+            if (this.mana > 0) {
+                for (int i : this.inventory.getInputSlots()) {
+                    if (this.inventory.getStackInSlot(i).getItem() == Items.BREAD) {
+                        this.world.setBlockState(this.pos, Blocks.AIR.getDefaultState());
+                        this.world.createExplosion(null, this.pos.getX(), this.pos.getY(), this.pos.getZ(), 3F, Explosion.Mode.BREAK);
+                        break;
+                    }
                 }
             }
         }
