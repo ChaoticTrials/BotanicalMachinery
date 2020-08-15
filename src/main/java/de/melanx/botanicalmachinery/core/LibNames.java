@@ -7,5 +7,6 @@ public class LibNames {
     public static final String MANA_BATTERY = "mana_battery";
     public static final String MECHANICAL_MANA_POOL = "mechanical_mana_pool";
     public static final String MECHANICAL_RUNIC_ALTAR = "mechanical_runic_altar";
+    public static final String MECHANICAL_DAISY = "mechanical_daisy";
 
 }
