@@ -1,17 +1,36 @@
 package de.melanx.botanicalmachinery.blocks;
 
+import de.melanx.botanicalmachinery.BotanicalMachinery;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalDaisy;
+import de.melanx.botanicalmachinery.blocks.tiles.TileAlfheimMarket;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalDaisy;
+import de.melanx.botanicalmachinery.core.LibNames;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BlockMechanicalDaisy extends Block {
 
-    public BlockMechanicalDaisy(Properties properties) {
-        super(properties);
+    public BlockMechanicalDaisy() {
+        super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10));
     }
 
     @Override
@@ -23,5 +42,30 @@ public class BlockMechanicalDaisy extends Block {
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileMechanicalDaisy();
+    }
+
+    @SuppressWarnings("deprecation")
+    @Nonnull
+    @Override
+    public ActionResultType onBlockActivated(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult hit) {
+        if (!world.isRemote) {
+            TileEntity tile = world.getTileEntity(pos);
+            if (tile instanceof TileMechanicalDaisy) {
+                INamedContainerProvider containerProvider = new INamedContainerProvider() {
+                    @Override
+                    public ITextComponent getDisplayName() {
+                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.MECHANICAL_DAISY);
+                    }
+
+                    @Nonnull
+                    @Override
+                    public Container createMenu(int windowId, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity player) {
+                        return new ContainerMechanicalDaisy(windowId, world, pos, playerInventory, player);
+                    }
+                };
+                NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, pos);
+            }
+        }
+        return ActionResultType.SUCCESS;
     }
 }

@@ -28,7 +28,7 @@ public class Registration {
     public static final RegistryObject<Block> BLOCK_MANA_BATTERY = BLOCKS.register(LibNames.MANA_BATTERY, BlockManaBattery::new);
     public static final RegistryObject<Block> BLOCK_MECHANICAL_MANA_POOL = BLOCKS.register(LibNames.MECHANICAL_MANA_POOL, BlockMechanicalManaPool::new);
     public static final RegistryObject<Block> BLOCK_MECHANICAL_RUNIC_ALTAR = BLOCKS.register(LibNames.MECHANICAL_RUNIC_ALTAR, BlockMechanicalRunicAltar::new);
-    public static final RegistryObject<Block> BLOCK_MECHANICAL_DAISY = BLOCKS.register(LibNames.MECHANICAL_DAISY, BlockMechanicalRunicAltar::new);
+    public static final RegistryObject<Block> BLOCK_MECHANICAL_DAISY = BLOCKS.register(LibNames.MECHANICAL_DAISY, BlockMechanicalDaisy::new);
 
     public static final RegistryObject<Item> ITEM_ALFHEIM_MARKET = ITEMS.register(LibNames.ALFHEIM_MARKET, () -> new BlockItem(BLOCK_ALFHEIM_MARKET.get(), itemProps));
     public static final RegistryObject<Item> ITEM_INDUSTRIAL_AGGLOMERATION_FACTORY = ITEMS.register(LibNames.INDUSTRIAL_AGGLOMERATION_FACTORY, () -> new BlockItem(BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), itemProps));
@@ -49,6 +49,7 @@ public class Registration {
     public static final RegistryObject<ContainerType<ContainerManaBattery>> CONTAINER_MANA_BATTERY = CONTAINERS.register(LibNames.MANA_BATTERY, ContainerManaBattery::createContainerType);
     public static final RegistryObject<ContainerType<ContainerMechanicalManaPool>> CONTAINER_MECHANICAL_MANA_POOL = CONTAINERS.register(LibNames.MECHANICAL_MANA_POOL, ContainerMechanicalManaPool::createContainerType);
     public static final RegistryObject<ContainerType<ContainerMechanicalRunicAltar>> CONTAINER_MECHANICAL_RUNIC_ALTAR = CONTAINERS.register(LibNames.MECHANICAL_RUNIC_ALTAR, ContainerMechanicalRunicAltar::createContainerType);
+    public static final RegistryObject<ContainerType<ContainerMechanicalDaisy>> CONTAINER_MECHANICAL_DAISY = CONTAINERS.register(LibNames.MECHANICAL_DAISY, ContainerMechanicalDaisy::createContainerType);
 
     public static void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();

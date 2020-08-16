@@ -1,6 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -11,6 +12,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -18,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import vazkii.botania.api.recipe.IPureDaisyRecipe;
 import vazkii.botania.client.fx.WispParticleData;
@@ -31,9 +34,14 @@ import java.util.List;
 
 public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity {
 
+    // Negative value = recipe completed
     private int[] workingTicks = new int[8];
     private final InventoryHandler inventory = new InventoryHandler();
-    private final LazyOptional<InventoryHandler> lazyInventory = LazyOptional.of(InventoryHandler::new);
+
+    private final LazyOptional<IItemHandlerModifiable> lazyInventory = ItemStackHandlerWrapper.create(inventory);
+
+    // The canExtract function makes it so that hoppers can only extract items when the recipe is done.
+    private final LazyOptional<IItemHandlerModifiable> hopperInventory = ItemStackHandlerWrapper.create(inventory, slot -> workingTicks[slot] < 0, null);
 
     public TileMechanicalDaisy() {
         super(Registration.TILE_MECHANICAL_DAISY.get());
@@ -41,14 +49,13 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
 
     @Override
     public void tick() {
-        boolean hasSpawnedPArticles = false;
+        boolean hasSpawnedParticles = false;
         for (int i = 0; i < 8; i++) {
             IPureDaisyRecipe recipe = getRecipe(i);
             if (recipe != null) {
                 //noinspection ConstantConditions
                 if (!world.isRemote) {
                     if (workingTicks[i] >= recipe.getTime()) {
-                        workingTicks[i] = 0;
                         BlockState state = recipe.getOutputState();
                         if (state.getBlock().asItem() != Items.AIR) {
                             //noinspection deprecation
@@ -56,27 +63,38 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
                         } else if (state.getFluidState().getFluid().getFluid() != Fluids.EMPTY) {
                             inventory.setStackInSlot(i, new FluidStack(state.getFluidState().getFluid(), 1000));
                         }
+                        workingTicks[i] = -1;
                     } else {
                         workingTicks[i] += 1;
                     }
-                } else if (!hasSpawnedPArticles) {
-                    hasSpawnedPArticles = true;
-                    for(int p = 0; p < 25; p++) {
-                        double x = pos.getX() + Math.random();
-                        double y = pos.getY() + Math.random() + 0.5D;
-                        double z = pos.getZ() + Math.random();
-                        WispParticleData data = WispParticleData.wisp((float)Math.random() / 2.0F, 1.0F, 1.0F, 1.0F);
-                        world.addParticle(data, x, y, z, 0.0D, 0.0D, 0.0D);
-                    }
+                } else if (!hasSpawnedParticles) {
+                    hasSpawnedParticles = true;
+                    double x = pos.getX() + Math.random();
+                    double y = pos.getY() + Math.random() + 0.5D;
+                    double z = pos.getZ() + Math.random();
+                    WispParticleData data = WispParticleData.wisp((float)Math.random() / 2.0F, 1.0F, 1.0F, 1.0F);
+                    world.addParticle(data, x, y, z, 0.0D, 0.0D, 0.0D);
                 }
             } else {
-                workingTicks[i] = 0;
+                if (workingTicks[i] < 0 && !inventory.getStackInSlot(i).isEmpty()) {
+                    workingTicks[i] = -1;
+                } else {
+                    workingTicks[i] = 0;
+                }
             }
         }
     }
 
     @Nullable
     private IPureDaisyRecipe getRecipe(int slot) {
+        BlockState state = getState(slot);
+        if (state == null)
+            return null;
+        return getRecipe(state);
+    }
+
+    @Nullable
+    public BlockState getState(int slot) {
         BlockState state = null;
 
         ItemStack stack = inventory.getStackInSlot(slot);
@@ -91,10 +109,7 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
             }
         }
 
-        if (state == null)
-            return null;
-
-        return getRecipe(state);
+        return state;
     }
 
     @Nullable
@@ -130,36 +145,47 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
 
     @Nonnull
     @Override
-    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap) {
+    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, @Nullable Direction side) {
         if (!this.removed && (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
                 || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
+
+            // If the side is null (e.g we'Re in the gui) we return the normal inventory.
+            // For world interactions (direction != null) we return the inventory that block slots of not finished recipes.
             //noinspection unchecked
-            return (LazyOptional<X>) lazyInventory;
+            return (LazyOptional<X>) (side == null ? lazyInventory : hopperInventory);
         }
         return super.getCapability(cap);
     }
 
-    private class InventoryHandler extends ItemStackHandler implements IFluidHandler {
+    public InventoryHandler getInventory() {
+        return inventory;
+    }
 
-        private final List<FluidStack> fluids;
+    public class InventoryHandler extends ItemStackHandler implements IFluidHandler {
+
+        private final List<FluidStack> fluids = new ArrayList<>(8);
 
         public InventoryHandler() {
             super(8);
-            fluids = new ArrayList<>(8);
             for (int i = 0; i < 8; i++) {
-                fluids.set(i, FluidStack.EMPTY);
+                fluids.add(FluidStack.EMPTY);
             }
+            //fluids = NonNullList.from(FluidStack.EMPTY, new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.WATER, 1000), new FluidStack(Fluids.WATER, 1000));
         }
 
         @Override
         public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-            fluids.set(slot, FluidStack.EMPTY);
+            if (!stack.isEmpty())
+                fluids.set(slot, FluidStack.EMPTY);
             super.setStackInSlot(slot, stack);
         }
 
         public void setStackInSlot(int slot, @Nonnull FluidStack stack) {
             fluids.set(slot, stack);
-            super.setStackInSlot(slot, ItemStack.EMPTY);
+            if (!stack.isEmpty())
+                super.setStackInSlot(slot, ItemStack.EMPTY);
+            else
+                onContentsChanged(slot); // setStackInSlot calls this as well
         }
 
         @Override
@@ -207,7 +233,7 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
         @Nonnull
         @Override
         public FluidStack getFluidInTank(int tank) {
-            if (!super.getStackInSlot(tank).isEmpty()) {
+            if (!getStackInSlot(tank).isEmpty()) {
                 // There's an item in here
                 return FluidStack.EMPTY;
             } else {
