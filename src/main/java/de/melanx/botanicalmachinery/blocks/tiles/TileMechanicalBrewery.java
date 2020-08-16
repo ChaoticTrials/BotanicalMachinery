@@ -172,6 +172,11 @@ public class TileMechanicalBrewery extends TileBase {
         }
     }
 
+    @Override
+    public boolean hasValidRecipe() {
+        return true;
+    }
+
     public int getManaCost() {
         ItemStack stack = this.inventory.getStackInSlot(0);
         if (recipe == null || stack.isEmpty() || !(stack.getItem() instanceof IBrewContainer)) {

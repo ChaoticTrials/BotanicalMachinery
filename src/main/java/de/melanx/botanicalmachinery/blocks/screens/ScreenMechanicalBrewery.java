@@ -22,7 +22,7 @@ public class ScreenMechanicalBrewery extends ScreenBase<ContainerMechanicalBrewe
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        this.drawDefaultGuiBackgroundLayer(LibResources.MECHANICAL_BREWERY_GUI);
+        this.drawDefaultGuiBackgroundLayer(LibResources.MECHANICAL_BREWERY_GUI, 100, 47);
 
         if (this.container.tile instanceof TileMechanicalBrewery && ((TileMechanicalBrewery) this.container.tile).getInventory().getStackInSlot(0).isEmpty()) {
             if (System.currentTimeMillis() - lastTime > 2000) {
