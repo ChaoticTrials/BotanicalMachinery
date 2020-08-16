@@ -41,18 +41,18 @@ public class ContainerMechanicalBrewery extends ContainerBase {
             ItemStack stack = slot.getStack();
             itemstack = stack.copy();
 
-            final int inventorySize = 3;
+            final int inventorySize = 7;
             final int playerInventoryEnd = inventorySize + 27;
             final int playerHotbarEnd = playerInventoryEnd + 9;
 
-            if (index == 2) {
+            if (index < inventorySize - 1) {
                 if (!this.mergeItemStack(stack, inventorySize, playerHotbarEnd, true)) {
                     return ItemStack.EMPTY;
                 }
 
                 slot.onSlotChange(stack, itemstack);
-            } else if (index != 1 && index != 0) {
-                if (!this.mergeItemStack(stack, 0, 2, false)) {
+            } else if (index > inventorySize) {
+                if (!this.mergeItemStack(stack, 0, inventorySize - 1, false)) {
                     return ItemStack.EMPTY;
                 } else if (index < playerInventoryEnd) {
                     if (!this.mergeItemStack(stack, playerInventoryEnd, playerHotbarEnd, false)) {
