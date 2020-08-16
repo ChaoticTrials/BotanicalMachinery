@@ -45,8 +45,8 @@ public class ContainerAlfheimMarket extends ContainerBase {
                 }
 
                 slot.onSlotChange(stack, itemstack);
-            } else if (index > 5) {
-                if (!this.mergeItemStack(stack, 0, inventorySize, false)) {
+            } else if (index > inventorySize- 1) {
+                if (!this.mergeItemStack(stack, 0, 4, false)) {
                     return ItemStack.EMPTY;
                 } else if (index < playerInventoryEnd) {
                     if (!this.mergeItemStack(stack, playerInventoryEnd, playerHotbarEnd, false)) {
