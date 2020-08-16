@@ -15,30 +15,29 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import vazkii.botania.api.recipe.IRuneAltarRecipe;
-import vazkii.botania.common.block.ModBlocks;
-import vazkii.botania.common.item.material.ItemRune;
+import vazkii.botania.api.brew.IBrewContainer;
+import vazkii.botania.api.recipe.IBrewRecipe;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
-public class TileMechanicalRunicAltar extends TileBase {
-    private static final int WORKING_DURATION = 100;
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, this.onContentsChanged());
+public class TileMechanicalBrewery extends TileBase {
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(8);
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
-    private IRuneAltarRecipe recipe = null;
+    private IBrewRecipe recipe = null;
     private boolean initDone;
     private int progress;
-    private boolean update = true;
+    private int workingDuration = -1;
+    private boolean update;
 
     private static final String TAG_PROGRESS = "progress";
+    private static final String TAG_WORKING_DURATION = "workingDuration";
 
-    public TileMechanicalRunicAltar() {
-        super(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), 500_000);
-        this.inventory.setInputSlots(IntStream.range(1, 17).toArray());
-        this.inventory.setOutputSlots(IntStream.range(17, 33).toArray());
+    public TileMechanicalBrewery() {
+        super(Registration.TILE_MECHANICAL_BREWERY.get(), 100_000);
+        this.inventory.setInputSlots(IntStream.range(0, 8).toArray());
+        this.inventory.setOutputSlots(8);
         this.inventory.setSlotValidator(this::canInsertStack);
     }
 
@@ -50,15 +49,20 @@ public class TileMechanicalRunicAltar extends TileBase {
 
     @Override
     public boolean canInsertStack(int slot, ItemStack stack) {
-        if (slot == 0) return stack.getItem() == ModBlocks.livingrock.asItem();
-        else if (Arrays.stream(this.inventory.getInputSlots()).anyMatch(x -> x == slot)) return RecipeHelper.runeAltarIngredients.contains(stack.getItem());
-        return true;
+        if (Arrays.stream(this.inventory.getOutputSlots()).anyMatch(x -> x == slot)) return false;
+        if (slot == 0)
+            return stack.getTag() != null ? !stack.getTag().contains("brewKey") : RecipeHelper.brewContainer.contains(stack.getItem());
+        return (Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot)) || RecipeHelper.brewIngredients.contains(stack.getItem());
     }
 
     private void updateRecipe() {
         if (world != null && !world.isRemote) {
+            if (this.inventory.getStackInSlot(0).isEmpty()) {
+                this.recipe = null;
+                return;
+            }
             List<ItemStack> stacks = new ArrayList<>(this.inventory.getStacks());
-            stacks.subList(17, stacks.size() - 1).clear();
+            stacks.remove(7);
             stacks.remove(0);
             Map<Item, Integer> items = new HashMap<>();
             stacks.removeIf(stack -> stack.getItem() == Blocks.AIR.asItem());
@@ -72,7 +76,7 @@ public class TileMechanicalRunicAltar extends TileBase {
                 }
             });
 
-            for (IRuneAltarRecipe recipe : RecipeHelper.runeAltarRecipes) {
+            for (IBrewRecipe recipe : RecipeHelper.brewRecipes) {
                 Map<Ingredient, Integer> recipeIngredients = new LinkedHashMap<>();
                 for (int i = 0; i < recipe.getIngredients().size(); i++) {
                     Ingredient ingredient = recipe.getIngredients().get(i);
@@ -93,7 +97,7 @@ public class TileMechanicalRunicAltar extends TileBase {
                         recipeIngredients.remove(remove);
                     }
                 }
-                if (recipeIngredients.isEmpty() && !this.inventory.getStackInSlot(0).isEmpty()) {
+                if (recipeIngredients.isEmpty()) {
                     this.recipe = recipe;
                     return;
                 }
@@ -102,99 +106,75 @@ public class TileMechanicalRunicAltar extends TileBase {
         this.recipe = null;
     }
 
-    private Function<Integer, Void> onContentsChanged() {
-        return slot -> {
-            this.update = true;
-            return null;
-        };
-    }
-
-    @Override
-    public boolean hasValidRecipe() {
-        if (!this.inventory.isInputEmpty()) {
-            return !this.inventory.getStackInSlot(0).isEmpty();
-        }
-        return true;
-    }
-
     @Override
     public void writePacketNBT(CompoundNBT cmp) {
         super.writePacketNBT(cmp);
         cmp.putInt(TAG_PROGRESS, this.progress);
+        cmp.putInt(TAG_WORKING_DURATION, this.workingDuration);
     }
 
     @Override
     public void readPacketNBT(CompoundNBT cmp) {
         super.readPacketNBT(cmp);
         this.progress = cmp.getInt(TAG_PROGRESS);
+        this.workingDuration = cmp.getInt(TAG_WORKING_DURATION);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (world != null && !world.isRemote) {
-            if (!this.initDone) {
-                this.update = true;
-                this.initDone = true;
-            }
-            boolean done = false;
-            if (this.recipe != null) {
-                if (this.getCurrentMana() >= this.recipe.getManaUsage() || this.progress > 0 && this.progress <= WORKING_DURATION) {
+        if (!this.initDone) {
+            this.update = true;
+            this.initDone = true;
+        }
+        this.updateRecipe(); // todo remove
+        boolean done = false;
+        if (this.recipe != null) {
+            ItemStack output = this.recipe.getOutput(this.inventory.getStackInSlot(0)).copy(); // fixme why am i air if i'm incense or pendant
+            if (this.inventory.insertItemSuper(7, output, true).isEmpty()) { // fixme why doesn't it work
+                int recipeCost = this.getManaCost();
+                this.workingDuration = recipeCost / 100;
+                if (this.getCurrentMana() >= recipeCost || this.progress > 0 && this.progress <= this.workingDuration) {
                     ++this.progress;
-                    this.receiveMana(-(this.recipe.getManaUsage() / WORKING_DURATION));
-                    if (this.progress >= WORKING_DURATION) {
-                        ItemStack output = this.recipe.getRecipeOutput().copy();
+                    this.receiveMana(-(recipeCost / this.workingDuration));
+                    if (this.progress >= this.workingDuration) {
+                        this.inventory.insertItemSuper(7, output, false);
+                        this.inventory.getStackInSlot(0).shrink(1);
                         for (Ingredient ingredient : this.recipe.getIngredients()) {
                             for (ItemStack stack : this.inventory.getStacks()) {
                                 if (ingredient.test(stack)) {
-                                    if (stack.getItem() instanceof ItemRune) {
-                                        ItemStack rune = stack.copy();
-                                        rune.setCount(1);
-                                        this.putIntoOutput(rune);
-                                    }
                                     stack.shrink(1);
                                     break;
                                 }
                             }
                         }
-                        this.inventory.getStackInSlot(0).shrink(1);
-                        this.putIntoOutput(output);
                         this.update = true;
                         done = true;
+                        this.markDirty();
+                        this.markDispatchable();
                     }
-                    this.markDirty();
-                    this.markDispatchable();
                 }
             }
-            if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
-                this.progress = 0;
-                this.markDirty();
-                this.markDispatchable();
-            }
-            if (this.update) {
-                this.updateRecipe();
-                this.update = false;
-            }
+        }
+        if (this.update) {
+            this.updateRecipe();
+            this.update = false;
+        }
+        if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
+            this.progress = 0;
+            this.workingDuration = -1;
+            this.markDirty();
+            this.markDispatchable();
         }
     }
 
-    private void putIntoOutput(ItemStack stack) {
-        for (int i : this.inventory.getOutputSlots()) {
-            if (stack.isEmpty()) break;
-            ItemStack slotStack = this.inventory.getStackInSlot(i);
-            if (slotStack.isEmpty()) {
-                this.inventory.insertItemSuper(i, stack.copy(), false);
-                break;
-            } else if ((slotStack.getItem() == stack.getItem() && slotStack.getCount() < slotStack.getMaxStackSize())) {
-                ItemStack left = this.inventory.insertItemSuper(i, stack, false);
-                if (left != ItemStack.EMPTY) stack = left;
-                else break;
-            }
+    public int getManaCost() {
+        ItemStack stack = this.inventory.getStackInSlot(0);
+        if (recipe == null || stack.isEmpty() || !(stack.getItem() instanceof IBrewContainer)) {
+            return 0;
         }
-    }
-
-    public int getProgress() {
-        return this.progress;
+        IBrewContainer container = (IBrewContainer) stack.getItem();
+        return container.getManaCost(recipe.getBrew(), stack);
     }
 
     @Nonnull
