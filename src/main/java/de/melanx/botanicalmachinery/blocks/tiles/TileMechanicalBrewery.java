@@ -20,10 +20,11 @@ import vazkii.botania.api.recipe.IBrewRecipe;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 public class TileMechanicalBrewery extends TileBase {
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(8);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(8, this.onContentsChanged());
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
     private IBrewRecipe recipe = null;
     private boolean initDone;
@@ -45,6 +46,13 @@ public class TileMechanicalBrewery extends TileBase {
     @Override
     public BaseItemStackHandler getInventory() {
         return this.inventory;
+    }
+
+    private Function<Integer, Void> onContentsChanged() {
+        return slot -> {
+            this.update = true;
+            return null;
+        };
     }
 
     @Override
