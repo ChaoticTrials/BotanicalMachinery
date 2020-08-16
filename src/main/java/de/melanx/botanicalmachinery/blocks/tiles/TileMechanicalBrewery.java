@@ -10,7 +10,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.brew.IBrewContainer;
 import vazkii.botania.api.recipe.IBrewRecipe;
@@ -172,5 +174,14 @@ public class TileMechanicalBrewery extends TileBase {
         }
         IBrewContainer container = (IBrewContainer) stack.getItem();
         return container.getManaCost(recipe.getBrew(), stack);
+    }
+
+    @Nonnull
+    @Override
+    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap) {
+        if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return this.handler.cast();
+        }
+        return super.getCapability(cap);
     }
 }
