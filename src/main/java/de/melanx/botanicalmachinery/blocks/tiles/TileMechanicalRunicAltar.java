@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -198,7 +199,7 @@ public class TileMechanicalRunicAltar extends TileBase {
 
     @Nonnull
     @Override
-    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap) {
+    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, Direction direction) {
         if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return this.handler.cast();
         }

@@ -5,6 +5,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -13,12 +14,14 @@ import java.util.function.Function;
  * https://github.com/BlakeBr0/Cucumber/blob/1.15/src/main/java/com/blakebr0/cucumber/inventory/SidedItemStackHandlerWrapper.java
  */
 public class ItemStackHandlerWrapper implements IItemHandlerModifiable {
-    private final BaseItemStackHandler inventory;
-    private final BiFunction<Integer, ItemStack, Boolean> canInsert = null;
-    private final Function<Integer, Boolean> canExtract = null;
+    private final IItemHandlerModifiable inventory;
+    private final BiFunction<Integer, ItemStack, Boolean> canInsert;
+    private final Function<Integer, Boolean> canExtract;
 
-    public ItemStackHandlerWrapper(BaseItemStackHandler inventory) {
+    public ItemStackHandlerWrapper(IItemHandlerModifiable inventory, @Nullable Function<Integer, Boolean> canExtract, @Nullable BiFunction<Integer, ItemStack, Boolean> canInsert) {
         this.inventory = inventory;
+        this.canExtract = canExtract;
+        this.canInsert = canInsert;
     }
 
     @Override
@@ -64,7 +67,11 @@ public class ItemStackHandlerWrapper implements IItemHandlerModifiable {
         return this.canInsert == null || this.canInsert.apply(slot, stack);
     }
 
-    public static LazyOptional<IItemHandlerModifiable> create(BaseItemStackHandler inv) {
-        return LazyOptional.of(() -> new ItemStackHandlerWrapper(inv));
+    public static LazyOptional<IItemHandlerModifiable> create(IItemHandlerModifiable inv) {
+        return LazyOptional.of(() -> new ItemStackHandlerWrapper(inv, null, null));
+    }
+
+    public static LazyOptional<IItemHandlerModifiable> create(IItemHandlerModifiable inv, @Nullable Function<Integer, Boolean> canExtract, @Nullable BiFunction<Integer, ItemStack, Boolean> canInsert) {
+        return LazyOptional.of(() -> new ItemStackHandlerWrapper(inv, canExtract, canInsert));
     }
 }
