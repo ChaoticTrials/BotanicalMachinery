@@ -49,7 +49,6 @@ public class TileMechanicalBrewery extends TileBase {
 
     @Override
     public boolean canInsertStack(int slot, ItemStack stack) {
-        if (Arrays.stream(this.inventory.getOutputSlots()).anyMatch(x -> x == slot)) return false;
         if (slot == 0)
             return stack.getTag() != null ? !stack.getTag().contains("brewKey") : RecipeHelper.brewContainer.contains(stack.getItem());
         return (Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot)) || RecipeHelper.brewIngredients.contains(stack.getItem());
@@ -130,15 +129,20 @@ public class TileMechanicalBrewery extends TileBase {
         this.updateRecipe(); // todo remove
         boolean done = false;
         if (this.recipe != null) {
-            ItemStack output = this.recipe.getOutput(this.inventory.getStackInSlot(0)).copy(); // fixme why am i air if i'm incense or pendant
-            if (this.inventory.insertItemSuper(7, output, true).isEmpty()) { // fixme why doesn't it work
+            ItemStack output = this.recipe.getOutput(this.inventory.getStackInSlot(0)).copy();
+            ItemStack currentOutput = this.inventory.getStackInSlot(7);
+            if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemStacksEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
                 int recipeCost = this.getManaCost();
                 this.workingDuration = recipeCost / 100;
                 if (this.getCurrentMana() >= recipeCost || this.progress > 0 && this.progress <= this.workingDuration) {
                     ++this.progress;
                     this.receiveMana(-(recipeCost / this.workingDuration));
                     if (this.progress >= this.workingDuration) {
-                        this.inventory.insertItemSuper(7, output, false);
+                        if (currentOutput.isEmpty()) {
+                            this.inventory.setStackInSlot(7, output);
+                        } else {
+                            currentOutput.setCount(currentOutput.getCount() + output.getCount());
+                        }
                         this.inventory.getStackInSlot(0).shrink(1);
                         for (Ingredient ingredient : this.recipe.getIngredients()) {
                             for (ItemStack stack : this.inventory.getStacks()) {
