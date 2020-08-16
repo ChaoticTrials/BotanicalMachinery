@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
+import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.api.recipe.IPureDaisyRecipe;
 import vazkii.botania.client.fx.WispParticleData;
 import vazkii.botania.common.block.tile.TileMod;
@@ -34,6 +35,7 @@ import java.util.List;
 
 public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity {
 
+    private int ticksToNextUpdate = 5;
     // Negative value = recipe completed
     private int[] workingTicks = new int[8];
     private final InventoryHandler inventory = new InventoryHandler();
@@ -83,6 +85,15 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
                 }
             }
         }
+        //noinspection ConstantConditions
+        if (!world.isRemote) {
+            if (ticksToNextUpdate <= 0) {
+                ticksToNextUpdate = 5;
+                VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
+            } else {
+                ticksToNextUpdate -= 1;
+            }
+        }
     }
 
     @Nullable
@@ -113,7 +124,20 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
     }
 
     @Nullable
-    private IPureDaisyRecipe getRecipe(BlockState state) {
+    public BlockState getState(ItemStack stack) {
+        BlockState state = null;
+
+        if (!stack.isEmpty()) {
+            if (stack.getItem() instanceof BlockItem) {
+                state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
+            }
+        }
+
+        return state;
+    }
+
+    @Nullable
+    public IPureDaisyRecipe getRecipe(BlockState state) {
         if (world == null)
             return null;
 

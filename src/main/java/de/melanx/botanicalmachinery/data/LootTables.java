@@ -40,7 +40,11 @@ public class LootTables extends LootTableProvider {
         @Override
         protected void addTables() {
             for (RegistryObject<Block> block : Registration.BLOCKS.getEntries()) {
-                this.registerLootTable(block.get(), droppingWithMana(block.get()));
+                if (block.get() != Registration.BLOCK_MECHANICAL_DAISY.get()) {
+                    this.registerLootTable(block.get(), droppingWithMana(block.get()));
+                } else {
+                    this.registerLootTable(block.get(), droppingWithInventoryAndWorkingTicks(block.get()));
+                }
             }
         }
 
@@ -54,6 +58,13 @@ public class LootTables extends LootTableProvider {
                     .acceptFunction(CopyName.builder(CopyName.Source.BLOCK_ENTITY)).acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY)
                             .replaceOperation("inv", "BlockEntityTag.inv")
                             .replaceOperation("mana", "BlockEntityTag.mana")))));
+        }
+
+        protected LootTable.Builder droppingWithInventoryAndWorkingTicks(Block block) {
+            return LootTable.builder().addLootPool(withSurvivesExplosion(block, LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(block)
+                    .acceptFunction(CopyName.builder(CopyName.Source.BLOCK_ENTITY)).acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY)
+                            .replaceOperation("inventory", "BlockEntityTag.inventory")
+                            .replaceOperation("workingTicks", "BlockEntityTag.workingTicks")))));
         }
     }
 }
