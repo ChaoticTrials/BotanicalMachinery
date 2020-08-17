@@ -44,6 +44,8 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
 
     // The canExtract function makes it so that hoppers can only extract items when the recipe is done.
     private final LazyOptional<IItemHandlerModifiable> hopperInventory = ItemStackHandlerWrapper.create(this.inventory, slot -> this.workingTicks[slot] < 0, null);
+    private final LazyOptional<IFluidHandler> fluidInventory = LazyOptional.of(() -> this.inventory);
+
 
     public TileMechanicalDaisy() {
         super(Registration.TILE_MECHANICAL_DAISY.get());
@@ -170,13 +172,15 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
     @Nonnull
     @Override
     public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, @Nullable Direction side) {
-        if (!this.removed && (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
-                || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
+        if (!this.removed && (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) {
 
             // If the side is null (e.g we'Re in the gui) we return the normal inventory.
             // For world interactions (direction != null) we return the inventory that block slots of not finished recipes.
             //noinspection unchecked
             return (LazyOptional<X>) (side == null ? this.lazyInventory : this.hopperInventory);
+        } else if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            //noinspection unchecked
+            return (LazyOptional<X>) this.fluidInventory;
         }
         return super.getCapability(cap);
     }
