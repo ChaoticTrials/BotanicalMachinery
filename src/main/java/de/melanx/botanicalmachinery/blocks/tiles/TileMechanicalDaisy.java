@@ -182,7 +182,7 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
             //noinspection unchecked
             return (LazyOptional<X>) this.fluidInventory;
         }
-        return super.getCapability(cap);
+        return super.getCapability(cap, side);
     }
 
     public InventoryHandler getInventory() {
