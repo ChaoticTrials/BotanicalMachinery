@@ -21,6 +21,8 @@ import java.util.List;
 
 public class ScreenMechanicalDaisy extends ContainerScreen<ContainerMechanicalDaisy> {
 
+    private static final ResourceLocation PURE_DAISY_TEXTURE = new ResourceLocation("botania", "blocks/flower_misc_pure_daisy");
+
     public ScreenMechanicalDaisy(ContainerMechanicalDaisy container, PlayerInventory inv, ITextComponent titleIn) {
         super(container, inv, titleIn);
     }
@@ -37,6 +39,23 @@ public class ScreenMechanicalDaisy extends ContainerScreen<ContainerMechanicalDa
     }
 
     @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        String s = this.title.getFormattedText();
+        this.font.drawString(s, (float) (this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, 4210752);
+        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float) (this.ySize - 96 + 2), 4210752);
+        GlStateManager.pushMatrix();
+        GlStateManager.color4f(1, 1, 1, 1);
+        GlStateManager.enableBlend();
+        TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(PURE_DAISY_TEXTURE);
+        //noinspection ConstantConditions
+        this.minecraft.getTextureManager().bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+        blit(12, 16, 0, 48, 48, sprite);
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
+        this.renderHoveredToolTip(mouseX - this.guiLeft, mouseY - this.guiTop);
+    }
+
+    @Override
     protected void drawSlot(@Nonnull Slot slot) {
         if (slot instanceof ContainerMechanicalDaisy.ItemAndFluidSlot) {
             FluidStack stack = ((ContainerMechanicalDaisy.ItemAndFluidSlot) slot).inventory.getFluidInTank(slot.slotNumber);
@@ -48,7 +67,7 @@ public class ScreenMechanicalDaisy extends ContainerScreen<ContainerMechanicalDa
                 ResourceLocation still = stack.getFluid().getAttributes().getStillTexture(stack);
                 TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(still);
                 //noinspection ConstantConditions
-                minecraft.getTextureManager().bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+                this.minecraft.getTextureManager().bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
                 int fluidColor = stack.getFluid().getAttributes().getColor(stack);
                 float fluidColorA = ((fluidColor >> 24) & 0xFF) / 255f;
                 float fluidColorR = ((fluidColor >> 16) & 0xFF) / 255f;

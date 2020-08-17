@@ -20,7 +20,7 @@ public class ContainerIndustrialAgglomerationFactory extends ContainerBase {
     public ContainerIndustrialAgglomerationFactory(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
         super(Registration.CONTAINER_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), windowId, world, pos, playerInventory, player);
         if (this.tile instanceof TileBase) {
-            BaseItemStackHandler inventory = ((TileBase) tile).getInventory();
+            BaseItemStackHandler inventory = ((TileBase) this.tile).getInventory();
             this.addSlot(new BaseItemHandlerSlot(inventory, 0, 61, 83));
             this.addSlot(new BaseItemHandlerSlot(inventory, 1, 80, 83));
             this.addSlot(new BaseItemHandlerSlot(inventory, 2, 99, 83));

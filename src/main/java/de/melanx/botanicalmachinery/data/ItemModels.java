@@ -19,21 +19,21 @@ public class ItemModels extends ItemModelProvider {
     protected void registerModels() {
         for (RegistryObject<Item> item : Registration.ITEMS.getEntries()) {
             if (item.get() instanceof BlockItem)
-                generateBlockItem(item.get());
+                this.generateBlockItem(item.get());
             else
-                generateItem(item.get());
+                this.generateItem(item.get());
         }
     }
 
     private void generateBlockItem(Item block) {
         String path = block.getRegistryName().getPath();
-        getBuilder(path)
-                .parent(new ModelFile.UncheckedModelFile(modLoc("block/" + path)));
+        this.getBuilder(path)
+                .parent(new ModelFile.UncheckedModelFile(this.modLoc("block/" + path)));
     }
 
     private void generateItem(Item item) {
         String path = item.getRegistryName().getPath();
-        getBuilder(path).parent(getExistingFile(mcLoc("item/handheld")))
+        this.getBuilder(path).parent(this.getExistingFile(this.mcLoc("item/handheld")))
                 .texture("layer0", "item/" + path);
     }
 }

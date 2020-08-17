@@ -20,7 +20,7 @@ public class ContainerMechanicalBrewery extends ContainerBase {
         super(Registration.CONTAINER_MECHANICAL_BREWERY.get(), windowId, world, pos, playerInventory, player);
 
         if (this.tile instanceof TileBase) {
-            BaseItemStackHandler inventory = ((TileBase) tile).getInventory();
+            BaseItemStackHandler inventory = ((TileBase) this.tile).getInventory();
             this.addSlot(new BaseItemHandlerSlot(inventory, 0, 44, 46));
             this.addSlot(new BaseItemHandlerSlot(inventory, 1, 29, 16));
             this.addSlot(new BaseItemHandlerSlot(inventory, 2, 59, 16));

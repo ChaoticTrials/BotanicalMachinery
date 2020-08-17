@@ -16,7 +16,7 @@ import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.opengl.GL11;
 
 public abstract class ScreenBase<X extends Container> extends ContainerScreen<X> {
-    public ManaBar manaBar;
+    public final ManaBar manaBar;
     public int relX;
     public int relY;
     public final ContainerBase container;
@@ -54,8 +54,8 @@ public abstract class ScreenBase<X extends Container> extends ContainerScreen<X>
     public void drawDefaultGuiBackgroundLayer(ResourceLocation screenLocation) {
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(screenLocation);
-        this.blit(relX, relY, 0, 0, this.xSize, this.ySize);
-        this.manaBar.draw(((TileBase) container.tile).getCurrentMana());
+        this.blit(this.relX, this.relY, 0, 0, this.xSize, this.ySize);
+        this.manaBar.draw(((TileBase) this.container.tile).getCurrentMana());
     }
 
     public void drawDefaultGuiBackgroundLayer(ResourceLocation screenLocation, int crossX, int crossY) {

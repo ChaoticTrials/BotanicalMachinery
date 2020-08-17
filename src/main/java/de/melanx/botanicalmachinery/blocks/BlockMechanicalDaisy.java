@@ -2,7 +2,6 @@ package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalDaisy;
-import de.melanx.botanicalmachinery.blocks.tiles.TileAlfheimMarket;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalDaisy;
 import de.melanx.botanicalmachinery.core.LibNames;
 import net.minecraft.block.Block;
@@ -18,6 +17,10 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.IBooleanFunction;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
@@ -29,8 +32,16 @@ import javax.annotation.Nullable;
 
 public class BlockMechanicalDaisy extends Block {
 
+    private static final VoxelShape COLLISION_SHAPE = VoxelShapes.combine(
+            makeCuboidShape(0, 0, 0, 16, 2, 16),
+            makeCuboidShape(5, 2, 5, 11, 3, 11),
+            IBooleanFunction.OR
+    );
+
+    private static final VoxelShape SHAPE = makeCuboidShape(0, 0, 0, 16, 11.4, 16);
+
     public BlockMechanicalDaisy() {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10));
+        super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity());
     }
 
     @Override
@@ -67,5 +78,37 @@ public class BlockMechanicalDaisy extends Block {
             }
         }
         return ActionResultType.SUCCESS;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public int getOpacity(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos) {
+        return 0;
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(@Nonnull BlockState state, @Nonnull IBlockReader reader, @Nonnull BlockPos pos) {
+        return true;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Nonnull
+    @Override
+    public VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
+        return COLLISION_SHAPE;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Nonnull
+    @Override
+    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
+        return SHAPE;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Nonnull
+    @Override
+    public VoxelShape getRenderShape(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos) {
+        return SHAPE;
     }
 }

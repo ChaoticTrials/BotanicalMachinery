@@ -2,7 +2,6 @@ package de.melanx.botanicalmachinery.blocks.screens;
 
 import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalBrewery;
-import de.melanx.botanicalmachinery.blocks.tiles.TileAlfheimMarket;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalBrewery;
 import de.melanx.botanicalmachinery.core.LibResources;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
@@ -26,8 +25,8 @@ public class ScreenMechanicalBrewery extends ScreenBase<ContainerMechanicalBrewe
         this.drawDefaultGuiBackgroundLayer(LibResources.MECHANICAL_BREWERY_GUI, 100, 47);
 
         if (this.container.tile instanceof TileMechanicalBrewery && ((TileMechanicalBrewery) this.container.tile).getInventory().getStackInSlot(0).isEmpty()) {
-            if (System.currentTimeMillis() - lastTime > 2000) {
-                lastTime = System.currentTimeMillis();
+            if (System.currentTimeMillis() - this.lastTime > 2000) {
+                this.lastTime = System.currentTimeMillis();
                 i--;
                 if (i < 0) i = RecipeHelper.brewContainer.size() - 1;
             }

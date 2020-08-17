@@ -36,16 +36,16 @@ public class TileMechanicalManaPool extends TileBase {
     private Function<Integer, Void> onContentsChanged() {
         return slot -> {
             if (slot == 1) {
-                ItemStack stack = getInventory().getStackInSlot(1);
-                ItemStack cat = getInventory().getStackInSlot(0);
-                IManaInfusionRecipe recipe = getMatchingRecipe(stack, cat);
+                ItemStack stack = this.getInventory().getStackInSlot(1);
+                ItemStack cat = this.getInventory().getStackInSlot(0);
+                IManaInfusionRecipe recipe = this.getMatchingRecipe(stack, cat);
                 if (recipe != null) {
                     this.validRecipe = recipe.getManaToConsume() <= this.getCurrentMana();
                 } else {
                     this.validRecipe = stack.isEmpty();
                 }
             }
-            markDirty();
+            this.markDirty();
             return null;
         };
     }
@@ -54,7 +54,7 @@ public class TileMechanicalManaPool extends TileBase {
         List<IManaInfusionRecipe> matchingNonCatRecipes = new ArrayList<>();
         List<IManaInfusionRecipe> matchingCatRecipes = new ArrayList<>();
 
-        for (IManaInfusionRecipe recipe : TilePool.manaInfusionRecipes(world.getRecipeManager())) {
+        for (IManaInfusionRecipe recipe : TilePool.manaInfusionRecipes(this.world.getRecipeManager())) {
             if (recipe.matches(stack)) {
                 if (recipe.getCatalyst() == null) {
                     matchingNonCatRecipes.add(recipe);
@@ -84,26 +84,26 @@ public class TileMechanicalManaPool extends TileBase {
     @Override
     public void tick() {
         super.tick();
-        if (!ManaNetworkHandler.instance.isPoolIn(this) && !isRemoved()) {
+        if (!ManaNetworkHandler.instance.isPoolIn(this) && !this.isRemoved()) {
             ManaNetworkEvent.addCollector(this);
         }
 
         if (this.world != null) {
             ItemStack stack = this.getInventory().getStackInSlot(1);
             ItemStack cat = this.getInventory().getStackInSlot(0);
-            IManaInfusionRecipe recipe = getMatchingRecipe(stack, cat);
-            if (!world.isRemote) {
+            IManaInfusionRecipe recipe = this.getMatchingRecipe(stack, cat);
+            if (!this.world.isRemote) {
                 if (recipe != null) {
                     int mana = recipe.getManaToConsume();
-                    if (getCurrentMana() >= mana && (this.getInventory().getStackInSlot(2).isEmpty() ||
+                    if (this.getCurrentMana() >= mana && (this.getInventory().getStackInSlot(2).isEmpty() ||
                             (recipe.getRecipeOutput().getItem() == this.getInventory().getStackInSlot(2).getItem() &&
                                     this.getInventory().getStackInSlot(2).getMaxStackSize() > this.getInventory().getStackInSlot(2).getCount()))) {
-                        receiveMana(-mana);
+                        this.receiveMana(-mana);
                         stack.shrink(1);
 
                         ItemStack output = recipe.getRecipeOutput().copy();
                         this.inventory.insertItemSuper(2, output, false);
-                        markDirty();
+                        this.markDirty();
                     }
                 }
             }

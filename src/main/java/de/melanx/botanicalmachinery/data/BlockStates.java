@@ -19,9 +19,11 @@ public class BlockStates extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         Registration.BLOCKS.getEntries().stream().map(block -> block.get()).forEach(block -> {
-            VariantBlockStateBuilder builder = getVariantBuilder(block);
-            if (block instanceof BlockManaBattery) {
-                this.createModels(builder, block, modLoc("block/" + LibNames.MANA_BATTERY + "_top"));
+            VariantBlockStateBuilder builder = this.getVariantBuilder(block);
+            if (block == Registration.BLOCK_MECHANICAL_DAISY.get()) {
+                this.createStateForManualModel(builder, block);
+            } else if (block instanceof BlockManaBattery) {
+                this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY + "_top"));
             } else {
                 this.createModels(builder, block);
             }
@@ -30,7 +32,7 @@ public class BlockStates extends BlockStateProvider {
 
     private void createModels(VariantBlockStateBuilder builder, Block block, ResourceLocation top) {
         String name = block.getRegistryName().getPath();
-        ModelFile model = models().orientable(block.getRegistryName().getPath(), modLoc("block/" + name + "_side"), modLoc("block/" + name + "_front"), top);
+        ModelFile model = this.models().orientable(block.getRegistryName().getPath(), this.modLoc("block/" + name + "_side"), this.modLoc("block/" + name + "_front"), top);
         for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getAllowedValues()) {
             builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, direction)
                     .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));
@@ -38,6 +40,10 @@ public class BlockStates extends BlockStateProvider {
     }
 
     private void createModels(VariantBlockStateBuilder builder, Block block) {
-        this.createModels(builder, block, modLoc("block/machine_top"));
+        this.createModels(builder, block, this.modLoc("block/machine_top"));
+    }
+
+    private void createStateForManualModel(VariantBlockStateBuilder builder, Block block) {
+        builder.partialState().addModels(new ConfiguredModel(this.models().getExistingFile(new ResourceLocation(BotanicalMachinery.MODID, "block/" + block.getRegistryName().getPath()))));
     }
 }

@@ -36,14 +36,14 @@ public class LootTables extends LootTableProvider {
         map.forEach((name, table) -> LootTableManager.func_227508_a_(validationtracker, name, table));
     }
 
-    private class BlockTable extends BlockLootTables {
+    private static class BlockTable extends BlockLootTables {
         @Override
         protected void addTables() {
             for (RegistryObject<Block> block : Registration.BLOCKS.getEntries()) {
                 if (block.get() != Registration.BLOCK_MECHANICAL_DAISY.get()) {
-                    this.registerLootTable(block.get(), droppingWithMana(block.get()));
+                    this.registerLootTable(block.get(), this.droppingWithMana(block.get()));
                 } else {
-                    this.registerLootTable(block.get(), droppingWithInventoryAndWorkingTicks(block.get()));
+                    this.registerLootTable(block.get(), this.droppingWithInventoryAndWorkingTicks(block.get()));
                 }
             }
         }
