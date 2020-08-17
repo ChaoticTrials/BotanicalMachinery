@@ -21,7 +21,7 @@ public class ContainerMechanicalManaPool extends ContainerBase {
         super(Registration.CONTAINER_MECHANICAL_MANA_POOL.get(), windowId, world, pos, playerInventory, player);
 
         if (this.tile instanceof TileBase) {
-            BaseItemStackHandler inventory = ((TileBase) tile).getInventory();
+            BaseItemStackHandler inventory = ((TileBase) this.tile).getInventory();
             this.addSlot(new BaseItemHandlerSlot(inventory, 0, 53, 47));
             this.addSlot(new BaseItemHandlerSlot(inventory, 1, 53, 25));
             this.addSlot(new SlotOutputOnly(inventory, 2, 111, 37));

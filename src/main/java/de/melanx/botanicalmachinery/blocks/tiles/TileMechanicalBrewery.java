@@ -63,7 +63,7 @@ public class TileMechanicalBrewery extends TileBase {
     }
 
     private void updateRecipe() {
-        if (world != null && !world.isRemote) {
+        if (this.world != null && !this.world.isRemote) {
             if (this.inventory.getStackInSlot(0).isEmpty()) {
                 this.recipe = null;
                 return;
@@ -197,11 +197,11 @@ public class TileMechanicalBrewery extends TileBase {
 
     public int getManaCost() {
         ItemStack stack = this.inventory.getStackInSlot(0);
-        if (recipe == null || stack.isEmpty() || !(stack.getItem() instanceof IBrewContainer)) {
+        if (this.recipe == null || stack.isEmpty() || !(stack.getItem() instanceof IBrewContainer)) {
             return 0;
         }
         IBrewContainer container = (IBrewContainer) stack.getItem();
-        return container.getManaCost(recipe.getBrew(), stack);
+        return container.getManaCost(this.recipe.getBrew(), stack);
     }
 
     @Nonnull

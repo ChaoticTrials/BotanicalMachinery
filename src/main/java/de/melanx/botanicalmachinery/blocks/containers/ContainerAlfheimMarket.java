@@ -20,7 +20,7 @@ public class ContainerAlfheimMarket extends ContainerBase {
         super(Registration.CONTAINER_ALFHEIM_MARKET.get(), windowId, world, pos, playerInventory, player);
 
         if (this.tile instanceof TileBase) {
-            BaseItemStackHandler inventory = ((TileBase) tile).getInventory();
+            BaseItemStackHandler inventory = ((TileBase) this.tile).getInventory();
             int index = this.addSlotBox(inventory, 0, 26, 26, 2, 18, 2, 18);
             this.addSlot(new BaseItemHandlerSlot(inventory, index, 125, 35));
         }

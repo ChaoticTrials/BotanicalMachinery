@@ -29,7 +29,6 @@ import vazkii.botania.client.core.handler.HUDHandler;
 import vazkii.botania.common.block.tile.TileMod;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 public abstract class TileBase extends TileMod implements IManaPool, IManaMachineTile, IKeyLocked, ISparkAttachable, IThrottledPacket, ITickableTileEntity {
@@ -86,7 +85,7 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
 
     @OnlyIn(Dist.CLIENT)
     public void renderHUD(Minecraft mc) {
-        ItemStack block = new ItemStack(getBlockState().getBlock());
+        ItemStack block = new ItemStack(this.getBlockState().getBlock());
         String name = block.getDisplayName().getString();
         int color = 0x4444FF;
         HUDHandler.drawSimpleManaHUD(color, this.getCurrentMana(), this.getManaCap(), name);
@@ -102,10 +101,10 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
 
     @Override
     public void tick() {
-        if (world != null) {
-            if (sendPacket) {
+        if (this.world != null) {
+            if (this.sendPacket) {
                 VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
-                sendPacket = false;
+                this.sendPacket = false;
             }
         }
     }
@@ -122,7 +121,7 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
 
     @Override
     public void markDispatchable() {
-        sendPacket = true;
+        this.sendPacket = true;
     }
 
     @Override
@@ -141,7 +140,7 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
 
     @Override
     public ISparkEntity getAttachedSpark() {
-        List<Entity> sparks = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.up(), pos.up().add(1, 1, 1)), Predicates.instanceOf(ISparkEntity.class));
+        List<Entity> sparks = this.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(this.pos.up(), this.pos.up().add(1, 1, 1)), Predicates.instanceOf(ISparkEntity.class));
         if (sparks.size() == 1) {
             Entity entity = sparks.get(0);
             return (ISparkEntity) entity;
@@ -164,8 +163,8 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
         int old = this.mana;
         this.mana = Math.max(0, Math.min(this.getCurrentMana() + i, this.getManaCap()));
         if (old != this.mana) {
-            markDirty();
-            markDispatchable();
+            this.markDirty();
+            this.markDispatchable();
         }
     }
 

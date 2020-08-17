@@ -17,6 +17,7 @@ public class LibResources {
     public static final ResourceLocation MECHANICAL_BREWERY_GUI = gui(LibNames.MECHANICAL_BREWERY);
     public static final ResourceLocation MECHANICAL_MANA_POOL_GUI = gui(LibNames.MECHANICAL_MANA_POOL);
     public static final ResourceLocation MECHANICAL_RUNIC_ALTAR_GUI = gui(LibNames.MECHANICAL_RUNIC_ALTAR);
+    public static final ResourceLocation MECHANICAL_DAISY_GUI = gui(LibNames.MECHANICAL_DAISY);
 
     private static ResourceLocation gui(String id) {
         return loc(GUI_PREFIX + id);

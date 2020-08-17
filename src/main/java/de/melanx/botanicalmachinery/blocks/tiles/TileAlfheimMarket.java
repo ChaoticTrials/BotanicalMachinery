@@ -56,7 +56,7 @@ public class TileAlfheimMarket extends TileBase {
     }
 
     private void updateRecipe() {
-        if (world != null && !world.isRemote) {
+        if (this.world != null && !this.world.isRemote) {
             List<ItemStack> stacks = new ArrayList<>(this.inventory.getStacks());
             stacks.remove(4);
             Map<Item, Integer> items = new HashMap<>();
@@ -123,13 +123,13 @@ public class TileAlfheimMarket extends TileBase {
     @Override
     public void tick() {
         super.tick();
-        if (world != null && !world.isRemote) {
+        if (this.world != null && !this.world.isRemote) {
             if (!this.initDone) {
                 this.update = true;
                 this.initDone = true;
             }
             boolean done = false;
-            if (recipe != null) {
+            if (this.recipe != null) {
                 List<ItemStack> outputs = new ArrayList<>(this.recipe.getOutputs());
                 if (outputs.size() == 1) {
                     if (this.inventory.insertItemSuper(4, outputs.get(0), true).isEmpty()) {

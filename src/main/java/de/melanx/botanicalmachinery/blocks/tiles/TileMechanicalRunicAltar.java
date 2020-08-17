@@ -56,7 +56,7 @@ public class TileMechanicalRunicAltar extends TileBase {
     }
 
     private void updateRecipe() {
-        if (world != null && !world.isRemote) {
+        if (this.world != null && !this.world.isRemote) {
             List<ItemStack> stacks = new ArrayList<>(this.inventory.getStacks());
             stacks.subList(17, stacks.size() - 1).clear();
             stacks.remove(0);
@@ -132,7 +132,7 @@ public class TileMechanicalRunicAltar extends TileBase {
     @Override
     public void tick() {
         super.tick();
-        if (world != null && !world.isRemote) {
+        if (this.world != null && !this.world.isRemote) {
             if (!this.initDone) {
                 this.update = true;
                 this.initDone = true;

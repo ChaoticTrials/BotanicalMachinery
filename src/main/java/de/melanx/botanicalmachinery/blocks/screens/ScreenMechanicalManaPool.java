@@ -26,8 +26,8 @@ public class ScreenMechanicalManaPool extends ScreenBase<ContainerMechanicalMana
 
         int relX = (this.width - this.xSize) / 2;
         int relY = (this.height - this.ySize) / 2;
-        if (System.currentTimeMillis() - lastTime > 2000) {
-            lastTime = System.currentTimeMillis();
+        if (System.currentTimeMillis() - this.lastTime > 2000) {
+            this.lastTime = System.currentTimeMillis();
             i--;
             if (i < 0) i = RecipeHelper.manaPoolCatalysts.size() - 1;
         }

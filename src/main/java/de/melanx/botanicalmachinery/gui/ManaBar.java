@@ -11,7 +11,7 @@ public class ManaBar {
     private final Screen parent;
     public int x = 153;
     public int y = 15;
-    public int capacity;
+    public final int capacity;
     private final int width = 16;
     private final int height = 62;
     public int guiLeft;
@@ -23,27 +23,27 @@ public class ManaBar {
     }
 
     public boolean isMouseOver(int mouseX, int mouseY) {
-        return guiLeft + x < mouseX && mouseX < guiLeft + x + width
-                && guiTop + y < mouseY && mouseY < guiTop + y + height;
+        return this.guiLeft + this.x < mouseX && mouseX < this.guiLeft + this.x + this.width
+                && this.guiTop + this.y < mouseY && mouseY < this.guiTop + this.y + this.height;
     }
 
     public void draw(float mana) {
         int relX;
         int relY;
-        parent.getMinecraft().getTextureManager().bindTexture(LibResources.MANA_BAR);
-        relX = guiLeft + x;
-        relY = guiTop + y;
-        Screen.blit(relX, relY, 0, 0, width, height, width, height);
-        parent.getMinecraft().getTextureManager().bindTexture(LibResources.MANA_BAR_CURRENT);
+        this.parent.getMinecraft().getTextureManager().bindTexture(LibResources.MANA_BAR);
+        relX = this.guiLeft + this.x;
+        relY = this.guiTop + this.y;
+        Screen.blit(relX, relY, 0, 0, this.width, this.height, this.width, this.height);
+        this.parent.getMinecraft().getTextureManager().bindTexture(LibResources.MANA_BAR_CURRENT);
         relX += 1;
-        relY += height - 1;
+        relY += this.height - 1;
         float pct = Math.min(mana / this.capacity, 1.0F);
-        Screen.blit(relX, relY, 0, 0, width - 2, (int) -((height - 2) * pct), width - 2, height - 2);
+        Screen.blit(relX, relY, 0, 0, this.width - 2, (int) -((this.height - 2) * pct), this.width - 2, this.height - 2);
     }
 
     public void renderHoveredToolTip(int mouseX, int mouseY, int mana) {
         if (this.isMouseOver(mouseX, mouseY)) {
-            parent.renderTooltip(mana + " / " + this.capacity + " Mana", mouseX, mouseY);
+            this.parent.renderTooltip(mana + " / " + this.capacity + " Mana", mouseX, mouseY);
         }
     }
 }

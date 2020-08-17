@@ -35,7 +35,7 @@ public abstract class ContainerBase extends Container {
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(IWorldPosCallable.of(this.tile.getWorld(), tile.getPos()), player, this.tile.getBlockState().getBlock());
+        return isWithinUsableDistance(IWorldPosCallable.of(this.tile.getWorld(), this.tile.getPos()), this.player, this.tile.getBlockState().getBlock());
     }
 
     private int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
@@ -56,10 +56,10 @@ public abstract class ContainerBase extends Container {
     }
 
     public void layoutPlayerInventorySlots(int leftCol, int topRow) {
-        this.addSlotBox(playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
+        this.addSlotBox(this.playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
 
         topRow += 58;
-        this.addSlotRange(playerInventory, 0, leftCol, topRow, 9, 18);
+        this.addSlotRange(this.playerInventory, 0, leftCol, topRow, 9, 18);
     }
 
     public BlockPos getPos() {

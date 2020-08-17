@@ -25,8 +25,8 @@ public class ScreenMechanicalBrewery extends ScreenBase<ContainerMechanicalBrewe
         this.drawDefaultGuiBackgroundLayer(LibResources.MECHANICAL_BREWERY_GUI, 100, 49);
 
         if (this.container.tile instanceof TileMechanicalBrewery && ((TileMechanicalBrewery) this.container.tile).getInventory().getStackInSlot(0).isEmpty()) {
-            if (System.currentTimeMillis() - lastTime > 2000) {
-                lastTime = System.currentTimeMillis();
+            if (System.currentTimeMillis() - this.lastTime > 2000) {
+                this.lastTime = System.currentTimeMillis();
                 i--;
                 if (i < 0) i = RecipeHelper.brewContainer.size() - 1;
             }

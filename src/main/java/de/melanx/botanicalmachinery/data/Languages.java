@@ -13,17 +13,18 @@ public class Languages extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        add("itemGroup." + BotanicalMachinery.MODID, "Botanical Machinery");
-        addTileWithScreen(Registration.BLOCK_ALFHEIM_MARKET.get(), "Alfheim Market");
-        addTileWithScreen(Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), "Industrial Agglomeration Factory");
-        addTileWithScreen(Registration.BLOCK_MANA_BATTERY.get(), "Mana Battery");
-        addTileWithScreen(Registration.BLOCK_MECHANICAL_BREWERY.get(), "Mechanical Brewery");
-        addTileWithScreen(Registration.BLOCK_MECHANICAL_MANA_POOL.get(), "Machanical Mana Pool");
-        addTileWithScreen(Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get(), "Mechanical Runic Altar");
+        this.add("itemGroup." + BotanicalMachinery.MODID, "Botanical Machinery");
+        this.addTileWithScreen(Registration.BLOCK_ALFHEIM_MARKET.get(), "Alfheim Market");
+        this.addTileWithScreen(Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), "Industrial Agglomeration Factory");
+        this.addTileWithScreen(Registration.BLOCK_MANA_BATTERY.get(), "Mana Battery");
+        this.addTileWithScreen(Registration.BLOCK_MECHANICAL_BREWERY.get(), "Mechanical Brewery");
+        this.addTileWithScreen(Registration.BLOCK_MECHANICAL_MANA_POOL.get(), "Machanical Mana Pool");
+        this.addTileWithScreen(Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get(), "Mechanical Runic Altar");
+        this.addTileWithScreen(Registration.BLOCK_MECHANICAL_DAISY.get(), "Mechanical Daisy");
     }
 
     private void addTileWithScreen(Block key, String name) {
-        add(key, name);
-        add("screen." + BotanicalMachinery.MODID + "." + key.getRegistryName().getPath(), name);
+        this.add(key, name);
+        this.add("screen." + BotanicalMachinery.MODID + "." + key.getRegistryName().getPath(), name);
     }
 }

@@ -20,7 +20,7 @@ public class ContainerManaBattery extends ContainerBase {
         super(Registration.CONTAINER_MANA_BATTERY.get(), windowId, world, pos, playerInventory, player);
 
         if (this.tile instanceof TileBase) {
-            BaseItemStackHandler inventory = ((TileBase) tile).getInventory();
+            BaseItemStackHandler inventory = ((TileBase) this.tile).getInventory();
             this.addSlot(new BaseItemHandlerSlot(inventory, 0, 53, 35));
             this.addSlot(new BaseItemHandlerSlot(inventory, 1, 107, 35));
         }
