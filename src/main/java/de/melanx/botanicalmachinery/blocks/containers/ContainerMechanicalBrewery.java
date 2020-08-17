@@ -21,14 +21,14 @@ public class ContainerMechanicalBrewery extends ContainerBase {
 
         if (this.tile instanceof TileBase) {
             BaseItemStackHandler inventory = ((TileBase) tile).getInventory();
-            this.addSlot(new BaseItemHandlerSlot(inventory, 0, 44, 46));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 1, 29, 16));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 2, 59, 16));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 3, 14, 46));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 4, 74, 46));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 5, 29, 76));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 6, 59, 76));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 7, 128, 47));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 0, 44, 48));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 1, 29, 18));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 2, 59, 18));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 3, 14, 48));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 4, 74, 48));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 5, 29, 78));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 6, 59, 78));
+            this.addSlot(new BaseItemHandlerSlot(inventory, 7, 128, 49));
         }
         this.layoutPlayerInventorySlots(8, 110);
     }
