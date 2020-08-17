@@ -58,11 +58,11 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
 
     @Nonnull
     @Override
-    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap) {
+    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, Direction direction) {
         if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.orEmpty(cap, LazyOptional.of(this::getInventory));
         }
-        return super.getCapability(cap);
+        return super.getCapability(cap, direction);
     }
 
     @Override

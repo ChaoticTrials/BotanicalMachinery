@@ -20,10 +20,11 @@ import vazkii.botania.api.recipe.IBrewRecipe;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 public class TileMechanicalBrewery extends TileBase {
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(8);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(8, this.onContentsChanged());
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
     private IBrewRecipe recipe = null;
     private boolean initDone;
@@ -36,8 +37,8 @@ public class TileMechanicalBrewery extends TileBase {
 
     public TileMechanicalBrewery() {
         super(Registration.TILE_MECHANICAL_BREWERY.get(), 100_000);
-        this.inventory.setInputSlots(IntStream.range(0, 8).toArray());
-        this.inventory.setOutputSlots(8);
+        this.inventory.setInputSlots(IntStream.range(0, 7).toArray());
+        this.inventory.setOutputSlots(7);
         this.inventory.setSlotValidator(this::canInsertStack);
     }
 
@@ -47,9 +48,15 @@ public class TileMechanicalBrewery extends TileBase {
         return this.inventory;
     }
 
+    private Function<Integer, Void> onContentsChanged() {
+        return slot -> {
+            this.update = true;
+            return null;
+        };
+    }
+
     @Override
     public boolean canInsertStack(int slot, ItemStack stack) {
-        if (Arrays.stream(this.inventory.getOutputSlots()).anyMatch(x -> x == slot)) return false;
         if (slot == 0)
             return stack.getTag() != null ? !stack.getTag().contains("brewKey") : RecipeHelper.brewContainer.contains(stack.getItem());
         return (Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot)) || RecipeHelper.brewIngredients.contains(stack.getItem());
@@ -127,45 +134,65 @@ public class TileMechanicalBrewery extends TileBase {
             this.update = true;
             this.initDone = true;
         }
-        this.updateRecipe(); // todo remove
-        boolean done = false;
-        if (this.recipe != null) {
-            ItemStack output = this.recipe.getOutput(this.inventory.getStackInSlot(0)).copy(); // fixme why am i air if i'm incense or pendant
-            if (this.inventory.insertItemSuper(7, output, true).isEmpty()) { // fixme why doesn't it work
-                int recipeCost = this.getManaCost();
-                this.workingDuration = recipeCost / 100;
-                if (this.getCurrentMana() >= recipeCost || this.progress > 0 && this.progress <= this.workingDuration) {
-                    ++this.progress;
-                    this.receiveMana(-(recipeCost / this.workingDuration));
-                    if (this.progress >= this.workingDuration) {
-                        this.inventory.insertItemSuper(7, output, false);
-                        this.inventory.getStackInSlot(0).shrink(1);
-                        for (Ingredient ingredient : this.recipe.getIngredients()) {
-                            for (ItemStack stack : this.inventory.getStacks()) {
-                                if (ingredient.test(stack)) {
-                                    stack.shrink(1);
-                                    break;
+        if (this.world != null && !this.world.isRemote) {
+            this.updateRecipe(); // todo remove
+            boolean done = false;
+            if (this.recipe != null) {
+                ItemStack output = this.recipe.getOutput(this.inventory.getStackInSlot(0)).copy();
+                ItemStack currentOutput = this.inventory.getStackInSlot(7);
+                if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemStacksEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
+                    int recipeCost = this.getManaCost();
+                    this.workingDuration = recipeCost / 100;
+                    if (this.getCurrentMana() >= recipeCost || this.progress > 0 && this.progress <= this.workingDuration) {
+                        ++this.progress;
+                        this.receiveMana(-(recipeCost / this.workingDuration));
+                        if (this.progress >= this.workingDuration) {
+                            if (currentOutput.isEmpty()) {
+                                this.inventory.setStackInSlot(7, output);
+                            } else {
+                                currentOutput.setCount(currentOutput.getCount() + output.getCount());
+                            }
+                            this.inventory.getStackInSlot(0).shrink(1);
+                            for (Ingredient ingredient : this.recipe.getIngredients()) {
+                                for (ItemStack stack : this.inventory.getStacks()) {
+                                    if (ingredient.test(stack)) {
+                                        stack.shrink(1);
+                                        break;
+                                    }
                                 }
                             }
+                            this.update = true;
+                            done = true;
                         }
-                        this.update = true;
-                        done = true;
-                        this.markDirty();
-                        this.markDispatchable();
                     }
+                    this.markDirty();
+                    this.markDispatchable();
                 }
             }
+            if (this.update) {
+                this.updateRecipe();
+                this.update = false;
+            }
+            if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
+                this.progress = 0;
+                this.workingDuration = -1;
+                this.markDirty();
+                this.markDispatchable();
+            }
         }
-        if (this.update) {
-            this.updateRecipe();
-            this.update = false;
-        }
-        if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
-            this.progress = 0;
-            this.workingDuration = -1;
-            this.markDirty();
-            this.markDispatchable();
-        }
+    }
+
+    @Override
+    public boolean hasValidRecipe() {
+        return true;
+    }
+
+    public int getProgress() {
+        return this.progress;
+    }
+
+    public int getWorkingDuration() {
+        return this.workingDuration;
     }
 
     public int getManaCost() {

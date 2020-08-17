@@ -52,7 +52,6 @@ public class TileAlfheimMarket extends TileBase {
 
     @Override
     public boolean canInsertStack(int slot, ItemStack stack) {
-        if (Arrays.stream(this.inventory.getOutputSlots()).anyMatch(x -> x == slot)) return false;
         return Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot) || RecipeHelper.elvenTradeIngredients.contains(stack.getItem());
     }
 

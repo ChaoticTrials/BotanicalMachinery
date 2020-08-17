@@ -13,6 +13,7 @@ public class RenderHelper {
         GlStateManager.enableBlend();
         GlStateManager.disableDepthTest();
         screen.getMinecraft().getTextureManager().bindTexture(LibResources.HUD);
+        GlStateManager.color4f(1, 1, 1, 1);
         vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(x, y, 16, 0, 16, 16);
     }
 }
