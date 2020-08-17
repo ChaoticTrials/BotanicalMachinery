@@ -37,8 +37,8 @@ public class TileMechanicalBrewery extends TileBase {
 
     public TileMechanicalBrewery() {
         super(Registration.TILE_MECHANICAL_BREWERY.get(), 100_000);
-        this.inventory.setInputSlots(IntStream.range(0, 8).toArray());
-        this.inventory.setOutputSlots(8);
+        this.inventory.setInputSlots(IntStream.range(0, 7).toArray());
+        this.inventory.setOutputSlots(7);
         this.inventory.setSlotValidator(this::canInsertStack);
     }
 
