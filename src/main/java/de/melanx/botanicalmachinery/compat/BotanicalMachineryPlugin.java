@@ -1,10 +1,7 @@
 package de.melanx.botanicalmachinery.compat;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.blocks.screens.ScreenAlfheimMarket;
-import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalBrewery;
-import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalManaPool;
-import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalRunicAltar;
+import de.melanx.botanicalmachinery.blocks.screens.*;
 import de.melanx.botanicalmachinery.core.Registration;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
