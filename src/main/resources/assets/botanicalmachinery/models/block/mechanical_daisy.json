@@ -1,0 +1,57 @@
+{
+  "parent": "block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "plate": "minecraft:block/iron_block",
+    "grass_top": "botania:blocks/enchantedsoil0",
+    "grass_side": "botania:blocks/enchantedsoil1",
+    "flower": "botania:blocks/flower_misc_pure_daisy",
+    "particle": "#plate"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 2, 16 ],
+      "faces": {
+        "down":  { "texture": "#plate", "uv": [ 1, 1, 15, 15 ], "cullface": "down" },
+        "up":    { "texture": "#plate", "uv": [ 1, 1, 15, 15 ] },
+        "north": { "texture": "#plate", "uv": [ 1, 7, 15, 9 ] },
+        "south": { "texture": "#plate", "uv": [ 1, 7, 15, 9 ] },
+        "west":  { "texture": "#plate", "uv": [ 1, 7, 15, 9 ] },
+        "east":  { "texture": "#plate", "uv": [ 1, 7, 15, 9 ] }
+        }
+    },
+    {
+      "from": [ 5, 2, 5 ],
+      "to": [ 11, 3, 11 ],
+      "faces": {
+        "down":  { "texture": "#plate", "uv": [ 5, 5, 11, 11 ], "cullface": "down" },
+        "up":    { "texture": "#grass_top", "uv": [ 5, 5, 11, 11 ] },
+        "north": { "texture": "#grass_side", "uv": [ 5, 0, 11, 1 ] },
+        "south": { "texture": "#grass_side", "uv": [ 5, 0, 11, 1 ] },
+        "west":  { "texture": "#grass_side", "uv": [ 5, 0, 11, 1 ] },
+        "east":  { "texture": "#grass_side", "uv": [ 5, 0, 11, 1 ] }
+        }
+    },
+    {
+      "from": [ 5, 3, 8 ],
+      "to": [ 11, 11.4, 8 ],
+      "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45, "rescale": true },
+      "shade": false,
+      "faces": {
+        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#flower" },
+        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#flower" }
+      }
+    },
+    {
+      "from": [ 8, 3, 5 ],
+      "to": [ 8, 11.4, 11 ],
+      "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45, "rescale": true },
+      "shade": false,
+      "faces": {
+        "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#flower" },
+        "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#flower" }
+      }
+    }
+  ]
+}

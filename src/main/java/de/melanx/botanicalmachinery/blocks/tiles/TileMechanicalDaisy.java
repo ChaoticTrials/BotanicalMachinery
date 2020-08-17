@@ -72,7 +72,7 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
                 } else if (!hasSpawnedParticles) {
                     hasSpawnedParticles = true;
                     double x = this.pos.getX() + Math.random();
-                    double y = this.pos.getY() + Math.random() + 0.5D;
+                    double y = this.pos.getY() + Math.random() + 0.25D;
                     double z = this.pos.getZ() + Math.random();
                     WispParticleData data = WispParticleData.wisp((float)Math.random() / 2.0F, 1.0F, 1.0F, 1.0F);
                     this.world.addParticle(data, x, y, z, 0.0D, 0.0D, 0.0D);

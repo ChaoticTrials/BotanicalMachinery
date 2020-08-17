@@ -29,6 +29,7 @@ public class ScreenMechanicalDaisy extends ContainerScreen<ContainerMechanicalDa
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        this.renderBackground();
         //noinspection deprecation
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         //noinspection ConstantConditions
