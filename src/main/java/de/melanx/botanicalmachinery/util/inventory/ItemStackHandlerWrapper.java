@@ -1,4 +1,4 @@
-package de.melanx.botanicalmachinery.inventory;
+package de.melanx.botanicalmachinery.util.inventory;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /*
  * Thanks to Cucumber by BlakeBr0
@@ -73,5 +74,13 @@ public class ItemStackHandlerWrapper implements IItemHandlerModifiable {
 
     public static LazyOptional<IItemHandlerModifiable> create(IItemHandlerModifiable inv, @Nullable Function<Integer, Boolean> canExtract, @Nullable BiFunction<Integer, ItemStack, Boolean> canInsert) {
         return LazyOptional.of(() -> new ItemStackHandlerWrapper(inv, canExtract, canInsert));
+    }
+
+    public static LazyOptional<IItemHandlerModifiable> createLazy(Supplier<IItemHandlerModifiable> inv) {
+        return LazyOptional.of(() -> new ItemStackHandlerWrapper(inv.get(), null, null));
+    }
+
+    public static LazyOptional<IItemHandlerModifiable> createLazy(Supplier<IItemHandlerModifiable> inv, @Nullable Function<Integer, Boolean> canExtract, @Nullable BiFunction<Integer, ItemStack, Boolean> canInsert) {
+        return LazyOptional.of(() -> new ItemStackHandlerWrapper(inv.get(), canExtract, canInsert));
     }
 }

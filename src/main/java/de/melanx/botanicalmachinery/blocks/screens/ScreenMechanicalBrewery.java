@@ -32,9 +32,12 @@ public class ScreenMechanicalBrewery extends ScreenBase<ContainerMechanicalBrewe
             }
             RenderHelper.renderFadedItem(this, RecipeHelper.brewContainer.get(i), this.relX + 44, this.relY + 48);
         }
+
+        //noinspection ConstantConditions
         TileMechanicalBrewery tile = (TileMechanicalBrewery) this.container.tile;
         if (tile.getProgress() > 0) {
             float pct = Math.min(tile.getProgress() / (float) tile.getWorkingDuration(), 1.0F);
+            //noinspection ConstantConditions
             this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_BREWERY_GUI);
             vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(this.relX + 96, this.relY + 48, 176, 0, Math.round(22 * pct), 16);
         }

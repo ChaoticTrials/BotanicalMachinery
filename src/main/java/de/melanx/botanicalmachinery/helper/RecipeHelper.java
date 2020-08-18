@@ -78,7 +78,7 @@ public class RecipeHelper {
     }
 
     /**
-     * Used to find the matching ingredient to an inventorys {@link ItemStack}
+     * Used to find the matching ingredient to an inventories {@link ItemStack}
      *
      * @param ingredients {@link Map} with the {@link Ingredient} ingredient and {@link Integer} amount to search the matching one
      * @param items       {@link Map} with {@link Item} item and {@link Integer} amount of all items to be checked

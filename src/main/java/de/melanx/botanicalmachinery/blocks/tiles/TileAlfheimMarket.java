@@ -3,32 +3,26 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
-import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
-import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;
+import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
 import net.minecraft.world.Explosion;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.recipe.IElvenTradeRecipe;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 public class TileAlfheimMarket extends TileBase {
+
     public static final int WORKING_DURATION = 20;
     private static final int RECIPE_COST = 500;
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(5, this.onContentsChanged());
-    private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
+
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(5, slot -> this.update = true, this::isValidStack);
     private IElvenTradeRecipe recipe = null;
     private boolean initDone;
     private int progress;
@@ -38,7 +32,6 @@ public class TileAlfheimMarket extends TileBase {
 
     public TileAlfheimMarket() {
         super(Registration.TILE_ALFHEIM_MARKET.get(), 500_000);
-        this.inventory.setSlotValidator(this::canInsertStack);
         this.inventory.setInputSlots(IntStream.range(0, 4).toArray());
         this.inventory.setOutputSlots(4);
         this.update = true;
@@ -51,7 +44,7 @@ public class TileAlfheimMarket extends TileBase {
     }
 
     @Override
-    public boolean canInsertStack(int slot, ItemStack stack) {
+    public boolean isValidStack(int slot, ItemStack stack) {
         return Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot) || RecipeHelper.elvenTradeIngredients.contains(stack.getItem());
     }
 
@@ -101,13 +94,6 @@ public class TileAlfheimMarket extends TileBase {
         this.recipe = null;
     }
 
-    private Function<Integer, Void> onContentsChanged() {
-        return slot -> {
-            this.update = true;
-            return null;
-        };
-    }
-
     @Override
     public void writePacketNBT(CompoundNBT cmp) {
         super.writePacketNBT(cmp);
@@ -132,12 +118,12 @@ public class TileAlfheimMarket extends TileBase {
             if (this.recipe != null) {
                 List<ItemStack> outputs = new ArrayList<>(this.recipe.getOutputs());
                 if (outputs.size() == 1) {
-                    if (this.inventory.insertItemSuper(4, outputs.get(0), true).isEmpty()) {
+                    if (this.inventory.getUnrestricted().insertItem(4, outputs.get(0), true).isEmpty()) {
                         if (this.getCurrentMana() >= RECIPE_COST || this.progress > 0 && this.progress <= WORKING_DURATION) {
                             ++this.progress;
                             this.receiveMana(-(RECIPE_COST / WORKING_DURATION));
                             if (this.progress >= WORKING_DURATION) {
-                                this.inventory.insertItemSuper(4, outputs.get(0).copy(), false);
+                                this.inventory.getUnrestricted().insertItem(4, outputs.get(0).copy(), false);
                                 for (Ingredient ingredient : this.recipe.getIngredients()) {
                                     for (ItemStack stack : this.inventory.getStacks()) {
                                         if (ingredient.test(stack)) {
@@ -178,14 +164,5 @@ public class TileAlfheimMarket extends TileBase {
 
     public int getProgress() {
         return this.progress;
-    }
-
-    @Nonnull
-    @Override
-    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, Direction direction) {
-        if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return this.handler.cast();
-        }
-        return super.getCapability(cap);
     }
 }

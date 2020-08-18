@@ -6,13 +6,11 @@ import de.melanx.botanicalmachinery.core.Registration;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -22,14 +20,14 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ContainerMechanicalDaisy extends ContainerBase {
+public class ContainerMechanicalDaisy extends ContainerBase<TileMechanicalDaisy> {
 
     private final TileMechanicalDaisy.InventoryHandler inventory;
 
     public ContainerMechanicalDaisy(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
-        super(Registration.CONTAINER_MECHANICAL_DAISY.get(), windowId, world, pos, playerInventory, player);
+        super(Registration.CONTAINER_MECHANICAL_DAISY.get(), windowId, world, pos, playerInventory, player, 8, 8);
 
-        this.inventory = ((TileMechanicalDaisy) this.tile).getInventory();
+        this.inventory = this.tile.getInventory();
         this.addSlot(new ItemAndFluidSlot(this.inventory, 0, 79, 16));
         this.addSlot(new ItemAndFluidSlot(this.inventory, 1, 100, 16));
         this.addSlot(new ItemAndFluidSlot(this.inventory, 2, 121, 16));
@@ -40,14 +38,6 @@ public class ContainerMechanicalDaisy extends ContainerBase {
         this.addSlot(new ItemAndFluidSlot(this.inventory, 7, 121, 58));
 
         this.layoutPlayerInventorySlots(8, 84);
-    }
-
-    public static ContainerType<ContainerMechanicalDaisy> createContainerType() {
-        return IForgeContainerType.create((windowId1, inv, data) -> {
-            BlockPos pos1 = data.readBlockPos();
-            World world1 = inv.player.getEntityWorld();
-            return new ContainerMechanicalDaisy(windowId1, world1, pos1, inv, inv.player);
-        });
     }
 
     @Nonnull
@@ -95,7 +85,7 @@ public class ContainerMechanicalDaisy extends ContainerBase {
 
     @Nonnull
     @Override
-    public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack transferStackInSlot(@Nonnull PlayerEntity player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
         if (slot != null && slot.getHasStack()) {
@@ -131,7 +121,7 @@ public class ContainerMechanicalDaisy extends ContainerBase {
             if (stack.getCount() == itemstack.getCount()) {
                 return ItemStack.EMPTY;
             }
-            slot.onTake(playerIn, stack);
+            slot.onTake(player, stack);
         }
         return itemstack;
     }

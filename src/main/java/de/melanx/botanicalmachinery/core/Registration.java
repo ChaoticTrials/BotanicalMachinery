@@ -2,6 +2,7 @@ package de.melanx.botanicalmachinery.core;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.*;
+import de.melanx.botanicalmachinery.blocks.base.ContainerBase;
 import de.melanx.botanicalmachinery.blocks.containers.*;
 import de.melanx.botanicalmachinery.blocks.tiles.*;
 import net.minecraft.block.Block;
@@ -15,6 +16,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+@SuppressWarnings("ConstantConditions")
 public class Registration {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BotanicalMachinery.MODID);
@@ -47,13 +49,13 @@ public class Registration {
     public static final RegistryObject<TileEntityType<TileMechanicalRunicAltar>> TILE_MECHANICAL_RUNIC_ALTAR = TILES.register(LibNames.MECHANICAL_RUNIC_ALTAR, () -> TileEntityType.Builder.create(TileMechanicalRunicAltar::new, BLOCK_MECHANICAL_RUNIC_ALTAR.get()).build(null));
     public static final RegistryObject<TileEntityType<TileMechanicalDaisy>> TILE_MECHANICAL_DAISY = TILES.register(LibNames.MECHANICAL_DAISY, () -> TileEntityType.Builder.create(TileMechanicalDaisy::new, BLOCK_MECHANICAL_DAISY.get()).build(null));
 
-    public static final RegistryObject<ContainerType<ContainerAlfheimMarket>> CONTAINER_ALFHEIM_MARKET = CONTAINERS.register(LibNames.ALFHEIM_MARKET, ContainerAlfheimMarket::createContainerType);
-    public static final RegistryObject<ContainerType<ContainerIndustrialAgglomerationFactory>> CONTAINER_INDUSTRIAL_AGGLOMERATION_FACTORY = CONTAINERS.register(LibNames.INDUSTRIAL_AGGLOMERATION_FACTORY, ContainerIndustrialAgglomerationFactory::createContainerType);
-    public static final RegistryObject<ContainerType<ContainerManaBattery>> CONTAINER_MANA_BATTERY = CONTAINERS.register(LibNames.MANA_BATTERY, ContainerManaBattery::createContainerType);
-    public static final RegistryObject<ContainerType<ContainerMechanicalBrewery>> CONTAINER_MECHANICAL_BREWERY = CONTAINERS.register(LibNames.MECHANICAL_BREWERY, ContainerMechanicalBrewery::createContainerType);
-    public static final RegistryObject<ContainerType<ContainerMechanicalManaPool>> CONTAINER_MECHANICAL_MANA_POOL = CONTAINERS.register(LibNames.MECHANICAL_MANA_POOL, ContainerMechanicalManaPool::createContainerType);
-    public static final RegistryObject<ContainerType<ContainerMechanicalRunicAltar>> CONTAINER_MECHANICAL_RUNIC_ALTAR = CONTAINERS.register(LibNames.MECHANICAL_RUNIC_ALTAR, ContainerMechanicalRunicAltar::createContainerType);
-    public static final RegistryObject<ContainerType<ContainerMechanicalDaisy>> CONTAINER_MECHANICAL_DAISY = CONTAINERS.register(LibNames.MECHANICAL_DAISY, ContainerMechanicalDaisy::createContainerType);
+    public static final RegistryObject<ContainerType<ContainerAlfheimMarket>> CONTAINER_ALFHEIM_MARKET = CONTAINERS.register(LibNames.ALFHEIM_MARKET, () -> ContainerBase.createContainerType(ContainerAlfheimMarket::new));
+    public static final RegistryObject<ContainerType<ContainerIndustrialAgglomerationFactory>> CONTAINER_INDUSTRIAL_AGGLOMERATION_FACTORY = CONTAINERS.register(LibNames.INDUSTRIAL_AGGLOMERATION_FACTORY, () -> ContainerBase.createContainerType(ContainerIndustrialAgglomerationFactory::new));
+    public static final RegistryObject<ContainerType<ContainerManaBattery>> CONTAINER_MANA_BATTERY = CONTAINERS.register(LibNames.MANA_BATTERY, () -> ContainerBase.createContainerType(ContainerManaBattery::new));
+    public static final RegistryObject<ContainerType<ContainerMechanicalBrewery>> CONTAINER_MECHANICAL_BREWERY = CONTAINERS.register(LibNames.MECHANICAL_BREWERY, () -> ContainerBase.createContainerType(ContainerMechanicalBrewery::new));
+    public static final RegistryObject<ContainerType<ContainerMechanicalManaPool>> CONTAINER_MECHANICAL_MANA_POOL = CONTAINERS.register(LibNames.MECHANICAL_MANA_POOL, () -> ContainerBase.createContainerType(ContainerMechanicalManaPool::new));
+    public static final RegistryObject<ContainerType<ContainerMechanicalRunicAltar>> CONTAINER_MECHANICAL_RUNIC_ALTAR = CONTAINERS.register(LibNames.MECHANICAL_RUNIC_ALTAR, () -> ContainerBase.createContainerType(ContainerMechanicalRunicAltar::new));
+    public static final RegistryObject<ContainerType<ContainerMechanicalDaisy>> CONTAINER_MECHANICAL_DAISY = CONTAINERS.register(LibNames.MECHANICAL_DAISY, () -> ContainerBase.createContainerType(ContainerMechanicalDaisy::new));
 
     public static void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();

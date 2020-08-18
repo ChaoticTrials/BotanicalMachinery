@@ -2,87 +2,28 @@ package de.melanx.botanicalmachinery.blocks.containers;
 
 import de.melanx.botanicalmachinery.blocks.base.ContainerBase;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalBrewery;
 import de.melanx.botanicalmachinery.core.Registration;
-import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
-import de.melanx.botanicalmachinery.inventory.slot.BaseItemHandlerSlot;
+import de.melanx.botanicalmachinery.util.inventory.slot.SlotOutputOnly;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class ContainerMechanicalBrewery extends ContainerBase {
+public class ContainerMechanicalBrewery extends ContainerBase<TileMechanicalBrewery> {
     public ContainerMechanicalBrewery(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
-        super(Registration.CONTAINER_MECHANICAL_BREWERY.get(), windowId, world, pos, playerInventory, player);
-
-        if (this.tile instanceof TileBase) {
-            BaseItemStackHandler inventory = ((TileBase) this.tile).getInventory();
-            this.addSlot(new BaseItemHandlerSlot(inventory, 0, 44, 48));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 1, 29, 18));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 2, 59, 18));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 3, 14, 48));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 4, 74, 48));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 5, 29, 78));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 6, 59, 78));
-            this.addSlot(new BaseItemHandlerSlot(inventory, 7, 128, 49));
-        }
+        super(Registration.CONTAINER_MECHANICAL_BREWERY.get(), windowId, world, pos, playerInventory, player, 7, 8);
+        IItemHandlerModifiable inventory = ((TileBase) this.tile).getInventory().getUnrestricted();
+        this.addSlot(new SlotItemHandler(inventory, 0, 44, 48));
+        this.addSlot(new SlotItemHandler(inventory, 1, 29, 18));
+        this.addSlot(new SlotItemHandler(inventory, 2, 59, 18));
+        this.addSlot(new SlotItemHandler(inventory, 3, 14, 48));
+        this.addSlot(new SlotItemHandler(inventory, 4, 74, 48));
+        this.addSlot(new SlotItemHandler(inventory, 5, 29, 78));
+        this.addSlot(new SlotItemHandler(inventory, 6, 59, 78));
+        this.addSlot(new SlotOutputOnly(inventory, 7, 128, 49));
         this.layoutPlayerInventorySlots(8, 110);
-    }
-
-    @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stack = slot.getStack();
-            itemstack = stack.copy();
-
-            final int inventorySize = 7;
-            final int playerInventoryEnd = inventorySize + 27;
-            final int playerHotbarEnd = playerInventoryEnd + 9;
-
-            if (index < inventorySize - 1) {
-                if (!this.mergeItemStack(stack, inventorySize, playerHotbarEnd, true)) {
-                    return ItemStack.EMPTY;
-                }
-
-                slot.onSlotChange(stack, itemstack);
-            } else if (index > inventorySize) {
-                if (!this.mergeItemStack(stack, 0, inventorySize - 1, false)) {
-                    return ItemStack.EMPTY;
-                } else if (index < playerInventoryEnd) {
-                    if (!this.mergeItemStack(stack, playerInventoryEnd, playerHotbarEnd, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index < playerHotbarEnd && !this.mergeItemStack(stack, inventorySize, playerInventoryEnd, false)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.mergeItemStack(stack, inventorySize, playerHotbarEnd, false)) {
-                return ItemStack.EMPTY;
-            }
-            if (stack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
-            } else {
-                slot.onSlotChanged();
-            }
-            if (stack.getCount() == itemstack.getCount()) {
-                return ItemStack.EMPTY;
-            }
-            slot.onTake(playerIn, stack);
-        }
-        return itemstack;
-    }
-
-    public static <X extends Container> ContainerType<X> createContainerType() {
-        ContainerType<Container> containerType = IForgeContainerType.create((windowId, inv, data) -> {
-            BlockPos pos = data.readBlockPos();
-            World world = inv.player.getEntityWorld();
-            return new ContainerMechanicalBrewery(windowId, world, pos, inv, inv.player);
-        });
-        return (ContainerType<X>) containerType;
     }
 }

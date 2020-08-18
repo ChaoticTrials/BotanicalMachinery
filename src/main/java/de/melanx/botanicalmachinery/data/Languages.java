@@ -18,13 +18,14 @@ public class Languages extends LanguageProvider {
         this.addTileWithScreen(Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), "Industrial Agglomeration Factory");
         this.addTileWithScreen(Registration.BLOCK_MANA_BATTERY.get(), "Mana Battery");
         this.addTileWithScreen(Registration.BLOCK_MECHANICAL_BREWERY.get(), "Mechanical Brewery");
-        this.addTileWithScreen(Registration.BLOCK_MECHANICAL_MANA_POOL.get(), "Machanical Mana Pool");
+        this.addTileWithScreen(Registration.BLOCK_MECHANICAL_MANA_POOL.get(), "Mechanical Mana Pool");
         this.addTileWithScreen(Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get(), "Mechanical Runic Altar");
         this.addTileWithScreen(Registration.BLOCK_MECHANICAL_DAISY.get(), "Mechanical Daisy");
     }
 
     private void addTileWithScreen(Block key, String name) {
         this.add(key, name);
+        //noinspection ConstantConditions
         this.add("screen." + BotanicalMachinery.MODID + "." + key.getRegistryName().getPath(), name);
     }
 }

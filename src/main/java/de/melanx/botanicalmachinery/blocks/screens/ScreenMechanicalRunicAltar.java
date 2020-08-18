@@ -27,6 +27,7 @@ public class ScreenMechanicalRunicAltar extends ScreenBase<ContainerMechanicalRu
         TileMechanicalRunicAltar tile = (TileMechanicalRunicAltar) this.container.tile;
         if (tile.getProgress() > 0) {
             float pct = Math.min(tile.getProgress() / 100.0F, 1.0F);
+            //noinspection ConstantConditions
             this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_RUNIC_ALTAR_GUI);
             vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(relX + 87, relY + 64, this.xSize, 0, Math.round(22 * pct), 16);
         }
