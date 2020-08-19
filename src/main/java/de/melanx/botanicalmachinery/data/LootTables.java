@@ -66,7 +66,7 @@ public class LootTables extends LootTableProvider {
         protected LootTable.Builder droppingWithInventoryAndWorkingTicks(Block block) {
             return LootTable.builder().addLootPool(withSurvivesExplosion(block, LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(block)
                     .acceptFunction(CopyName.builder(CopyName.Source.BLOCK_ENTITY)).acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY)
-                            .replaceOperation("inventory", "BlockEntityTag.inventory")
+                            .replaceOperation("inv", "BlockEntityTag.inv")
                             .replaceOperation("workingTicks", "BlockEntityTag.workingTicks")))));
         }
     }

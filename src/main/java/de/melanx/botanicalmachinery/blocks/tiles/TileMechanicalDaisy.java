@@ -154,14 +154,14 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
 
     @Override
     public void writePacketNBT(CompoundNBT tag) {
-        tag.put("inventory", this.inventory.serializeNBT());
+        tag.put("inv", this.inventory.serializeNBT());
         tag.putIntArray("workingTicks", this.workingTicks);
     }
 
     @Override
     public void readPacketNBT(CompoundNBT tag) {
-        if (tag.contains("inventory")) {
-            this.inventory.deserializeNBT(tag.getCompound("inventory"));
+        if (tag.contains("inv")) {
+            this.inventory.deserializeNBT(tag.getCompound("inv"));
         }
         if (tag.contains("workingTicks")) {
             this.workingTicks = tag.getIntArray("workingTicks");
