@@ -26,12 +26,14 @@ public class ItemModels extends ItemModelProvider {
     }
 
     private void generateBlockItem(Item block) {
+        @SuppressWarnings("ConstantConditions")
         String path = block.getRegistryName().getPath();
         this.getBuilder(path)
                 .parent(new ModelFile.UncheckedModelFile(this.modLoc("block/" + path)));
     }
 
     private void generateItem(Item item) {
+        @SuppressWarnings("ConstantConditions")
         String path = item.getRegistryName().getPath();
         this.getBuilder(path).parent(this.getExistingFile(this.mcLoc("item/handheld")))
                 .texture("layer0", "item/" + path);

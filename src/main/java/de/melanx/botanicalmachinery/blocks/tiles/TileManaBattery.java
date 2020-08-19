@@ -2,26 +2,25 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
-import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
-import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;
+import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
+import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.mana.IManaItem;
 
 import javax.annotation.Nonnull;
+import java.util.function.Supplier;
 
 public class TileManaBattery extends TileBase {
-    private final ManaBatteryHandler inventory = new ManaBatteryHandler(2);
+
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, null, this::isValidStack);
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
 
     public TileManaBattery() {
         super(Registration.TILE_MANA_BATTERY.get(), 10_000_000);
-        this.inventory.setSlotValidator(this::canInsertStack);
     }
 
     @Nonnull
@@ -31,7 +30,7 @@ public class TileManaBattery extends TileBase {
     }
 
     @Override
-    public boolean canInsertStack(int slot, ItemStack stack) {
+    public boolean isValidStack(int slot, ItemStack stack) {
         if (stack.getItem() instanceof IManaItem) {
             IManaItem item = (IManaItem) stack.getItem();
             if (slot == 0 && item.getMana(stack) >= item.getMaxMana(stack)) return false;
@@ -82,38 +81,19 @@ public class TileManaBattery extends TileBase {
         }
     }
 
-    @Nonnull
     @Override
-    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, Direction direction) {
-        if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return this.handler.cast();
-        }
-        return super.getCapability(cap);
-    }
-
-    private static class ManaBatteryHandler extends BaseItemStackHandler {
-        public ManaBatteryHandler(int size) {
-            super(size);
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            ItemStack minus = this.getStackInSlot(0);
-            ItemStack plus = this.getStackInSlot(1);
-            IManaItem manaItem;
+    protected LazyOptional<IItemHandlerModifiable> createHandler(Supplier<IItemHandlerModifiable> inventory) {
+        return ItemStackHandlerWrapper.createLazy(inventory, slot -> {
+            ItemStack minus = inventory.get().getStackInSlot(0);
+            ItemStack plus = inventory.get().getStackInSlot(1);
             if (slot == 0 && minus.getItem() instanceof IManaItem) {
-                manaItem = (IManaItem) minus.getItem();
-                if (manaItem.getMana(minus) < manaItem.getMaxMana(minus)) {
-                    return ItemStack.EMPTY;
-                }
+                IManaItem manaItem = (IManaItem) minus.getItem();
+                return manaItem.getMana(minus) >= manaItem.getMaxMana(minus);
             } else if (slot == 1 && plus.getItem() instanceof IManaItem) {
-                manaItem = (IManaItem) plus.getItem();
-                if (manaItem.getMana(plus) > 0) {
-                    return ItemStack.EMPTY;
-                }
+                IManaItem manaItem = (IManaItem) plus.getItem();
+                return manaItem.getMana(plus) <= 0;
             }
-            return super.extractItem(slot, amount, simulate);
-        }
+            return true;
+        }, null);
     }
 }

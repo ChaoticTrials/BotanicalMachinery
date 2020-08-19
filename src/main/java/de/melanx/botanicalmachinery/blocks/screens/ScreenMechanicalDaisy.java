@@ -39,6 +39,7 @@ public class ScreenMechanicalDaisy extends ContainerScreen<ContainerMechanicalDa
         this.blit(relX, relY, 0, 0, this.xSize, this.ySize);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String s = this.title.getFormattedText();

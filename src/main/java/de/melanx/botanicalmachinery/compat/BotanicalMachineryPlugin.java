@@ -15,8 +15,11 @@ import vazkii.botania.client.integration.jei.manapool.ManaPoolRecipeCategory;
 import vazkii.botania.client.integration.jei.puredaisy.PureDaisyRecipeCategory;
 import vazkii.botania.client.integration.jei.runicaltar.RunicAltarRecipeCategory;
 
+import javax.annotation.Nonnull;
+
 @JeiPlugin
 public class BotanicalMachineryPlugin implements IModPlugin {
+    @Nonnull
     @Override
     public ResourceLocation getPluginUid() {
         return new ResourceLocation(BotanicalMachinery.MODID, "jei_plugin");

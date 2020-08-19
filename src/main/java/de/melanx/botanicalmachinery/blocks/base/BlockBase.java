@@ -1,29 +1,46 @@
 package de.melanx.botanicalmachinery.blocks.base;
 
+import de.melanx.botanicalmachinery.BotanicalMachinery;
+import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import vazkii.botania.api.wand.IWandHUD;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@SuppressWarnings("deprecation")
 public abstract class BlockBase extends Block implements ITileEntityProvider, IWandHUD {
+
     public BlockBase() {
         super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10));
     }
 
     @Nullable
     @Override
-    public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
+    public INamedContainerProvider getContainer(@Nonnull BlockState state, World worldIn, @Nonnull BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
         return tile instanceof INamedContainerProvider ? (INamedContainerProvider) tile : null;
     }
@@ -41,6 +58,41 @@ public abstract class BlockBase extends Block implements ITileEntityProvider, IW
 
     @Override
     public void renderHUD(Minecraft mc, World world, BlockPos pos) {
+        //noinspection ConstantConditions
         ((TileBase) world.getTileEntity(pos)).renderHUD(mc);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Nonnull
+    @Override
+    public ActionResultType onBlockActivated(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult hit) {
+        ContainerType<?> containerType = this.getContainerType();
+        if (containerType != null) {
+            if (!world.isRemote) {
+                INamedContainerProvider containerProvider = new INamedContainerProvider() {
+                    @Override
+                    public ITextComponent getDisplayName() {
+                        //noinspection ConstantConditions
+                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + BlockBase.this.getRegistryName().getPath());
+                    }
+
+                    @Override
+                    public Container createMenu(int windowId, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity player) {
+                        PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+                        buffer.writeBlockPos(pos);
+                        return containerType.create(windowId, playerInventory, buffer);
+                    }
+                };
+                NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, pos);
+            }
+            return ActionResultType.SUCCESS;
+        } else {
+            return super.onBlockActivated(state, world, pos, player, hand, hit);
+        }
+    }
+
+    @Nullable
+    protected ContainerType<?> getContainerType() {
+        return null;
     }
 }

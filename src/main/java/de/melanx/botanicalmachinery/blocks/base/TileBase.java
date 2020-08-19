@@ -2,8 +2,8 @@ package de.melanx.botanicalmachinery.blocks.base;
 
 import com.google.common.base.Predicates;
 import com.mojang.blaze3d.systems.RenderSystem;
-import de.melanx.botanicalmachinery.blocks.tiles.IManaMachineTile;
-import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
+import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
+import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.DyeColor;
@@ -18,6 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import org.lwjgl.opengl.GL11;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.api.mana.IKeyLocked;
@@ -30,12 +31,15 @@ import vazkii.botania.common.block.tile.TileMod;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.function.Supplier;
 
 public abstract class TileBase extends TileMod implements IManaPool, IManaMachineTile, IKeyLocked, ISparkAttachable, IThrottledPacket, ITickableTileEntity {
-    public TileBase(TileEntityType<?> tileEntityTypeIn, int manaCap) {
-        super(tileEntityTypeIn);
-        this.manaCap = manaCap;
-    }
+
+    public static final String TAG_INV = "inv";
+    public static final String TAG_MANA = "mana";
+    public static final String TAG_MANA_CAP = "manaCap";
+    public static final String TAG_INPUT_KEY = "inputKey";
+    public static final String TAG_OUTPUT_KEY = "outputKey";
 
     public int mana;
     private int manaCap;
@@ -44,22 +48,32 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
 
     public boolean sendPacket = false;
 
-    public static final String TAG_INV = "inv";
-    public static final String TAG_MANA = "mana";
-    public static final String TAG_MANA_CAP = "manaCap";
-    public static final String TAG_INPUT_KEY = "inputKey";
-    public static final String TAG_OUTPUT_KEY = "outputKey";
+    private final LazyOptional<IItemHandlerModifiable> handler = this.createHandler(this::getInventory);
+
+    public TileBase(TileEntityType<?> tileEntityTypeIn, int manaCap) {
+        super(tileEntityTypeIn);
+        this.manaCap = manaCap;
+    }
+
+    /**
+     * This can be used to add canExtract or canInsert to the wrapper used as capability. You may not call the supplier
+     * now. Always use IItemHandlerModifiable.createLazy. You may call the supplier inside the canExtract and canInsert
+     * lambda.
+     */
+    protected LazyOptional<IItemHandlerModifiable> createHandler(Supplier<IItemHandlerModifiable> inventory) {
+        return ItemStackHandlerWrapper.createLazy(inventory);
+    }
 
     @Nonnull
     public abstract BaseItemStackHandler getInventory();
 
-    public abstract boolean canInsertStack(int slot, ItemStack stack);
+    public abstract boolean isValidStack(int slot, ItemStack stack);
 
     @Nonnull
     @Override
     public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, Direction direction) {
         if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.orEmpty(cap, LazyOptional.of(this::getInventory));
+            return this.handler.cast();
         }
         return super.getCapability(cap, direction);
     }
@@ -140,6 +154,7 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
 
     @Override
     public ISparkEntity getAttachedSpark() {
+        @SuppressWarnings("ConstantConditions")
         List<Entity> sparks = this.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(this.pos.up(), this.pos.up().add(1, 1, 1)), Predicates.instanceOf(ISparkEntity.class));
         if (sparks.size() == 1) {
             Entity entity = sparks.get(0);

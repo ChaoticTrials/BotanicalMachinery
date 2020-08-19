@@ -20,6 +20,7 @@ public class ScreenAlfheimMarket extends ScreenBase<ContainerAlfheimMarket> {
         TileAlfheimMarket tile = (TileAlfheimMarket) this.container.tile;
         if (tile.getProgress() > 0) {
             float pct = Math.min(tile.getProgress() / (float) TileAlfheimMarket.WORKING_DURATION, 1.0F);
+            //noinspection ConstantConditions
             this.minecraft.getTextureManager().bindTexture(LibResources.ALFHEIM_MARKET_GUI);
             vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(relX + 77, relY + 35, 176, 0, Math.round(22 * pct), 16);
         }

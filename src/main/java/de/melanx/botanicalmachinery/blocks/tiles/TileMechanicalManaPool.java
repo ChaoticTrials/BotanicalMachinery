@@ -3,14 +3,8 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
-import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
-import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;
+import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.mana.ManaNetworkEvent;
 import vazkii.botania.api.recipe.IManaInfusionRecipe;
 import vazkii.botania.common.block.tile.mana.TilePool;
@@ -19,41 +13,23 @@ import vazkii.botania.common.core.handler.ManaNetworkHandler;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class TileMechanicalManaPool extends TileBase {
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(3, this.onContentsChanged());
-    private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
+
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(3, this::onSlotChanged, this::isValidStack);
     public boolean validRecipe = true;
 
     public TileMechanicalManaPool() {
         super(Registration.TILE_MECHANICAL_MANA_POOL.get(), 100_000);
         this.inventory.addSlotLimit(0, 1);
         this.inventory.setOutputSlots(2);
-        this.inventory.setSlotValidator(this::canInsertStack);
-    }
-
-    private Function<Integer, Void> onContentsChanged() {
-        return slot -> {
-            if (slot == 1) {
-                ItemStack stack = this.getInventory().getStackInSlot(1);
-                ItemStack cat = this.getInventory().getStackInSlot(0);
-                IManaInfusionRecipe recipe = this.getMatchingRecipe(stack, cat);
-                if (recipe != null) {
-                    this.validRecipe = recipe.getManaToConsume() <= this.getCurrentMana();
-                } else {
-                    this.validRecipe = stack.isEmpty();
-                }
-            }
-            this.markDirty();
-            return null;
-        };
     }
 
     public IManaInfusionRecipe getMatchingRecipe(@Nonnull ItemStack stack, @Nonnull ItemStack cat) {
         List<IManaInfusionRecipe> matchingNonCatRecipes = new ArrayList<>();
         List<IManaInfusionRecipe> matchingCatRecipes = new ArrayList<>();
 
+        //noinspection ConstantConditions
         for (IManaInfusionRecipe recipe : TilePool.manaInfusionRecipes(this.world.getRecipeManager())) {
             if (recipe.matches(stack)) {
                 if (recipe.getCatalyst() == null) {
@@ -74,8 +50,22 @@ public class TileMechanicalManaPool extends TileBase {
         return this.inventory;
     }
 
+    private void onSlotChanged(int slot) {
+        if (slot == 1) {
+            ItemStack stack = this.getInventory().getStackInSlot(1);
+            ItemStack cat = this.getInventory().getStackInSlot(0);
+            IManaInfusionRecipe recipe = this.getMatchingRecipe(stack, cat);
+            if (recipe != null) {
+                this.validRecipe = recipe.getManaToConsume() <= this.getCurrentMana();
+            } else {
+                this.validRecipe = stack.isEmpty();
+            }
+        }
+        this.markDirty();
+    }
+
     @Override
-    public boolean canInsertStack(int slot, ItemStack stack) {
+    public boolean isValidStack(int slot, ItemStack stack) {
         if (slot == 0) return RecipeHelper.manaPoolCatalysts.contains(stack.getItem());
         if (slot == 1) return RecipeHelper.manaPoolIngredients.contains(stack.getItem());
         return true;
@@ -102,21 +92,12 @@ public class TileMechanicalManaPool extends TileBase {
                         stack.shrink(1);
 
                         ItemStack output = recipe.getRecipeOutput().copy();
-                        this.inventory.insertItemSuper(2, output, false);
+                        this.inventory.getUnrestricted().insertItem(2, output, false);
                         this.markDirty();
                     }
                 }
             }
         }
-    }
-
-    @Nonnull
-    @Override
-    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, Direction direction) {
-        if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return this.handler.cast();
-        }
-        return super.getCapability(cap);
     }
 
     @Override

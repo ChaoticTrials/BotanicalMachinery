@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.core.Registration;
-import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;
+import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;

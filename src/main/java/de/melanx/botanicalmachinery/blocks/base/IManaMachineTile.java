@@ -1,4 +1,4 @@
-package de.melanx.botanicalmachinery.blocks.tiles;
+package de.melanx.botanicalmachinery.blocks.base;
 
 /**
  * All machines which uses mana and items to create something else via recipe.

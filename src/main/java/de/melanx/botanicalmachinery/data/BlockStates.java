@@ -10,6 +10,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.fml.RegistryObject;
 
 public class BlockStates extends BlockStateProvider {
     public BlockStates(DataGenerator gen, ExistingFileHelper helper) {
@@ -18,7 +19,7 @@ public class BlockStates extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        Registration.BLOCKS.getEntries().stream().map(block -> block.get()).forEach(block -> {
+        Registration.BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(block -> {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             if (block == Registration.BLOCK_MECHANICAL_DAISY.get()) {
                 this.createStateForManualModel(builder, block);
@@ -31,6 +32,7 @@ public class BlockStates extends BlockStateProvider {
     }
 
     private void createModels(VariantBlockStateBuilder builder, Block block, ResourceLocation top) {
+        @SuppressWarnings("ConstantConditions")
         String name = block.getRegistryName().getPath();
         ModelFile model = this.models().orientable(block.getRegistryName().getPath(), this.modLoc("block/" + name + "_side"), this.modLoc("block/" + name + "_front"), top);
         for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getAllowedValues()) {
@@ -44,6 +46,7 @@ public class BlockStates extends BlockStateProvider {
     }
 
     private void createStateForManualModel(VariantBlockStateBuilder builder, Block block) {
+        //noinspection ConstantConditions
         builder.partialState().addModels(new ConfiguredModel(this.models().getExistingFile(new ResourceLocation(BotanicalMachinery.MODID, "block/" + block.getRegistryName().getPath()))));
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.world.storage.loot.functions.CopyName;
 import net.minecraft.world.storage.loot.functions.CopyNbt;
 import net.minecraftforge.fml.RegistryObject;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -24,6 +25,7 @@ public class LootTables extends LootTableProvider {
         super(gen);
     }
 
+    @Nonnull
     @Override
     protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {
         return ImmutableList.of(
@@ -32,7 +34,7 @@ public class LootTables extends LootTableProvider {
     }
 
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationTracker validationtracker) {
+    protected void validate(Map<ResourceLocation, LootTable> map, @Nonnull ValidationTracker validationtracker) {
         map.forEach((name, table) -> LootTableManager.func_227508_a_(validationtracker, name, table));
     }
 
@@ -48,6 +50,7 @@ public class LootTables extends LootTableProvider {
             }
         }
 
+        @Nonnull
         @Override
         protected Iterable<Block> getKnownBlocks() {
             return Registration.BLOCKS.getEntries().stream().map(RegistryObject::get)::iterator;

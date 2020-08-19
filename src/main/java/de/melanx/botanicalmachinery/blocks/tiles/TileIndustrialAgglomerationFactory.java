@@ -2,15 +2,9 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
-import de.melanx.botanicalmachinery.inventory.BaseItemStackHandler;
-import de.melanx.botanicalmachinery.inventory.ItemStackHandlerWrapper;
+import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.item.ModItems;
 import vazkii.botania.common.lib.ModTags;
@@ -18,10 +12,11 @@ import vazkii.botania.common.lib.ModTags;
 import javax.annotation.Nonnull;
 
 public class TileIndustrialAgglomerationFactory extends TileBase {
-    private static final int recipeCost = TilePool.MAX_MANA / 2;
-    private static final int workingDuration = 100;
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(4);
-    private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.create(this.inventory);
+
+    public static final int RECIPE_COST = TilePool.MAX_MANA / 2;
+    public static final int WORKING_DURATION = 100;
+
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(4, null, this::isValidStack);
     private int progress;
     private boolean recipe;
 
@@ -30,7 +25,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
     public TileIndustrialAgglomerationFactory() {
         super(Registration.TILE_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), 1_000_000);
         this.inventory.setOutputSlots(3);
-        this.inventory.setSlotValidator(this::canInsertStack);
+        this.inventory.setSlotValidator(this::isValidStack);
     }
 
     @Nonnull
@@ -40,12 +35,10 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
     }
 
     @Override
-    public boolean canInsertStack(int slot, ItemStack stack) {
-        if ((slot == 0 && !ModTags.Items.INGOTS_MANASTEEL.contains(stack.getItem())) ||
-                (slot == 1 && !ModTags.Items.GEMS_MANA_DIAMOND.contains(stack.getItem())) ||
-                (slot == 2 && ModItems.manaPearl != stack.getItem()))
-                return false;
-        return true;
+    public boolean isValidStack(int slot, ItemStack stack) {
+        return (slot != 0 || ModTags.Items.INGOTS_MANASTEEL.contains(stack.getItem())) &&
+                (slot != 1 || ModTags.Items.GEMS_MANA_DIAMOND.contains(stack.getItem())) &&
+                (slot != 2 || ModItems.manaPearl == stack.getItem());
     }
 
     @Override
@@ -71,14 +64,14 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
             if (!manasteel.isEmpty() && !manadiamond.isEmpty() &&
                     !manapearl.isEmpty() && output.getCount() < 64) {
                 this.recipe = true;
-                if (this.getCurrentMana() >= recipeCost || this.progress > 0 && this.progress <= workingDuration) {
+                if (this.getCurrentMana() >= RECIPE_COST || this.progress > 0 && this.progress <= WORKING_DURATION) {
                     ++this.progress;
-                    this.receiveMana(-(recipeCost / workingDuration));
-                    if (this.progress >= workingDuration) {
+                    this.receiveMana(-(RECIPE_COST / WORKING_DURATION));
+                    if (this.progress >= WORKING_DURATION) {
                         manasteel.shrink(1);
                         manadiamond.shrink(1);
                         manapearl.shrink(1);
-                        this.inventory.insertItemSuper(3, new ItemStack(ModItems.terrasteel), false);
+                        this.inventory.getUnrestricted().insertItem(3, new ItemStack(ModItems.terrasteel), false);
                         this.recipe = false;
                     }
                     this.markDirty();
@@ -92,15 +85,6 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
                 this.recipe = false;
             }
         }
-    }
-
-    @Nonnull
-    @Override
-    public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, Direction direction) {
-        if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return this.handler.cast();
-        }
-        return super.getCapability(cap);
     }
 
     public int getProgress() {
