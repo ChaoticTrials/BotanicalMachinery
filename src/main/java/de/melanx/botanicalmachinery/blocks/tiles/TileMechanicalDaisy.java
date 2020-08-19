@@ -121,7 +121,6 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
                 state = fluid.getFluid().getDefaultState().getBlockState();
             }
         }
-
         return state;
     }
 
@@ -134,7 +133,6 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
                 state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
             }
         }
-
         return state;
     }
 
@@ -151,15 +149,16 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
                 }
             }
         }
-
         return null;
     }
 
+    @Override
     public void writePacketNBT(CompoundNBT tag) {
         tag.put("inventory", this.inventory.serializeNBT());
         tag.putIntArray("workingTicks", this.workingTicks);
     }
 
+    @Override
     public void readPacketNBT(CompoundNBT tag) {
         if (tag.contains("inventory")) {
             this.inventory.deserializeNBT(tag.getCompound("inventory"));
@@ -314,7 +313,6 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
                     }
                 }
             }
-
             return resource.getAmount() - leftToFill;
         }
 

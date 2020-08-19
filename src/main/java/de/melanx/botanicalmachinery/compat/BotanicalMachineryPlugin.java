@@ -29,17 +29,17 @@ public class BotanicalMachineryPlugin implements IModPlugin {
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(ScreenAlfheimMarket.class, 77, 36, 22, 15, ElvenTradeRecipeCategory.UID);
         registration.addRecipeClickArea(ScreenMechanicalBrewery.class, 96, 48, 22, 15, BreweryRecipeCategory.UID);
+        registration.addRecipeClickArea(ScreenMechanicalDaisy.class, 24, 16, 24, 48, PureDaisyRecipeCategory.UID);
         registration.addRecipeClickArea(ScreenMechanicalManaPool.class, 77, 36, 22, 15, ManaPoolRecipeCategory.UID);
         registration.addRecipeClickArea(ScreenMechanicalRunicAltar.class, 87, 65, 22, 15, RunicAltarRecipeCategory.UID);
-        registration.addRecipeClickArea(ScreenMechanicalDaisy.class, 24, 16, 24, 48, PureDaisyRecipeCategory.UID);
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_ALFHEIM_MARKET.get()), ElvenTradeRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_MECHANICAL_BREWERY.get()), BreweryRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_MECHANICAL_DAISY.get()), PureDaisyRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_MECHANICAL_MANA_POOL.get()), ManaPoolRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get()), RunicAltarRecipeCategory.UID);
-        registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_MECHANICAL_DAISY.get()), PureDaisyRecipeCategory.UID);
     }
 }
