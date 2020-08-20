@@ -24,13 +24,11 @@ public class ScreenMechanicalManaPool extends ScreenBase<ContainerMechanicalMana
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         this.drawDefaultGuiBackgroundLayer(LibResources.MECHANICAL_MANA_POOL_GUI, 81, 37);
 
-        int relX = (this.width - this.xSize) / 2;
-        int relY = (this.height - this.ySize) / 2;
         if (System.currentTimeMillis() - this.lastTime > 2000) {
             this.lastTime = System.currentTimeMillis();
             i--;
             if (i < 0) i = RecipeHelper.manaPoolCatalysts.size() - 1;
         }
-        RenderHelper.renderFadedItem(this, RecipeHelper.manaPoolCatalysts.get(i), relX + 53, relY + 47);
+        RenderHelper.renderFadedItem(this, RecipeHelper.manaPoolCatalysts.get(i), this.relX + 53, this.relY + 47);
     }
 }
