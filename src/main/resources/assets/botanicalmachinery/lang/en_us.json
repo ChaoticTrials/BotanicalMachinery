@@ -1,4 +1,6 @@
 {
+  "itemGroup.botanicalmachinery": "Botanical Machinery",
+
   "block.botanicalmachinery.alfheim_market": "Alfheim Market",
   "block.botanicalmachinery.industrial_agglomeration_factory": "Industrial Agglomeration Factory",
   "block.botanicalmachinery.mana_battery": "Mana Battery",
@@ -6,7 +8,7 @@
   "block.botanicalmachinery.mechanical_daisy": "Mechanical Daisy",
   "block.botanicalmachinery.mechanical_mana_pool": "Machanical Mana Pool",
   "block.botanicalmachinery.mechanical_runic_altar": "Mechanical Runic Altar",
-  "itemGroup.botanicalmachinery": "Botanical Machinery",
+
   "screen.botanicalmachinery.alfheim_market": "Alfheim Market",
   "screen.botanicalmachinery.industrial_agglomeration_factory": "Industrial Agglomeration Factory",
   "screen.botanicalmachinery.mana_battery": "Mana Battery",

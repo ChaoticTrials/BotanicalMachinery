@@ -21,8 +21,6 @@ public class DataCreator {
         if (event.includeClient()) {
             gen.addProvider(new BlockStates(gen, helper));
             gen.addProvider(new ItemModels(gen, helper));
-            gen.addProvider(new Languages(gen));
         }
     }
-
 }
