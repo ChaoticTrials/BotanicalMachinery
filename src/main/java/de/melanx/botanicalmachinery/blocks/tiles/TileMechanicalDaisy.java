@@ -117,7 +117,7 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
             }
         } else {
             FluidStack fluid = this.inventory.getFluidInTank(slot);
-            if (!fluid.isEmpty()) {
+            if (!fluid.isEmpty() && fluid.getAmount() >= 1000) {
                 state = fluid.getFluid().getDefaultState().getBlockState();
             }
         }
