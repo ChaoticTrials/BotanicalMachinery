@@ -1,0 +1,9 @@
+{
+  "name": "botania.entry.runeAltar",
+  "category": "botania:basics",
+  "icon": "botanicalmachinery:alfheim_market",
+  "advancement": "botania:recipes/botania/alfheim_portal",
+  "pages": [
+
+  ]
+}
