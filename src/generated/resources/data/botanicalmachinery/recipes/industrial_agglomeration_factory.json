@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "botanicalmachinery:industrial_agglomeration_factory",
+  "pattern": [
+    "eye",
+    "xaz",
+    "ese"
+  ],
+  "key": {
+    "e": {
+      "tag": "forge:ingots/elementium"
+    },
+    "a": {
+      "item": "botania:aura_ring"
+    },
+    "s": {
+      "item": "botania:terra_plate"
+    },
+    "x": {
+      "tag": "forge:gems/mana_diamond"
+    },
+    "y": {
+      "tag": "forge:ingots/manasteel"
+    },
+    "z": {
+      "item": "botania:mana_pearl"
+    }
+  },
+  "result": {
+    "item": "botanicalmachinery:industrial_agglomeration_factory"
+  }
+}
