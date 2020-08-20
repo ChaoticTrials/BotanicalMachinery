@@ -4,15 +4,21 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalApothecary;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
 import de.melanx.botanicalmachinery.core.LibResources;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 
 public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechanicalApothecary> {
-    private final int relX;
-    private final int relY;
+    private int relX;
+    private int relY;
 
     public ScreenMechanicalApothecary(ContainerMechanicalApothecary screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -20,6 +26,13 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         this.ySize = 195;
         this.relX = (this.width - this.xSize) / 2;
         this.relY = (this.height - this.ySize) / 2;
+    }
+
+    @Override
+    public void init(@Nonnull Minecraft p_init_1_, int p_init_2_, int p_init_3_) {
+        super.init(p_init_1_, p_init_2_, p_init_3_);
+        this.relX = (p_init_2_ - this.xSize) / 2;
+        this.relY = (p_init_3_ - this.ySize) / 2;
     }
 
     @Override
@@ -40,8 +53,27 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float) (this.ySize - 96 + 2), Color.DARK_GRAY.getRGB());
         this.font.drawString(String.valueOf(((TileMechanicalApothecary) this.container.getWorld().getTileEntity(this.container.getPos())).getFluidInventory().getFluidAmount()), 160.0F, this.ySize - 94, Color.BLUE.getRGB());
 
+        float pct = Math.min((float) ((TileMechanicalApothecary) this.container.getWorld().getTileEntity(this.container.getPos())).getFluidInventory().getFluidAmount() / TileMechanicalApothecary.FLUID_CAPACITY, 1.0F);
+        ResourceLocation water = new ResourceLocation("block/water_still");
         //noinspection ConstantConditions
+        this.minecraft.getTextureManager().bindTexture(water);
+        TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(water);
+        this.minecraft.getTextureManager().bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+        int fluidColor = Fluids.WATER.getAttributes().getColor();
+        float fluidColorA = ((fluidColor >> 24) & 0xFF) / 255f;
+        float fluidColorR = ((fluidColor >> 16) & 0xFF) / 255f;
+        float fluidColorG = ((fluidColor >> 8) & 0xFF) / 255f;
+        float fluidColorB = ((fluidColor) & 0xFF) / 255f;
+        //noinspection deprecation
+        GlStateManager.color4f(fluidColorR, fluidColorG, fluidColorB, fluidColorA);
+        int xPos = 163;
+        int yPos = 15 + 81;
+        blit(xPos, yPos, 0, 17, (int) -(81 * pct), sprite);
+//        innerBlit(xPos, yPos + 16, yPos, yPos + 16, 0, (int) sprite.getMinU(), (int) sprite.getMaxU(), sprite.getMinV(), sprite.getMaxV(), 16, 16); fixme
+        //noinspection deprecation
+        GlStateManager.color4f(1, 1, 1, 1);
+
         this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
-        this.blit(this.relX + 163, this.relY + 15, this.xSize, 0, 17, 81);
+        this.blit(xPos, 15, this.xSize, 0, 17, 81);
     }
 }

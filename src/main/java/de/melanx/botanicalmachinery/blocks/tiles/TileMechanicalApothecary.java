@@ -27,13 +27,14 @@ import java.util.function.Predicate;
 public class TileMechanicalApothecary extends TileMod implements ITickableTileEntity {
 
     private static final int WORKING_DURATION = 20;
+    public static final int FLUID_CAPACITY = 8000;
     public static final String TAG_INV = "inv";
     public static final String TAG_FLUID = "fluid";
     public static final String TAG_PROGRESS = "progress";
 
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.createLazy(this::getInventory);
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(20, slot -> this.update = true, this::isValidStack);
-    private final ModdedFluidTank fluidInventory = new ModdedFluidTank(8000, fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER));
+    private final ModdedFluidTank fluidInventory = new ModdedFluidTank(FLUID_CAPACITY, fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER));
     private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.fluidInventory);
     private IPetalRecipe recipe = null;
     private boolean initDone;
