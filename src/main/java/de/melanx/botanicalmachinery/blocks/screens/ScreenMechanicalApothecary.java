@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalApothecary;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
 import de.melanx.botanicalmachinery.core.LibResources;
+import de.melanx.botanicalmachinery.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -67,9 +68,9 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         //noinspection deprecation
         GlStateManager.color4f(fluidColorR, fluidColorG, fluidColorB, fluidColorA);
         int xPos = 163;
-        int yPos = 15 + 81;
-        blit(xPos, yPos, 0, 17, (int) -(81 * pct), sprite);
-//        innerBlit(xPos, yPos + 16, yPos, yPos + 16, 0, (int) sprite.getMinU(), (int) sprite.getMaxU(), sprite.getMinV(), sprite.getMaxV(), 16, 16); fixme
+        int ySize = Math.round(81 * pct);
+        int yPos = 15 + 81 - ySize;
+        RenderHelper.repeatBlit(xPos, yPos, 16, 16, 17, ySize, sprite);
         //noinspection deprecation
         GlStateManager.color4f(1, 1, 1, 1);
 
