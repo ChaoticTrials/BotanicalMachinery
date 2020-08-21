@@ -1,0 +1,18 @@
+{
+  "name": "lexicon.botanicalmachinery.alfheim_market",
+  "category": "botanicalmachinery:botanicalmachinery",
+  "icon": "botanicalmachinery:alfheim_market",
+  "entry_color": "aa00aa",
+  "advancement": "botania:main/elf_portal_open",
+  "pages": [
+    {
+      "type": "text",
+      "text": "lexicon.botanicalmachinery.alfheim_market.page1"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.botanicalmachinery.alfheim_market.recipe",
+      "recipe": "botanicalmachinery:alfheim_market"
+    }
+  ]
+}
