@@ -1,5 +1,6 @@
 package de.melanx.botanicalmachinery.blocks.screens;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.GlStateManager;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalApothecary;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
@@ -13,6 +14,7 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -79,12 +81,13 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         this.blit(xPos, 16, this.xSize, 0, 17, 81);
 
         this.renderHoveredToolTip(mouseX - this.guiLeft, mouseY - this.guiTop);
+        RenderHelper.renderFadedItem(this, ImmutableList.copyOf(Tags.Items.SEEDS.getAllElements()), this.playerInventory.player.ticksExisted, 90, 43);
     }
 
     @Override
     protected void renderHoveredToolTip(int mouseX, int mouseY) {
         if (mouseX >= 163 && mouseX <= 179 &&
-        mouseY >= 16 && mouseY <= 96) {
+                mouseY >= 16 && mouseY <= 96) {
             String fluid = this.tile.getFluidInventory().getFluidAmount() + " / " + this.tile.getFluidInventory().getCapacity() + " mB";
             this.renderTooltip(fluid, mouseX, mouseY);
         }
