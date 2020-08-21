@@ -50,5 +50,9 @@
 
   "lexicon.botanicalmachinery.mechanical_brewery": "Mechanical Brewery",
   "lexicon.botanicalmachinery.mechanical_brewery.recipe": "It brews",
-  "lexicon.botanicalmachinery.mechanical_brewery.page1": "An improved version of the $(l:botania:devices/brewery)Botanical Brewery$() that receives mana from sparks and lets you automate brews  easily."
+  "lexicon.botanicalmachinery.mechanical_brewery.page1": "An improved version of the $(l:botania:devices/brewery)Botanical Brewery$() that receives mana from sparks and lets you automate brews easily.",
+
+  "lexicon.botanicalmachinery.mechanical_apothecary": "Mechanical Apothecary",
+  "lexicon.botanicalmachinery.mechanical_apothecary.recipe": "Give me all the flowers",
+  "lexicon.botanicalmachinery.mechanical_apothecary.page1": "An improved version of the $(l:botania:basics/apothecary)Apothecary$() which uses water, seeds and ingredients to create all the flowers you want."
 }

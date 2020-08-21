@@ -1,0 +1,18 @@
+{
+  "name": "lexicon.botanicalmachinery.mechanical_apothecary",
+  "category": "botanicalmachinery:botanicalmachinery",
+  "icon": "botanicalmachinery:mechanical_apothecary",
+  "entry_color": "aa00aa",
+  "advancement": "botania:recipes/botania/apothecary_default",
+  "pages": [
+    {
+      "type": "text",
+      "text": "lexicon.botanicalmachinery.mechanical_apothecary.page1"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.botanicalmachinery.mechanical_apothecary.recipe",
+      "recipe": "botanicalmachinery:mechanical_apothecary"
+    }
+  ]
+}
