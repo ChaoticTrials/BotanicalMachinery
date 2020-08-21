@@ -22,13 +22,14 @@ public class RenderHelper {
 
     /**
      * Repeatedly blits a texture
-     * @param x x coordinate of topleft corner
-     * @param y y coordinate of topleft corner
-     * @param texWidth with of one texture element. If this is lower than displayWidth the texture is looped.
-     * @param texHeight height of one texture element. If this is lower than displayHeight the texture is looped.
-     * @param displayWidth the width of the blit
+     *
+     * @param x             x coordinate of topleft corner
+     * @param y             y coordinate of topleft corner
+     * @param texWidth      width of one texture element. If this is lower than displayWidth the texture is looped.
+     * @param texHeight     height of one texture element. If this is lower than displayHeight the texture is looped.
+     * @param displayWidth  the width of the blit
      * @param displayHeight the height of the blit
-     * @param sprite A texture sprite
+     * @param sprite        A texture sprite
      */
     public static void repeatBlit(int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
         repeatBlit(x, y, texWidth, texHeight, displayWidth, displayHeight, sprite.getMinU(), sprite.getMaxU(), sprite.getMinV(), sprite.getMaxV());
@@ -57,7 +58,6 @@ public class RenderHelper {
 
                 pixelsRenderedY += pixelsNowY;
             }
-
             pixelsRenderedX += pixelsNowX;
         }
     }
