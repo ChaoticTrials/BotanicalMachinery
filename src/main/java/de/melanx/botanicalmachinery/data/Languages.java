@@ -21,6 +21,7 @@ public class Languages extends LanguageProvider {
         this.addTileWithScreen(Registration.BLOCK_MECHANICAL_MANA_POOL.get(), "Mechanical Mana Pool");
         this.addTileWithScreen(Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get(), "Mechanical Runic Altar");
         this.addTileWithScreen(Registration.BLOCK_MECHANICAL_DAISY.get(), "Mechanical Daisy");
+        this.addTileWithScreen(Registration.BLOCK_MECHANICAL_APOTHECARY.get(), "Mechanical Apothecary");
     }
 
     private void addTileWithScreen(Block key, String name) {
