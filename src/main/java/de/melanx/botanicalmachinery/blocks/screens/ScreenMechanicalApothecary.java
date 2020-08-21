@@ -88,5 +88,6 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
             String fluid = this.tile.getFluidInventory().getFluidAmount() + " / " + this.tile.getFluidInventory().getCapacity() + " mB";
             this.renderTooltip(fluid, mouseX, mouseY);
         }
+        super.renderHoveredToolTip(mouseX, mouseY);
     }
 }
