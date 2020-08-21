@@ -2,6 +2,7 @@
   "name": "lexicon.botanicalmachinery.mechanical_brewery",
   "category": "botanicalmachinery:botanicalmachinery",
   "icon": "botanicalmachinery:mechanical_brewery",
+  "entry_color": "aa00aa",
   "advancement": "botania:recipes/botania/brewery",
   "pages": [
     {

@@ -3,6 +3,7 @@
   "category": "botanicalmachinery:botanicalmachinery",
   "priority": true,
   "icon": "botania:elementium_ingot",
+  "entry_color": "aa00aa",
   "advancement": "botania:recipes/botania/alfheim_portal",
   "pages": [
     {

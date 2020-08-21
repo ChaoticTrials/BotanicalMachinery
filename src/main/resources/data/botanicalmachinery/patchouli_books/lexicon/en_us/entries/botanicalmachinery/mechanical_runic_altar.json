@@ -2,6 +2,7 @@
   "name": "lexicon.botanicalmachinery.mechanical_runic_altar",
   "category": "botanicalmachinery:botanicalmachinery",
   "icon": "botanicalmachinery:mechanical_runic_altar",
+  "entry_color": "aa00aa",
   "advancement": "botania:recipes/botania/runic_altar",
   "pages": [
     {
