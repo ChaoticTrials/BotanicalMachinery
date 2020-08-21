@@ -9,10 +9,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import vazkii.botania.api.recipe.IBrewRecipe;
-import vazkii.botania.api.recipe.IElvenTradeRecipe;
-import vazkii.botania.api.recipe.IManaInfusionRecipe;
-import vazkii.botania.api.recipe.IRuneAltarRecipe;
+import vazkii.botania.api.recipe.*;
 import vazkii.botania.common.item.ModItems;
 
 import javax.annotation.Nullable;
@@ -25,20 +22,24 @@ import java.util.Map;
 public class RecipeHelper {
     public static final List<Item> manaPoolCatalysts = new ArrayList<>();
     public static final List<Item> brewContainer = Arrays.asList(ModItems.vial.asItem(), ModItems.flask.asItem(), ModItems.incenseStick.asItem(), ModItems.bloodPendant.asItem());
+    public static final List<Item> apothecaryIngredients = new ArrayList<>();
     public static final List<Item> manaPoolIngredients = new ArrayList<>();
     public static final List<Item> runeAltarIngredients = new ArrayList<>();
     public static final List<Item> elvenTradeIngredients = new ArrayList<>();
     public static final List<Item> brewIngredients = new ArrayList<>();
+    public static final List<IPetalRecipe> apothecaryRecipes = new ArrayList<>();
     public static final List<IRuneAltarRecipe> runeAltarRecipes = new ArrayList<>();
     public static final List<IElvenTradeRecipe> elvenTradeRecipes = new ArrayList<>();
     public static final List<IBrewRecipe> brewRecipes = new ArrayList<>();
 
     @SubscribeEvent
     public static void onRecipesUpdated(final RecipesUpdatedEvent event) {
+        apothecaryIngredients.clear();
         manaPoolCatalysts.clear();
         manaPoolIngredients.clear();
         runeAltarIngredients.clear();
         elvenTradeIngredients.clear();
+        apothecaryRecipes.clear();
         runeAltarRecipes.clear();
         elvenTradeRecipes.clear();
         brewRecipes.clear();
@@ -63,6 +64,10 @@ public class RecipeHelper {
                 IBrewRecipe recipe = (IBrewRecipe) r;
                 brewRecipes.add(recipe);
                 addIngredientsToList(recipe.getIngredients(), brewIngredients);
+            } else if (r instanceof IPetalRecipe) {
+                IPetalRecipe recipe = (IPetalRecipe) r;
+                apothecaryRecipes.add(recipe);
+                addIngredientsToList(recipe.getIngredients(), apothecaryIngredients);
             }
         }
     }

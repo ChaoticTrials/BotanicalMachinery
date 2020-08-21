@@ -1,6 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
 import net.minecraft.fluid.Fluids;
@@ -8,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -22,7 +24,9 @@ import vazkii.botania.common.block.tile.TileMod;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 public class TileMechanicalApothecary extends TileMod implements ITickableTileEntity {
 
@@ -44,6 +48,8 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
 
     public TileMechanicalApothecary() {
         super(Registration.TILE_MECHANICAL_APOTHECARY.get());
+        this.inventory.setInputSlots(IntStream.range(1, 17).toArray());
+        this.inventory.setOutputSlots(IntStream.range(17, 21).toArray());
     }
 
     @Nonnull
@@ -57,6 +63,9 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
     }
 
     public boolean isValidStack(int slot, ItemStack stack) {
+        if (slot == 0) return Tags.Items.SEEDS.contains(stack.getItem());
+        else if (Arrays.stream(this.inventory.getInputSlots()).anyMatch(x -> x == slot))
+            return RecipeHelper.apothecaryIngredients.contains(stack.getItem());
         return true;
     }
 
