@@ -69,12 +69,12 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         GlStateManager.color4f(fluidColorR, fluidColorG, fluidColorB, fluidColorA);
         int xPos = 163;
         int ySize = Math.round(81 * pct);
-        int yPos = 15 + 81 - ySize;
+        int yPos = 16 + 81 - ySize;
         RenderHelper.repeatBlit(xPos, yPos, 16, 16, 17, ySize, sprite);
         //noinspection deprecation
         GlStateManager.color4f(1, 1, 1, 1);
 
         this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
-        this.blit(xPos, 15, this.xSize, 0, 17, 81);
+        this.blit(xPos, 16, this.xSize, 0, 17, 81);
     }
 }
