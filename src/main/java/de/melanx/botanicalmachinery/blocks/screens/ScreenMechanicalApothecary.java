@@ -47,6 +47,7 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         this.blit(this.relX, this.relY, 0, 0, this.xSize, this.ySize);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String s = this.title.getFormattedText();
@@ -56,7 +57,6 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
 
         float pct = Math.min((float) ((TileMechanicalApothecary) this.container.getWorld().getTileEntity(this.container.getPos())).getFluidInventory().getFluidAmount() / TileMechanicalApothecary.FLUID_CAPACITY, 1.0F);
         ResourceLocation water = new ResourceLocation("block/water_still");
-        //noinspection ConstantConditions
         this.minecraft.getTextureManager().bindTexture(water);
         TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(water);
         this.minecraft.getTextureManager().bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);

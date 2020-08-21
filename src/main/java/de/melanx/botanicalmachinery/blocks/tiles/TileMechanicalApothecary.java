@@ -105,5 +105,17 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
             TileMechanicalApothecary.this.sendPacket = true;
             TileMechanicalApothecary.this.update = true;
         }
+
+        @Nonnull
+        @Override
+        public FluidStack drain(FluidStack resource, FluidAction action) {
+            return FluidStack.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public FluidStack drain(int maxDrain, FluidAction action) {
+            return FluidStack.EMPTY;
+        }
     }
 }
