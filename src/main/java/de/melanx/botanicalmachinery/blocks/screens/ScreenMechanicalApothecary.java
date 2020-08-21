@@ -20,6 +20,7 @@ import java.awt.*;
 public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechanicalApothecary> {
     private int relX;
     private int relY;
+    private final static ResourceLocation water = new ResourceLocation("block/water_still");
 
     public ScreenMechanicalApothecary(ContainerMechanicalApothecary screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -56,7 +57,6 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         this.font.drawString(String.valueOf(((TileMechanicalApothecary) this.container.getWorld().getTileEntity(this.container.getPos())).getFluidInventory().getFluidAmount()), 160.0F, this.ySize - 94, Color.BLUE.getRGB());
 
         float pct = Math.min((float) ((TileMechanicalApothecary) this.container.getWorld().getTileEntity(this.container.getPos())).getFluidInventory().getFluidAmount() / TileMechanicalApothecary.FLUID_CAPACITY, 1.0F);
-        ResourceLocation water = new ResourceLocation("block/water_still");
         this.minecraft.getTextureManager().bindTexture(water);
         TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(water);
         this.minecraft.getTextureManager().bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
