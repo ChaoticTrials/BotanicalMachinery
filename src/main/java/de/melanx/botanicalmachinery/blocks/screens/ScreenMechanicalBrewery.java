@@ -24,16 +24,8 @@ public class ScreenMechanicalBrewery extends ScreenBase<ContainerMechanicalBrewe
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         this.drawDefaultGuiBackgroundLayer(LibResources.MECHANICAL_BREWERY_GUI, 100, 49);
 
-        if (this.container.tile instanceof TileMechanicalBrewery && ((TileMechanicalBrewery) this.container.tile).getInventory().getStackInSlot(0).isEmpty()) {
-            if (System.currentTimeMillis() - this.lastTime > 2000) {
-                this.lastTime = System.currentTimeMillis();
-                i--;
-                if (i < 0) i = RecipeHelper.brewContainer.size() - 1;
-            }
-            RenderHelper.renderFadedItem(this, RecipeHelper.brewContainer.get(i), this.relX + 44, this.relY + 48);
-        }
+        RenderHelper.renderFadedItem(this, RecipeHelper.brewContainer, this.playerInventory.player.ticksExisted, this.relX + 44, this.relY + 48);
 
-        //noinspection ConstantConditions
         TileMechanicalBrewery tile = (TileMechanicalBrewery) this.container.tile;
         if (tile.getProgress() > 0) {
             float pct = Math.min(tile.getProgress() / (float) tile.getWorkingDuration(), 1.0F);
