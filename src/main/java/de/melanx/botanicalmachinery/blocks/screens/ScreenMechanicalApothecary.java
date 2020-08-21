@@ -20,6 +20,7 @@ import java.awt.*;
 public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechanicalApothecary> {
     private int relX;
     private int relY;
+    private TileMechanicalApothecary tile;
     private final static ResourceLocation water = new ResourceLocation("block/water_still");
 
     public ScreenMechanicalApothecary(ContainerMechanicalApothecary screenContainer, PlayerInventory inv, ITextComponent titleIn) {
@@ -28,6 +29,7 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         this.ySize = 195;
         this.relX = (this.width - this.xSize) / 2;
         this.relY = (this.height - this.ySize) / 2;
+        this.tile = (TileMechanicalApothecary) this.container.getWorld().getTileEntity(this.container.getPos());
     }
 
     @Override
@@ -54,9 +56,8 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         String s = this.title.getFormattedText();
         this.font.drawString(s, (float) (this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, Color.DARK_GRAY.getRGB());
         this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float) (this.ySize - 96 + 2), Color.DARK_GRAY.getRGB());
-        this.font.drawString(String.valueOf(((TileMechanicalApothecary) this.container.getWorld().getTileEntity(this.container.getPos())).getFluidInventory().getFluidAmount()), 160.0F, this.ySize - 94, Color.BLUE.getRGB());
 
-        float pct = Math.min((float) ((TileMechanicalApothecary) this.container.getWorld().getTileEntity(this.container.getPos())).getFluidInventory().getFluidAmount() / TileMechanicalApothecary.FLUID_CAPACITY, 1.0F);
+        float pct = Math.min((float) this.tile.getFluidInventory().getFluidAmount() / TileMechanicalApothecary.FLUID_CAPACITY, 1.0F);
         this.minecraft.getTextureManager().bindTexture(water);
         TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(water);
         this.minecraft.getTextureManager().bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
@@ -76,5 +77,16 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
 
         this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
         this.blit(xPos, 16, this.xSize, 0, 17, 81);
+
+        this.renderHoveredToolTip(mouseX - this.guiLeft, mouseY - this.guiTop);
+    }
+
+    @Override
+    protected void renderHoveredToolTip(int mouseX, int mouseY) {
+        if (mouseX >= 163 && mouseX <= 179 &&
+        mouseY >= 16 && mouseY <= 96) {
+            String fluid = this.tile.getFluidInventory().getFluidAmount() + " / " + this.tile.getFluidInventory().getCapacity() + " mB";
+            this.renderTooltip(fluid, mouseX, mouseY);
+        }
     }
 }
