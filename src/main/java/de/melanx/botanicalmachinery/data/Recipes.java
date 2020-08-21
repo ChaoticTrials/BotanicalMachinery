@@ -38,9 +38,10 @@ public class Recipes extends net.minecraft.data.RecipeProvider {
 
         this.shaped(Registration.BLOCK_MECHANICAL_DAISY.get())
                 .key('e', ModTags.Items.INGOTS_ELEMENTIUM)
+                .key('a', ModItems.auraRing)
                 .key('d', ModSubtiles.pureDaisyFloating)
                 .patternLine(" d ")
-                .patternLine("eee")
+                .patternLine("eae")
                 .addCriterion("has_item", this.hasItem(ModSubtiles.pureDaisyFloating))
                 .build(consumer);
 

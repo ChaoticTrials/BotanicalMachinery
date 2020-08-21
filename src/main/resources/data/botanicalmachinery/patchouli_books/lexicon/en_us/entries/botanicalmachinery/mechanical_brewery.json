@@ -1,0 +1,17 @@
+{
+  "name": "lexicon.botanicalmachinery.mechanical_brewery",
+  "category": "botanicalmachinery:botanicalmachinery",
+  "icon": "botanicalmachinery:mechanical_brewery",
+  "advancement": "botania:recipes/botania/brewery",
+  "pages": [
+    {
+      "type": "text",
+      "text": "lexicon.botanicalmachinery.mechanical_brewery.page1"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.botanicalmachinery.mechanical_brewery.recipe",
+      "recipe": "botanicalmachinery:mechanical_brewery"
+    }
+  ]
+}

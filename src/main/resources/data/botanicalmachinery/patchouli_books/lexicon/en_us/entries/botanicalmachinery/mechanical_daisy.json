@@ -1,0 +1,17 @@
+{
+  "name": "lexicon.botanicalmachinery.mechanical_daisy",
+  "category": "botanicalmachinery:botanicalmachinery",
+  "icon": "botanicalmachinery:mechanical_daisy",
+  "advancement": "botania:main/pure_daisy_pickup",
+  "pages": [
+    {
+      "type": "text",
+      "text": "lexicon.botanicalmachinery.mechanical_daisy.page1"
+    },
+    {
+      "type": "crafting",
+      "text": "lexicon.botanicalmachinery.mechanical_daisy.recipe",
+      "recipe": "botanicalmachinery:mechanical_daisy"
+    }
+  ]
+}
