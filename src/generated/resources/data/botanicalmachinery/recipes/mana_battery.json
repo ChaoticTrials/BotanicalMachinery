@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "botanicalmachinery:mana_battery",
+  "pattern": [
+    "dgd",
+    "grg",
+    "dbd"
+  ],
+  "key": {
+    "d": {
+      "tag": "forge:gems/dragonstone"
+    },
+    "g": {
+      "item": "botania:gaia_ingot"
+    },
+    "r": {
+      "item": "botania:mana_ring_greater"
+    },
+    "b": {
+      "item": "botania:mana_diamond_block"
+    }
+  },
+  "result": {
+    "item": "botanicalmachinery:mana_battery"
+  }
+}

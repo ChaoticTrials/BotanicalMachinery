@@ -15,14 +15,12 @@ public class ScreenAlfheimMarket extends ScreenBase<ContainerAlfheimMarket> {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         this.drawDefaultGuiBackgroundLayer(LibResources.ALFHEIM_MARKET_GUI, 81, 37);
-        int relX = (this.width - this.xSize) / 2;
-        int relY = (this.height - this.ySize) / 2;
         TileAlfheimMarket tile = (TileAlfheimMarket) this.container.tile;
         if (tile.getProgress() > 0) {
             float pct = Math.min(tile.getProgress() / (float) TileAlfheimMarket.WORKING_DURATION, 1.0F);
             //noinspection ConstantConditions
             this.minecraft.getTextureManager().bindTexture(LibResources.ALFHEIM_MARKET_GUI);
-            vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(relX + 77, relY + 35, 176, 0, Math.round(22 * pct), 16);
+            vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(this.relX + 77, this.relY + 35, 176, 0, Math.round(22 * pct), 16);
         }
     }
 }

@@ -2,7 +2,7 @@
   "parent": "block/block",
   "ambientocclusion": false,
   "textures": {
-    "plate": "minecraft:block/iron_block",
+    "plate": "botania:blocks/storage2",
     "grass_top": "botania:blocks/enchantedsoil0",
     "grass_side": "botania:blocks/enchantedsoil1",
     "flower": "botania:blocks/flower_misc_pure_daisy",

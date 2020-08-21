@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "botanicalmachinery:alfheim_market",
+  "pattern": [
+    "eye",
+    "xaz",
+    "ese"
+  ],
+  "key": {
+    "e": {
+      "tag": "forge:ingots/elementium"
+    },
+    "a": {
+      "item": "botania:aura_ring"
+    },
+    "s": {
+      "item": "botania:alfheim_portal"
+    },
+    "x": {
+      "item": "botania:glimmering_livingwood"
+    },
+    "y": {
+      "item": "botania:glimmering_livingwood"
+    },
+    "z": {
+      "item": "botania:glimmering_livingwood"
+    }
+  },
+  "result": {
+    "item": "botanicalmachinery:alfheim_market"
+  }
+}

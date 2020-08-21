@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "botanicalmachinery:mechanical_daisy",
+  "pattern": [
+    " d ",
+    "eae"
+  ],
+  "key": {
+    "e": {
+      "tag": "forge:ingots/elementium"
+    },
+    "a": {
+      "item": "botania:aura_ring"
+    },
+    "d": {
+      "item": "botania:floating_pure_daisy"
+    }
+  },
+  "result": {
+    "item": "botanicalmachinery:mechanical_daisy"
+  }
+}
