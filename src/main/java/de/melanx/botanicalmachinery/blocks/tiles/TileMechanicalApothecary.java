@@ -35,7 +35,7 @@ import java.util.stream.IntStream;
 
 public class TileMechanicalApothecary extends TileMod implements ITickableTileEntity {
 
-    private static final int WORKING_DURATION = 20;
+    public static final int WORKING_DURATION = 20;
     public static final int FLUID_CAPACITY = 8000;
     public static final String TAG_INV = "inv";
     public static final String TAG_FLUID = "fluid";

@@ -50,6 +50,15 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
 
         this.blit(this.relX, this.relY, 0, 0, this.xSize, this.ySize);
+
+        if (this.tile.getInventory().getStackInSlot(0).isEmpty())
+            RenderHelper.renderFadedItem(this, ImmutableList.copyOf(Tags.Items.SEEDS.getAllElements()), this.playerInventory.player.ticksExisted, this.relX + 90, this.relY + 43);
+
+        if (this.tile.getProgress() > 0) {
+            float pctProgress = Math.min(this.tile.getProgress() / (float) TileMechanicalApothecary.WORKING_DURATION, 1.0F);
+            this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
+            vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(this.relX + 87, this.relY + 64, this.xSize, 0, Math.round(22 * pctProgress), 16);
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -59,7 +68,7 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         this.font.drawString(s, (float) (this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, Color.DARK_GRAY.getRGB());
         this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float) (this.ySize - 96 + 2), Color.DARK_GRAY.getRGB());
 
-        float pct = Math.min((float) this.tile.getFluidInventory().getFluidAmount() / TileMechanicalApothecary.FLUID_CAPACITY, 1.0F);
+        float pctFluid = Math.min((float) this.tile.getFluidInventory().getFluidAmount() / TileMechanicalApothecary.FLUID_CAPACITY, 1.0F);
         this.minecraft.getTextureManager().bindTexture(water);
         TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(water);
         this.minecraft.getTextureManager().bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
@@ -71,17 +80,16 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         //noinspection deprecation
         GlStateManager.color4f(fluidColorR, fluidColorG, fluidColorB, fluidColorA);
         int xPos = 163;
-        int ySize = Math.round(81 * pct);
+        int ySize = Math.round(81 * pctFluid);
         int yPos = 16 + 81 - ySize;
         RenderHelper.repeatBlit(xPos, yPos, 16, 16, 17, ySize, sprite);
         //noinspection deprecation
         GlStateManager.color4f(1, 1, 1, 1);
 
         this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
-        this.blit(xPos, 16, this.xSize, 0, 17, 81);
+        this.blit(xPos, 16, this.xSize, 16, 17, 81);
 
         this.renderHoveredToolTip(mouseX - this.guiLeft, mouseY - this.guiTop);
-        RenderHelper.renderFadedItem(this, ImmutableList.copyOf(Tags.Items.SEEDS.getAllElements()), this.playerInventory.player.ticksExisted, 90, 43);
     }
 
     @Override
