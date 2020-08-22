@@ -2,6 +2,7 @@ package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.BlockManaBattery;
+import de.melanx.botanicalmachinery.blocks.base.BlockBase;
 import de.melanx.botanicalmachinery.core.LibNames;
 import de.melanx.botanicalmachinery.core.Registration;
 import net.minecraft.block.Block;
@@ -23,12 +24,19 @@ public class BlockStates extends BlockStateProvider {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             if (block == Registration.BLOCK_MECHANICAL_DAISY.get()) {
                 this.createStateForManualModel(builder, block);
-            } else if (block instanceof BlockManaBattery) {
+            } else if (block == Registration.BLOCK_MANA_BATTERY.get()) {
                 this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY + "_top"));
-            } else {
+            } else if (block instanceof BlockBase || block == Registration.BLOCK_MECHANICAL_APOTHECARY.get()) {
                 this.createModels(builder, block);
+            } else {
+                this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(this.modelDefault(block)).build());
             }
         });
+    }
+
+    private ModelFile modelDefault(Block block) {
+        String name = block.getRegistryName().getPath();
+        return models().cubeAll(name, modLoc("block/" + name));
     }
 
     private void createModels(VariantBlockStateBuilder builder, Block block, ResourceLocation top) {
