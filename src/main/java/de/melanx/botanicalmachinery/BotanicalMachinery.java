@@ -16,6 +16,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,8 +32,8 @@ public class BotanicalMachinery {
     public BotanicalMachinery() {
         this.instance = this;
         Registration.init();
-        MinecraftForge.EVENT_BUS.register(RecipeHelper.class);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
+        MinecraftForge.EVENT_BUS.addListener(this::onServerStart);
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
@@ -53,5 +54,9 @@ public class BotanicalMachinery {
         ClientRegistry.bindTileEntityRenderer(Registration.TILE_ALFHEIM_MARKET.get(), TesrAlfheimMarket::new);
         ClientRegistry.bindTileEntityRenderer(Registration.TILE_MECHANICAL_MANA_POOL.get(), TesrMechanicalManaPool::new);
         ClientRegistry.bindTileEntityRenderer(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), TesrMechanicalRunicAltar::new);
+    }
+
+    private void onServerStart(final FMLServerStartingEvent event) {
+        RecipeHelper.updateRecipes(event.getServer().getRecipeManager().getRecipes());
     }
 }
