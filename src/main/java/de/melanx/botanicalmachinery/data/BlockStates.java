@@ -36,7 +36,7 @@ public class BlockStates extends BlockStateProvider {
 
     private ModelFile modelDefault(Block block) {
         String name = block.getRegistryName().getPath();
-        return models().cubeAll(name, modLoc("block/" + name));
+        return this.models().cubeAll(name, this.modLoc("block/" + name));
     }
 
     private void createModels(VariantBlockStateBuilder builder, Block block, ResourceLocation top) {

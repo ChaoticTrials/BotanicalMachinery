@@ -22,7 +22,7 @@ import java.awt.*;
 public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechanicalApothecary> {
     private int relX;
     private int relY;
-    private TileMechanicalApothecary tile;
+    private final TileMechanicalApothecary tile;
     private final static ResourceLocation water = new ResourceLocation("block/water_still");
 
     public ScreenMechanicalApothecary(ContainerMechanicalApothecary screenContainer, PlayerInventory inv, ITextComponent titleIn) {

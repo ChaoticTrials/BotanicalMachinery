@@ -1,0 +1,10 @@
+{
+  "type": "botania:mana_infusion",
+  "input": {
+    "tag": "forge:gems/emerald"
+  },
+  "output": {
+    "item": "botanicalmachinery:mana_emerald"
+  },
+  "mana": 11000
+}

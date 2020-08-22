@@ -2,12 +2,12 @@ package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.core.Registration;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapedRecipeBuilder;
+import net.minecraft.data.*;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.util.ResourceLocation;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.ModSubtiles;
 import vazkii.botania.common.item.ModItems;
@@ -16,14 +16,19 @@ import vazkii.botania.common.lib.ModTags;
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
-public class Recipes extends net.minecraft.data.RecipeProvider {
+public class Recipes extends RecipeProvider {
 
     public Recipes(DataGenerator generatorIn) {
         super(generatorIn);
+        generatorIn.addProvider(new ManaInfusionProvider(generatorIn));
     }
 
     @Override
     protected void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
+
+
+        this.compress(consumer, Registration.ITEM_MANA_EMERALD_BLOCK.get(), Registration.ITEM_MANA_EMERALD.get());
+        this.decompress(consumer, Registration.ITEM_MANA_EMERALD.get(), Registration.ITEM_MANA_EMERALD_BLOCK.get());
 
         this.shaped(Registration.BLOCK_MANA_BATTERY.get())
                 .key('d', ModTags.Items.GEMS_DRAGONSTONE)
@@ -68,6 +73,25 @@ public class Recipes extends net.minecraft.data.RecipeProvider {
     private ShapedRecipeBuilder shaped(IItemProvider result) {
         //noinspection ConstantConditions
         return ShapedRecipeBuilder.shapedRecipe(result).setGroup(BotanicalMachinery.MODID + ":" + result.asItem().getRegistryName().getPath());
+    }
+
+    private void compress(Consumer<IFinishedRecipe> consumer, IItemProvider output, Item input) {
+        //noinspection ConstantConditions
+        this.shaped(output)
+                .key('X', input)
+                .patternLine("XXX")
+                .patternLine("XXX")
+                .patternLine("XXX")
+                .addCriterion("has_item", this.hasItem(input))
+                .build(consumer, new ResourceLocation(BotanicalMachinery.MODID, "compress/" + output.asItem().getRegistryName().getPath()));
+    }
+
+    private void decompress(Consumer<IFinishedRecipe> consumer, IItemProvider output, Item input) {
+        //noinspection ConstantConditions
+        ShapelessRecipeBuilder.shapelessRecipe(output, 9)
+                .addIngredient(input)
+                .addCriterion("has_item", this.hasItem(input))
+                .build(consumer, new ResourceLocation(BotanicalMachinery.MODID, "decompress/" + output.asItem().getRegistryName().getPath()));
     }
 
     private void defaultMachine(Consumer<IFinishedRecipe> consumer, IItemProvider output, IItemProvider special1, IItemProvider special2) {
