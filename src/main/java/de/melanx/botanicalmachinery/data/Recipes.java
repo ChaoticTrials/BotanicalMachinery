@@ -61,6 +61,8 @@ public class Recipes extends net.minecraft.data.RecipeProvider {
 
         this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_BREWERY.get(), ModBlocks.brewery,
                 ModItems.vial, Items.BLAZE_POWDER, ModItems.vial);
+
+        this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_APOTHECARY.get(), ModBlocks.defaultAltar, Ingredient.fromTag(ModTags.Items.PETALS));
     }
 
     private ShapedRecipeBuilder shaped(IItemProvider result) {

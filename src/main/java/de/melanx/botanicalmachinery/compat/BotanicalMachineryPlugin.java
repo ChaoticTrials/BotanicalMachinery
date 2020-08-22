@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import vazkii.botania.client.integration.jei.brewery.BreweryRecipeCategory;
 import vazkii.botania.client.integration.jei.elventrade.ElvenTradeRecipeCategory;
 import vazkii.botania.client.integration.jei.manapool.ManaPoolRecipeCategory;
+import vazkii.botania.client.integration.jei.petalapothecary.PetalApothecaryRecipeCategory;
 import vazkii.botania.client.integration.jei.puredaisy.PureDaisyRecipeCategory;
 import vazkii.botania.client.integration.jei.runicaltar.RunicAltarRecipeCategory;
 
@@ -28,6 +29,7 @@ public class BotanicalMachineryPlugin implements IModPlugin {
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(ScreenAlfheimMarket.class, 77, 36, 22, 15, ElvenTradeRecipeCategory.UID);
+        registration.addRecipeClickArea(ScreenMechanicalApothecary.class, 87, 65, 22, 15, PetalApothecaryRecipeCategory.UID);
         registration.addRecipeClickArea(ScreenMechanicalBrewery.class, 96, 48, 22, 15, BreweryRecipeCategory.UID);
         registration.addRecipeClickArea(ScreenMechanicalDaisy.class, 24, 16, 24, 48, PureDaisyRecipeCategory.UID);
         registration.addRecipeClickArea(ScreenMechanicalManaPool.class, 77, 36, 22, 15, ManaPoolRecipeCategory.UID);
@@ -37,6 +39,7 @@ public class BotanicalMachineryPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_ALFHEIM_MARKET.get()), ElvenTradeRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_MECHANICAL_APOTHECARY.get()), PetalApothecaryRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_MECHANICAL_BREWERY.get()), BreweryRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_MECHANICAL_DAISY.get()), PureDaisyRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(Registration.BLOCK_MECHANICAL_MANA_POOL.get()), ManaPoolRecipeCategory.UID);

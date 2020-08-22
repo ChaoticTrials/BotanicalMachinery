@@ -5,6 +5,7 @@
   "block.botanicalmachinery.industrial_agglomeration_factory": "Industrial Agglomeration Factory",
   "block.botanicalmachinery.mana_battery": "Mana Battery",
   "block.botanicalmachinery.mechanical_brewery": "Mechanical Brewery",
+  "block.botanicalmachinery.mechanical_apothecary": "Mechanical Apothecary",
   "block.botanicalmachinery.mechanical_daisy": "Mechanical Daisy",
   "block.botanicalmachinery.mechanical_mana_pool": "Machanical Mana Pool",
   "block.botanicalmachinery.mechanical_runic_altar": "Mechanical Runic Altar",
@@ -12,6 +13,7 @@
   "screen.botanicalmachinery.alfheim_market": "Alfheim Market",
   "screen.botanicalmachinery.industrial_agglomeration_factory": "Industrial Agglomeration Factory",
   "screen.botanicalmachinery.mana_battery": "Mana Battery",
+  "screen.botanicalmachinery.mechanical_apothecary": "Mechanical Apothecary",
   "screen.botanicalmachinery.mechanical_brewery": "Mechanical Brewery",
   "screen.botanicalmachinery.mechanical_daisy": "Mechanical Daisy",
   "screen.botanicalmachinery.mechanical_mana_pool": "Machanical Mana Pool",
@@ -48,5 +50,9 @@
 
   "lexicon.botanicalmachinery.mechanical_brewery": "Mechanical Brewery",
   "lexicon.botanicalmachinery.mechanical_brewery.recipe": "It brews",
-  "lexicon.botanicalmachinery.mechanical_brewery.page1": "An improved version of the $(l:botania:devices/brewery)Botanical Brewery$() that receives mana from sparks and lets you automate brews  easily."
+  "lexicon.botanicalmachinery.mechanical_brewery.page1": "An improved version of the $(l:botania:devices/brewery)Botanical Brewery$() that receives mana from sparks and lets you automate brews easily.",
+
+  "lexicon.botanicalmachinery.mechanical_apothecary": "Mechanical Apothecary",
+  "lexicon.botanicalmachinery.mechanical_apothecary.recipe": "Give me all the flowers",
+  "lexicon.botanicalmachinery.mechanical_apothecary.page1": "An improved version of the $(l:botania:basics/apothecary)Apothecary$() which uses water, seeds and ingredients to create all the flowers you want."
 }

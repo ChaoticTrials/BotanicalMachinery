@@ -14,6 +14,7 @@ public class LibResources {
     public static final ResourceLocation ALFHEIM_MARKET_GUI = gui(LibNames.ALFHEIM_MARKET);
     public static final ResourceLocation INDUSTRIAL_AGGLOMERATION_FACTORY_GUI = gui(LibNames.INDUSTRIAL_AGGLOMERATION_FACTORY);
     public static final ResourceLocation MANA_BATTERY_GUI = gui(LibNames.MANA_BATTERY);
+    public static final ResourceLocation MECHANICAL_APOTHECARY_GUI = gui(LibNames.MECHANICAL_APOTHECARY);
     public static final ResourceLocation MECHANICAL_BREWERY_GUI = gui(LibNames.MECHANICAL_BREWERY);
     public static final ResourceLocation MECHANICAL_DAISY_GUI = gui(LibNames.MECHANICAL_DAISY);
     public static final ResourceLocation MECHANICAL_MANA_POOL_GUI = gui(LibNames.MECHANICAL_MANA_POOL);

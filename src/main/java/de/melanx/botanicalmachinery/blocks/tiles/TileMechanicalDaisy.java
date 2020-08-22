@@ -173,7 +173,7 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
     public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, @Nullable Direction side) {
         if (!this.removed && (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) {
 
-            // If the side is null (e.g we'Re in the gui) we return the normal inventory.
+            // If the side is null (e.g we're in the gui) we return the normal inventory.
             // For world interactions (direction != null) we return the inventory that block slots of not finished recipes.
             //noinspection unchecked
             return (LazyOptional<X>) (side == null ? this.lazyInventory : this.hopperInventory);
