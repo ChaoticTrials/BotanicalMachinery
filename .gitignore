@@ -20,7 +20,7 @@ build
 # other
 .cache
 eclipse
-run*
+/run*
 
 # botania textures for data run
 libs/resources

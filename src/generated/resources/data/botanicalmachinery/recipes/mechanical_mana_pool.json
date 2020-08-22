@@ -11,19 +11,19 @@
       "tag": "forge:ingots/elementium"
     },
     "a": {
-      "item": "botania:aura_ring"
+      "item": "botania:mana_ring_greater"
     },
     "s": {
       "item": "botania:fabulous_pool"
     },
     "x": {
-      "item": "botania:diluted_pool"
+      "item": "botania:alchemy_catalyst"
     },
     "y": {
       "item": "botania:diluted_pool"
     },
     "z": {
-      "item": "botania:diluted_pool"
+      "item": "botania:conjuration_catalyst"
     }
   },
   "result": {

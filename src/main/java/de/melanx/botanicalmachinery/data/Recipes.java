@@ -2,12 +2,12 @@ package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.core.Registration;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapedRecipeBuilder;
+import net.minecraft.data.*;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.util.ResourceLocation;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.ModSubtiles;
 import vazkii.botania.common.item.ModItems;
@@ -16,20 +16,25 @@ import vazkii.botania.common.lib.ModTags;
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
-public class Recipes extends net.minecraft.data.RecipeProvider {
+public class Recipes extends RecipeProvider {
 
     public Recipes(DataGenerator generatorIn) {
         super(generatorIn);
+        generatorIn.addProvider(new ManaInfusionProvider(generatorIn));
     }
 
     @Override
     protected void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
+        this.registerExtraRecipes(consumer);
+
+        this.compress(consumer, Registration.ITEM_MANA_EMERALD_BLOCK.get(), Registration.ITEM_MANA_EMERALD.get());
+        this.decompress(consumer, Registration.ITEM_MANA_EMERALD.get(), Registration.ITEM_MANA_EMERALD_BLOCK.get());
 
         this.shaped(Registration.BLOCK_MANA_BATTERY.get())
                 .key('d', ModTags.Items.GEMS_DRAGONSTONE)
                 .key('g', ModItems.gaiaIngot)
                 .key('r', ModItems.manaRingGreater)
-                .key('b', ModBlocks.manaDiamondBlock)
+                .key('b', Registration.ITEM_MANA_EMERALD_BLOCK.get())
                 .patternLine("dgd")
                 .patternLine("grg")
                 .patternLine("dbd")
@@ -37,8 +42,8 @@ public class Recipes extends net.minecraft.data.RecipeProvider {
                 .build(consumer);
 
         this.shaped(Registration.BLOCK_MECHANICAL_DAISY.get())
-                .key('e', ModTags.Items.INGOTS_ELEMENTIUM)
-                .key('a', ModItems.auraRing)
+                .key('e', ModTags.Items.BLOCKS_ELEMENTIUM)
+                .key('a', ModItems.manaRingGreater)
                 .key('d', ModSubtiles.pureDaisyFloating)
                 .patternLine(" d ")
                 .patternLine("eae")
@@ -46,7 +51,7 @@ public class Recipes extends net.minecraft.data.RecipeProvider {
                 .build(consumer);
 
         this.defaultMachine(consumer, Registration.BLOCK_ALFHEIM_MARKET.get(), ModBlocks.alfPortal,
-                ModBlocks.livingwoodGlimmering);
+                ModBlocks.livingwoodGlimmering, ModBlocks.dreamwood, ModBlocks.livingwoodGlimmering);
 
         this.defaultMachine(consumer, Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), ModBlocks.terraPlate,
                 Ingredient.fromTag(ModTags.Items.GEMS_MANA_DIAMOND),
@@ -54,20 +59,41 @@ public class Recipes extends net.minecraft.data.RecipeProvider {
                 Ingredient.fromItems(ModItems.manaPearl));
 
         this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_MANA_POOL.get(), ModBlocks.fabulousPool,
-                ModBlocks.dilutedPool);
+                ModBlocks.alchemyCatalyst, ModBlocks.dilutedPool, ModBlocks.conjurationCatalyst);
 
         this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get(), ModBlocks.runeAltar,
-                Ingredient.fromTag(ModTags.Items.RUNES));
+                Ingredient.fromItems(ModItems.runeLust, ModItems.runeGluttony, ModItems.runeGreed,
+                        ModItems.runeSloth, ModItems.runeWrath, ModItems.runeEnvy, ModItems.runePride));
 
         this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_BREWERY.get(), ModBlocks.brewery,
-                ModItems.vial, Items.BLAZE_POWDER, ModItems.vial);
+                ModItems.flask, Items.BLAZE_ROD, ModItems.flask);
 
-        this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_APOTHECARY.get(), ModBlocks.defaultAltar, Ingredient.fromTag(ModTags.Items.PETALS));
+        this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_APOTHECARY.get(), ModBlocks.defaultAltar,
+                Ingredient.fromTag(ModTags.Items.PETALS));
     }
 
     private ShapedRecipeBuilder shaped(IItemProvider result) {
         //noinspection ConstantConditions
         return ShapedRecipeBuilder.shapedRecipe(result).setGroup(BotanicalMachinery.MODID + ":" + result.asItem().getRegistryName().getPath());
+    }
+
+    private void compress(Consumer<IFinishedRecipe> consumer, IItemProvider output, Item input) {
+        //noinspection ConstantConditions
+        this.shaped(output)
+                .key('X', input)
+                .patternLine("XXX")
+                .patternLine("XXX")
+                .patternLine("XXX")
+                .addCriterion("has_item", this.hasItem(input))
+                .build(consumer, new ResourceLocation(BotanicalMachinery.MODID, "compress/" + output.asItem().getRegistryName().getPath()));
+    }
+
+    private void decompress(Consumer<IFinishedRecipe> consumer, IItemProvider output, Item input) {
+        //noinspection ConstantConditions
+        ShapelessRecipeBuilder.shapelessRecipe(output, 9)
+                .addIngredient(input)
+                .addCriterion("has_item", this.hasItem(input))
+                .build(consumer, new ResourceLocation(BotanicalMachinery.MODID, "decompress/" + output.asItem().getRegistryName().getPath()));
     }
 
     private void defaultMachine(Consumer<IFinishedRecipe> consumer, IItemProvider output, IItemProvider special1, IItemProvider special2) {
@@ -85,7 +111,7 @@ public class Recipes extends net.minecraft.data.RecipeProvider {
     private void defaultMachine(Consumer<IFinishedRecipe> consumer, IItemProvider output, IItemProvider special1, Ingredient special2, Ingredient special3, Ingredient special4) {
         this.shaped(output)
                 .key('e', ModTags.Items.INGOTS_ELEMENTIUM)
-                .key('a', ModItems.auraRing)
+                .key('a', ModItems.manaRingGreater)
                 .key('s', special1)
                 .key('x', special2)
                 .key('y', special3)
@@ -95,5 +121,30 @@ public class Recipes extends net.minecraft.data.RecipeProvider {
                 .patternLine("ese")
                 .addCriterion("has_item", this.hasItem(special1))
                 .build(consumer);
+    }
+
+    private void registerExtraRecipes(Consumer<IFinishedRecipe> consumer) {
+        this.shaped(ModItems.manaTablet)
+                .key('P', Ingredient.fromItems(Registration.ITEM_MANA_EMERALD.get()))
+                .key('S', ModTags.Items.LIVINGROCK)
+                .patternLine("SSS")
+                .patternLine("SPS")
+                .patternLine("SSS")
+                .addCriterion("has_item", this.hasItem(Registration.ITEM_MANA_EMERALD.get()))
+                .build(consumer, this.changedBotaniaLoc(ModItems.manaTablet));
+
+        this.shaped(ModBlocks.runeAltar)
+                .key('P', Registration.ITEM_MANA_EMERALD.get())
+                .key('S', ModTags.Items.LIVINGROCK)
+                .patternLine("SSS")
+                .patternLine("SPS")
+                .addCriterion("has_item", this.hasItem(Registration.ITEM_MANA_EMERALD.get()))
+                .build(consumer, this.changedBotaniaLoc(ModBlocks.runeAltar.asItem()));
+    }
+
+    private ResourceLocation changedBotaniaLoc(Item item) {
+        @SuppressWarnings("ConstantConditions")
+        String name = item.asItem().getRegistryName().getPath();
+        return new ResourceLocation(BotanicalMachinery.MODID, "botania/" + name);
     }
 }

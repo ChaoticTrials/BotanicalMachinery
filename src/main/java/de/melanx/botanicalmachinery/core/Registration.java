@@ -6,10 +6,14 @@ import de.melanx.botanicalmachinery.blocks.base.ContainerBase;
 import de.melanx.botanicalmachinery.blocks.containers.*;
 import de.melanx.botanicalmachinery.blocks.tiles.*;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -25,6 +29,7 @@ public class Registration {
     public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, BotanicalMachinery.MODID);
     private static final Item.Properties itemProps = new Item.Properties().group(BotanicalMachinery.itemGroup);
 
+    public static final RegistryObject<Block> BLOCK_MANA_EMERALD = BLOCKS.register(LibNames.MANA_EMERALD_BLOCK, () -> new Block(Block.Properties.create(Material.IRON, MaterialColor.EMERALD).harvestLevel(3).harvestTool(ToolType.PICKAXE).hardnessAndResistance(5.0F, 6.0F).sound(SoundType.METAL)));
     public static final RegistryObject<Block> BLOCK_ALFHEIM_MARKET = BLOCKS.register(LibNames.ALFHEIM_MARKET, BlockAlfheimMarket::new);
     public static final RegistryObject<Block> BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY = BLOCKS.register(LibNames.INDUSTRIAL_AGGLOMERATION_FACTORY, BlockIndustrialAgglomerationFactory::new);
     public static final RegistryObject<Block> BLOCK_MANA_BATTERY = BLOCKS.register(LibNames.MANA_BATTERY, BlockManaBattery::new);
@@ -34,6 +39,9 @@ public class Registration {
     public static final RegistryObject<Block> BLOCK_MECHANICAL_MANA_POOL = BLOCKS.register(LibNames.MECHANICAL_MANA_POOL, BlockMechanicalManaPool::new);
     public static final RegistryObject<Block> BLOCK_MECHANICAL_RUNIC_ALTAR = BLOCKS.register(LibNames.MECHANICAL_RUNIC_ALTAR, BlockMechanicalRunicAltar::new);
 
+    public static final RegistryObject<Item> ITEM_MANA_EMERALD = ITEMS.register(LibNames.MANA_EMERALD, () -> new Item(itemProps));
+
+    public static final RegistryObject<Item> ITEM_MANA_EMERALD_BLOCK = ITEMS.register(LibNames.MANA_EMERALD_BLOCK, () -> new BlockItem(BLOCK_MANA_EMERALD.get(), itemProps));
     public static final RegistryObject<Item> ITEM_ALFHEIM_MARKET = ITEMS.register(LibNames.ALFHEIM_MARKET, () -> new BlockItem(BLOCK_ALFHEIM_MARKET.get(), itemProps));
     public static final RegistryObject<Item> ITEM_INDUSTRIAL_AGGLOMERATION_FACTORY = ITEMS.register(LibNames.INDUSTRIAL_AGGLOMERATION_FACTORY, () -> new BlockItem(BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), itemProps));
     public static final RegistryObject<Item> ITEM_MANA_BATTERY = ITEMS.register(LibNames.MANA_BATTERY, () -> new BlockItem(BLOCK_MANA_BATTERY.get(), itemProps));

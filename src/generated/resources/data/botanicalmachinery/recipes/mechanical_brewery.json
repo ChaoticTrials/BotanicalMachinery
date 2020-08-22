@@ -11,19 +11,19 @@
       "tag": "forge:ingots/elementium"
     },
     "a": {
-      "item": "botania:aura_ring"
+      "item": "botania:mana_ring_greater"
     },
     "s": {
       "item": "botania:brewery"
     },
     "x": {
-      "item": "botania:vial"
+      "item": "botania:flask"
     },
     "y": {
-      "item": "minecraft:blaze_powder"
+      "item": "minecraft:blaze_rod"
     },
     "z": {
-      "item": "botania:vial"
+      "item": "botania:flask"
     }
   },
   "result": {
