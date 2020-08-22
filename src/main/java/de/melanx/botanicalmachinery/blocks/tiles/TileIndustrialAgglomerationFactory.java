@@ -16,7 +16,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
     public static final int RECIPE_COST = TilePool.MAX_MANA / 2;
     public static final int WORKING_DURATION = 100;
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(4, null, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(4, slot -> this.sendPacket = true, this::isValidStack);
     private int progress;
     private boolean recipe;
 

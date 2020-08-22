@@ -42,7 +42,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
     public static final String TAG_PROGRESS = "progress";
 
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.createLazy(this::getInventory);
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(21, slot -> this.update = true, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(21, slot -> {this.update = true; this.sendPacket = true;}, this::isValidStack);
     private final ModdedFluidTank fluidInventory = new ModdedFluidTank(FLUID_CAPACITY, fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER));
     private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.fluidInventory);
     private IPetalRecipe recipe = null;

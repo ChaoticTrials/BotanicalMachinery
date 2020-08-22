@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 public class BlockMechanicalRunicAltar extends BlockBase {
 
     public BlockMechanicalRunicAltar() {
-        super(true);
+        super(false);
     }
 
     @Nullable

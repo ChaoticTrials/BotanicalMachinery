@@ -4,6 +4,7 @@ import de.melanx.botanicalmachinery.blocks.screens.*;
 import de.melanx.botanicalmachinery.blocks.tesr.TesrAlfheimMarket;
 import de.melanx.botanicalmachinery.blocks.tesr.TesrMechanicalDaisy;
 import de.melanx.botanicalmachinery.blocks.tesr.TesrMechanicalManaPool;
+import de.melanx.botanicalmachinery.blocks.tesr.TesrMechanicalRunicAltar;
 import de.melanx.botanicalmachinery.core.ModGroup;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
@@ -51,5 +52,6 @@ public class BotanicalMachinery {
         ClientRegistry.bindTileEntityRenderer(Registration.TILE_MECHANICAL_DAISY.get(), TesrMechanicalDaisy::new);
         ClientRegistry.bindTileEntityRenderer(Registration.TILE_ALFHEIM_MARKET.get(), TesrAlfheimMarket::new);
         ClientRegistry.bindTileEntityRenderer(Registration.TILE_MECHANICAL_MANA_POOL.get(), TesrMechanicalManaPool::new);
+        ClientRegistry.bindTileEntityRenderer(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), TesrMechanicalRunicAltar::new);
     }
 }

@@ -22,7 +22,7 @@ public class TileMechanicalRunicAltar extends TileBase {
     public static final int WORKING_DURATION = 100;
     public static final String TAG_PROGRESS = "progress";
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, slot -> this.update = true, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, slot -> {this.update = true; this.sendPacket = true;}, this::isValidStack);
     private IRuneAltarRecipe recipe = null;
     private boolean initDone;
     private int progress;

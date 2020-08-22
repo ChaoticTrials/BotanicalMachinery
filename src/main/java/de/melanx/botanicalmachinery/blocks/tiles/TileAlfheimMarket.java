@@ -22,7 +22,7 @@ public class TileAlfheimMarket extends TileBase {
     public static final int WORKING_DURATION = 20;
     private static final int RECIPE_COST = 500;
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(5, slot -> this.update = true, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(5, slot -> {this.update = true; this.sendPacket = true;}, this::isValidStack);
     private IElvenTradeRecipe recipe = null;
     private boolean initDone;
     private int progress;

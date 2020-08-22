@@ -78,7 +78,7 @@ public class TesrMechanicalManaPool extends HorizontalRotatedTesr<TileMechanical
             if (!output.isEmpty()) {
                 matrixStack.push();
                 matrixStack.scale(7 / 16f, 7 / 16f, 7 / 16f);
-                matrixStack.rotate(Vector3f.YP.rotationDegrees(ClientTickHandler.ticksInGame % 360));
+                matrixStack.rotate(Vector3f.YP.rotationDegrees(ClientTickHandler.ticksInGame + partialTicks));
                 Minecraft.getInstance().getItemRenderer().renderItem(output, ItemCameraTransforms.TransformType.GROUND, 200, OverlayTexture.NO_OVERLAY, matrixStack, buffer);
                 matrixStack.pop();
             }

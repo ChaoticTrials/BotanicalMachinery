@@ -61,6 +61,7 @@ public class TileMechanicalManaPool extends TileBase {
                 this.validRecipe = stack.isEmpty();
             }
         }
+        this.sendPacket = true;
         this.markDirty();
     }
 

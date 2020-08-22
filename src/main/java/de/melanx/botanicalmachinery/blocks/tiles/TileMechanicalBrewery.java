@@ -21,7 +21,7 @@ public class TileMechanicalBrewery extends TileBase {
     public static final String TAG_PROGRESS = "progress";
     public static final String TAG_WORKING_DURATION = "workingDuration";
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(8, slot -> this.update = true, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(8, slot -> {this.update = true; this.sendPacket = true;}, this::isValidStack);
     private IBrewRecipe recipe = null;
     private boolean initDone;
     private int progress;
