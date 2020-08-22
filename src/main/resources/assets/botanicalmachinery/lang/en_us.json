@@ -1,6 +1,9 @@
 {
   "itemGroup.botanicalmachinery": "Botanical Machinery",
 
+  "item.botanicalmachinery.mana_emerald": "Mana Emerald",
+
+  "block.botanicalmachinery.mana_emerald_block": "Mana Emerald Block",
   "block.botanicalmachinery.alfheim_market": "Alfheim Market",
   "block.botanicalmachinery.industrial_agglomeration_factory": "Industrial Agglomeration Factory",
   "block.botanicalmachinery.mana_battery": "Mana Battery",
