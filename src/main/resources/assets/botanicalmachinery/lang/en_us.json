@@ -25,7 +25,7 @@
   "lexicon.botanicalmachinery.title": "Botanical Machinery",
   "lexicon.botanicalmachinery.description": "Make your farms more compact. This is the chapter for Botanical Machinery, a mod by MelanX.",
   "lexicon.botanicalmachinery.introduction": "A new discovery",
-  "lexicon.botanicalmachinery.introduction.page1": "Elementium has some properties many didn't notice at all. Just setting the to a continuous stream of mana using a $(l:botania:baubles/aura_ring)Band of Aura$() it makes the machines of a botanist available to the world of technic where everything is controlled by pipes. But even the elves don't fully understand this effect and it's not known if it's safe to change the machines of a botanist that much.",
+  "lexicon.botanicalmachinery.introduction.page1": "Elementium has some properties many didn't notice at all. Just setting the to a continuous stream of mana using a $(l:botania:baubles/aura_ring)Greater Band of Aura$() it makes the machines of a botanist available to the world of technic where everything is controlled by pipes. But even the elves don't fully understand this effect and it's not known if it's safe to change the machines of a botanist that much.",
 
   "lexicon.botanicalmachinery.mana_battery": "Mana Battery",
   "lexicon.botanicalmachinery.mana_battery.recipe": "This is all you need",

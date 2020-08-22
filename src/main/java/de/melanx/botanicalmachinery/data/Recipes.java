@@ -43,7 +43,7 @@ public class Recipes extends RecipeProvider {
 
         this.shaped(Registration.BLOCK_MECHANICAL_DAISY.get())
                 .key('e', ModTags.Items.BLOCKS_ELEMENTIUM)
-                .key('a', ModItems.manaRingGreater)
+                .key('a', ModItems.auraRingGreater)
                 .key('d', ModSubtiles.pureDaisyFloating)
                 .patternLine(" d ")
                 .patternLine("eae")
@@ -111,7 +111,7 @@ public class Recipes extends RecipeProvider {
     private void defaultMachine(Consumer<IFinishedRecipe> consumer, IItemProvider output, IItemProvider special1, Ingredient special2, Ingredient special3, Ingredient special4) {
         this.shaped(output)
                 .key('e', ModTags.Items.INGOTS_ELEMENTIUM)
-                .key('a', ModItems.manaRingGreater)
+                .key('a', ModItems.auraRingGreater)
                 .key('s', special1)
                 .key('x', special2)
                 .key('y', special3)
