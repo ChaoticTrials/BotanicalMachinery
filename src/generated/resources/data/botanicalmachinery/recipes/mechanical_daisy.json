@@ -7,10 +7,10 @@
   ],
   "key": {
     "e": {
-      "tag": "forge:ingots/elementium"
+      "tag": "forge:storage_blocks/elementium"
     },
     "a": {
-      "item": "botania:aura_ring"
+      "item": "botania:mana_ring_greater"
     },
     "d": {
       "item": "botania:floating_pure_daisy"

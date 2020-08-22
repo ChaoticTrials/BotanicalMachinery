@@ -11,20 +11,80 @@
       "tag": "forge:ingots/elementium"
     },
     "a": {
-      "item": "botania:aura_ring"
+      "item": "botania:mana_ring_greater"
     },
     "s": {
       "item": "botania:runic_altar"
     },
-    "x": {
-      "tag": "botania:runes"
-    },
-    "y": {
-      "tag": "botania:runes"
-    },
-    "z": {
-      "tag": "botania:runes"
-    }
+    "x": [
+      {
+        "item": "botania:rune_lust"
+      },
+      {
+        "item": "botania:rune_gluttony"
+      },
+      {
+        "item": "botania:rune_greed"
+      },
+      {
+        "item": "botania:rune_sloth"
+      },
+      {
+        "item": "botania:rune_wrath"
+      },
+      {
+        "item": "botania:rune_envy"
+      },
+      {
+        "item": "botania:rune_pride"
+      }
+    ],
+    "y": [
+      {
+        "item": "botania:rune_lust"
+      },
+      {
+        "item": "botania:rune_gluttony"
+      },
+      {
+        "item": "botania:rune_greed"
+      },
+      {
+        "item": "botania:rune_sloth"
+      },
+      {
+        "item": "botania:rune_wrath"
+      },
+      {
+        "item": "botania:rune_envy"
+      },
+      {
+        "item": "botania:rune_pride"
+      }
+    ],
+    "z": [
+      {
+        "item": "botania:rune_lust"
+      },
+      {
+        "item": "botania:rune_gluttony"
+      },
+      {
+        "item": "botania:rune_greed"
+      },
+      {
+        "item": "botania:rune_sloth"
+      },
+      {
+        "item": "botania:rune_wrath"
+      },
+      {
+        "item": "botania:rune_envy"
+      },
+      {
+        "item": "botania:rune_pride"
+      }
+    ]
   },
   "result": {
     "item": "botanicalmachinery:mechanical_runic_altar"

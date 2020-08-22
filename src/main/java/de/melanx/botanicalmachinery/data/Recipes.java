@@ -34,7 +34,7 @@ public class Recipes extends RecipeProvider {
                 .key('d', ModTags.Items.GEMS_DRAGONSTONE)
                 .key('g', ModItems.gaiaIngot)
                 .key('r', ModItems.manaRingGreater)
-                .key('b', ModBlocks.manaDiamondBlock)
+                .key('b', Registration.ITEM_MANA_EMERALD_BLOCK.get())
                 .patternLine("dgd")
                 .patternLine("grg")
                 .patternLine("dbd")
@@ -42,8 +42,8 @@ public class Recipes extends RecipeProvider {
                 .build(consumer);
 
         this.shaped(Registration.BLOCK_MECHANICAL_DAISY.get())
-                .key('e', ModTags.Items.INGOTS_ELEMENTIUM)
-                .key('a', ModItems.auraRing)
+                .key('e', ModTags.Items.BLOCKS_ELEMENTIUM)
+                .key('a', ModItems.manaRingGreater)
                 .key('d', ModSubtiles.pureDaisyFloating)
                 .patternLine(" d ")
                 .patternLine("eae")
@@ -51,7 +51,7 @@ public class Recipes extends RecipeProvider {
                 .build(consumer);
 
         this.defaultMachine(consumer, Registration.BLOCK_ALFHEIM_MARKET.get(), ModBlocks.alfPortal,
-                ModBlocks.livingwoodGlimmering);
+                ModBlocks.livingwoodGlimmering, ModBlocks.dreamwood, ModBlocks.livingwoodGlimmering);
 
         this.defaultMachine(consumer, Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), ModBlocks.terraPlate,
                 Ingredient.fromTag(ModTags.Items.GEMS_MANA_DIAMOND),
@@ -59,15 +59,17 @@ public class Recipes extends RecipeProvider {
                 Ingredient.fromItems(ModItems.manaPearl));
 
         this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_MANA_POOL.get(), ModBlocks.fabulousPool,
-                ModBlocks.dilutedPool);
+                ModBlocks.alchemyCatalyst, ModBlocks.dilutedPool, ModBlocks.conjurationCatalyst);
 
         this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get(), ModBlocks.runeAltar,
-                Ingredient.fromTag(ModTags.Items.RUNES));
+                Ingredient.fromItems(ModItems.runeLust, ModItems.runeGluttony, ModItems.runeGreed,
+                        ModItems.runeSloth, ModItems.runeWrath, ModItems.runeEnvy, ModItems.runePride));
 
         this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_BREWERY.get(), ModBlocks.brewery,
-                ModItems.vial, Items.BLAZE_POWDER, ModItems.vial);
+                ModItems.flask, Items.BLAZE_ROD, ModItems.flask);
 
-        this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_APOTHECARY.get(), ModBlocks.defaultAltar, Ingredient.fromTag(ModTags.Items.PETALS));
+        this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_APOTHECARY.get(), ModBlocks.defaultAltar,
+                Ingredient.fromTag(ModTags.Items.PETALS));
     }
 
     private ShapedRecipeBuilder shaped(IItemProvider result) {
@@ -109,7 +111,7 @@ public class Recipes extends RecipeProvider {
     private void defaultMachine(Consumer<IFinishedRecipe> consumer, IItemProvider output, IItemProvider special1, Ingredient special2, Ingredient special3, Ingredient special4) {
         this.shaped(output)
                 .key('e', ModTags.Items.INGOTS_ELEMENTIUM)
-                .key('a', ModItems.auraRing)
+                .key('a', ModItems.manaRingGreater)
                 .key('s', special1)
                 .key('x', special2)
                 .key('y', special3)
