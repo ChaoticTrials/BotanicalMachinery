@@ -1,6 +1,7 @@
 package de.melanx.botanicalmachinery;
 
 import de.melanx.botanicalmachinery.blocks.screens.*;
+import de.melanx.botanicalmachinery.blocks.tesr.TesrAlfheimMarket;
 import de.melanx.botanicalmachinery.blocks.tesr.TesrMechanicalDaisy;
 import de.melanx.botanicalmachinery.core.ModGroup;
 import de.melanx.botanicalmachinery.core.Registration;
@@ -43,7 +44,9 @@ public class BotanicalMachinery {
         ScreenManager.registerFactory(Registration.CONTAINER_MECHANICAL_RUNIC_ALTAR.get(), ScreenMechanicalRunicAltar::new);
 
         RenderTypeLookup.setRenderLayer(Registration.BLOCK_MECHANICAL_DAISY.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(Registration.BLOCK_ALFHEIM_MARKET.get(), RenderType.getCutout());
 
         ClientRegistry.bindTileEntityRenderer(Registration.TILE_MECHANICAL_DAISY.get(), TesrMechanicalDaisy::new);
+        ClientRegistry.bindTileEntityRenderer(Registration.TILE_ALFHEIM_MARKET.get(), TesrAlfheimMarket::new);
     }
 }

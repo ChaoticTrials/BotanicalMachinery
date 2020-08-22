@@ -12,6 +12,10 @@ import javax.annotation.Nullable;
 
 public class BlockIndustrialAgglomerationFactory extends BlockBase {
 
+    public BlockIndustrialAgglomerationFactory() {
+        super(true);
+    }
+
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull IBlockReader worldIn) {

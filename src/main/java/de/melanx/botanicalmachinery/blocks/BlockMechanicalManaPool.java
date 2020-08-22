@@ -12,6 +12,10 @@ import javax.annotation.Nullable;
 
 public class BlockMechanicalManaPool extends BlockBase {
 
+    public BlockMechanicalManaPool() {
+        super(true);
+    }
+
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull IBlockReader worldIn) {

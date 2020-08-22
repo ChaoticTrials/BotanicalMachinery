@@ -12,6 +12,10 @@ import javax.annotation.Nullable;
 
 public class BlockAlfheimMarket extends BlockBase {
 
+    public BlockAlfheimMarket() {
+        super(false);
+    }
+
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull IBlockReader worldIn) {

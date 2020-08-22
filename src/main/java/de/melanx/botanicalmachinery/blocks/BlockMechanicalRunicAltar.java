@@ -12,6 +12,10 @@ import javax.annotation.Nullable;
 
 public class BlockMechanicalRunicAltar extends BlockBase {
 
+    public BlockMechanicalRunicAltar() {
+        super(true);
+    }
+
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull IBlockReader worldIn) {
