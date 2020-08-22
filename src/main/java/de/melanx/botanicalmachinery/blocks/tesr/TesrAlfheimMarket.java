@@ -9,10 +9,13 @@ import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Matrix3f;
 import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import vazkii.botania.api.recipe.IElvenTradeRecipe;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 import vazkii.botania.client.core.handler.MiscellaneousIcons;
@@ -66,7 +69,7 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
                 matrixStack.scale(4.8f, 4.8f, 4.8f);
                 matrixStack.translate(0, yPos, zPos);
 
-                Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, 100, overlay, matrixStack, buffer);
+                Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, 300, OverlayTexture.NO_OVERLAY, matrixStack, buffer);
                 matrixStack.pop();
             }
         }

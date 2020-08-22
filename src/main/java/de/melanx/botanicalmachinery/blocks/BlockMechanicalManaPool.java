@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 public class BlockMechanicalManaPool extends BlockBase {
 
     public BlockMechanicalManaPool() {
-        super(true);
+        super(false);
     }
 
     @Nullable

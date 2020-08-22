@@ -106,7 +106,7 @@ public abstract class BlockBase extends Block implements ITileEntityProvider, IW
     @SuppressWarnings("deprecation")
     @Override
     public int getOpacity(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos) {
-        return !this.fullCube ? 0 : super.getOpacity(state, world, pos);
+        return (!this.fullCube) ? 0 : super.getOpacity(state, world, pos);
     }
 
     @Override
@@ -122,6 +122,6 @@ public abstract class BlockBase extends Block implements ITileEntityProvider, IW
     @Nonnull
     @Override
     public VoxelShape getRenderShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos) {
-        return !this.fullCube ? RENDER_SHAPE_NO_CULLFACE : super.getRenderShape(state, world, pos);
+        return (!this.fullCube) ? RENDER_SHAPE_NO_CULLFACE : super.getRenderShape(state, world, pos);
     }
 }

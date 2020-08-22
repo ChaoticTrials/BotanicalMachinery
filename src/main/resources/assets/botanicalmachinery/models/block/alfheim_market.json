@@ -3,7 +3,6 @@
   "ambientocclusion": false,
   "textures": {
     "frame": "botania:blocks/storage2",
-    "glass": "botania:blocks/mana_glass",
     "wood": "botania:blocks/livingwood0",
     "glimmering_wood": "botania:blocks/livingwood5",
     "core": "botania:blocks/alfheim_portal_activated",

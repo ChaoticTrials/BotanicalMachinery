@@ -23,7 +23,8 @@ public class BlockStates extends BlockStateProvider {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             if (block == Registration.BLOCK_MECHANICAL_DAISY.get()) {
                 this.createStateForManualModel(builder, block);
-            } else if (block == Registration.BLOCK_ALFHEIM_MARKET.get()) {
+            } else if (block == Registration.BLOCK_ALFHEIM_MARKET.get()
+                    || block == Registration.BLOCK_MECHANICAL_MANA_POOL.get()) {
                 this.createStateForManualModelRotatable(builder, block);
             } else if (block instanceof BlockManaBattery) {
                 this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY + "_top"));
