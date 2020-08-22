@@ -36,8 +36,8 @@ public class ManaInfusionProvider extends RecipeProvider {
 
     @Override
     protected void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
-        registerInfusionRecipe(consumer, Registration.ITEM_MANA_EMERALD.get(), Ingredient.fromTag(Tags.Items.GEMS_EMERALD), 11000);
-        registerInfusionRecipe(consumer, Registration.BLOCK_MANA_EMERALD.get(), Ingredient.fromTag(Tags.Items.STORAGE_BLOCKS_EMERALD), 11000 * 9);
+        registerInfusionRecipe(consumer, Registration.ITEM_MANA_EMERALD.get(), Ingredient.fromTag(Tags.Items.GEMS_EMERALD), 8000);
+        registerInfusionRecipe(consumer, Registration.BLOCK_MANA_EMERALD.get(), Ingredient.fromTag(Tags.Items.STORAGE_BLOCKS_EMERALD), 8000 * 9);
     }
 
     private static ResourceLocation id(String s) {

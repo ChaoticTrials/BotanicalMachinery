@@ -25,7 +25,7 @@ public class Recipes extends RecipeProvider {
 
     @Override
     protected void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
-
+        this.registerExtraRecipes(consumer);
 
         this.compress(consumer, Registration.ITEM_MANA_EMERALD_BLOCK.get(), Registration.ITEM_MANA_EMERALD.get());
         this.decompress(consumer, Registration.ITEM_MANA_EMERALD.get(), Registration.ITEM_MANA_EMERALD_BLOCK.get());
@@ -121,5 +121,30 @@ public class Recipes extends RecipeProvider {
                 .patternLine("ese")
                 .addCriterion("has_item", this.hasItem(special1))
                 .build(consumer);
+    }
+
+    private void registerExtraRecipes(Consumer<IFinishedRecipe> consumer) {
+        this.shaped(ModItems.manaTablet)
+                .key('P', Ingredient.fromItems(Registration.ITEM_MANA_EMERALD.get()))
+                .key('S', ModTags.Items.LIVINGROCK)
+                .patternLine("SSS")
+                .patternLine("SPS")
+                .patternLine("SSS")
+                .addCriterion("has_item", this.hasItem(Registration.ITEM_MANA_EMERALD.get()))
+                .build(consumer, this.changedBotaniaLoc(ModItems.manaTablet));
+
+        this.shaped(ModBlocks.runeAltar)
+                .key('P', Registration.ITEM_MANA_EMERALD.get())
+                .key('S', ModTags.Items.LIVINGROCK)
+                .patternLine("SSS")
+                .patternLine("SPS")
+                .addCriterion("has_item", this.hasItem(Registration.ITEM_MANA_EMERALD.get()))
+                .build(consumer, this.changedBotaniaLoc(ModBlocks.runeAltar.asItem()));
+    }
+
+    private ResourceLocation changedBotaniaLoc(Item item) {
+        @SuppressWarnings("ConstantConditions")
+        String name = item.asItem().getRegistryName().getPath();
+        return new ResourceLocation(BotanicalMachinery.MODID, "botania/" + name);
     }
 }
