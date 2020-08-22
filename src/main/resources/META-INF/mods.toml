@@ -1,6 +1,7 @@
 modLoader="javafml"
 loaderVersion="[31,)"
 issueTrackerURL="http://www.github.com/MelanX/botanical-machinery/issues/"
+license="MIT License"
 
 [[mods]]
 modId="botanicalmachinery"
