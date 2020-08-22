@@ -1,24 +1,16 @@
 package de.melanx.botanicalmachinery.helper;
 
-import de.melanx.botanicalmachinery.BotanicalMachinery;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.client.event.RecipesUpdatedEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import vazkii.botania.api.recipe.*;
 import vazkii.botania.common.item.ModItems;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-@Mod.EventBusSubscriber(modid = BotanicalMachinery.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class RecipeHelper {
     public static final List<Item> manaPoolCatalysts = new ArrayList<>();
     public static final List<Item> brewContainer = Arrays.asList(ModItems.vial.asItem(), ModItems.flask.asItem(), ModItems.incenseStick.asItem(), ModItems.bloodPendant.asItem());
@@ -32,8 +24,7 @@ public class RecipeHelper {
     public static final List<IElvenTradeRecipe> elvenTradeRecipes = new ArrayList<>();
     public static final List<IBrewRecipe> brewRecipes = new ArrayList<>();
 
-    @SubscribeEvent
-    public static void onRecipesUpdated(final RecipesUpdatedEvent event) {
+    public static void updateRecipes(Collection<IRecipe<?>> recipes) {
         apothecaryIngredients.clear();
         manaPoolCatalysts.clear();
         manaPoolIngredients.clear();
@@ -43,7 +34,7 @@ public class RecipeHelper {
         runeAltarRecipes.clear();
         elvenTradeRecipes.clear();
         brewRecipes.clear();
-        for (IRecipe<?> r : event.getRecipeManager().getRecipes()) {
+        for (IRecipe<?> r : recipes) {
             if (r instanceof IManaInfusionRecipe) {
                 IManaInfusionRecipe recipe = (IManaInfusionRecipe) r;
                 if (recipe.getCatalyst() != null) {

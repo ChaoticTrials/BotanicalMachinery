@@ -13,6 +13,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,8 +29,8 @@ public class BotanicalMachinery {
     public BotanicalMachinery() {
         this.instance = this;
         Registration.init();
-        MinecraftForge.EVENT_BUS.register(RecipeHelper.class);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
+        MinecraftForge.EVENT_BUS.addListener(this::onServerStart);
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
@@ -45,5 +46,9 @@ public class BotanicalMachinery {
         RenderTypeLookup.setRenderLayer(Registration.BLOCK_MECHANICAL_DAISY.get(), RenderType.getCutout());
 
         ClientRegistry.bindTileEntityRenderer(Registration.TILE_MECHANICAL_DAISY.get(), TesrMechanicalDaisy::new);
+    }
+
+    private void onServerStart(final FMLServerStartingEvent event) {
+        RecipeHelper.updateRecipes(event.getServer().getRecipeManager().getRecipes());
     }
 }

@@ -7,12 +7,17 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
+import java.util.Collections;
 import java.util.List;
 
 public class RenderHelper {
 
     public static void renderFadedItem(Screen screen, List<Item> items, int relativeTicks, int x, int y) {
+        if (items.isEmpty()) {
+            items = Collections.singletonList(Items.AIR);
+        }
         int idx = (items.size() + ((relativeTicks / 20) % items.size())) % items.size();
         renderFadedItem(screen, items.get(idx), x, y);
     }
