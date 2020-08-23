@@ -4,17 +4,21 @@ import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import vazkii.botania.api.recipe.IRuneAltarRecipe;
 import vazkii.botania.common.block.ModBlocks;
+import vazkii.botania.common.crafting.ModRecipeTypes;
 import vazkii.botania.common.item.material.ItemRune;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 public class TileMechanicalRunicAltar extends TileBase {
@@ -43,51 +47,23 @@ public class TileMechanicalRunicAltar extends TileBase {
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
         if (slot == 0) return stack.getItem() == ModBlocks.livingrock.asItem();
-        else if (Arrays.stream(this.inventory.getInputSlots()).anyMatch(x -> x == slot)) return RecipeHelper.runeAltarIngredients.contains(stack.getItem());
+        else if (Arrays.stream(this.inventory.getInputSlots()).anyMatch(x -> x == slot))
+            return RecipeHelper.isItemValid(this.world, ModRecipeTypes.RUNE_TYPE, stack);
         return true;
     }
 
     private void updateRecipe() {
         if (this.world != null && !this.world.isRemote) {
             List<ItemStack> stacks = new ArrayList<>(this.inventory.getStacks());
-            stacks.subList(17, stacks.size() - 1).clear();
-            stacks.remove(0);
-            Map<Item, Integer> items = new HashMap<>();
-            stacks.removeIf(stack -> stack.getItem() == Blocks.AIR.asItem());
-            stacks.forEach(stack -> {
-                Item item = stack.getItem();
-                if (!items.containsKey(item)) {
-                    items.put(item, stack.getCount());
-                } else {
-                    int prevCount = items.get(item);
-                    items.replace(item, prevCount, prevCount + stack.getCount());
-                }
-            });
+            RecipeHelper.removeFromList(stacks, IntStream.range(17, stacks.size() - 1).toArray(), new int[]{0});
+            Map<Item, Integer> items = RecipeHelper.getInvItems(stacks);
 
-            for (IRuneAltarRecipe recipe : RecipeHelper.runeAltarRecipes) {
-                Map<Ingredient, Integer> recipeIngredients = new LinkedHashMap<>();
-                for (int i = 0; i < recipe.getIngredients().size(); i++) {
-                    Ingredient ingredient = recipe.getIngredients().get(i);
-                    boolean done = false;
-                    for (Ingredient ingredient1 : recipeIngredients.keySet()) {
-                        if (ingredient.serialize().equals(ingredient1.serialize())) {
-                            recipeIngredients.replace(ingredient1, recipeIngredients.get(ingredient1) + 1);
-                            done = true;
-                            break;
-                        }
+            for (IRecipe<?> recipe : this.world.getRecipeManager().getRecipes()) {
+                if (recipe instanceof IRuneAltarRecipe) {
+                    if (RecipeHelper.checkIngredients(stacks, items, recipe) && !this.inventory.getStackInSlot(0).isEmpty()) {
+                        this.recipe = (IRuneAltarRecipe) recipe;
+                        return;
                     }
-                    if (!done) recipeIngredients.put(ingredient, 1);
-                }
-
-                for (ItemStack input : stacks) {
-                    Ingredient remove = RecipeHelper.getMatchingIngredient(recipeIngredients, items, input);
-                    if (remove != null) {
-                        recipeIngredients.remove(remove);
-                    }
-                }
-                if (recipeIngredients.isEmpty() && !this.inventory.getStackInSlot(0).isEmpty()) {
-                    this.recipe = recipe;
-                    return;
                 }
             }
         }
