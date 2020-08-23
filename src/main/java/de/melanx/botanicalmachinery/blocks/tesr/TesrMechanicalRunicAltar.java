@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.melanx.botanicalmachinery.blocks.base.HorizontalRotatedTesr;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalRunicAltar;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.HopperBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Vector3f;
@@ -72,7 +73,7 @@ public class TesrMechanicalRunicAltar extends HorizontalRotatedTesr<TileMechanic
                     break;
 
                 matrixStack.push();
-                matrixStack.translate(0.5, 10/16d, 0.5);
+                matrixStack.translate(0.5, 10.8/16d, 0.5);
                 matrixStack.scale(0.3f, 0.3f, 0.3f);
                 matrixStack.rotate(Vector3f.YP.rotationDegrees(angles[angleIdx] + time));
                 matrixStack.translate(progressLeft * 1.125, 0, progressLeft * 0.25);

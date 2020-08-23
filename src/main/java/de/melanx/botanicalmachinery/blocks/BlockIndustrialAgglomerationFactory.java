@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 public class BlockIndustrialAgglomerationFactory extends BlockBase {
 
     public BlockIndustrialAgglomerationFactory() {
-        super(true);
+        super(false);
     }
 
     @Nullable

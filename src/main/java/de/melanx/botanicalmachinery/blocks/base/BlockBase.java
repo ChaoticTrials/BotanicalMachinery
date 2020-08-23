@@ -22,6 +22,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -36,7 +37,7 @@ import javax.annotation.Nullable;
 @SuppressWarnings("deprecation")
 public abstract class BlockBase extends Block implements ITileEntityProvider, IWandHUD {
 
-    private static final VoxelShape RENDER_SHAPE_NO_CULLFACE = makeCuboidShape(0.1, 0.1, 0.1, 15.9, 15.9, 15.9);
+    private static final VoxelShape RENDER_SHAPE_NO_CULLFACE = makeCuboidShape(0.001, 0.001, 0.001, 15.999, 15.999, 15.999);
 
     private final boolean fullCube;
 
@@ -123,5 +124,11 @@ public abstract class BlockBase extends Block implements ITileEntityProvider, IW
     @Override
     public VoxelShape getRenderShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos) {
         return (!this.fullCube) ? RENDER_SHAPE_NO_CULLFACE : super.getRenderShape(state, world, pos);
+    }
+
+    @Nonnull
+    @Override
+    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
+        return (!this.fullCube) ? RENDER_SHAPE_NO_CULLFACE : super.getShape(state, world, pos, context);
     }
 }
