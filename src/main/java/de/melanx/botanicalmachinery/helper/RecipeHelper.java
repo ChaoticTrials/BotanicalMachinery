@@ -3,74 +3,37 @@ package de.melanx.botanicalmachinery.helper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import vazkii.botania.api.recipe.*;
-import vazkii.botania.common.item.ModItems;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class RecipeHelper {
-    public static final List<Item> manaPoolCatalysts = new ArrayList<>();
-    public static final List<Item> brewContainer = Arrays.asList(ModItems.vial.asItem(), ModItems.flask.asItem(), ModItems.incenseStick.asItem(), ModItems.bloodPendant.asItem());
-    public static final List<Item> apothecaryIngredients = new ArrayList<>();
-    public static final List<Item> manaPoolIngredients = new ArrayList<>();
-    public static final List<Item> runeAltarIngredients = new ArrayList<>();
-    public static final List<Item> elvenTradeIngredients = new ArrayList<>();
-    public static final List<Item> brewIngredients = new ArrayList<>();
-    public static final List<IPetalRecipe> apothecaryRecipes = new ArrayList<>();
-    public static final List<IRuneAltarRecipe> runeAltarRecipes = new ArrayList<>();
-    public static final List<IElvenTradeRecipe> elvenTradeRecipes = new ArrayList<>();
-    public static final List<IBrewRecipe> brewRecipes = new ArrayList<>();
 
-    public static void updateRecipes(Collection<IRecipe<?>> recipes) {
-        apothecaryIngredients.clear();
-        manaPoolCatalysts.clear();
-        manaPoolIngredients.clear();
-        runeAltarIngredients.clear();
-        elvenTradeIngredients.clear();
-        apothecaryRecipes.clear();
-        runeAltarRecipes.clear();
-        elvenTradeRecipes.clear();
-        brewRecipes.clear();
-        for (IRecipe<?> r : recipes) {
-            if (r instanceof IManaInfusionRecipe) {
-                IManaInfusionRecipe recipe = (IManaInfusionRecipe) r;
-                if (recipe.getCatalyst() != null) {
-                    Item catalyst = recipe.getCatalyst().getBlock().asItem();
-                    if (!manaPoolCatalysts.contains(catalyst))
-                        manaPoolCatalysts.add(catalyst);
-                }
-                addIngredientsToList(recipe.getIngredients(), manaPoolIngredients);
-            } else if (r instanceof IRuneAltarRecipe) {
-                IRuneAltarRecipe recipe = (IRuneAltarRecipe) r;
-                runeAltarRecipes.add(recipe);
-                addIngredientsToList(recipe.getIngredients(), runeAltarIngredients);
-            } else if (r instanceof IElvenTradeRecipe) {
-                IElvenTradeRecipe recipe = (IElvenTradeRecipe) r;
-                elvenTradeRecipes.add(recipe);
-                addIngredientsToList(recipe.getIngredients(), elvenTradeIngredients);
-            } else if (r instanceof IBrewRecipe) {
-                IBrewRecipe recipe = (IBrewRecipe) r;
-                brewRecipes.add(recipe);
-                addIngredientsToList(recipe.getIngredients(), brewIngredients);
-            } else if (r instanceof IPetalRecipe) {
-                IPetalRecipe recipe = (IPetalRecipe) r;
-                apothecaryRecipes.add(recipe);
-                addIngredientsToList(recipe.getIngredients(), apothecaryIngredients);
-            }
-        }
-    }
-
-    private static void addIngredientsToList(NonNullList<Ingredient> ingredients, List<Item> list) {
-        for (Ingredient ingredient : ingredients) {
-            for (ItemStack stack : ingredient.getMatchingStacks()) {
-                if (!list.contains(stack.getItem())) {
-                    list.add(stack.getItem());
+    /**
+     * @param world      {@link World} to get the {@link net.minecraft.item.crafting.RecipeManager} from
+     * @param recipeType {@link IRecipeType} to filter which recipe type will be checked
+     * @param input      {@link ItemStack} which will be checked to fit
+     * @return If the input is in any recipe
+     */
+    public static <X extends IRecipe<?>> boolean isItemValid(@Nullable World world, IRecipeType<X> recipeType, ItemStack input) {
+        if (world == null) return false;
+        Collection<IRecipe<?>> recipes = world.getRecipeManager().getRecipes();
+        for (IRecipe<?> recipe : recipes) {
+            if (recipe.getType() == recipeType) {
+                for (Ingredient ingredient : recipe.getIngredients()) {
+                    for (ItemStack stack : ingredient.getMatchingStacks()) {
+                        if (stack.getItem() == input.getItem())
+                            return true;
+                    }
                 }
             }
         }
+        return false;
     }
 
     /**

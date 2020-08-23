@@ -8,10 +8,13 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.Explosion;
 import vazkii.botania.api.recipe.IElvenTradeRecipe;
+import vazkii.botania.api.recipe.IPetalRecipe;
+import vazkii.botania.common.crafting.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -45,7 +48,7 @@ public class TileAlfheimMarket extends TileBase {
 
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
-        return Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot) || RecipeHelper.elvenTradeIngredients.contains(stack.getItem());
+        return Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot) || RecipeHelper.isItemValid(this.world, ModRecipeTypes.ELVEN_TRADE_TYPE, stack);
     }
 
     private void updateRecipe() {
@@ -64,30 +67,32 @@ public class TileAlfheimMarket extends TileBase {
                 }
             });
 
-            for (IElvenTradeRecipe recipe : RecipeHelper.elvenTradeRecipes) {
-                Map<Ingredient, Integer> recipeIngredients = new LinkedHashMap<>();
-                for (int i = 0; i < recipe.getIngredients().size(); i++) {
-                    Ingredient ingredient = recipe.getIngredients().get(i);
-                    boolean done = false;
-                    for (Ingredient ingredient1 : recipeIngredients.keySet()) {
-                        if (ingredient.serialize().equals(ingredient1.serialize())) {
-                            recipeIngredients.replace(ingredient1, recipeIngredients.get(ingredient1) + 1);
-                            done = true;
-                            break;
+            for (IRecipe<?> recipe : this.world.getRecipeManager().getRecipes()) {
+                if (recipe instanceof IElvenTradeRecipe) {
+                    Map<Ingredient, Integer> recipeIngredients = new LinkedHashMap<>();
+                    for (int i = 0; i < recipe.getIngredients().size(); i++) {
+                        Ingredient ingredient = recipe.getIngredients().get(i);
+                        boolean done = false;
+                        for (Ingredient ingredient1 : recipeIngredients.keySet()) {
+                            if (ingredient.serialize().equals(ingredient1.serialize())) {
+                                recipeIngredients.replace(ingredient1, recipeIngredients.get(ingredient1) + 1);
+                                done = true;
+                                break;
+                            }
+                        }
+                        if (!done) recipeIngredients.put(ingredient, 1);
+                    }
+
+                    for (ItemStack input : stacks) {
+                        Ingredient remove = RecipeHelper.getMatchingIngredient(recipeIngredients, items, input);
+                        if (remove != null) {
+                            recipeIngredients.remove(remove);
                         }
                     }
-                    if (!done) recipeIngredients.put(ingredient, 1);
-                }
-
-                for (ItemStack input : stacks) {
-                    Ingredient remove = RecipeHelper.getMatchingIngredient(recipeIngredients, items, input);
-                    if (remove != null) {
-                        recipeIngredients.remove(remove);
+                    if (recipeIngredients.isEmpty()) {
+                        this.recipe = (IElvenTradeRecipe) recipe;
+                        return;
                     }
-                }
-                if (recipeIngredients.isEmpty()) {
-                    this.recipe = recipe;
-                    return;
                 }
             }
         }

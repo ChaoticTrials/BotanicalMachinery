@@ -7,17 +7,20 @@ import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import vazkii.botania.api.brew.IBrewContainer;
 import vazkii.botania.api.recipe.IBrewRecipe;
+import vazkii.botania.common.crafting.ModRecipeTypes;
+import vazkii.botania.common.item.ModItems;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.IntStream;
 
 public class TileMechanicalBrewery extends TileBase {
-
+    public static final List<Item> BREW_CONTAINER = Arrays.asList(ModItems.vial.asItem(), ModItems.flask.asItem(), ModItems.incenseStick.asItem(), ModItems.bloodPendant.asItem());
     public static final String TAG_PROGRESS = "progress";
     public static final String TAG_WORKING_DURATION = "workingDuration";
 
@@ -43,8 +46,8 @@ public class TileMechanicalBrewery extends TileBase {
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
         if (slot == 0)
-            return stack.getTag() != null ? !stack.getTag().contains("brewKey") : RecipeHelper.brewContainer.contains(stack.getItem());
-        return (Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot)) || RecipeHelper.brewIngredients.contains(stack.getItem());
+            return stack.getTag() != null ? !stack.getTag().contains("brewKey") : BREW_CONTAINER.contains(stack.getItem());
+        return (Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot)) || RecipeHelper.isItemValid(this.world, ModRecipeTypes.BREW_TYPE, stack);
     }
 
     private void updateRecipe() {
@@ -68,30 +71,32 @@ public class TileMechanicalBrewery extends TileBase {
                 }
             });
 
-            for (IBrewRecipe recipe : RecipeHelper.brewRecipes) {
-                Map<Ingredient, Integer> recipeIngredients = new LinkedHashMap<>();
-                for (int i = 0; i < recipe.getIngredients().size(); i++) {
-                    Ingredient ingredient = recipe.getIngredients().get(i);
-                    boolean done = false;
-                    for (Ingredient ingredient1 : recipeIngredients.keySet()) {
-                        if (ingredient.serialize().equals(ingredient1.serialize())) {
-                            recipeIngredients.replace(ingredient1, recipeIngredients.get(ingredient1) + 1);
-                            done = true;
-                            break;
+            for (IRecipe<?> recipe : this.world.getRecipeManager().getRecipes()) {
+                if (recipe instanceof IBrewRecipe) {
+                    Map<Ingredient, Integer> recipeIngredients = new LinkedHashMap<>();
+                    for (int i = 0; i < recipe.getIngredients().size(); i++) {
+                        Ingredient ingredient = recipe.getIngredients().get(i);
+                        boolean done = false;
+                        for (Ingredient ingredient1 : recipeIngredients.keySet()) {
+                            if (ingredient.serialize().equals(ingredient1.serialize())) {
+                                recipeIngredients.replace(ingredient1, recipeIngredients.get(ingredient1) + 1);
+                                done = true;
+                                break;
+                            }
+                        }
+                        if (!done) recipeIngredients.put(ingredient, 1);
+                    }
+
+                    for (ItemStack input : stacks) {
+                        Ingredient remove = RecipeHelper.getMatchingIngredient(recipeIngredients, items, input);
+                        if (remove != null) {
+                            recipeIngredients.remove(remove);
                         }
                     }
-                    if (!done) recipeIngredients.put(ingredient, 1);
-                }
-
-                for (ItemStack input : stacks) {
-                    Ingredient remove = RecipeHelper.getMatchingIngredient(recipeIngredients, items, input);
-                    if (remove != null) {
-                        recipeIngredients.remove(remove);
+                    if (recipeIngredients.isEmpty()) {
+                        this.recipe = (IBrewRecipe) recipe;
+                        return;
                     }
-                }
-                if (recipeIngredients.isEmpty()) {
-                    this.recipe = recipe;
-                    return;
                 }
             }
         }
