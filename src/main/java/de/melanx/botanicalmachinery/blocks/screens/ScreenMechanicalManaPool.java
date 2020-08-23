@@ -19,6 +19,6 @@ public class ScreenMechanicalManaPool extends ScreenBase<ContainerMechanicalMana
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         this.drawDefaultGuiBackgroundLayer(LibResources.MECHANICAL_MANA_POOL_GUI, 81, 37);
-        RenderHelper.renderFadedItem(this, TileMechanicalManaPool.CATALYSTS, this.playerInventory.player.ticksExisted, this.relX + 53, this.relY + 47);
+        RenderHelper.renderFadedItem(this, TileMechanicalManaPool.CATALYSTS, this.relX + 53, this.relY + 47);
     }
 }

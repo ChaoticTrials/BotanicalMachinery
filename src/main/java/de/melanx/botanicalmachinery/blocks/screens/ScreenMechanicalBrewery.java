@@ -23,7 +23,7 @@ public class ScreenMechanicalBrewery extends ScreenBase<ContainerMechanicalBrewe
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         this.drawDefaultGuiBackgroundLayer(LibResources.MECHANICAL_BREWERY_GUI, 100, 49);
 
-        RenderHelper.renderFadedItem(this, TileMechanicalBrewery.BREW_CONTAINER, this.playerInventory.player.ticksExisted, this.relX + 44, this.relY + 48);
+        RenderHelper.renderFadedItem(this, TileMechanicalBrewery.BREW_CONTAINER, this.relX + 44, this.relY + 48);
 
         TileMechanicalBrewery tile = (TileMechanicalBrewery) this.container.tile;
         if (tile.getProgress() > 0) {
