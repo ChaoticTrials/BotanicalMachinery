@@ -37,7 +37,7 @@ import javax.annotation.Nullable;
 @SuppressWarnings("deprecation")
 public abstract class BlockBase extends Block implements ITileEntityProvider, IWandHUD {
 
-    private static final VoxelShape RENDER_SHAPE_NO_CULLFACE = makeCuboidShape(0.001, 0.001, 0.001, 15.999, 15.999, 15.999);
+    public static final VoxelShape RENDER_SHAPE_NO_CULLFACE = makeCuboidShape(0.001, 0.001, 0.001, 15.999, 15.999, 15.999);
 
     private final boolean fullCube;
 
