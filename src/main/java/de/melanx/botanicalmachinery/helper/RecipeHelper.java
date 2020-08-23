@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,38 @@ public class RecipeHelper {
             }
         }
         return false;
+    }
+
+    /**
+     * Checks if stacks are ingredients for the recipe
+     *
+     * @param stacks {@link List} of {@link ItemStack} which includes the stacks to be checked
+     * @param items  {@link Map} with {@link Item} item and {@link Integer} amount of all items needed for the recipe
+     * @param recipe The {@link IRecipe} to be checked
+     * @return If all items are contained in the stacks
+     */
+    public static boolean checkIngredients(List<ItemStack> stacks, Map<Item, Integer> items, IRecipe<?> recipe) {
+        Map<Ingredient, Integer> recipeIngredients = new LinkedHashMap<>();
+        for (int i = 0; i < recipe.getIngredients().size(); i++) {
+            Ingredient ingredient = recipe.getIngredients().get(i);
+            boolean done = false;
+            for (Ingredient ingredient1 : recipeIngredients.keySet()) {
+                if (ingredient.serialize().equals(ingredient1.serialize())) {
+                    recipeIngredients.replace(ingredient1, recipeIngredients.get(ingredient1) + 1);
+                    done = true;
+                    break;
+                }
+            }
+            if (!done) recipeIngredients.put(ingredient, 1);
+        }
+
+        for (ItemStack input : stacks) {
+            Ingredient remove = RecipeHelper.getMatchingIngredient(recipeIngredients, items, input);
+            if (remove != null) {
+                recipeIngredients.remove(remove);
+            }
+        }
+        return recipeIngredients.isEmpty();
     }
 
     /**

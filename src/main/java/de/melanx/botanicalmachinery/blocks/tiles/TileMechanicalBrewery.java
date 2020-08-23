@@ -73,27 +73,7 @@ public class TileMechanicalBrewery extends TileBase {
 
             for (IRecipe<?> recipe : this.world.getRecipeManager().getRecipes()) {
                 if (recipe instanceof IBrewRecipe) {
-                    Map<Ingredient, Integer> recipeIngredients = new LinkedHashMap<>();
-                    for (int i = 0; i < recipe.getIngredients().size(); i++) {
-                        Ingredient ingredient = recipe.getIngredients().get(i);
-                        boolean done = false;
-                        for (Ingredient ingredient1 : recipeIngredients.keySet()) {
-                            if (ingredient.serialize().equals(ingredient1.serialize())) {
-                                recipeIngredients.replace(ingredient1, recipeIngredients.get(ingredient1) + 1);
-                                done = true;
-                                break;
-                            }
-                        }
-                        if (!done) recipeIngredients.put(ingredient, 1);
-                    }
-
-                    for (ItemStack input : stacks) {
-                        Ingredient remove = RecipeHelper.getMatchingIngredient(recipeIngredients, items, input);
-                        if (remove != null) {
-                            recipeIngredients.remove(remove);
-                        }
-                    }
-                    if (recipeIngredients.isEmpty()) {
+                    if (RecipeHelper.checkIngredients(stacks, items, recipe)) {
                         this.recipe = (IBrewRecipe) recipe;
                         return;
                     }
