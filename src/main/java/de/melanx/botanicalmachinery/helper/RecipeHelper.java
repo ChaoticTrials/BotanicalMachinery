@@ -1,76 +1,71 @@
 package de.melanx.botanicalmachinery.helper;
 
+import com.google.common.collect.Lists;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import vazkii.botania.api.recipe.*;
-import vazkii.botania.common.item.ModItems;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 public class RecipeHelper {
-    public static final List<Item> manaPoolCatalysts = new ArrayList<>();
-    public static final List<Item> brewContainer = Arrays.asList(ModItems.vial.asItem(), ModItems.flask.asItem(), ModItems.incenseStick.asItem(), ModItems.bloodPendant.asItem());
-    public static final List<Item> apothecaryIngredients = new ArrayList<>();
-    public static final List<Item> manaPoolIngredients = new ArrayList<>();
-    public static final List<Item> runeAltarIngredients = new ArrayList<>();
-    public static final List<Item> elvenTradeIngredients = new ArrayList<>();
-    public static final List<Item> brewIngredients = new ArrayList<>();
-    public static final List<IPetalRecipe> apothecaryRecipes = new ArrayList<>();
-    public static final List<IRuneAltarRecipe> runeAltarRecipes = new ArrayList<>();
-    public static final List<IElvenTradeRecipe> elvenTradeRecipes = new ArrayList<>();
-    public static final List<IBrewRecipe> brewRecipes = new ArrayList<>();
 
-    public static void updateRecipes(Collection<IRecipe<?>> recipes) {
-        apothecaryIngredients.clear();
-        manaPoolCatalysts.clear();
-        manaPoolIngredients.clear();
-        runeAltarIngredients.clear();
-        elvenTradeIngredients.clear();
-        apothecaryRecipes.clear();
-        runeAltarRecipes.clear();
-        elvenTradeRecipes.clear();
-        brewRecipes.clear();
-        for (IRecipe<?> r : recipes) {
-            if (r instanceof IManaInfusionRecipe) {
-                IManaInfusionRecipe recipe = (IManaInfusionRecipe) r;
-                if (recipe.getCatalyst() != null) {
-                    Item catalyst = recipe.getCatalyst().getBlock().asItem();
-                    if (!manaPoolCatalysts.contains(catalyst))
-                        manaPoolCatalysts.add(catalyst);
+    /**
+     * @param world      {@link World} to get the {@link net.minecraft.item.crafting.RecipeManager} from
+     * @param recipeType {@link IRecipeType} to filter which recipe type will be checked
+     * @param input      {@link ItemStack} which will be checked to fit
+     * @return If the input is in any recipe
+     */
+    public static <X extends IRecipe<?>> boolean isItemValid(@Nullable World world, IRecipeType<X> recipeType, ItemStack input) {
+        if (world == null) return false;
+        Collection<IRecipe<?>> recipes = world.getRecipeManager().getRecipes();
+        for (IRecipe<?> recipe : recipes) {
+            if (recipe.getType() == recipeType) {
+                for (Ingredient ingredient : recipe.getIngredients()) {
+                    for (ItemStack stack : ingredient.getMatchingStacks()) {
+                        if (stack.getItem() == input.getItem())
+                            return true;
+                    }
                 }
-                addIngredientsToList(recipe.getIngredients(), manaPoolIngredients);
-            } else if (r instanceof IRuneAltarRecipe) {
-                IRuneAltarRecipe recipe = (IRuneAltarRecipe) r;
-                runeAltarRecipes.add(recipe);
-                addIngredientsToList(recipe.getIngredients(), runeAltarIngredients);
-            } else if (r instanceof IElvenTradeRecipe) {
-                IElvenTradeRecipe recipe = (IElvenTradeRecipe) r;
-                elvenTradeRecipes.add(recipe);
-                addIngredientsToList(recipe.getIngredients(), elvenTradeIngredients);
-            } else if (r instanceof IBrewRecipe) {
-                IBrewRecipe recipe = (IBrewRecipe) r;
-                brewRecipes.add(recipe);
-                addIngredientsToList(recipe.getIngredients(), brewIngredients);
-            } else if (r instanceof IPetalRecipe) {
-                IPetalRecipe recipe = (IPetalRecipe) r;
-                apothecaryRecipes.add(recipe);
-                addIngredientsToList(recipe.getIngredients(), apothecaryIngredients);
             }
         }
+        return false;
     }
 
-    private static void addIngredientsToList(NonNullList<Ingredient> ingredients, List<Item> list) {
-        for (Ingredient ingredient : ingredients) {
-            for (ItemStack stack : ingredient.getMatchingStacks()) {
-                if (!list.contains(stack.getItem())) {
-                    list.add(stack.getItem());
+    /**
+     * Checks if stacks are ingredients for the recipe
+     *
+     * @param stacks {@link List} of {@link ItemStack} which includes the stacks to be checked
+     * @param items  {@link Map} with {@link Item} item and {@link Integer} amount of all items needed for the recipe
+     * @param recipe The {@link IRecipe} to be checked
+     * @return If all items are contained in the stacks
+     */
+    public static boolean checkIngredients(List<ItemStack> stacks, Map<Item, Integer> items, IRecipe<?> recipe) {
+        Map<Ingredient, Integer> recipeIngredients = new LinkedHashMap<>();
+        for (int i = 0; i < recipe.getIngredients().size(); i++) {
+            Ingredient ingredient = recipe.getIngredients().get(i);
+            boolean done = false;
+            for (Ingredient ingredient1 : recipeIngredients.keySet()) {
+                if (ingredient.serialize().equals(ingredient1.serialize())) {
+                    recipeIngredients.replace(ingredient1, recipeIngredients.get(ingredient1) + 1);
+                    done = true;
+                    break;
                 }
             }
+            if (!done) recipeIngredients.put(ingredient, 1);
         }
+
+        for (ItemStack input : stacks) {
+            Ingredient remove = RecipeHelper.getMatchingIngredient(recipeIngredients, items, input);
+            if (remove != null) {
+                recipeIngredients.remove(remove);
+            }
+        }
+        return recipeIngredients.isEmpty();
     }
 
     /**
@@ -104,5 +99,41 @@ public class RecipeHelper {
             }
         }
         return null;
+    }
+
+    /**
+     * @param stacks All {@link ItemStack}s from the inventory
+     * @return {@link Map} which includes the item and amount for all items in inventory
+     */
+    public static Map<Item, Integer> getInvItems(List<ItemStack> stacks) {
+        Map<Item, Integer> items = new HashMap<>();
+        stacks.removeIf(stack -> stack.getItem() == Blocks.AIR.asItem());
+        stacks.forEach(stack -> {
+            Item item = stack.getItem();
+            if (!items.containsKey(item)) {
+                items.put(item, stack.getCount());
+            } else {
+                int prevCount = items.get(item);
+                items.replace(item, prevCount, prevCount + stack.getCount());
+            }
+        });
+        return items;
+    }
+
+    /**
+     * @param list   {@link List} to remove from
+     * @param arrays indexes to remove
+     */
+    public static void removeFromList(List<?> list, int[]... arrays) {
+        List<Integer> toRemove = new ArrayList<>();
+        for (int[] array : arrays) {
+            for (int i : array) {
+                toRemove.add(i);
+            }
+        }
+        toRemove.sort(Comparator.naturalOrder());
+        for (int i : Lists.reverse(toRemove)) {
+            list.remove(i);
+        }
     }
 }

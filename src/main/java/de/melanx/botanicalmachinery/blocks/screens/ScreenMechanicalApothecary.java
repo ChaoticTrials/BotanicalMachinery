@@ -52,7 +52,7 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         this.blit(this.relX, this.relY, 0, 0, this.xSize, this.ySize);
 
         if (this.tile.getInventory().getStackInSlot(0).isEmpty())
-            RenderHelper.renderFadedItem(this, ImmutableList.copyOf(Tags.Items.SEEDS.getAllElements()), this.playerInventory.player.ticksExisted, this.relX + 90, this.relY + 43);
+            RenderHelper.renderFadedItem(this, ImmutableList.copyOf(Tags.Items.SEEDS.getAllElements()), this.relX + 90, this.relY + 43);
 
         if (this.tile.getProgress() > 0) {
             float pctProgress = Math.min(this.tile.getProgress() / (float) TileMechanicalApothecary.WORKING_DURATION, 1.0F);

@@ -4,7 +4,6 @@ import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalBrewery;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalBrewery;
 import de.melanx.botanicalmachinery.core.LibResources;
-import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.helper.RenderHelper;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
@@ -24,7 +23,7 @@ public class ScreenMechanicalBrewery extends ScreenBase<ContainerMechanicalBrewe
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         this.drawDefaultGuiBackgroundLayer(LibResources.MECHANICAL_BREWERY_GUI, 100, 49);
 
-        RenderHelper.renderFadedItem(this, RecipeHelper.brewContainer, this.playerInventory.player.ticksExisted, this.relX + 44, this.relY + 48);
+        RenderHelper.renderFadedItem(this, TileMechanicalBrewery.BREW_CONTAINER, this.relX + 44, this.relY + 48);
 
         TileMechanicalBrewery tile = (TileMechanicalBrewery) this.container.tile;
         if (tile.getProgress() > 0) {

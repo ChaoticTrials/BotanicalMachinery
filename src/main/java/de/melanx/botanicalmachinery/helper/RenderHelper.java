@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
+import vazkii.botania.client.core.handler.ClientTickHandler;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,11 +25,11 @@ import java.util.Random;
 
 public class RenderHelper {
 
-    public static void renderFadedItem(Screen screen, List<Item> items, int relativeTicks, int x, int y) {
+    public static void renderFadedItem(Screen screen, List<Item> items, int x, int y) {
         if (items.isEmpty()) {
             items = Collections.singletonList(Items.AIR);
         }
-        int idx = (items.size() + ((relativeTicks / 20) % items.size())) % items.size();
+        int idx = (items.size() + ((ClientTickHandler.ticksInGame / 20) % items.size())) % items.size();
         renderFadedItem(screen, items.get(idx), x, y);
     }
 
