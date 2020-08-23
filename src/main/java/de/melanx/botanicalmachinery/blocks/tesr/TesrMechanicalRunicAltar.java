@@ -68,6 +68,14 @@ public class TesrMechanicalRunicAltar extends HorizontalRotatedTesr<TileMechanic
         int nextAngleIdx = 0;
         for(int slot : tile.getInventory().getInputSlots()) {
             if (!tile.getInventory().getStackInSlot(slot).isEmpty()) {
+                double travelCenter = 1;
+                boolean shrink = false;
+                if (tile.isSlotUsedCurrently(slot)) {
+                    travelCenter = progressLeft;
+                } else if (tile.getProgress() > 0) {
+                    shrink = true;
+                }
+
                 int angleIdx = nextAngleIdx++;
                 if (angleIdx >= angles.length)
                     break;
@@ -76,9 +84,11 @@ public class TesrMechanicalRunicAltar extends HorizontalRotatedTesr<TileMechanic
                 matrixStack.translate(0.5, 10.8/16d, 0.5);
                 matrixStack.scale(0.3f, 0.3f, 0.3f);
                 matrixStack.rotate(Vector3f.YP.rotationDegrees(angles[angleIdx] + time));
-                matrixStack.translate(progressLeft * 1.125, 0, progressLeft * 0.25);
+                matrixStack.translate(travelCenter * 1.125, 0, travelCenter * 0.25);
                 matrixStack.rotate(Vector3f.YP.rotationDegrees(90f));
                 matrixStack.translate(0, 0.075 * Math.sin((time + (angleIdx * 10)) / 5d), 0);
+                if (shrink)
+                    matrixStack.scale(0.3f, 0.3f, 0.3f);
 
                 ItemStack stack = tile.getInventory().getStackInSlot(slot);
                 Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, 200, OverlayTexture.NO_OVERLAY, matrixStack, buffer);

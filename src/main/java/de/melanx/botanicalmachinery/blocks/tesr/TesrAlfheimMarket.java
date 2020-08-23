@@ -9,14 +9,11 @@ import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Matrix3f;
 import net.minecraft.client.renderer.Matrix4f;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import vazkii.botania.api.recipe.IElvenTradeRecipe;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 import vazkii.botania.client.core.handler.MiscellaneousIcons;
 import vazkii.botania.common.block.ModBlocks;
@@ -35,8 +32,10 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
         matrixStack.scale(1/16f, 1/16f, 1/16f);
         matrixStack.translate(3.2, 2, 3.6);
         matrixStack.scale(3.6f, 3.6f, 3.6f);
+        //noinspection deprecation
         Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(ModBlocks.naturaPylon.getDefaultState(), matrixStack, buffer, light, overlay);
         matrixStack.translate(1 + (2/3.6), 0, 0);
+        //noinspection deprecation
         Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(ModBlocks.naturaPylon.getDefaultState(), matrixStack, buffer, light, overlay);
         matrixStack.pop();
 
@@ -56,9 +55,9 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
             matrixStack.pop();
         }
 
-        if (tile.getProgress() > 0 && tile.getRecipe() != null) {
+        if (tile.getProgress() > 0) {
             double progress = (tile.getProgress() - (TileAlfheimMarket.WORKING_DURATION / 2d)) / (TileAlfheimMarket.WORKING_DURATION / 2d);
-            ItemStack stack = progress < 0 ? this.getInputStack(tile.getRecipe()) : tile.getRecipe().getOutputs().get(0);
+            ItemStack stack = progress < 0 ? tile.getCurrentInput() : tile.getCurrentOutput();
             if (!stack.isEmpty()) {
                 double yPos = Math.pow(progress, 2);
                 double zPos = -(progress * 0.75);
@@ -66,10 +65,11 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
                 matrixStack.push();
                 matrixStack.scale(1/16f, 1/16f, 1/16f);
                 matrixStack.translate(8, 4.6, 8.8);
-                matrixStack.scale(4.8f, 4.8f, 4.8f);
+                matrixStack.scale(5.4f, 5.4f, 5.4f);
                 matrixStack.translate(0, yPos, zPos);
+                matrixStack.rotate(Minecraft.getInstance().getRenderManager().getCameraOrientation());
 
-                Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, 300, OverlayTexture.NO_OVERLAY, matrixStack, buffer);
+                Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, 200, OverlayTexture.NO_OVERLAY, matrixStack, buffer);
                 matrixStack.pop();
             }
         }
@@ -83,14 +83,5 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
         vertex.pos(model, (float)(x + width), (float)(y + height), 0.0F).color(1.0F, 1.0F, 1.0F, alpha).tex(sprite.getMaxU(), sprite.getMaxV()).overlay(overlay).lightmap(15728880).normal(normal, 1.0F, 0.0F, 0.0F).endVertex();
         vertex.pos(model, (float)(x + width), (float)y, 0.0F).color(1.0F, 1.0F, 1.0F, alpha).tex(sprite.getMaxU(), sprite.getMinV()).overlay(overlay).lightmap(15728880).normal(normal, 1.0F, 0.0F, 0.0F).endVertex();
         vertex.pos(model, (float)x, (float)y, 0.0F).color(1.0F, 1.0F, 1.0F, alpha).tex(sprite.getMinU(), sprite.getMinV()).overlay(overlay).lightmap(15728880).normal(normal, 1.0F, 0.0F, 0.0F).endVertex();
-    }
-
-    private ItemStack getInputStack(IElvenTradeRecipe recipe) {
-        if (recipe.getIngredients().isEmpty())
-            return ItemStack.EMPTY;
-        ItemStack[] stacks = recipe.getIngredients().get(0).getMatchingStacks();
-        if (stacks.length == 0)
-            return ItemStack.EMPTY;
-        return stacks[0];
     }
 }

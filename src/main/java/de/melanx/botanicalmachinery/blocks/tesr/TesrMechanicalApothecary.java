@@ -44,18 +44,18 @@ public class TesrMechanicalApothecary extends HorizontalRotatedTesr<TileMechanic
                 int progress = tile.getProgress();
                 if (progress > TileMechanicalApothecary.WORKING_DURATION / 2) {
                     progress = (TileMechanicalApothecary.WORKING_DURATION / 2) - Math.abs((TileMechanicalApothecary.WORKING_DURATION / 2) - progress);
-                    // TODO change item
+                    stack = tile.getCurrentOutput();
                 }
                 double amount = progress / (TileMechanicalApothecary.WORKING_DURATION / 2d);
                 matrixStack.translate(0, -amount, 0);
             }
 
-            RenderHelper.renderItemTinted(stack, ItemCameraTransforms.TransformType.GROUND, 200, OverlayTexture.NO_OVERLAY, matrixStack, buffer, (float) (0.75 + (0.25 * Math.sin(time / 9))), (float) (0.75 + (0.25 * Math.sin((time / 9) + (Math.PI / 3)))), (float) (0.75 + (0.25 * Math.sin(time / 9) + ((2 * Math.PI) / 3))));
+            Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, 200, OverlayTexture.NO_OVERLAY, matrixStack, buffer);
 
             matrixStack.pop();
         }
 
-        double fluidAmount = tile.getFluidInventory().getFluidAmount() / (double) tile.getFluidInventory().getCapacity();
+        double fluidAmount = (tile.getFluidInventory().getFluidAmount() - ((tile.getProgress() / (double) TileMechanicalApothecary.WORKING_DURATION) * 1000d)) / (double) tile.getFluidInventory().getCapacity();
 
         if (tile.getFluidInventory().getFluidAmount() > 0) {
 

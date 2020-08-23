@@ -52,6 +52,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
     private int progress;
     private boolean update;
     private boolean sendPacket;
+    private ItemStack currentOutput = ItemStack.EMPTY;
 
     public TileMechanicalApothecary() {
         super(Registration.TILE_MECHANICAL_APOTHECARY.get());
@@ -86,11 +87,14 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
                 if (recipe instanceof IPetalRecipe) {
                     if (RecipeHelper.checkIngredients(stacks, items, recipe) && !this.inventory.getStackInSlot(0).isEmpty() && this.fluidInventory.getFluidAmount() >= 1000) {
                         this.recipe = (IPetalRecipe) recipe;
+                        this.currentOutput = this.recipe.getRecipeOutput().copy();
+                        this.sendPacket = true;
                         return;
                     }
                 }
             }
         }
+        this.currentOutput = ItemStack.EMPTY;
         this.recipe = null;
     }
 
@@ -173,6 +177,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
         this.getFluidInventory().getFluid().writeToNBT(tankTag);
         cmp.put(TAG_FLUID, tankTag);
         cmp.putInt(TAG_PROGRESS, this.progress);
+        cmp.put("currentOutput", this.currentOutput.serializeNBT());
     }
 
     @Override
@@ -180,6 +185,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
         this.getInventory().deserializeNBT(cmp.getCompound(TAG_INV));
         this.fluidInventory.setFluid(FluidStack.loadFluidStackFromNBT(cmp.getCompound(TAG_FLUID)));
         this.progress = cmp.getInt(TAG_PROGRESS);
+        this.currentOutput = ItemStack.read(cmp.getCompound("currentOutput"));
     }
 
     @Nonnull
@@ -191,6 +197,10 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
             return this.fluidHandler.cast();
         }
         return super.getCapability(cap, side);
+    }
+
+    public ItemStack getCurrentOutput() {
+        return this.currentOutput;
     }
 
     private class ModdedFluidTank extends FluidTank {

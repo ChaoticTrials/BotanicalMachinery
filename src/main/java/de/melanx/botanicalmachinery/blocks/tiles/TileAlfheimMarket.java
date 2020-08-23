@@ -32,6 +32,8 @@ public class TileAlfheimMarket extends TileBase {
     private boolean initDone;
     private int progress;
     private boolean update;
+    private ItemStack currentInput = ItemStack.EMPTY;
+    private ItemStack currentOutput = ItemStack.EMPTY;
 
     private static final String TAG_PROGRESS = "progress";
 
@@ -63,11 +65,16 @@ public class TileAlfheimMarket extends TileBase {
                 if (recipe instanceof IElvenTradeRecipe) {
                     if (RecipeHelper.checkIngredients(stacks, items, recipe)) {
                         this.recipe = (IElvenTradeRecipe) recipe;
+                        this.currentInput = getInputStack(this.recipe).copy();
+                        this.currentOutput = this.recipe.getOutputs().get(0).copy();
+                        this.sendPacket = true;
                         return;
                     }
                 }
             }
         }
+        this.currentInput = ItemStack.EMPTY;
+        this.currentOutput = ItemStack.EMPTY;
         this.recipe = null;
     }
 
@@ -75,12 +82,16 @@ public class TileAlfheimMarket extends TileBase {
     public void writePacketNBT(CompoundNBT cmp) {
         super.writePacketNBT(cmp);
         cmp.putInt(TAG_PROGRESS, this.progress);
+        cmp.put("currentInput", this.currentInput.serializeNBT());
+        cmp.put("currentOutput", this.currentOutput.serializeNBT());
     }
 
     @Override
     public void readPacketNBT(CompoundNBT cmp) {
         super.readPacketNBT(cmp);
         this.progress = cmp.getInt(TAG_PROGRESS);
+        this.currentInput = ItemStack.read(cmp.getCompound("currentInput"));
+        this.currentOutput = ItemStack.read(cmp.getCompound("currentOutput"));
     }
 
     @Override
@@ -141,5 +152,22 @@ public class TileAlfheimMarket extends TileBase {
 
     public int getProgress() {
         return this.progress;
+    }
+
+    private static ItemStack getInputStack(IElvenTradeRecipe recipe) {
+        if (recipe.getIngredients().isEmpty())
+            return ItemStack.EMPTY;
+        ItemStack[] stacks = recipe.getIngredients().get(0).getMatchingStacks();
+        if (stacks.length == 0)
+            return ItemStack.EMPTY;
+        return stacks[0];
+    }
+
+    public ItemStack getCurrentInput() {
+        return this.currentInput;
+    }
+
+    public ItemStack getCurrentOutput() {
+        return this.currentOutput;
     }
 }

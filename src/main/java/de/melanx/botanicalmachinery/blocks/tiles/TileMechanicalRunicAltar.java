@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TileMechanicalRunicAltar extends TileBase {
@@ -26,11 +27,15 @@ public class TileMechanicalRunicAltar extends TileBase {
     public static final int WORKING_DURATION = 100;
     public static final String TAG_PROGRESS = "progress";
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, slot -> {this.update = true; this.sendPacket = true;}, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, slot -> {
+        this.update = true;
+        this.sendPacket = true;
+    }, this::isValidStack);
     private IRuneAltarRecipe recipe = null;
     private boolean initDone;
     private int progress;
     private boolean update = true;
+    private final List<Integer> slotsUsed = new ArrayList<>();
 
     public TileMechanicalRunicAltar() {
         super(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), 500_000);
@@ -62,11 +67,24 @@ public class TileMechanicalRunicAltar extends TileBase {
                 if (recipe instanceof IRuneAltarRecipe) {
                     if (RecipeHelper.checkIngredients(stacks, items, recipe) && !this.inventory.getStackInSlot(0).isEmpty()) {
                         this.recipe = (IRuneAltarRecipe) recipe;
+                        this.slotsUsed.clear();
+                        for (int i : this.inventory.getInputSlots()) {
+                            ItemStack iStack = this.inventory.getStackInSlot(i);
+                            if (!iStack.isEmpty()) {
+                                for (Ingredient ingredient : this.recipe.getIngredients()) {
+                                    if (ingredient.test(iStack)) {
+                                        this.slotsUsed.add(i);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                         return;
                     }
                 }
             }
         }
+        this.slotsUsed.clear();
         this.recipe = null;
     }
 
@@ -82,12 +100,15 @@ public class TileMechanicalRunicAltar extends TileBase {
     public void writePacketNBT(CompoundNBT cmp) {
         super.writePacketNBT(cmp);
         cmp.putInt(TAG_PROGRESS, this.progress);
+        cmp.putIntArray("slotsUsed", this.slotsUsed);
     }
 
     @Override
     public void readPacketNBT(CompoundNBT cmp) {
         super.readPacketNBT(cmp);
         this.progress = cmp.getInt(TAG_PROGRESS);
+        this.slotsUsed.clear();
+        this.slotsUsed.addAll(Arrays.stream(cmp.getIntArray("slotsUsed")).boxed().collect(Collectors.toList()));
     }
 
     @Override
@@ -156,5 +177,9 @@ public class TileMechanicalRunicAltar extends TileBase {
 
     public int getProgress() {
         return this.progress;
+    }
+
+    public boolean isSlotUsedCurrently(int slot) {
+        return this.slotsUsed.contains(slot);
     }
 }
