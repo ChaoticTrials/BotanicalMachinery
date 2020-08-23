@@ -1,5 +1,7 @@
 package de.melanx.botanicalmachinery.helper;
 
+import com.google.common.collect.Lists;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -8,10 +10,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RecipeHelper {
 
@@ -100,5 +99,41 @@ public class RecipeHelper {
             }
         }
         return null;
+    }
+
+    /**
+     * @param stacks All {@link ItemStack}s from the inventory
+     * @return {@link Map} which includes the item and amount for all items in inventory
+     */
+    public static Map<Item, Integer> getInvItems(List<ItemStack> stacks) {
+        Map<Item, Integer> items = new HashMap<>();
+        stacks.removeIf(stack -> stack.getItem() == Blocks.AIR.asItem());
+        stacks.forEach(stack -> {
+            Item item = stack.getItem();
+            if (!items.containsKey(item)) {
+                items.put(item, stack.getCount());
+            } else {
+                int prevCount = items.get(item);
+                items.replace(item, prevCount, prevCount + stack.getCount());
+            }
+        });
+        return items;
+    }
+
+    /**
+     * @param list   {@link List} to remove from
+     * @param arrays indexes to remove
+     */
+    public static void removeFromList(List<?> list, int[]... arrays) {
+        List<Integer> toRemove = new ArrayList<>();
+        for (int[] array : arrays) {
+            for (int i : array) {
+                toRemove.add(i);
+            }
+        }
+        toRemove.sort(Comparator.naturalOrder());
+        for (int i : Lists.reverse(toRemove)) {
+            list.remove(i);
+        }
     }
 }

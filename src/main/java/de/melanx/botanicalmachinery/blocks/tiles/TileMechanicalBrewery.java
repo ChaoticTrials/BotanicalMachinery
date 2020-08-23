@@ -4,7 +4,6 @@ import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -16,7 +15,10 @@ import vazkii.botania.common.crafting.ModRecipeTypes;
 import vazkii.botania.common.item.ModItems;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 public class TileMechanicalBrewery extends TileBase {
@@ -57,19 +59,8 @@ public class TileMechanicalBrewery extends TileBase {
                 return;
             }
             List<ItemStack> stacks = new ArrayList<>(this.inventory.getStacks());
-            stacks.remove(7);
-            stacks.remove(0);
-            Map<Item, Integer> items = new HashMap<>();
-            stacks.removeIf(stack -> stack.getItem() == Blocks.AIR.asItem());
-            stacks.forEach(stack -> {
-                Item item = stack.getItem();
-                if (!items.containsKey(item)) {
-                    items.put(item, stack.getCount());
-                } else {
-                    int prevCount = items.get(item);
-                    items.replace(item, prevCount, prevCount + stack.getCount());
-                }
-            });
+            RecipeHelper.removeFromList(stacks, new int[]{0, 7});
+            Map<Item, Integer> items = RecipeHelper.getInvItems(stacks);
 
             for (IRecipe<?> recipe : this.world.getRecipeManager().getRecipes()) {
                 if (recipe instanceof IBrewRecipe) {

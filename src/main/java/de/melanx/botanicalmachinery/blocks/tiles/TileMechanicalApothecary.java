@@ -4,7 +4,6 @@ import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
-import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,7 +28,10 @@ import vazkii.botania.common.crafting.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
@@ -77,19 +79,8 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
     private void updateRecipe() {
         if (this.world != null && !this.world.isRemote) {
             List<ItemStack> stacks = new ArrayList<>(this.inventory.getStacks());
-            stacks.subList(17, stacks.size() - 1).clear();
-            stacks.remove(0);
-            Map<Item, Integer> items = new HashMap<>();
-            stacks.removeIf(stack -> stack.getItem() == Blocks.AIR.asItem());
-            stacks.forEach(stack -> {
-                Item item = stack.getItem();
-                if (!items.containsKey(item)) {
-                    items.put(item, stack.getCount());
-                } else {
-                    int prevCount = items.get(item);
-                    items.replace(item, prevCount, prevCount + stack.getCount());
-                }
-            });
+            RecipeHelper.removeFromList(stacks, IntStream.range(17, stacks.size() - 1).toArray(), new int[]{0});
+            Map<Item, Integer> items = RecipeHelper.getInvItems(stacks);
 
             for (IRecipe<?> recipe : this.world.getRecipeManager().getRecipes()) {
                 if (recipe instanceof IPetalRecipe) {

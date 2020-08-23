@@ -16,7 +16,10 @@ import vazkii.botania.api.recipe.IElvenTradeRecipe;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 public class TileAlfheimMarket extends TileBase {
@@ -54,17 +57,7 @@ public class TileAlfheimMarket extends TileBase {
         if (this.world != null && !this.world.isRemote) {
             List<ItemStack> stacks = new ArrayList<>(this.inventory.getStacks());
             stacks.remove(4);
-            Map<Item, Integer> items = new HashMap<>();
-            stacks.removeIf(stack -> stack.getItem() == Blocks.AIR.asItem());
-            stacks.forEach(stack -> {
-                Item item = stack.getItem();
-                if (!items.containsKey(item)) {
-                    items.put(item, stack.getCount());
-                } else {
-                    int prevCount = items.get(item);
-                    items.replace(item, prevCount, prevCount + stack.getCount());
-                }
-            });
+            Map<Item, Integer> items = RecipeHelper.getInvItems(stacks);
 
             for (IRecipe<?> recipe : this.world.getRecipeManager().getRecipes()) {
                 if (recipe instanceof IElvenTradeRecipe) {
