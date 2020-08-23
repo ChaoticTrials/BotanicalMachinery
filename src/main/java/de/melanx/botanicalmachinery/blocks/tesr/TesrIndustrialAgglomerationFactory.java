@@ -1,21 +1,20 @@
 package de.melanx.botanicalmachinery.blocks.tesr;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.melanx.botanicalmachinery.blocks.base.HorizontalRotatedTesr;
 import de.melanx.botanicalmachinery.blocks.tiles.TileIndustrialAgglomerationFactory;
 import de.melanx.botanicalmachinery.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 import vazkii.botania.client.core.handler.ClientTickHandler;
+import vazkii.botania.client.core.handler.MiscellaneousIcons;
+import vazkii.botania.client.core.helper.IconHelper;
 
 import javax.annotation.Nonnull;
 
@@ -43,6 +42,21 @@ public class TesrIndustrialAgglomerationFactory extends HorizontalRotatedTesr<Ti
             matrixStack.translate(0, 0.075 * Math.sin(time / 5d), 0);
 
             Minecraft.getInstance().getItemRenderer().renderItem(tile.getInventory().getStackInSlot(3), ItemCameraTransforms.TransformType.GROUND, 200, OverlayTexture.NO_OVERLAY, matrixStack, buffer);
+
+            matrixStack.pop();
+        }
+
+        if (tile.getProgress() > 0) {
+            matrixStack.push();
+            matrixStack.translate(6.2 / 16, 4.7 / 16, 6.2 / 16);
+            matrixStack.scale(3.6f / 16, 3.6f / 16, 3.6f / 16);
+
+            float alphaMod = 50000 * (tile.getProgress() / (float) TileIndustrialAgglomerationFactory.WORKING_DURATION);
+            matrixStack.rotate(Vector3f.XP.rotationDegrees(90));
+            matrixStack.translate(0, 0, -0.18850000202655792);
+            float alpha = (float) ((Math.sin((ClientTickHandler.ticksInGame + partialTicks) / 8) + 1) / 5 + 0.6) * alphaMod;
+            IVertexBuilder vertex = buffer.getBuffer(vazkii.botania.client.core.helper.RenderHelper.TERRA_PLATE);
+            IconHelper.renderIcon(matrixStack, vertex, 0, 0, MiscellaneousIcons.INSTANCE.terraPlateOverlay, 1, 1, alpha);
 
             matrixStack.pop();
         }

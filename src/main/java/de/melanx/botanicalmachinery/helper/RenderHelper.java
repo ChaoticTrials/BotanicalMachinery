@@ -4,7 +4,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.melanx.botanicalmachinery.core.LibResources;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
@@ -122,15 +121,15 @@ public class RenderHelper {
         for (Direction direction : Direction.values()) {
             random.setSeed(42);
             //noinspection deprecation
-            renderTintedQuads(matrixStack, buffer, model.getQuads(null, direction, random), stack, light, overlay, r, g, b);
+            renderTintedQuads(matrixStack, buffer, model.getQuads(null, direction, random), light, overlay, r, g, b);
         }
 
         random.setSeed(42);
         //noinspection deprecation
-        renderTintedQuads(matrixStack, buffer, model.getQuads(null, null, random), stack, light, overlay, r, g, b);
+        renderTintedQuads(matrixStack, buffer, model.getQuads(null, null, random), light, overlay, r, g, b);
     }
 
-    private static void renderTintedQuads(MatrixStack matrixStack, IVertexBuilder buffer, List<BakedQuad> quads, ItemStack stack, int light, int overlay, float r, float g, float b) {
+    private static void renderTintedQuads(MatrixStack matrixStack, IVertexBuilder buffer, List<BakedQuad> quads, int light, int overlay, float r, float g, float b) {
         MatrixStack.Entry entry = matrixStack.getLast();
 
         for (BakedQuad bakedquad : quads) {
