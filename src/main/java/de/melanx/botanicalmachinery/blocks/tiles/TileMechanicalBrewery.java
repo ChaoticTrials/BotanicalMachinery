@@ -26,12 +26,16 @@ public class TileMechanicalBrewery extends TileBase {
     public static final String TAG_PROGRESS = "progress";
     public static final String TAG_WORKING_DURATION = "workingDuration";
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(8, slot -> {this.update = true; this.sendPacket = true;}, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(8, slot -> {
+        this.update = true;
+        this.sendPacket = true;
+    }, this::isValidStack);
     private IBrewRecipe recipe = null;
     private boolean initDone;
     private int progress;
     private int workingDuration = -1;
     private boolean update;
+    private ItemStack currentOutput = ItemStack.EMPTY;
 
     public TileMechanicalBrewery() {
         super(Registration.TILE_MECHANICAL_BREWERY.get(), 100_000);
@@ -66,11 +70,18 @@ public class TileMechanicalBrewery extends TileBase {
                 if (recipe instanceof IBrewRecipe) {
                     if (RecipeHelper.checkIngredients(stacks, items, recipe)) {
                         this.recipe = (IBrewRecipe) recipe;
+                        if (this.inventory.getStackInSlot(0).isEmpty() || !(this.inventory.getStackInSlot(0).getItem() instanceof IBrewContainer)) {
+                            this.currentOutput = ItemStack.EMPTY;
+                        } else {
+                            this.currentOutput = ((IBrewContainer) this.inventory.getStackInSlot(0).getItem()).getItemForBrew(this.recipe.getBrew(), this.inventory.getStackInSlot(0).copy());
+                        }
+                        this.sendPacket = true;
                         return;
                     }
                 }
             }
         }
+        this.currentOutput = ItemStack.EMPTY;
         this.recipe = null;
     }
 
@@ -79,6 +90,7 @@ public class TileMechanicalBrewery extends TileBase {
         super.writePacketNBT(cmp);
         cmp.putInt(TAG_PROGRESS, this.progress);
         cmp.putInt(TAG_WORKING_DURATION, this.workingDuration);
+        cmp.put("currentOutput", this.currentOutput.serializeNBT());
     }
 
     @Override
@@ -86,6 +98,7 @@ public class TileMechanicalBrewery extends TileBase {
         super.readPacketNBT(cmp);
         this.progress = cmp.getInt(TAG_PROGRESS);
         this.workingDuration = cmp.getInt(TAG_WORKING_DURATION);
+        this.currentOutput = ItemStack.read(cmp.getCompound("currentOutput"));
     }
 
     @Override
@@ -103,7 +116,7 @@ public class TileMechanicalBrewery extends TileBase {
                 ItemStack currentOutput = this.inventory.getStackInSlot(7);
                 if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemStacksEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
                     int recipeCost = this.getManaCost();
-                    this.workingDuration = recipeCost / 100;
+                    this.workingDuration = recipeCost / 20;
                     if (this.getCurrentMana() >= recipeCost || this.progress > 0 && this.progress <= this.workingDuration) {
                         ++this.progress;
                         this.receiveMana(-(recipeCost / this.workingDuration));
@@ -163,5 +176,9 @@ public class TileMechanicalBrewery extends TileBase {
         }
         IBrewContainer container = (IBrewContainer) stack.getItem();
         return container.getManaCost(this.recipe.getBrew(), stack);
+    }
+
+    public ItemStack getCurrentOutput() {
+        return this.currentOutput;
     }
 }

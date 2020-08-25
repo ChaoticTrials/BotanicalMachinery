@@ -26,7 +26,8 @@ public class BlockStates extends BlockStateProvider {
             } else if (block == Registration.BLOCK_ALFHEIM_MARKET.get()
                     || block == Registration.BLOCK_MECHANICAL_MANA_POOL.get()
                     || block == Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get()
-                    || block == Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get()) {
+                    || block == Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get()
+                    || block == Registration.BLOCK_MECHANICAL_BREWERY.get()) {
                 this.createStateForManualModelRotatable(builder, block);
             } else if (block == Registration.BLOCK_MANA_BATTERY.get()) {
                 this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY + "_top"));

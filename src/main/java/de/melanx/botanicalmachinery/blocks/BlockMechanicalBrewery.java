@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 public class BlockMechanicalBrewery extends BlockBase {
 
     public BlockMechanicalBrewery() {
-        super(true);
+        super(false);
     }
 
     @Nullable
