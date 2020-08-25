@@ -60,6 +60,7 @@ public class BlockMechanicalApothecary extends Block {
             TileEntity tile = world.getTileEntity(pos);
 
             ItemStack held = player.getHeldItemMainhand();
+            @SuppressWarnings("ConstantConditions")
             FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainer(held, tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).orElse(null), 1000, player, true);
             if (fluidActionResult.isSuccess()) {
                 if (!player.isCreative()) {
@@ -110,17 +111,20 @@ public class BlockMechanicalApothecary extends Block {
         return true;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isTransparent(@Nonnull BlockState state) {
         return true;
     }
 
+    @SuppressWarnings("deprecation")
     @Nonnull
     @Override
     public VoxelShape getRenderShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos) {
         return BlockBase.RENDER_SHAPE_NO_CULLFACE;
     }
 
+    @SuppressWarnings("deprecation")
     @Nonnull
     @Override
     public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {

@@ -22,7 +22,6 @@ import vazkii.botania.api.brew.IBrewItem;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 import vazkii.botania.common.item.Item16Colors;
 import vazkii.botania.common.item.ModItems;
-import vazkii.botania.common.item.brew.ItemBrewBase;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -179,7 +178,7 @@ public class TesrMechanicalBrewery extends HorizontalRotatedTesr<TileMechanicalB
                 matrixStack.push();
                 matrixStack.translate(0.5, 0.7, 0.5);
                 matrixStack.scale(0.3f, 0.3f, 0.3f);
-                matrixStack.rotate(Vector3f.YP.rotationDegrees((float) ((angle * idxNow) + time)));
+                matrixStack.rotate(Vector3f.YP.rotationDegrees((float) -((angle * idxNow) + time)));
                 if (i == slotToMove) {
                     matrixStack.translate((1 - travelCenter) * 1.125, travelCenter * -1, (1 - travelCenter) * 0.25);
                     matrixStack.rotate(Vector3f.XP.rotationDegrees((float) (90 * travelCenter)));
@@ -204,6 +203,7 @@ public class TesrMechanicalBrewery extends HorizontalRotatedTesr<TileMechanicalB
         } else if (stack.getItem() instanceof DyeItem) {
             return ((DyeItem) stack.getItem()).getDyeColor().getColorValue();
         } else if (stack.getItem() instanceof BlockItem) {
+            //noinspection deprecation
             return ((BlockItem) stack.getItem()).getBlock().getMaterial(((BlockItem) stack.getItem()).getBlock().getDefaultState()).getColor().colorValue;
         } else if (stack.getItem() instanceof Item16Colors) {
             return ((Item16Colors) stack.getItem()).color.getColorValue();

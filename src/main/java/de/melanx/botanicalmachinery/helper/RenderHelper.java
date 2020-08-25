@@ -138,14 +138,14 @@ public class RenderHelper {
         }
     }
 
-    public static void renderIconColored(MatrixStack matrixStack, IVertexBuilder buffer, int x, int y, TextureAtlasSprite sprite, int width, int height, float alpha, int color, int light, int overlay) {
+    public static void renderIconColored(MatrixStack matrixStack, IVertexBuilder buffer, float x, float y, TextureAtlasSprite sprite, float width, float height, float alpha, int color, int light, int overlay) {
         int red = color >> 16 & 255;
         int green = color >> 8 & 255;
         int blue = color & 255;
         Matrix4f mat = matrixStack.getLast().getMatrix();
-        buffer.pos(mat, (float)x, (float)(y + height), 0.0F).color(red, green, blue, (int)(alpha * 255.0F)).tex(sprite.getMinU(), sprite.getMaxV()).overlay(overlay).lightmap(light).normal(0.0F, 0.0F, 1.0F).endVertex();
-        buffer.pos(mat, (float)(x + width), (float)(y + height), 0.0F).color(red, green, blue, (int)(alpha * 255.0F)).tex(sprite.getMaxU(), sprite.getMaxV()).overlay(overlay).lightmap(light).normal(0.0F, 0.0F, 1.0F).endVertex();
-        buffer.pos(mat, (float)(x + width), (float)y, 0.0F).color(red, green, blue, (int)(alpha * 255.0F)).tex(sprite.getMaxU(), sprite.getMinV()).overlay(overlay).lightmap(light).normal(0.0F, 0.0F, 1.0F).endVertex();
-        buffer.pos(mat, (float)x, (float)y, 0.0F).color(red, green, blue, (int)(alpha * 255.0F)).tex(sprite.getMinU(), sprite.getMinV()).overlay(overlay).lightmap(light).normal(0.0F, 0.0F, 1.0F).endVertex();
+        buffer.pos(mat, x, y + height, 0.0F).color(red, green, blue, (int)(alpha * 255.0F)).tex(sprite.getMinU(), sprite.getMaxV()).overlay(overlay).lightmap(light).normal(0.0F, 0.0F, 1.0F).endVertex();
+        buffer.pos(mat, x + width, y + height, 0.0F).color(red, green, blue, (int)(alpha * 255.0F)).tex(sprite.getMaxU(), sprite.getMaxV()).overlay(overlay).lightmap(light).normal(0.0F, 0.0F, 1.0F).endVertex();
+        buffer.pos(mat, x + width, y, 0.0F).color(red, green, blue, (int)(alpha * 255.0F)).tex(sprite.getMaxU(), sprite.getMinV()).overlay(overlay).lightmap(light).normal(0.0F, 0.0F, 1.0F).endVertex();
+        buffer.pos(mat, x, y, 0.0F).color(red, green, blue, (int)(alpha * 255.0F)).tex(sprite.getMinU(), sprite.getMinV()).overlay(overlay).lightmap(light).normal(0.0F, 0.0F, 1.0F).endVertex();
     }
 }

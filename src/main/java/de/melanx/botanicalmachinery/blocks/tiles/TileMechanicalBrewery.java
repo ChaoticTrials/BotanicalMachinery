@@ -116,7 +116,7 @@ public class TileMechanicalBrewery extends TileBase {
                 ItemStack currentOutput = this.inventory.getStackInSlot(7);
                 if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemStacksEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
                     int recipeCost = this.getManaCost();
-                    this.workingDuration = recipeCost / 20;
+                    this.workingDuration = recipeCost / 50;
                     if (this.getCurrentMana() >= recipeCost || this.progress > 0 && this.progress <= this.workingDuration) {
                         ++this.progress;
                         this.receiveMana(-(recipeCost / this.workingDuration));
