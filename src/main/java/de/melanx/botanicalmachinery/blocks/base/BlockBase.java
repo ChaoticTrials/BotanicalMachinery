@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
@@ -37,7 +38,17 @@ import javax.annotation.Nullable;
 @SuppressWarnings("deprecation")
 public abstract class BlockBase extends Block implements ITileEntityProvider, IWandHUD {
 
-    public static final VoxelShape RENDER_SHAPE_NO_CULLFACE = makeCuboidShape(0.001, 0.001, 0.001, 15.999, 15.999, 15.999);
+    public static final VoxelShape FRAME_SHAPE = VoxelShapes.or(
+            makeCuboidShape(0, 0, 0, 16, 1, 16),
+            makeCuboidShape(0, 0, 0, 1, 16, 1),
+            makeCuboidShape(15, 0, 0, 16, 16, 1),
+            makeCuboidShape(0, 0, 15, 1, 16, 16),
+            makeCuboidShape(15, 0,  15, 16, 16, 16),
+            makeCuboidShape(0, 15,  0, 1, 16, 16),
+            makeCuboidShape(0, 15,  0, 16, 16, 1),
+            makeCuboidShape(15, 15,  0, 16, 16, 16),
+            makeCuboidShape(0, 15,  15, 16, 16, 16)
+    );
 
     private final boolean fullCube;
 
@@ -123,12 +134,12 @@ public abstract class BlockBase extends Block implements ITileEntityProvider, IW
     @Nonnull
     @Override
     public VoxelShape getRenderShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos) {
-        return (!this.fullCube) ? RENDER_SHAPE_NO_CULLFACE : super.getRenderShape(state, world, pos);
+        return (!this.fullCube) ? FRAME_SHAPE : super.getRenderShape(state, world, pos);
     }
 
     @Nonnull
     @Override
     public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
-        return (!this.fullCube) ? RENDER_SHAPE_NO_CULLFACE : super.getShape(state, world, pos, context);
+        return (!this.fullCube) ? FRAME_SHAPE : super.getShape(state, world, pos, context);
     }
 }

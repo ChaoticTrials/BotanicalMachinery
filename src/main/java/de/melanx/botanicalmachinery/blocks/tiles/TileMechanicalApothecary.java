@@ -42,6 +42,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
     public static final String TAG_INV = "inv";
     public static final String TAG_FLUID = "fluid";
     public static final String TAG_PROGRESS = "progress";
+    private static final String TAG_CURRENT_OUTPUT = "currentOutput";
 
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.createLazy(this::getInventory);
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(21, slot -> {this.update = true; this.sendPacket = true;}, this::isValidStack);
@@ -177,7 +178,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
         this.getFluidInventory().getFluid().writeToNBT(tankTag);
         cmp.put(TAG_FLUID, tankTag);
         cmp.putInt(TAG_PROGRESS, this.progress);
-        cmp.put("currentOutput", this.currentOutput.serializeNBT());
+        cmp.put(TAG_CURRENT_OUTPUT, this.currentOutput.serializeNBT());
     }
 
     @Override
@@ -185,7 +186,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
         this.getInventory().deserializeNBT(cmp.getCompound(TAG_INV));
         this.fluidInventory.setFluid(FluidStack.loadFluidStackFromNBT(cmp.getCompound(TAG_FLUID)));
         this.progress = cmp.getInt(TAG_PROGRESS);
-        this.currentOutput = ItemStack.read(cmp.getCompound("currentOutput"));
+        this.currentOutput = ItemStack.read(cmp.getCompound(TAG_CURRENT_OUTPUT));
     }
 
     @Nonnull

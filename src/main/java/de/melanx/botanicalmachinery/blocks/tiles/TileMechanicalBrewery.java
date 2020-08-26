@@ -25,6 +25,7 @@ public class TileMechanicalBrewery extends TileBase {
     public static final List<Item> BREW_CONTAINER = Arrays.asList(ModItems.vial.asItem(), ModItems.flask.asItem(), ModItems.incenseStick.asItem(), ModItems.bloodPendant.asItem());
     public static final String TAG_PROGRESS = "progress";
     public static final String TAG_WORKING_DURATION = "workingDuration";
+    private static final String TAG_CURRENT_OUTPUT = "currentOutput";
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(8, slot -> {
         this.update = true;
@@ -90,7 +91,7 @@ public class TileMechanicalBrewery extends TileBase {
         super.writePacketNBT(cmp);
         cmp.putInt(TAG_PROGRESS, this.progress);
         cmp.putInt(TAG_WORKING_DURATION, this.workingDuration);
-        cmp.put("currentOutput", this.currentOutput.serializeNBT());
+        cmp.put(TAG_CURRENT_OUTPUT, this.currentOutput.serializeNBT());
     }
 
     @Override
@@ -98,7 +99,7 @@ public class TileMechanicalBrewery extends TileBase {
         super.readPacketNBT(cmp);
         this.progress = cmp.getInt(TAG_PROGRESS);
         this.workingDuration = cmp.getInt(TAG_WORKING_DURATION);
-        this.currentOutput = ItemStack.read(cmp.getCompound("currentOutput"));
+        this.currentOutput = ItemStack.read(cmp.getCompound(TAG_CURRENT_OUTPUT));
     }
 
     @Override

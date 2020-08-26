@@ -5,6 +5,7 @@ import de.melanx.botanicalmachinery.blocks.base.BlockBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalApothecary;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
 import de.melanx.botanicalmachinery.core.LibNames;
+import de.melanx.botanicalmachinery.util.DirectionShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -24,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
@@ -37,6 +39,19 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BlockMechanicalApothecary extends Block {
+
+    public static final DirectionShape SHAPE = new DirectionShape(VoxelShapes.or(
+            BlockBase.FRAME_SHAPE,
+            makeCuboidShape(3, 1, 3, 13, 2, 13),
+            makeCuboidShape(4, 2, 4, 12, 3, 12),
+            makeCuboidShape(6, 3, 6, 10, 8, 10),
+            makeCuboidShape(4, 8, 4, 12, 10, 12),
+            makeCuboidShape(3, 10, 12, 13, 14, 13),
+            makeCuboidShape(3, 10, 3, 13, 14, 4),
+            makeCuboidShape(3, 10, 4, 4, 14, 12),
+            makeCuboidShape(12, 10, 4, 13, 14, 12)
+    ));
+
     public BlockMechanicalApothecary() {
         super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10));
     }
@@ -121,13 +136,13 @@ public class BlockMechanicalApothecary extends Block {
     @Nonnull
     @Override
     public VoxelShape getRenderShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos) {
-        return BlockBase.RENDER_SHAPE_NO_CULLFACE;
+        return SHAPE.getShape(state.get(BlockStateProperties.HORIZONTAL_FACING));
     }
 
     @SuppressWarnings("deprecation")
     @Nonnull
     @Override
     public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
-        return BlockBase.RENDER_SHAPE_NO_CULLFACE;
+        return SHAPE.getShape(state.get(BlockStateProperties.HORIZONTAL_FACING));
     }
 }

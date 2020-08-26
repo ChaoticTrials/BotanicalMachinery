@@ -36,6 +36,8 @@ public class TileAlfheimMarket extends TileBase {
     private ItemStack currentOutput = ItemStack.EMPTY;
 
     private static final String TAG_PROGRESS = "progress";
+    private static final String TAG_CURRENT_INPUT = "currentInput";
+    private static final String TAG_CURRENT_OUTPUT = "currentOutput";
 
     public TileAlfheimMarket() {
         super(Registration.TILE_ALFHEIM_MARKET.get(), 500_000);
@@ -82,16 +84,16 @@ public class TileAlfheimMarket extends TileBase {
     public void writePacketNBT(CompoundNBT cmp) {
         super.writePacketNBT(cmp);
         cmp.putInt(TAG_PROGRESS, this.progress);
-        cmp.put("currentInput", this.currentInput.serializeNBT());
-        cmp.put("currentOutput", this.currentOutput.serializeNBT());
+        cmp.put(TAG_CURRENT_INPUT, this.currentInput.serializeNBT());
+        cmp.put(TAG_CURRENT_OUTPUT, this.currentOutput.serializeNBT());
     }
 
     @Override
     public void readPacketNBT(CompoundNBT cmp) {
         super.readPacketNBT(cmp);
         this.progress = cmp.getInt(TAG_PROGRESS);
-        this.currentInput = ItemStack.read(cmp.getCompound("currentInput"));
-        this.currentOutput = ItemStack.read(cmp.getCompound("currentOutput"));
+        this.currentInput = ItemStack.read(cmp.getCompound(TAG_CURRENT_INPUT));
+        this.currentOutput = ItemStack.read(cmp.getCompound(TAG_CURRENT_OUTPUT));
     }
 
     @Override
