@@ -25,7 +25,7 @@ import java.util.stream.IntStream;
 
 public class TileMechanicalRunicAltar extends TileBase {
 
-    public static final int WORKING_DURATION = 2;
+    public static final int WORKING_DURATION = 100;
     public static final String TAG_PROGRESS = "progress";
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, slot -> this.update = true, this::isValidStack);
@@ -180,14 +180,12 @@ public class TileMechanicalRunicAltar extends TileBase {
         for (ItemStack stack : stacks) {
             freeSlotsNeeded += this.freeSlotsNeededFor(stack);
         }
-        System.out.println("B: " + freeSlotsNeeded);
         for (int i : this.inventory.getOutputSlots()) {
             ItemStack slotContent = this.inventory.getStackInSlot(i);
             if (slotContent.isEmpty()) {
                 freeSlotsNeeded -= 1;
             }
         }
-        System.out.println("A: " + freeSlotsNeeded);
         return freeSlotsNeeded <= 0;
     }
 
