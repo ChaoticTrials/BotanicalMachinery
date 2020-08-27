@@ -5,6 +5,7 @@ import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import vazkii.botania.client.fx.WispParticleData;
 import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.item.ModItems;
 import vazkii.botania.common.lib.ModTags;
@@ -83,6 +84,23 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
                 this.markDispatchable();
             } else if (this.recipe) {
                 this.recipe = false;
+            }
+        } else if (world != null) {
+            if (progress > 0) {
+                double time = progress / (double) WORKING_DURATION;
+                if (time < 0.8) {
+                    time = time * 1.25;
+                    double y = pos.getY() + 6 / 16d + ((5 / 16d) * time);
+                    double x1 = pos.getX() + 0.2 + (0.3 * time);
+                    double x2 = pos.getX() + 0.8 - (0.3 * time);
+                    double z1 = pos.getZ() + 0.2 + (0.3 * time);
+                    double z2 = pos.getZ() + 0.8 - (0.3 * time);
+                    WispParticleData data = WispParticleData.wisp(0.1f, 0, (float) time, (float) (1 - time), 1);
+                    world.addParticle(data, x1, y, z1, 0, 0, 0);
+                    world.addParticle(data, x1, y, z2, 0, 0, 0);
+                    world.addParticle(data, x2, y, z1, 0, 0, 0);
+                    world.addParticle(data, x2, y, z2, 0, 0, 0);
+                }
             }
         }
     }

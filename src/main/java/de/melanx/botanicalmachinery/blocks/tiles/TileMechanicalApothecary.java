@@ -12,6 +12,8 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -22,8 +24,11 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
+import vazkii.botania.api.recipe.ICustomApothecaryColor;
 import vazkii.botania.api.recipe.IPetalRecipe;
+import vazkii.botania.client.fx.SparkleParticleData;
 import vazkii.botania.common.block.tile.TileMod;
+import vazkii.botania.common.core.handler.ModSounds;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
@@ -144,6 +149,35 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
             if (this.update) {
                 this.updateRecipe();
                 this.update = false;
+            }
+        } else if (world != null) {
+            if (fluidInventory.getFluidAmount() > 0) {
+                if (progress > WORKING_DURATION - 5) {
+                    for(int i = 0; i < 5; i++) {
+                        SparkleParticleData data = SparkleParticleData.sparkle(world.rand.nextFloat(), world.rand.nextFloat(), world.rand.nextFloat(), world.rand.nextFloat(), 10);
+                        this.world.addParticle(data, this.pos.getX() + 0.3 + (world.rand.nextDouble() * 0.4), this.pos.getY() + 0.6, this.pos.getZ() + 0.3 + (world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
+                    }
+                    this.world.playSound(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5, ModSounds.altarCraft, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+                } else {
+                    for (int slot = 0; slot < inventory.getSlots(); slot++) {
+                        ItemStack stack = inventory.getStackInSlot(slot);
+                        if (stack.isEmpty()) {
+                            continue;
+                        }
+
+                        if (world.rand.nextFloat() >= 0.97f) {
+                            int color = stack.getItem() instanceof ICustomApothecaryColor ? ((ICustomApothecaryColor) stack.getItem()).getParticleColor(stack) : 0x888888;
+                            float red = (float) (color >> 16 & 255) / 255f;
+                            float green = (float) (color >> 8 & 255) / 255f;
+                            float blue = (float) (color & 255) / 255f;
+                            if (Math.random() >= 0.75) {
+                                this.world.playSound(null, this.pos, SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.1F, 10.0F);
+                            }
+                            SparkleParticleData data = SparkleParticleData.sparkle(world.rand.nextFloat(), red, green, blue, 10);
+                            this.world.addParticle(data, this.pos.getX() + 0.3 + (world.rand.nextDouble() * 0.4), this.pos.getY() + 0.6, this.pos.getZ() + 0.3 + (world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
+                        }
+                    }
+                }
             }
         }
     }

@@ -10,7 +10,9 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import vazkii.botania.api.brew.IBrewContainer;
+import vazkii.botania.api.brew.IBrewItem;
 import vazkii.botania.api.recipe.IBrewRecipe;
+import vazkii.botania.client.fx.WispParticleData;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 import vazkii.botania.common.item.ModItems;
 
@@ -153,6 +155,27 @@ public class TileMechanicalBrewery extends TileBase {
                 this.workingDuration = -1;
                 this.markDirty();
                 this.markDispatchable();
+            }
+        } else if (world != null) {
+            if (progress > 0) {
+                if (currentOutput.getItem() instanceof IBrewItem && world.rand.nextFloat() < 0.5f) {
+                    int segments = 3;
+                    for (int i = 1; i <= 6; i++) {
+                        if (!inventory.getStackInSlot(i).isEmpty()) {
+                            segments += 1;
+                        }
+                    }
+                    if (progress < (segments - 1) * (workingDuration / (double) segments) && progress > (segments - 2) * (workingDuration / (double) segments)) {
+                        int targetColor = ((IBrewItem) currentOutput.getItem()).getBrew(currentOutput).getColor(currentOutput);
+                        float red = (targetColor >> 16 & 255) / 255f;
+                        float green = (targetColor >> 8 & 255) / 255f;
+                        float blue = (targetColor & 255) / 255f;
+                        WispParticleData data = WispParticleData.wisp(0.125f, red, green, blue, 0.5f);
+                        double xPos = pos.getX() + 0.25 + (world.rand.nextDouble() / 2);
+                        double zPos = pos.getZ() + 0.25 + (world.rand.nextDouble() / 2);
+                        world.addParticle(data, xPos, pos.getY() + 0.35, zPos, 0, 0.01 + (world.rand.nextDouble() / 18), 0);
+                    }
+                }
             }
         }
     }

@@ -10,6 +10,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import vazkii.botania.api.recipe.IRuneAltarRecipe;
+import vazkii.botania.client.fx.SparkleParticleData;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 import vazkii.botania.common.item.material.ItemRune;
@@ -156,6 +157,13 @@ public class TileMechanicalRunicAltar extends TileBase {
             if (this.update) {
                 this.updateRecipe();
                 this.update = false;
+            }
+        } else if (world != null) {
+            if (progress >= (WORKING_DURATION - 5)) {
+                for(int i = 0; i < 5; ++i) {
+                    SparkleParticleData data = SparkleParticleData.sparkle(world.rand.nextFloat(), world.rand.nextFloat(), world.rand.nextFloat(), world.rand.nextFloat(), 10);
+                    this.world.addParticle(data, this.pos.getX() + 0.3 + (world.rand.nextDouble() * 0.4), this.pos.getY() + 0.7, this.pos.getZ() + 0.3 + (world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
+                }
             }
         }
     }
