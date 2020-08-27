@@ -109,7 +109,7 @@ public class TileMechanicalManaPool extends TileBase {
                     float green = 0.7764706F;
                     float blue = 1.0F;
                     WispParticleData data = WispParticleData.wisp((float)Math.random() / 3.0F, red, green, blue, 2.0F);
-                    this.world.addParticle(data, (double)this.pos.getX() + 0.3D + Math.random() * 0.4D, (double)this.pos.getY() + 0.5D + Math.random() * 0.25D, (double)this.pos.getZ() + Math.random(), 0.0D, (double)((float)Math.random() / 25.0F), 0.0D);
+                    this.world.addParticle(data, this.pos.getX() + 0.3D + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.5D + (this.world.rand.nextDouble() * 0.25D), this.pos.getZ() + 0.3D + (this.world.rand.nextDouble() * 0.4), 0, this.world.rand.nextFloat() / 25, 0);
                 }
             }
         }

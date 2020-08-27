@@ -158,11 +158,11 @@ public class TileMechanicalRunicAltar extends TileBase {
                 this.updateRecipe();
                 this.update = false;
             }
-        } else if (world != null) {
-            if (progress >= (WORKING_DURATION - 5)) {
+        } else if (this.world != null) {
+            if (this.progress >= (WORKING_DURATION - 5)) {
                 for(int i = 0; i < 5; ++i) {
-                    SparkleParticleData data = SparkleParticleData.sparkle(world.rand.nextFloat(), world.rand.nextFloat(), world.rand.nextFloat(), world.rand.nextFloat(), 10);
-                    this.world.addParticle(data, this.pos.getX() + 0.3 + (world.rand.nextDouble() * 0.4), this.pos.getY() + 0.7, this.pos.getZ() + 0.3 + (world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
+                    SparkleParticleData data = SparkleParticleData.sparkle(this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), 10);
+                    this.world.addParticle(data, this.pos.getX() + 0.3 + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.7, this.pos.getZ() + 0.3 + (this.world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
                 }
             }
         }

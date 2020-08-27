@@ -150,22 +150,22 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
                 this.updateRecipe();
                 this.update = false;
             }
-        } else if (world != null) {
-            if (fluidInventory.getFluidAmount() > 0) {
-                if (progress > WORKING_DURATION - 5) {
+        } else if (this.world != null) {
+            if (this.fluidInventory.getFluidAmount() > 0) {
+                if (this.progress > WORKING_DURATION - 5) {
                     for(int i = 0; i < 5; i++) {
-                        SparkleParticleData data = SparkleParticleData.sparkle(world.rand.nextFloat(), world.rand.nextFloat(), world.rand.nextFloat(), world.rand.nextFloat(), 10);
-                        this.world.addParticle(data, this.pos.getX() + 0.3 + (world.rand.nextDouble() * 0.4), this.pos.getY() + 0.6, this.pos.getZ() + 0.3 + (world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
+                        SparkleParticleData data = SparkleParticleData.sparkle(this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), 10);
+                        this.world.addParticle(data, this.pos.getX() + 0.3 + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.6, this.pos.getZ() + 0.3 + (this.world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
                     }
                     this.world.playSound(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5, ModSounds.altarCraft, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
                 } else {
-                    for (int slot = 0; slot < inventory.getSlots(); slot++) {
-                        ItemStack stack = inventory.getStackInSlot(slot);
+                    for (int slot = 0; slot < this.inventory.getSlots(); slot++) {
+                        ItemStack stack = this.inventory.getStackInSlot(slot);
                         if (stack.isEmpty()) {
                             continue;
                         }
 
-                        if (world.rand.nextFloat() >= 0.97f) {
+                        if (this.world.rand.nextFloat() >= 0.97f) {
                             int color = stack.getItem() instanceof ICustomApothecaryColor ? ((ICustomApothecaryColor) stack.getItem()).getParticleColor(stack) : 0x888888;
                             float red = (float) (color >> 16 & 255) / 255f;
                             float green = (float) (color >> 8 & 255) / 255f;
@@ -173,8 +173,8 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
                             if (Math.random() >= 0.75) {
                                 this.world.playSound(null, this.pos, SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.1F, 10.0F);
                             }
-                            SparkleParticleData data = SparkleParticleData.sparkle(world.rand.nextFloat(), red, green, blue, 10);
-                            this.world.addParticle(data, this.pos.getX() + 0.3 + (world.rand.nextDouble() * 0.4), this.pos.getY() + 0.6, this.pos.getZ() + 0.3 + (world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
+                            SparkleParticleData data = SparkleParticleData.sparkle(this.world.rand.nextFloat(), red, green, blue, 10);
+                            this.world.addParticle(data, this.pos.getX() + 0.3 + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.6, this.pos.getZ() + 0.3 + (this.world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
                         }
                     }
                 }

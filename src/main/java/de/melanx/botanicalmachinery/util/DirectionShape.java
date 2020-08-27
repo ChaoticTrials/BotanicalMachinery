@@ -23,14 +23,13 @@ public class DirectionShape {
 
     public VoxelShape getShape(Direction direction) {
         switch (direction) {
-            case NORTH:
-                return this.north;
             case SOUTH:
                 return this.south;
             case WEST:
                 return this.west;
             case EAST:
                 return this.east;
+            case NORTH:
             default:
                 return this.north;
         }

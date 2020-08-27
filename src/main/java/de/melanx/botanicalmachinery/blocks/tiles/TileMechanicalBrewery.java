@@ -156,24 +156,24 @@ public class TileMechanicalBrewery extends TileBase {
                 this.markDirty();
                 this.markDispatchable();
             }
-        } else if (world != null) {
-            if (progress > 0) {
-                if (currentOutput.getItem() instanceof IBrewItem && world.rand.nextFloat() < 0.5f) {
+        } else if (this.world != null) {
+            if (this.progress > 0) {
+                if (this.currentOutput.getItem() instanceof IBrewItem && this.world.rand.nextFloat() < 0.5f) {
                     int segments = 3;
                     for (int i = 1; i <= 6; i++) {
-                        if (!inventory.getStackInSlot(i).isEmpty()) {
+                        if (!this.inventory.getStackInSlot(i).isEmpty()) {
                             segments += 1;
                         }
                     }
-                    if (progress < (segments - 1) * (workingDuration / (double) segments) && progress > (segments - 2) * (workingDuration / (double) segments)) {
-                        int targetColor = ((IBrewItem) currentOutput.getItem()).getBrew(currentOutput).getColor(currentOutput);
+                    if (this.progress < (segments - 1) * (this.workingDuration / (double) segments) && this.progress > (segments - 2) * (this.workingDuration / (double) segments)) {
+                        int targetColor = ((IBrewItem) this.currentOutput.getItem()).getBrew(this.currentOutput).getColor(this.currentOutput);
                         float red = (targetColor >> 16 & 255) / 255f;
                         float green = (targetColor >> 8 & 255) / 255f;
                         float blue = (targetColor & 255) / 255f;
                         WispParticleData data = WispParticleData.wisp(0.125f, red, green, blue, 0.5f);
-                        double xPos = pos.getX() + 0.25 + (world.rand.nextDouble() / 2);
-                        double zPos = pos.getZ() + 0.25 + (world.rand.nextDouble() / 2);
-                        world.addParticle(data, xPos, pos.getY() + 0.35, zPos, 0, 0.01 + (world.rand.nextDouble() / 18), 0);
+                        double xPos = this.pos.getX() + 0.25 + (this.world.rand.nextDouble() / 2);
+                        double zPos = this.pos.getZ() + 0.25 + (this.world.rand.nextDouble() / 2);
+                        this.world.addParticle(data, xPos, this.pos.getY() + 0.35, zPos, 0, 0.01 + (this.world.rand.nextDouble() / 18), 0);
                     }
                 }
             }
