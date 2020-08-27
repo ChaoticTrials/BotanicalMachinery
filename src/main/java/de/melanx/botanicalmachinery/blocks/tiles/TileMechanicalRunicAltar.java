@@ -4,15 +4,17 @@ import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.items.ItemHandlerHelper;
 import vazkii.botania.api.recipe.IRuneAltarRecipe;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.crafting.ModRecipeTypes;
-import vazkii.botania.common.item.material.ItemRune;
+import vazkii.botania.common.lib.ModTags;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -61,8 +63,28 @@ public class TileMechanicalRunicAltar extends TileBase {
             for (IRecipe<?> recipe : this.world.getRecipeManager().getRecipes()) {
                 if (recipe instanceof IRuneAltarRecipe) {
                     if (RecipeHelper.checkIngredients(stacks, items, recipe) && !this.inventory.getStackInSlot(0).isEmpty()) {
-                        this.recipe = (IRuneAltarRecipe) recipe;
-                        return;
+                        List<ItemStack> stacksToTest = new ArrayList<>();
+                        stacksToTest.add(recipe.getRecipeOutput());
+                        for (Ingredient ingredient : recipe.getIngredients()) {
+                            for (ItemStack stack : this.inventory.getStacks()) {
+                                if (ingredient.test(stack) && ModTags.Items.RUNES.contains(stack.getItem())) {
+                                    ItemStack rune = stack.copy();
+                                    rune.setCount(1);
+                                    for (ItemStack testStack : stacksToTest) {
+                                        if (ItemHandlerHelper.canItemStacksStack(testStack, rune)) {
+                                            testStack.grow(1);
+                                            break;
+                                        }
+                                    }
+                                    stacksToTest.add(rune);
+                                    break;
+                                }
+                            }
+                        }
+                        if (this.canInsertAll(stacksToTest)) {
+                            this.recipe = (IRuneAltarRecipe) recipe;
+                            return;
+                        }
                     }
                 }
             }
@@ -108,10 +130,10 @@ public class TileMechanicalRunicAltar extends TileBase {
                         for (Ingredient ingredient : this.recipe.getIngredients()) {
                             for (ItemStack stack : this.inventory.getStacks()) {
                                 if (ingredient.test(stack)) {
-                                    if (stack.getItem() instanceof ItemRune) {
+                                    if (ModTags.Items.RUNES.contains(stack.getItem())) {
                                         ItemStack rune = stack.copy();
                                         rune.setCount(1);
-                                        this.putIntoOutput(rune);
+                                        this.putIntoOutputOrDrop(rune);
                                     }
                                     stack.shrink(1);
                                     break;
@@ -119,7 +141,7 @@ public class TileMechanicalRunicAltar extends TileBase {
                             }
                         }
                         this.inventory.getStackInSlot(0).shrink(1);
-                        this.putIntoOutput(output);
+                        this.putIntoOutputOrDrop(output);
                         this.update = true;
                         done = true;
                     }
@@ -139,19 +161,47 @@ public class TileMechanicalRunicAltar extends TileBase {
         }
     }
 
-    private void putIntoOutput(ItemStack stack) {
+    private void putIntoOutputOrDrop(ItemStack stack) {
+        ItemStack leftToInsert = stack;
         for (int i : this.inventory.getOutputSlots()) {
-            if (stack.isEmpty()) break;
-            ItemStack slotStack = this.inventory.getStackInSlot(i);
-            if (slotStack.isEmpty()) {
-                this.inventory.getUnrestricted().insertItem(i, stack.copy(), false);
+            if (stack.isEmpty() || leftToInsert.isEmpty())
                 break;
-            } else if ((slotStack.getItem() == stack.getItem() && slotStack.getCount() < slotStack.getMaxStackSize())) {
-                ItemStack left = this.inventory.getUnrestricted().insertItem(i, stack, false);
-                if (left != ItemStack.EMPTY) stack = left;
-                else break;
+            leftToInsert = this.inventory.getUnrestricted().insertItem(i, leftToInsert, false);
+        }
+        //noinspection ConstantConditions
+        if (!leftToInsert.isEmpty() && !this.world.isRemote) {
+            ItemEntity ie = new ItemEntity(this.world, this.pos.getX() + 0.5, this.pos.getY() + 0.7, this.pos.getZ() + 0.5, leftToInsert.copy());
+            this.world.addEntity(ie);
+        }
+    }
+
+    private boolean canInsertAll(List<ItemStack> stacks) {
+        int freeSlotsNeeded = 0;
+        for (ItemStack stack : stacks) {
+            freeSlotsNeeded += this.freeSlotsNeededFor(stack);
+        }
+        for (int i : this.inventory.getOutputSlots()) {
+            ItemStack slotContent = this.inventory.getStackInSlot(i);
+            if (slotContent.isEmpty()) {
+                freeSlotsNeeded -= 1;
             }
         }
+        return freeSlotsNeeded <= 0;
+    }
+
+    private int freeSlotsNeededFor(ItemStack stack) {
+        int sizeLeft = stack.getCount();
+        for (int i : this.inventory.getOutputSlots()) {
+            ItemStack slotContent = this.inventory.getStackInSlot(i);
+            if (slotContent.isEmpty())
+                continue;
+            if (ItemHandlerHelper.canItemStacksStack(stack, slotContent)) {
+                sizeLeft -= Math.min(sizeLeft, slotContent.getMaxStackSize() - slotContent.getCount());
+                if (sizeLeft <= 0)
+                    return 0;
+            }
+        }
+        return 1;
     }
 
     public int getProgress() {
