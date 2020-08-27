@@ -109,6 +109,6 @@ public class BlockMechanicalDaisy extends Block {
     @Nonnull
     @Override
     public VoxelShape getRenderShape(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos) {
-        return SHAPE;
+        return COLLISION_SHAPE;
     }
 }
