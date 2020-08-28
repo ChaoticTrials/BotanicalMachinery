@@ -41,8 +41,8 @@ public class TileManaBattery extends TileBase {
     public boolean isValidStack(int slot, ItemStack stack) {
         if (stack.getItem() instanceof IManaItem) {
             IManaItem item = (IManaItem) stack.getItem();
-            if (slot == 0 && item.getMana(stack) >= item.getMaxMana(stack)) return false;
-            if (slot == 1 && item.getMana(stack) <= 0) return false;
+            if (slot == 0 && (item.getMana(stack) >= item.getMaxMana(stack) || this.slot1Locked)) return false;
+            if (slot == 1 && (item.getMana(stack) <= 0 || this.slot2Locked)) return false;
         }
         return stack.getItem() instanceof IManaItem;
     }
