@@ -6,6 +6,7 @@ import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.util.LazyOptional;
@@ -17,7 +18,12 @@ import java.util.function.Supplier;
 
 public class TileManaBattery extends TileBase {
 
+    private static final String TAG_SLOT_1_LOCKED = "slot1Locked";
+    private static final String TAG_SLOT_2_LOCKED = "slot2Locked";
+
     private static final int MANA_TRANSFER_RATE = 5000;
+    private boolean slot1Locked;
+    private boolean slot2Locked;
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, slot -> this.sendPacket = true, this::isValidStack);
 
@@ -39,6 +45,20 @@ public class TileManaBattery extends TileBase {
             if (slot == 1 && item.getMana(stack) <= 0) return false;
         }
         return stack.getItem() instanceof IManaItem;
+    }
+
+    @Override
+    public void writePacketNBT(CompoundNBT cmp) {
+        super.writePacketNBT(cmp);
+        cmp.putBoolean(TAG_SLOT_1_LOCKED, this.slot1Locked);
+        cmp.putBoolean(TAG_SLOT_2_LOCKED, this.slot2Locked);
+    }
+
+    @Override
+    public void readPacketNBT(CompoundNBT cmp) {
+        super.readPacketNBT(cmp);
+        this.slot1Locked = cmp.getBoolean(TAG_SLOT_1_LOCKED);
+        this.slot2Locked = cmp.getBoolean(TAG_SLOT_2_LOCKED);
     }
 
     @Override
@@ -91,6 +111,14 @@ public class TileManaBattery extends TileBase {
                 }
             }
         }
+    }
+
+    public boolean isSlot1Locked() {
+        return this.slot1Locked;
+    }
+
+    public boolean isSlot2Locked() {
+        return this.slot2Locked;
     }
 
     @Override
