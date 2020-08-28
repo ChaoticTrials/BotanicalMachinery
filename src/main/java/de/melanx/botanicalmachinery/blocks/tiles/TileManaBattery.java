@@ -121,6 +121,22 @@ public class TileManaBattery extends TileBase {
         return this.slot2Locked;
     }
 
+    public void setSlot1Locked(boolean slot1Locked) {
+        // Do not remove the condition! (Because of packets)
+        if (slot1Locked != this.slot1Locked) {
+            this.slot1Locked = slot1Locked;
+            this.markDirty();
+        }
+    }
+
+    public void setSlot2Locked(boolean slot2Locked) {
+        // Do not remove the condition! (Because of packets)
+        if (slot2Locked != this.slot2Locked) {
+            this.slot2Locked = slot2Locked;
+            this.markDirty();
+        }
+    }
+
     @Override
     protected LazyOptional<IItemHandlerModifiable> createHandler(Supplier<IItemHandlerModifiable> inventory) {
         return ItemStackHandlerWrapper.createLazy(inventory, slot -> {
