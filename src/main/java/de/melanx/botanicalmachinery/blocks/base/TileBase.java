@@ -2,6 +2,7 @@ package de.melanx.botanicalmachinery.blocks.base;
 
 import com.google.common.base.Predicates;
 import com.mojang.blaze3d.systems.RenderSystem;
+import de.melanx.botanicalmachinery.blocks.BlockManaBattery;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
 import net.minecraft.client.Minecraft;
@@ -175,9 +176,9 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
 
     @Override
     public void receiveMana(int i) {
-        int old = this.mana;
+        int old = this.getCurrentMana();
         this.mana = Math.max(0, Math.min(this.getCurrentMana() + i, this.getManaCap()));
-        if (old != this.mana) {
+        if (old != this.getCurrentMana()) {
             this.markDirty();
             this.markDispatchable();
         }

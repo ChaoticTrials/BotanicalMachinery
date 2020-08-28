@@ -1,5 +1,6 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
+import de.melanx.botanicalmachinery.blocks.BlockManaBattery;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
@@ -39,6 +40,11 @@ public class TileManaBattery extends TileBase {
     }
 
     @Override
+    public int getCurrentMana() {
+        return ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.CREATIVE ? this.getManaCap() : this.mana;
+    }
+
+    @Override
     public void tick() {
         super.tick();
         if (this.world != null && !this.world.isRemote) {
@@ -47,7 +53,8 @@ public class TileManaBattery extends TileBase {
             if (!minus.isEmpty()) {
                 if (minus.getItem() instanceof IManaItem) {
                     IManaItem manaItem = (IManaItem) minus.getItem();
-                    int manaValue = Math.min(1000, Math.min(this.getCurrentMana(), manaItem.getMaxMana(minus) - manaItem.getMana(minus)));
+                    int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? 1000 : Integer.MAX_VALUE;
+                    int manaValue = Math.min(maxManaValue, Math.min(this.getCurrentMana(), manaItem.getMaxMana(minus) - manaItem.getMana(minus)));
                     manaItem.addMana(minus, manaValue);
                     this.receiveMana(-manaValue);
                     this.markDirty();
@@ -57,7 +64,8 @@ public class TileManaBattery extends TileBase {
             if (!plus.isEmpty()) {
                 if (plus.getItem() instanceof IManaItem) {
                     IManaItem manaItem = (IManaItem) plus.getItem();
-                    int manaValue = Math.min(1000, Math.min(this.getManaCap() - this.getCurrentMana(), manaItem.getMana(plus)));
+                    int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? 1000 : Integer.MAX_VALUE;
+                    int manaValue = Math.min(maxManaValue, Math.min(this.getManaCap() - this.getCurrentMana(), manaItem.getMana(plus)));
                     manaItem.addMana(plus, -manaValue);
                     this.receiveMana(manaValue);
                     this.markDirty();
@@ -69,7 +77,8 @@ public class TileManaBattery extends TileBase {
                 if (tile instanceof TileBase) {
                     TileBase offsetTile = (TileBase) tile;
                     if (offsetTile.getCurrentMana() < offsetTile.getManaCap()) {
-                        int manaValue = Math.min(5000, Math.min(this.getCurrentMana(), offsetTile.getManaCap() - offsetTile.getCurrentMana()));
+                        int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? 5000 : Integer.MAX_VALUE;
+                        int manaValue = Math.min(maxManaValue, Math.min(this.getCurrentMana(), offsetTile.getManaCap() - offsetTile.getCurrentMana()));
                         this.receiveMana(-manaValue);
                         offsetTile.receiveMana(manaValue);
                         this.markDirty();

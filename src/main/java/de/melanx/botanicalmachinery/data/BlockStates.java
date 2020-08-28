@@ -27,11 +27,14 @@ public class BlockStates extends BlockStateProvider {
                     || block == Registration.BLOCK_MECHANICAL_MANA_POOL.get()
                     || block == Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get()
                     || block == Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get()
-                    || block == Registration.BLOCK_MECHANICAL_BREWERY.get()) {
+                    || block == Registration.BLOCK_MECHANICAL_BREWERY.get()
+                    || block == Registration.BLOCK_MECHANICAL_APOTHECARY.get()) {
                 this.createStateForManualModelRotatable(builder, block);
             } else if (block == Registration.BLOCK_MANA_BATTERY.get()) {
                 this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY + "_top"));
-            } else if (block instanceof BlockBase || block == Registration.BLOCK_MECHANICAL_APOTHECARY.get()) {
+            } else if (block == Registration.BLOCK_MANA_BATTERY_CREATIVE.get()) {
+                this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY_CREATIVE + "_top"));
+            } else if (block instanceof BlockBase) {
                 this.createModels(builder, block);
             } else {
                 this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(this.modelDefault(block)).build());

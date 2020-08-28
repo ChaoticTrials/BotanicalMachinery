@@ -8,6 +8,7 @@ public class LibNames {
     public static final String ALFHEIM_MARKET = "alfheim_market";
     public static final String INDUSTRIAL_AGGLOMERATION_FACTORY = "industrial_agglomeration_factory";
     public static final String MANA_BATTERY = "mana_battery";
+    public static final String MANA_BATTERY_CREATIVE = MANA_BATTERY + "_creative";
     public static final String MECHANICAL_APOTHECARY = "mechanical_apothecary";
     public static final String MECHANICAL_BREWERY = "mechanical_brewery";
     public static final String MECHANICAL_DAISY = "mechanical_daisy";

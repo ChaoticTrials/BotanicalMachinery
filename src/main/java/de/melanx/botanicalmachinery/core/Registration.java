@@ -32,7 +32,8 @@ public class Registration {
     public static final RegistryObject<Block> BLOCK_MANA_EMERALD = BLOCKS.register(LibNames.MANA_EMERALD_BLOCK, () -> new Block(Block.Properties.create(Material.IRON, MaterialColor.EMERALD).harvestLevel(3).harvestTool(ToolType.PICKAXE).hardnessAndResistance(5.0F, 6.0F).sound(SoundType.METAL)));
     public static final RegistryObject<Block> BLOCK_ALFHEIM_MARKET = BLOCKS.register(LibNames.ALFHEIM_MARKET, BlockAlfheimMarket::new);
     public static final RegistryObject<Block> BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY = BLOCKS.register(LibNames.INDUSTRIAL_AGGLOMERATION_FACTORY, BlockIndustrialAgglomerationFactory::new);
-    public static final RegistryObject<Block> BLOCK_MANA_BATTERY = BLOCKS.register(LibNames.MANA_BATTERY, BlockManaBattery::new);
+    public static final RegistryObject<Block> BLOCK_MANA_BATTERY = BLOCKS.register(LibNames.MANA_BATTERY, () -> new BlockManaBattery(BlockManaBattery.Variant.NORMAL));
+    public static final RegistryObject<Block> BLOCK_MANA_BATTERY_CREATIVE = BLOCKS.register(LibNames.MANA_BATTERY_CREATIVE, () -> new BlockManaBattery(BlockManaBattery.Variant.CREATIVE));
     public static final RegistryObject<Block> BLOCK_MECHANICAL_APOTHECARY = BLOCKS.register(LibNames.MECHANICAL_APOTHECARY, BlockMechanicalApothecary::new);
     public static final RegistryObject<Block> BLOCK_MECHANICAL_BREWERY = BLOCKS.register(LibNames.MECHANICAL_BREWERY, BlockMechanicalBrewery::new);
     public static final RegistryObject<Block> BLOCK_MECHANICAL_DAISY = BLOCKS.register(LibNames.MECHANICAL_DAISY, BlockMechanicalDaisy::new);
@@ -45,6 +46,7 @@ public class Registration {
     public static final RegistryObject<Item> ITEM_ALFHEIM_MARKET = ITEMS.register(LibNames.ALFHEIM_MARKET, () -> new BlockItem(BLOCK_ALFHEIM_MARKET.get(), itemProps));
     public static final RegistryObject<Item> ITEM_INDUSTRIAL_AGGLOMERATION_FACTORY = ITEMS.register(LibNames.INDUSTRIAL_AGGLOMERATION_FACTORY, () -> new BlockItem(BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), itemProps));
     public static final RegistryObject<Item> ITEM_MANA_BATTERY = ITEMS.register(LibNames.MANA_BATTERY, () -> new BlockItem(BLOCK_MANA_BATTERY.get(), itemProps));
+    public static final RegistryObject<Item> ITEM_MANA_BATTERY_CREATIVE = ITEMS.register(LibNames.MANA_BATTERY_CREATIVE, () -> new BlockItem(BLOCK_MANA_BATTERY_CREATIVE.get(), itemProps));
     public static final RegistryObject<Item> ITEM_MECHANICAL_APOTHECARY = ITEMS.register(LibNames.MECHANICAL_APOTHECARY, () -> new BlockItem(BLOCK_MECHANICAL_APOTHECARY.get(), itemProps));
     public static final RegistryObject<Item> ITEM_MECHANICAL_BREWERY = ITEMS.register(LibNames.MECHANICAL_BREWERY, () -> new BlockItem(BLOCK_MECHANICAL_BREWERY.get(), itemProps));
     public static final RegistryObject<Item> ITEM_MECHANICAL_DAISY = ITEMS.register(LibNames.MECHANICAL_DAISY, () -> new BlockItem(BLOCK_MECHANICAL_DAISY.get(), itemProps));
@@ -53,7 +55,7 @@ public class Registration {
 
     public static final RegistryObject<TileEntityType<TileAlfheimMarket>> TILE_ALFHEIM_MARKET = TILES.register(LibNames.ALFHEIM_MARKET, () -> TileEntityType.Builder.create(TileAlfheimMarket::new, BLOCK_ALFHEIM_MARKET.get()).build(null));
     public static final RegistryObject<TileEntityType<TileIndustrialAgglomerationFactory>> TILE_INDUSTRIAL_AGGLOMERATION_FACTORY = TILES.register(LibNames.INDUSTRIAL_AGGLOMERATION_FACTORY, () -> TileEntityType.Builder.create(TileIndustrialAgglomerationFactory::new, BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get()).build(null));
-    public static final RegistryObject<TileEntityType<TileManaBattery>> TILE_MANA_BATTERY = TILES.register(LibNames.MANA_BATTERY, () -> TileEntityType.Builder.create(TileManaBattery::new, BLOCK_MANA_BATTERY.get()).build(null));
+    public static final RegistryObject<TileEntityType<TileManaBattery>> TILE_MANA_BATTERY = TILES.register(LibNames.MANA_BATTERY, () -> TileEntityType.Builder.create(TileManaBattery::new, BLOCK_MANA_BATTERY.get(), BLOCK_MANA_BATTERY_CREATIVE.get()).build(null));
     public static final RegistryObject<TileEntityType<TileMechanicalApothecary>> TILE_MECHANICAL_APOTHECARY = TILES.register(LibNames.MECHANICAL_APOTHECARY, () -> TileEntityType.Builder.create(TileMechanicalApothecary::new, BLOCK_MECHANICAL_APOTHECARY.get()).build(null));
     public static final RegistryObject<TileEntityType<TileMechanicalBrewery>> TILE_MECHANICAL_BREWERY = TILES.register(LibNames.MECHANICAL_BREWERY, () -> TileEntityType.Builder.create(TileMechanicalBrewery::new, BLOCK_MECHANICAL_BREWERY.get()).build(null));
     public static final RegistryObject<TileEntityType<TileMechanicalDaisy>> TILE_MECHANICAL_DAISY = TILES.register(LibNames.MECHANICAL_DAISY, () -> TileEntityType.Builder.create(TileMechanicalDaisy::new, BLOCK_MECHANICAL_DAISY.get()).build(null));
