@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TileMechanicalManaPool extends TileBase {
-    public static final List<Item> CATALYSTS = Arrays.asList(ModBlocks.alchemyCatalyst.asItem(), ModBlocks.conjurationCatalyst.asItem());
+    public static final List<Item> CATALYSTS = Arrays.asList(ModBlocks.alchemyCatalyst.asItem(), ModBlocks.conjurationCatalyst.asItem(), ModBlocks.manaVoid.asItem());
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(3, this::onSlotChanged, this::isValidStack);
     public boolean validRecipe = true;
 
@@ -118,5 +118,17 @@ public class TileMechanicalManaPool extends TileBase {
     @Override
     public boolean hasValidRecipe() {
         return this.validRecipe;
+    }
+
+    @Override
+    public void receiveMana(int i) {
+        if (this.inventory.getStackInSlot(0).getItem() == ModBlocks.manaVoid.asItem())
+            this.mana = Math.min(this.getCurrentMana() + i, this.getManaCap());
+        else super.receiveMana(i);
+    }
+
+    @Override
+    public boolean isFull() {
+        return this.inventory.getStackInSlot(0).getItem() != ModBlocks.manaVoid.asItem() && super.isFull();
     }
 }

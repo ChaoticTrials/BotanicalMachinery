@@ -17,6 +17,8 @@ import java.util.function.Supplier;
 
 public class TileManaBattery extends TileBase {
 
+    private static final int MANA_TRANSFER_RATE = 5000;
+
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, slot -> this.sendPacket = true, this::isValidStack);
 
     public TileManaBattery() {
@@ -53,7 +55,7 @@ public class TileManaBattery extends TileBase {
             if (!minus.isEmpty()) {
                 if (minus.getItem() instanceof IManaItem) {
                     IManaItem manaItem = (IManaItem) minus.getItem();
-                    int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? 1000 : Integer.MAX_VALUE;
+                    int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? MANA_TRANSFER_RATE : Integer.MAX_VALUE;
                     int manaValue = Math.min(maxManaValue, Math.min(this.getCurrentMana(), manaItem.getMaxMana(minus) - manaItem.getMana(minus)));
                     manaItem.addMana(minus, manaValue);
                     this.receiveMana(-manaValue);
@@ -64,7 +66,7 @@ public class TileManaBattery extends TileBase {
             if (!plus.isEmpty()) {
                 if (plus.getItem() instanceof IManaItem) {
                     IManaItem manaItem = (IManaItem) plus.getItem();
-                    int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? 1000 : Integer.MAX_VALUE;
+                    int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? MANA_TRANSFER_RATE : Integer.MAX_VALUE;
                     int manaValue = Math.min(maxManaValue, Math.min(this.getManaCap() - this.getCurrentMana(), manaItem.getMana(plus)));
                     manaItem.addMana(plus, -manaValue);
                     this.receiveMana(manaValue);
@@ -76,9 +78,11 @@ public class TileManaBattery extends TileBase {
                 TileEntity tile = this.world.getTileEntity(this.getPos().offset(direction));
                 if (tile instanceof TileBase) {
                     TileBase offsetTile = (TileBase) tile;
-                    if (offsetTile.getCurrentMana() < offsetTile.getManaCap()) {
-                        int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? 5000 : Integer.MAX_VALUE;
+                    if (!offsetTile.isFull()) {
+                        int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? MANA_TRANSFER_RATE : Integer.MAX_VALUE;
                         int manaValue = Math.min(maxManaValue, Math.min(this.getCurrentMana(), offsetTile.getManaCap() - offsetTile.getCurrentMana()));
+                        if (manaValue <= 0 && offsetTile instanceof TileMechanicalManaPool)
+                            manaValue = MANA_TRANSFER_RATE;
                         this.receiveMana(-manaValue);
                         offsetTile.receiveMana(manaValue);
                         this.markDirty();
