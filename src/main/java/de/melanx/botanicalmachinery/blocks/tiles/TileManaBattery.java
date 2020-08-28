@@ -6,6 +6,7 @@ import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.util.LazyOptional;
@@ -17,7 +18,12 @@ import java.util.function.Supplier;
 
 public class TileManaBattery extends TileBase {
 
+    private static final String TAG_SLOT_1_LOCKED = "slot1Locked";
+    private static final String TAG_SLOT_2_LOCKED = "slot2Locked";
+
     private static final int MANA_TRANSFER_RATE = 5000;
+    private boolean slot1Locked;
+    private boolean slot2Locked;
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, slot -> this.sendPacket = true, this::isValidStack);
 
@@ -35,10 +41,24 @@ public class TileManaBattery extends TileBase {
     public boolean isValidStack(int slot, ItemStack stack) {
         if (stack.getItem() instanceof IManaItem) {
             IManaItem item = (IManaItem) stack.getItem();
-            if (slot == 0 && item.getMana(stack) >= item.getMaxMana(stack)) return false;
-            if (slot == 1 && item.getMana(stack) <= 0) return false;
+            if (slot == 0 && (item.getMana(stack) >= item.getMaxMana(stack) || this.slot1Locked)) return false;
+            if (slot == 1 && (item.getMana(stack) <= 0 || this.slot2Locked)) return false;
         }
         return stack.getItem() instanceof IManaItem;
+    }
+
+    @Override
+    public void writePacketNBT(CompoundNBT cmp) {
+        super.writePacketNBT(cmp);
+        cmp.putBoolean(TAG_SLOT_1_LOCKED, this.slot1Locked);
+        cmp.putBoolean(TAG_SLOT_2_LOCKED, this.slot2Locked);
+    }
+
+    @Override
+    public void readPacketNBT(CompoundNBT cmp) {
+        super.readPacketNBT(cmp);
+        this.slot1Locked = cmp.getBoolean(TAG_SLOT_1_LOCKED);
+        this.slot2Locked = cmp.getBoolean(TAG_SLOT_2_LOCKED);
     }
 
     @Override
@@ -90,6 +110,30 @@ public class TileManaBattery extends TileBase {
                     }
                 }
             }
+        }
+    }
+
+    public boolean isSlot1Locked() {
+        return this.slot1Locked;
+    }
+
+    public boolean isSlot2Locked() {
+        return this.slot2Locked;
+    }
+
+    public void setSlot1Locked(boolean slot1Locked) {
+        // Do not remove the condition! (Because of packets)
+        if (slot1Locked != this.slot1Locked) {
+            this.slot1Locked = slot1Locked;
+            this.markDirty();
+        }
+    }
+
+    public void setSlot2Locked(boolean slot2Locked) {
+        // Do not remove the condition! (Because of packets)
+        if (slot2Locked != this.slot2Locked) {
+            this.slot2Locked = slot2Locked;
+            this.markDirty();
         }
     }
 

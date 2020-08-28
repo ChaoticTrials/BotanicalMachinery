@@ -29,10 +29,10 @@ public abstract class ScreenBase<X extends ContainerBase<?>> extends ContainerSc
     }
 
     @Override
-    public void init(@Nonnull Minecraft p_init_1_, int p_init_2_, int p_init_3_) {
-        super.init(p_init_1_, p_init_2_, p_init_3_);
-        this.relX = (p_init_2_ - this.xSize) / 2;
-        this.relY = (p_init_3_ - this.ySize) / 2;
+    public void init(@Nonnull Minecraft mc, int x, int y) {
+        super.init(mc, x, y);
+        this.relX = (x - this.xSize) / 2;
+        this.relY = (y - this.ySize) / 2;
     }
 
     @Override

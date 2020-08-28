@@ -15,8 +15,8 @@ public class ContainerManaBattery extends ContainerBase<TileManaBattery> {
     public ContainerManaBattery(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
         super(Registration.CONTAINER_MANA_BATTERY.get(), windowId, world, pos, playerInventory, player, 2, 2);
         IItemHandlerModifiable inventory = ((TileBase) this.tile).getInventory().getUnrestricted();
-        this.addSlot(new SlotItemHandler(inventory, 0, 53, 35));
-        this.addSlot(new SlotItemHandler(inventory, 1, 107, 35));
+        this.addSlot(new SlotItemHandler(inventory, 0, 53, 25));
+        this.addSlot(new SlotItemHandler(inventory, 1, 107, 25));
         this.layoutPlayerInventorySlots(8, 84);
     }
 }
