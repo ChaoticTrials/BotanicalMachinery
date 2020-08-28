@@ -9,10 +9,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
 public class ScreenMechanicalBrewery extends ScreenBase<ContainerMechanicalBrewery> {
-
-    private static int i;
-    private long lastTime;
-
     public ScreenMechanicalBrewery(ContainerMechanicalBrewery container, PlayerInventory inv, ITextComponent titleIn) {
         super(container, inv, titleIn);
         this.ySize = 192;
