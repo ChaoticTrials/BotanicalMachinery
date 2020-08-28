@@ -12,6 +12,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.ItemHandlerHelper;
 import vazkii.botania.api.recipe.IRuneAltarRecipe;
+import vazkii.botania.client.fx.SparkleParticleData;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 import vazkii.botania.common.lib.ModTags;
@@ -21,18 +22,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TileMechanicalRunicAltar extends TileBase {
 
     public static final int WORKING_DURATION = 100;
     public static final String TAG_PROGRESS = "progress";
+    public static final String TAG_USED_SLOTS = "slotsUsed";
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, slot -> this.update = true, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, slot -> {
+        this.update = true;
+        this.sendPacket = true;
+    }, this::isValidStack);
     private IRuneAltarRecipe recipe = null;
     private boolean initDone;
     private int progress;
     private boolean update = true;
+    private final List<Integer> slotsUsed = new ArrayList<>();
 
     public TileMechanicalRunicAltar() {
         super(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), 500_000);
@@ -89,6 +96,7 @@ public class TileMechanicalRunicAltar extends TileBase {
                 }
             }
         }
+        this.slotsUsed.clear();
         this.recipe = null;
     }
 
@@ -104,12 +112,15 @@ public class TileMechanicalRunicAltar extends TileBase {
     public void writePacketNBT(CompoundNBT cmp) {
         super.writePacketNBT(cmp);
         cmp.putInt(TAG_PROGRESS, this.progress);
+        cmp.putIntArray(TAG_USED_SLOTS, this.slotsUsed);
     }
 
     @Override
     public void readPacketNBT(CompoundNBT cmp) {
         super.readPacketNBT(cmp);
         this.progress = cmp.getInt(TAG_PROGRESS);
+        this.slotsUsed.clear();
+        this.slotsUsed.addAll(Arrays.stream(cmp.getIntArray(TAG_USED_SLOTS)).boxed().collect(Collectors.toList()));
     }
 
     @Override
@@ -157,6 +168,13 @@ public class TileMechanicalRunicAltar extends TileBase {
             if (this.update) {
                 this.updateRecipe();
                 this.update = false;
+            }
+        } else if (this.world != null) {
+            if (this.progress >= (WORKING_DURATION - 5)) {
+                for (int i = 0; i < 5; ++i) {
+                    SparkleParticleData data = SparkleParticleData.sparkle(this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), 10);
+                    this.world.addParticle(data, this.pos.getX() + 0.3 + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.7, this.pos.getZ() + 0.3 + (this.world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
+                }
             }
         }
     }
@@ -206,5 +224,9 @@ public class TileMechanicalRunicAltar extends TileBase {
 
     public int getProgress() {
         return this.progress;
+    }
+
+    public boolean isSlotUsedCurrently(int slot) {
+        return this.slotsUsed.contains(slot);
     }
 }

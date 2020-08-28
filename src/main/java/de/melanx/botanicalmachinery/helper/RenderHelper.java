@@ -1,17 +1,27 @@
 package de.melanx.botanicalmachinery.helper;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.melanx.botanicalmachinery.core.LibResources;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.Direction;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 public class RenderHelper {
 
@@ -73,5 +83,69 @@ public class RenderHelper {
             }
             pixelsRenderedX += pixelsNowX;
         }
+    }
+
+    public static void renderItemTinted(ItemStack stack, ItemCameraTransforms.TransformType transformType, int light, int overlay, MatrixStack matrixStack, IRenderTypeBuffer buffer, float r, float g, float b) {
+        if (!stack.isEmpty()) {
+            boolean isGui = transformType == ItemCameraTransforms.TransformType.GUI;
+            boolean isFixed = isGui || transformType == ItemCameraTransforms.TransformType.GROUND || transformType == ItemCameraTransforms.TransformType.FIXED;
+
+            IBakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelWithOverrides(stack, null, null);
+            model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(matrixStack, model, transformType, false);
+
+            matrixStack.push();
+            matrixStack.translate(-0.5D, -0.5D, -0.5D);
+
+            if (!model.isBuiltInRenderer() && (stack.getItem() != Items.TRIDENT || isFixed)) {
+                RenderType type = RenderTypeLookup.getRenderType(stack);
+                if (isGui && Objects.equals(type, Atlases.getTranslucentBlockType())) {
+                    type = Atlases.getTranslucentCullBlockType();
+                }
+
+                IVertexBuilder ivertexbuilder = ItemRenderer.getBuffer(buffer, type, true, stack.hasEffect());
+                renderTintedModel(model, light, overlay, matrixStack, ivertexbuilder, r, g, b);
+            } else {
+                //noinspection deprecation
+                GlStateManager.color4f(r, g, b, 1);
+                stack.getItem().getItemStackTileEntityRenderer().render(stack, matrixStack, buffer, light, overlay);
+                //noinspection deprecation
+                GlStateManager.color4f(1, 1, 1, 1);
+            }
+
+            matrixStack.pop();
+        }
+    }
+
+    private static void renderTintedModel(IBakedModel model, int light, int overlay, MatrixStack matrixStack, IVertexBuilder buffer, float r, float g, float b) {
+        Random random = new Random();
+
+        for (Direction direction : Direction.values()) {
+            random.setSeed(42);
+            //noinspection deprecation
+            renderTintedQuads(matrixStack, buffer, model.getQuads(null, direction, random), light, overlay, r, g, b);
+        }
+
+        random.setSeed(42);
+        //noinspection deprecation
+        renderTintedQuads(matrixStack, buffer, model.getQuads(null, null, random), light, overlay, r, g, b);
+    }
+
+    private static void renderTintedQuads(MatrixStack matrixStack, IVertexBuilder buffer, List<BakedQuad> quads, int light, int overlay, float r, float g, float b) {
+        MatrixStack.Entry entry = matrixStack.getLast();
+
+        for (BakedQuad bakedquad : quads) {
+            buffer.addVertexData(entry, bakedquad, r, g, b, light, overlay, true);
+        }
+    }
+
+    public static void renderIconColored(MatrixStack matrixStack, IVertexBuilder buffer, float x, float y, TextureAtlasSprite sprite, float width, float height, float alpha, int color, int light, int overlay) {
+        int red = color >> 16 & 255;
+        int green = color >> 8 & 255;
+        int blue = color & 255;
+        Matrix4f mat = matrixStack.getLast().getMatrix();
+        buffer.pos(mat, x, y + height, 0.0F).color(red, green, blue, (int)(alpha * 255.0F)).tex(sprite.getMinU(), sprite.getMaxV()).overlay(overlay).lightmap(light).normal(0.0F, 0.0F, 1.0F).endVertex();
+        buffer.pos(mat, x + width, y + height, 0.0F).color(red, green, blue, (int)(alpha * 255.0F)).tex(sprite.getMaxU(), sprite.getMaxV()).overlay(overlay).lightmap(light).normal(0.0F, 0.0F, 1.0F).endVertex();
+        buffer.pos(mat, x + width, y, 0.0F).color(red, green, blue, (int)(alpha * 255.0F)).tex(sprite.getMaxU(), sprite.getMinV()).overlay(overlay).lightmap(light).normal(0.0F, 0.0F, 1.0F).endVertex();
+        buffer.pos(mat, x, y, 0.0F).color(red, green, blue, (int)(alpha * 255.0F)).tex(sprite.getMinU(), sprite.getMinV()).overlay(overlay).lightmap(light).normal(0.0F, 0.0F, 1.0F).endVertex();
     }
 }

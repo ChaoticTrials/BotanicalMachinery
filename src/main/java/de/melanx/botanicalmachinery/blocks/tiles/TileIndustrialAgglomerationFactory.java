@@ -5,6 +5,7 @@ import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import vazkii.botania.client.fx.WispParticleData;
 import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.item.ModItems;
 import vazkii.botania.common.lib.ModTags;
@@ -16,7 +17,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
     public static final int RECIPE_COST = TilePool.MAX_MANA / 2;
     public static final int WORKING_DURATION = 100;
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(4, null, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(4, slot -> this.sendPacket = true, this::isValidStack);
     private int progress;
     private boolean recipe;
 
@@ -83,6 +84,23 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
                 this.markDispatchable();
             } else if (this.recipe) {
                 this.recipe = false;
+            }
+        } else if (this.world != null) {
+            if (this.progress > 0) {
+                double time = this.progress / (double) WORKING_DURATION;
+                if (time < 0.8) {
+                    time = time * 1.25;
+                    double y = this.pos.getY() + 6 / 16d + ((5 / 16d) * time);
+                    double x1 = this.pos.getX() + 0.2 + (0.3 * time);
+                    double x2 = this.pos.getX() + 0.8 - (0.3 * time);
+                    double z1 = this.pos.getZ() + 0.2 + (0.3 * time);
+                    double z2 = this.pos.getZ() + 0.8 - (0.3 * time);
+                    WispParticleData data = WispParticleData.wisp(0.1f, 0, (float) time, (float) (1 - time), 1);
+                    this.world.addParticle(data, x1, y, z1, 0, 0, 0);
+                    this.world.addParticle(data, x1, y, z2, 0, 0, 0);
+                    this.world.addParticle(data, x2, y, z1, 0, 0, 0);
+                    this.world.addParticle(data, x2, y, z2, 0, 0, 0);
+                }
             }
         }
     }

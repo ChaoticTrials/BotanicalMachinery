@@ -12,6 +12,8 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -22,8 +24,11 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
+import vazkii.botania.api.recipe.ICustomApothecaryColor;
 import vazkii.botania.api.recipe.IPetalRecipe;
+import vazkii.botania.client.fx.SparkleParticleData;
 import vazkii.botania.common.block.tile.TileMod;
+import vazkii.botania.common.core.handler.ModSounds;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
@@ -42,9 +47,13 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
     public static final String TAG_INV = "inv";
     public static final String TAG_FLUID = "fluid";
     public static final String TAG_PROGRESS = "progress";
+    private static final String TAG_CURRENT_OUTPUT = "currentOutput";
 
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.createLazy(this::getInventory);
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(21, slot -> this.update = true, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(21, slot -> {
+        this.update = true;
+        this.sendPacket = true;
+    }, this::isValidStack);
     private final ModdedFluidTank fluidInventory = new ModdedFluidTank(FLUID_CAPACITY, fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER));
     private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.fluidInventory);
     private IPetalRecipe recipe = null;
@@ -52,6 +61,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
     private int progress;
     private boolean update;
     private boolean sendPacket;
+    private ItemStack currentOutput = ItemStack.EMPTY;
 
     public TileMechanicalApothecary() {
         super(Registration.TILE_MECHANICAL_APOTHECARY.get());
@@ -86,11 +96,14 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
                 if (recipe instanceof IPetalRecipe) {
                     if (RecipeHelper.checkIngredients(stacks, items, recipe) && !this.inventory.getStackInSlot(0).isEmpty() && this.fluidInventory.getFluidAmount() >= 1000) {
                         this.recipe = (IPetalRecipe) recipe;
+                        this.currentOutput = this.recipe.getRecipeOutput().copy();
+                        this.sendPacket = true;
                         return;
                     }
                 }
             }
         }
+        this.currentOutput = ItemStack.EMPTY;
         this.recipe = null;
     }
 
@@ -140,6 +153,35 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
                 this.updateRecipe();
                 this.update = false;
             }
+        } else if (this.world != null) {
+            if (this.fluidInventory.getFluidAmount() > 0) {
+                if (this.progress > WORKING_DURATION - 5) {
+                    for (int i = 0; i < 5; i++) {
+                        SparkleParticleData data = SparkleParticleData.sparkle(this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), 10);
+                        this.world.addParticle(data, this.pos.getX() + 0.3 + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.6, this.pos.getZ() + 0.3 + (this.world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
+                    }
+                    this.world.playSound(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5, ModSounds.altarCraft, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+                } else {
+                    for (int slot = 0; slot < this.inventory.getSlots(); slot++) {
+                        ItemStack stack = this.inventory.getStackInSlot(slot);
+                        if (stack.isEmpty()) {
+                            continue;
+                        }
+
+                        if (this.world.rand.nextFloat() >= 0.97f) {
+                            int color = stack.getItem() instanceof ICustomApothecaryColor ? ((ICustomApothecaryColor) stack.getItem()).getParticleColor(stack) : 0x888888;
+                            float red = (float) (color >> 16 & 255) / 255f;
+                            float green = (float) (color >> 8 & 255) / 255f;
+                            float blue = (float) (color & 255) / 255f;
+                            if (Math.random() >= 0.75) {
+                                this.world.playSound(null, this.pos, SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.1F, 10.0F);
+                            }
+                            SparkleParticleData data = SparkleParticleData.sparkle(this.world.rand.nextFloat(), red, green, blue, 10);
+                            this.world.addParticle(data, this.pos.getX() + 0.3 + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.6, this.pos.getZ() + 0.3 + (this.world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -173,6 +215,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
         this.getFluidInventory().getFluid().writeToNBT(tankTag);
         cmp.put(TAG_FLUID, tankTag);
         cmp.putInt(TAG_PROGRESS, this.progress);
+        cmp.put(TAG_CURRENT_OUTPUT, this.currentOutput.serializeNBT());
     }
 
     @Override
@@ -180,6 +223,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
         this.getInventory().deserializeNBT(cmp.getCompound(TAG_INV));
         this.fluidInventory.setFluid(FluidStack.loadFluidStackFromNBT(cmp.getCompound(TAG_FLUID)));
         this.progress = cmp.getInt(TAG_PROGRESS);
+        this.currentOutput = ItemStack.read(cmp.getCompound(TAG_CURRENT_OUTPUT));
     }
 
     @Nonnull
@@ -191,6 +235,10 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
             return this.fluidHandler.cast();
         }
         return super.getCapability(cap, side);
+    }
+
+    public ItemStack getCurrentOutput() {
+        return this.currentOutput;
     }
 
     private class ModdedFluidTank extends FluidTank {

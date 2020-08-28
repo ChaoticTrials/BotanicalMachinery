@@ -27,13 +27,20 @@ public class TileAlfheimMarket extends TileBase {
     public static final int WORKING_DURATION = 20;
     private static final int RECIPE_COST = 500;
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(5, slot -> this.update = true, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(5, slot -> {
+        this.update = true;
+        this.sendPacket = true;
+    }, this::isValidStack);
     private IElvenTradeRecipe recipe = null;
     private boolean initDone;
     private int progress;
     private boolean update;
+    private ItemStack currentInput = ItemStack.EMPTY;
+    private ItemStack currentOutput = ItemStack.EMPTY;
 
     private static final String TAG_PROGRESS = "progress";
+    private static final String TAG_CURRENT_INPUT = "currentInput";
+    private static final String TAG_CURRENT_OUTPUT = "currentOutput";
 
     public TileAlfheimMarket() {
         super(Registration.TILE_ALFHEIM_MARKET.get(), 500_000);
@@ -63,11 +70,16 @@ public class TileAlfheimMarket extends TileBase {
                 if (recipe instanceof IElvenTradeRecipe) {
                     if (RecipeHelper.checkIngredients(stacks, items, recipe)) {
                         this.recipe = (IElvenTradeRecipe) recipe;
+                        this.currentInput = getInputStack(this.recipe).copy();
+                        this.currentOutput = this.recipe.getOutputs().get(0).copy();
+                        this.sendPacket = true;
                         return;
                     }
                 }
             }
         }
+        this.currentInput = ItemStack.EMPTY;
+        this.currentOutput = ItemStack.EMPTY;
         this.recipe = null;
     }
 
@@ -75,12 +87,16 @@ public class TileAlfheimMarket extends TileBase {
     public void writePacketNBT(CompoundNBT cmp) {
         super.writePacketNBT(cmp);
         cmp.putInt(TAG_PROGRESS, this.progress);
+        cmp.put(TAG_CURRENT_INPUT, this.currentInput.serializeNBT());
+        cmp.put(TAG_CURRENT_OUTPUT, this.currentOutput.serializeNBT());
     }
 
     @Override
     public void readPacketNBT(CompoundNBT cmp) {
         super.readPacketNBT(cmp);
         this.progress = cmp.getInt(TAG_PROGRESS);
+        this.currentInput = ItemStack.read(cmp.getCompound(TAG_CURRENT_INPUT));
+        this.currentOutput = ItemStack.read(cmp.getCompound(TAG_CURRENT_OUTPUT));
     }
 
     @Override
@@ -141,5 +157,22 @@ public class TileAlfheimMarket extends TileBase {
 
     public int getProgress() {
         return this.progress;
+    }
+
+    private static ItemStack getInputStack(IElvenTradeRecipe recipe) {
+        if (recipe.getIngredients().isEmpty())
+            return ItemStack.EMPTY;
+        ItemStack[] stacks = recipe.getIngredients().get(0).getMatchingStacks();
+        if (stacks.length == 0)
+            return ItemStack.EMPTY;
+        return stacks[0];
+    }
+
+    public ItemStack getCurrentInput() {
+        return this.currentInput;
+    }
+
+    public ItemStack getCurrentOutput() {
+        return this.currentOutput;
     }
 }

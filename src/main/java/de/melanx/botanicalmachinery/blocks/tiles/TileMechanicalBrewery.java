@@ -10,7 +10,9 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import vazkii.botania.api.brew.IBrewContainer;
+import vazkii.botania.api.brew.IBrewItem;
 import vazkii.botania.api.recipe.IBrewRecipe;
+import vazkii.botania.client.fx.WispParticleData;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 import vazkii.botania.common.item.ModItems;
 
@@ -25,13 +27,18 @@ public class TileMechanicalBrewery extends TileBase {
     public static final List<Item> BREW_CONTAINER = Arrays.asList(ModItems.vial.asItem(), ModItems.flask.asItem(), ModItems.incenseStick.asItem(), ModItems.bloodPendant.asItem());
     public static final String TAG_PROGRESS = "progress";
     public static final String TAG_WORKING_DURATION = "workingDuration";
+    private static final String TAG_CURRENT_OUTPUT = "currentOutput";
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(8, slot -> this.update = true, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(8, slot -> {
+        this.update = true;
+        this.sendPacket = true;
+    }, this::isValidStack);
     private IBrewRecipe recipe = null;
     private boolean initDone;
     private int progress;
     private int workingDuration = -1;
     private boolean update;
+    private ItemStack currentOutput = ItemStack.EMPTY;
 
     public TileMechanicalBrewery() {
         super(Registration.TILE_MECHANICAL_BREWERY.get(), 100_000);
@@ -66,11 +73,18 @@ public class TileMechanicalBrewery extends TileBase {
                 if (recipe instanceof IBrewRecipe) {
                     if (RecipeHelper.checkIngredients(stacks, items, recipe)) {
                         this.recipe = (IBrewRecipe) recipe;
+                        if (this.inventory.getStackInSlot(0).isEmpty() || !(this.inventory.getStackInSlot(0).getItem() instanceof IBrewContainer)) {
+                            this.currentOutput = ItemStack.EMPTY;
+                        } else {
+                            this.currentOutput = ((IBrewContainer) this.inventory.getStackInSlot(0).getItem()).getItemForBrew(this.recipe.getBrew(), this.inventory.getStackInSlot(0).copy());
+                        }
+                        this.sendPacket = true;
                         return;
                     }
                 }
             }
         }
+        this.currentOutput = ItemStack.EMPTY;
         this.recipe = null;
     }
 
@@ -79,6 +93,7 @@ public class TileMechanicalBrewery extends TileBase {
         super.writePacketNBT(cmp);
         cmp.putInt(TAG_PROGRESS, this.progress);
         cmp.putInt(TAG_WORKING_DURATION, this.workingDuration);
+        cmp.put(TAG_CURRENT_OUTPUT, this.currentOutput.serializeNBT());
     }
 
     @Override
@@ -86,6 +101,7 @@ public class TileMechanicalBrewery extends TileBase {
         super.readPacketNBT(cmp);
         this.progress = cmp.getInt(TAG_PROGRESS);
         this.workingDuration = cmp.getInt(TAG_WORKING_DURATION);
+        this.currentOutput = ItemStack.read(cmp.getCompound(TAG_CURRENT_OUTPUT));
     }
 
     @Override
@@ -103,7 +119,7 @@ public class TileMechanicalBrewery extends TileBase {
                 ItemStack currentOutput = this.inventory.getStackInSlot(7);
                 if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemStacksEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
                     int recipeCost = this.getManaCost();
-                    this.workingDuration = recipeCost / 100;
+                    this.workingDuration = recipeCost / 50;
                     if (this.getCurrentMana() >= recipeCost || this.progress > 0 && this.progress <= this.workingDuration) {
                         ++this.progress;
                         this.receiveMana(-(recipeCost / this.workingDuration));
@@ -140,6 +156,27 @@ public class TileMechanicalBrewery extends TileBase {
                 this.markDirty();
                 this.markDispatchable();
             }
+        } else if (this.world != null) {
+            if (this.progress > 0) {
+                if (this.currentOutput.getItem() instanceof IBrewItem && this.world.rand.nextFloat() < 0.5f) {
+                    int segments = 3;
+                    for (int i = 1; i <= 6; i++) {
+                        if (!this.inventory.getStackInSlot(i).isEmpty()) {
+                            segments += 1;
+                        }
+                    }
+                    if (this.progress < (segments - 1) * (this.workingDuration / (double) segments) && this.progress > (segments - 2) * (this.workingDuration / (double) segments)) {
+                        int targetColor = ((IBrewItem) this.currentOutput.getItem()).getBrew(this.currentOutput).getColor(this.currentOutput);
+                        float red = (targetColor >> 16 & 255) / 255f;
+                        float green = (targetColor >> 8 & 255) / 255f;
+                        float blue = (targetColor & 255) / 255f;
+                        WispParticleData data = WispParticleData.wisp(0.125f, red, green, blue, 0.5f);
+                        double xPos = this.pos.getX() + 0.25 + (this.world.rand.nextDouble() / 2);
+                        double zPos = this.pos.getZ() + 0.25 + (this.world.rand.nextDouble() / 2);
+                        this.world.addParticle(data, xPos, this.pos.getY() + 0.35, zPos, 0, 0.01 + (this.world.rand.nextDouble() / 18), 0);
+                    }
+                }
+            }
         }
     }
 
@@ -163,5 +200,9 @@ public class TileMechanicalBrewery extends TileBase {
         }
         IBrewContainer container = (IBrewContainer) stack.getItem();
         return container.getManaCost(this.recipe.getBrew(), stack);
+    }
+
+    public ItemStack getCurrentOutput() {
+        return this.currentOutput;
     }
 }

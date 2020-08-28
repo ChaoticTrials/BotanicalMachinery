@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 public class TileManaBattery extends TileBase {
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, null, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, slot -> this.sendPacket = true, this::isValidStack);
 
     public TileManaBattery() {
         super(Registration.TILE_MANA_BATTERY.get(), 10_000_000);

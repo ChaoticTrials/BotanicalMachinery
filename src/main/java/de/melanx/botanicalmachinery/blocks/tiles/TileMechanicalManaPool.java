@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import vazkii.botania.api.mana.ManaNetworkEvent;
 import vazkii.botania.api.recipe.IManaInfusionRecipe;
+import vazkii.botania.client.fx.WispParticleData;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.core.handler.ManaNetworkHandler;
@@ -65,6 +66,7 @@ public class TileMechanicalManaPool extends TileBase {
                 this.validRecipe = stack.isEmpty();
             }
         }
+        this.sendPacket = true;
         this.markDirty();
     }
 
@@ -99,6 +101,15 @@ public class TileMechanicalManaPool extends TileBase {
                         this.inventory.getUnrestricted().insertItem(2, output, false);
                         this.markDirty();
                     }
+                }
+            } else {
+                double particleChance = (this.getCurrentMana() / (double) this.getManaCap()) * 0.1D;
+                if (Math.random() < particleChance) {
+                    float red = 0.0F;
+                    float green = 0.7764706F;
+                    float blue = 1.0F;
+                    WispParticleData data = WispParticleData.wisp((float) Math.random() / 3.0F, red, green, blue, 2.0F);
+                    this.world.addParticle(data, this.pos.getX() + 0.3D + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.5D + (this.world.rand.nextDouble() * 0.25D), this.pos.getZ() + 0.3D + (this.world.rand.nextDouble() * 0.4), 0, this.world.rand.nextFloat() / 25, 0);
                 }
             }
         }

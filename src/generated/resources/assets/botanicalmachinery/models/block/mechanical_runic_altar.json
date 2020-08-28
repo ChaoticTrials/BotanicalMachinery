@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "side": "botanicalmachinery:block/mechanical_runic_altar_side",
-    "front": "botanicalmachinery:block/mechanical_runic_altar_front",
-    "top": "botanicalmachinery:block/machine_top"
-  }
-}

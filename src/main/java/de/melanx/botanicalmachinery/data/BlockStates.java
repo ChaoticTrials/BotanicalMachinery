@@ -23,6 +23,12 @@ public class BlockStates extends BlockStateProvider {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
             if (block == Registration.BLOCK_MECHANICAL_DAISY.get()) {
                 this.createStateForManualModel(builder, block);
+            } else if (block == Registration.BLOCK_ALFHEIM_MARKET.get()
+                    || block == Registration.BLOCK_MECHANICAL_MANA_POOL.get()
+                    || block == Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get()
+                    || block == Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get()
+                    || block == Registration.BLOCK_MECHANICAL_BREWERY.get()) {
+                this.createStateForManualModelRotatable(builder, block);
             } else if (block == Registration.BLOCK_MANA_BATTERY.get()) {
                 this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY + "_top"));
             } else if (block instanceof BlockBase || block == Registration.BLOCK_MECHANICAL_APOTHECARY.get()) {
@@ -34,6 +40,7 @@ public class BlockStates extends BlockStateProvider {
     }
 
     private ModelFile modelDefault(Block block) {
+        @SuppressWarnings("ConstantConditions")
         String name = block.getRegistryName().getPath();
         return this.models().cubeAll(name, this.modLoc("block/" + name));
     }
@@ -55,5 +62,14 @@ public class BlockStates extends BlockStateProvider {
     private void createStateForManualModel(VariantBlockStateBuilder builder, Block block) {
         //noinspection ConstantConditions
         builder.partialState().addModels(new ConfiguredModel(this.models().getExistingFile(new ResourceLocation(BotanicalMachinery.MODID, "block/" + block.getRegistryName().getPath()))));
+    }
+
+    private void createStateForManualModelRotatable(VariantBlockStateBuilder builder, Block block) {
+        @SuppressWarnings("ConstantConditions")
+        ModelFile model = this.models().getExistingFile(new ResourceLocation(BotanicalMachinery.MODID, "block/" + block.getRegistryName().getPath()));
+        for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getAllowedValues()) {
+            builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, direction)
+                    .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));
+        }
     }
 }
