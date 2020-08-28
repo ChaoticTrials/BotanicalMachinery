@@ -29,7 +29,6 @@ public class TesrMechanicalApothecary extends HorizontalRotatedTesr<TileMechanic
 
     @Override
     protected void doRender(@Nonnull TileMechanicalApothecary tile, float partialTicks, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
-
         if (!tile.getInventory().getStackInSlot(0).isEmpty()) {
             float time = ClientTickHandler.ticksInGame + partialTicks;
 
@@ -58,7 +57,6 @@ public class TesrMechanicalApothecary extends HorizontalRotatedTesr<TileMechanic
         double fluidAmount = (tile.getFluidInventory().getFluidAmount() - ((tile.getProgress() / (double) TileMechanicalApothecary.WORKING_DURATION) * 1000d)) / (double) tile.getFluidInventory().getCapacity();
 
         if (tile.getFluidInventory().getFluidAmount() > 0) {
-
             matrixStack.push();
             matrixStack.translate(4 / 16d, (10 + (fluidAmount * 3.8)) / 16, 4 / 16d);
             matrixStack.rotate(Vector3f.XP.rotationDegrees(90.0F));
@@ -73,9 +71,7 @@ public class TesrMechanicalApothecary extends HorizontalRotatedTesr<TileMechanic
             RenderHelper.renderIconColored(matrixStack, vertex, 0, 0, sprite, 8, 8, 1.0F, fluidColor, light, OverlayTexture.NO_OVERLAY);
 
             matrixStack.pop();
-
         }
-
 
         int items = 0;
         for (int slot : tile.getInventory().getInputSlots()) {

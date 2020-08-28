@@ -50,7 +50,10 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
     private static final String TAG_CURRENT_OUTPUT = "currentOutput";
 
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.createLazy(this::getInventory);
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(21, slot -> {this.update = true; this.sendPacket = true;}, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(21, slot -> {
+        this.update = true;
+        this.sendPacket = true;
+    }, this::isValidStack);
     private final ModdedFluidTank fluidInventory = new ModdedFluidTank(FLUID_CAPACITY, fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER));
     private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.fluidInventory);
     private IPetalRecipe recipe = null;
@@ -153,7 +156,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
         } else if (this.world != null) {
             if (this.fluidInventory.getFluidAmount() > 0) {
                 if (this.progress > WORKING_DURATION - 5) {
-                    for(int i = 0; i < 5; i++) {
+                    for (int i = 0; i < 5; i++) {
                         SparkleParticleData data = SparkleParticleData.sparkle(this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), 10);
                         this.world.addParticle(data, this.pos.getX() + 0.3 + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.6, this.pos.getZ() + 0.3 + (this.world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
                     }

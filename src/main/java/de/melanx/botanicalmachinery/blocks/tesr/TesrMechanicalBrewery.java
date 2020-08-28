@@ -241,7 +241,6 @@ public class TesrMechanicalBrewery extends HorizontalRotatedTesr<TileMechanicalB
     private void renderFluid(MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, float partialTicks, int light, float fillLevel, int color) {
         matrixStack.push();
         matrixStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
-        System.out.println("FL" + fillLevel);
         matrixStack.translate(4, 3 + (4.4 * fillLevel), 4);
         matrixStack.rotate(Vector3f.XP.rotationDegrees(90));
 

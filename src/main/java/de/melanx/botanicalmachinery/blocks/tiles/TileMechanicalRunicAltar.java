@@ -29,6 +29,7 @@ public class TileMechanicalRunicAltar extends TileBase {
 
     public static final int WORKING_DURATION = 100;
     public static final String TAG_PROGRESS = "progress";
+    public static final String TAG_USED_SLOTS = "slotsUsed";
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, slot -> {
         this.update = true;
@@ -111,7 +112,7 @@ public class TileMechanicalRunicAltar extends TileBase {
     public void writePacketNBT(CompoundNBT cmp) {
         super.writePacketNBT(cmp);
         cmp.putInt(TAG_PROGRESS, this.progress);
-        cmp.putIntArray("slotsUsed", this.slotsUsed);
+        cmp.putIntArray(TAG_USED_SLOTS, this.slotsUsed);
     }
 
     @Override
@@ -119,7 +120,7 @@ public class TileMechanicalRunicAltar extends TileBase {
         super.readPacketNBT(cmp);
         this.progress = cmp.getInt(TAG_PROGRESS);
         this.slotsUsed.clear();
-        this.slotsUsed.addAll(Arrays.stream(cmp.getIntArray("slotsUsed")).boxed().collect(Collectors.toList()));
+        this.slotsUsed.addAll(Arrays.stream(cmp.getIntArray(TAG_USED_SLOTS)).boxed().collect(Collectors.toList()));
     }
 
     @Override
@@ -170,7 +171,7 @@ public class TileMechanicalRunicAltar extends TileBase {
             }
         } else if (this.world != null) {
             if (this.progress >= (WORKING_DURATION - 5)) {
-                for(int i = 0; i < 5; ++i) {
+                for (int i = 0; i < 5; ++i) {
                     SparkleParticleData data = SparkleParticleData.sparkle(this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), 10);
                     this.world.addParticle(data, this.pos.getX() + 0.3 + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.7, this.pos.getZ() + 0.3 + (this.world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
                 }
