@@ -26,6 +26,11 @@
                   "op": "replace"
                 },
                 {
+                  "source": "progress",
+                  "target": "BlockEntityTag.progress",
+                  "op": "replace"
+                },
+                {
                   "source": "slot1Locked",
                   "target": "BlockEntityTag.slot1Locked",
                   "op": "replace"

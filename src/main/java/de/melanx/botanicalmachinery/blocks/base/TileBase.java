@@ -3,6 +3,7 @@ package de.melanx.botanicalmachinery.blocks.base;
 import com.google.common.base.Predicates;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.melanx.botanicalmachinery.blocks.BlockManaBattery;
+import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
 import net.minecraft.client.Minecraft;
@@ -36,16 +37,10 @@ import java.util.function.Supplier;
 
 public abstract class TileBase extends TileMod implements IManaPool, IManaMachineTile, IKeyLocked, ISparkAttachable, IThrottledPacket, ITickableTileEntity {
 
-    public static final String TAG_INV = "inv";
-    public static final String TAG_MANA = "mana";
-    public static final String TAG_MANA_CAP = "manaCap";
-    public static final String TAG_INPUT_KEY = "inputKey";
-    public static final String TAG_OUTPUT_KEY = "outputKey";
-
     public int mana;
-    private int manaCap;
+    private final int manaCap;
     public String inputKey = "";
-    public final String outputKey = "";
+    public String outputKey = "";
 
     public boolean sendPacket = false;
 
@@ -81,21 +76,18 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
 
     @Override
     public void writePacketNBT(CompoundNBT cmp) {
-        cmp.put(TAG_INV, this.getInventory().serializeNBT());
-        cmp.putInt(TAG_MANA, this.getCurrentMana());
-        cmp.putInt(TAG_MANA_CAP, this.getManaCap());
-        cmp.putString(TAG_INPUT_KEY, this.inputKey);
-        cmp.putString(TAG_OUTPUT_KEY, this.outputKey);
+        cmp.put(TileTags.INVENTORY, this.getInventory().serializeNBT());
+        cmp.putInt(TileTags.MANA, this.getCurrentMana());
+        cmp.putString(TileTags.INPUT_KEY, this.inputKey);
+        cmp.putString(TileTags.OUTPUT_KEY, this.outputKey);
     }
 
     @Override
     public void readPacketNBT(CompoundNBT cmp) {
-        this.getInventory().deserializeNBT(cmp.getCompound(TAG_INV));
-        this.mana = cmp.getInt(TAG_MANA);
-        this.manaCap = cmp.getInt(TAG_MANA_CAP);
-
-        if (cmp.contains(TAG_INPUT_KEY)) this.inputKey = cmp.getString(TAG_INPUT_KEY);
-        if (cmp.contains(TAG_OUTPUT_KEY)) this.inputKey = cmp.getString(TAG_OUTPUT_KEY);
+        this.getInventory().deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
+        this.mana = cmp.getInt(TileTags.MANA);
+        if (cmp.contains(TileTags.INPUT_KEY)) this.inputKey = cmp.getString(TileTags.INPUT_KEY);
+        if (cmp.contains(TileTags.OUTPUT_KEY)) this.outputKey = cmp.getString(TileTags.OUTPUT_KEY);
     }
 
     @OnlyIn(Dist.CLIENT)

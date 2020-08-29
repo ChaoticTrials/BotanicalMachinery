@@ -26,7 +26,7 @@ public class TesrIndustrialAgglomerationFactory extends HorizontalRotatedTesr<Ti
 
     @Override
     protected void doRender(@Nonnull TileIndustrialAgglomerationFactory tile, float partialTicks, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
-        double progressLeft = 1 - (tile.getProgress() / (double) TileIndustrialAgglomerationFactory.WORKING_DURATION);
+        double progressLeft = 1 - (tile.getProgress() / (double) tile.getMaxProgress());
 
         this.renderStack(tile.getInventory().getStackInSlot(0), matrixStack, buffer, partialTicks, progressLeft, 0);
         this.renderStack(tile.getInventory().getStackInSlot(1), matrixStack, buffer, partialTicks, progressLeft, 120);
@@ -51,7 +51,7 @@ public class TesrIndustrialAgglomerationFactory extends HorizontalRotatedTesr<Ti
             matrixStack.translate(6.2 / 16, 4.7 / 16, 6.2 / 16);
             matrixStack.scale(3.6f / 16, 3.6f / 16, 3.6f / 16);
 
-            float alphaMod = 50000 * (tile.getProgress() / (float) TileIndustrialAgglomerationFactory.WORKING_DURATION);
+            float alphaMod = 50000 * (tile.getProgress() / (float) tile.getMaxProgress());
             matrixStack.rotate(Vector3f.XP.rotationDegrees(90));
             matrixStack.translate(0, 0, -0.18850000202655792);
             float alpha = (float) ((Math.sin((ClientTickHandler.ticksInGame + partialTicks) / 8) + 1) / 5 + 0.6) * alphaMod;

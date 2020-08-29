@@ -14,18 +14,7 @@
             {
               "function": "minecraft:copy_nbt",
               "source": "block_entity",
-              "ops": [
-                {
-                  "source": "inv",
-                  "target": "BlockEntityTag.inv",
-                  "op": "replace"
-                },
-                {
-                  "source": "mana",
-                  "target": "BlockEntityTag.mana",
-                  "op": "replace"
-                }
-              ]
+              "ops": []
             }
           ],
           "name": "botanicalmachinery:mana_emerald_block"

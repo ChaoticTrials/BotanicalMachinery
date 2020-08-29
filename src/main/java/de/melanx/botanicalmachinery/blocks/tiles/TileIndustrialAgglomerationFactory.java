@@ -1,7 +1,9 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
+import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -12,16 +14,14 @@ import vazkii.botania.common.lib.ModTags;
 
 import javax.annotation.Nonnull;
 
-public class TileIndustrialAgglomerationFactory extends TileBase {
+public class TileIndustrialAgglomerationFactory extends TileBase implements IWorkingTile {
 
     public static final int RECIPE_COST = TilePool.MAX_MANA / 2;
-    public static final int WORKING_DURATION = 100;
+    public static final int MAX_MANA_PER_TICK = RECIPE_COST / 100;
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(4, slot -> this.sendPacket = true, this::isValidStack);
     private int progress;
     private boolean recipe;
-
-    private static final String TAG_PROGRESS = "progress";
 
     public TileIndustrialAgglomerationFactory() {
         super(Registration.TILE_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), 1_000_000);
@@ -45,13 +45,13 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
     @Override
     public void writePacketNBT(CompoundNBT cmp) {
         super.writePacketNBT(cmp);
-        cmp.putInt(TAG_PROGRESS, this.progress);
+        cmp.putInt(TileTags.PROGRESS, this.progress);
     }
 
     @Override
     public void readPacketNBT(CompoundNBT cmp) {
         super.readPacketNBT(cmp);
-        this.progress = cmp.getInt(TAG_PROGRESS);
+        this.progress = cmp.getInt(TileTags.PROGRESS);
     }
 
     @Override
@@ -65,10 +65,10 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
             if (!manasteel.isEmpty() && !manadiamond.isEmpty() &&
                     !manapearl.isEmpty() && output.getCount() < 64) {
                 this.recipe = true;
-                if (this.getCurrentMana() >= RECIPE_COST || this.progress > 0 && this.progress <= WORKING_DURATION) {
-                    ++this.progress;
-                    this.receiveMana(-(RECIPE_COST / WORKING_DURATION));
-                    if (this.progress >= WORKING_DURATION) {
+                    int manaTransfer = Math.min(this.mana, Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
+                    this.progress += manaTransfer;
+                    this.receiveMana(-manaTransfer);
+                    if (this.progress >= this.getMaxProgress()) {
                         manasteel.shrink(1);
                         manadiamond.shrink(1);
                         manapearl.shrink(1);
@@ -76,7 +76,6 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
                         this.recipe = false;
                     }
                     this.markDirty();
-                }
             }
             if (!this.recipe && this.progress > 0) {
                 this.progress = 0;
@@ -87,7 +86,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
             }
         } else if (this.world != null) {
             if (this.progress > 0) {
-                double time = this.progress / (double) WORKING_DURATION;
+                double time = this.progress / (double) this.getMaxProgress();
                 if (time < 0.8) {
                     time = time * 1.25;
                     double y = this.pos.getY() + 6 / 16d + ((5 / 16d) * time);
@@ -107,5 +106,9 @@ public class TileIndustrialAgglomerationFactory extends TileBase {
 
     public int getProgress() {
         return this.progress;
+    }
+
+    public int getMaxProgress() {
+        return RECIPE_COST;
     }
 }

@@ -1,7 +1,9 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
+import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import net.minecraft.item.Item;
@@ -23,11 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-public class TileMechanicalBrewery extends TileBase {
+public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
+
+    public static final int MAX_MANA_PER_TICK = 50;
+
     public static final List<Item> BREW_CONTAINER = Arrays.asList(ModItems.vial.asItem(), ModItems.flask.asItem(), ModItems.incenseStick.asItem(), ModItems.bloodPendant.asItem());
-    public static final String TAG_PROGRESS = "progress";
-    public static final String TAG_WORKING_DURATION = "workingDuration";
-    private static final String TAG_CURRENT_OUTPUT = "currentOutput";
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(8, slot -> {
         this.update = true;
@@ -36,7 +38,7 @@ public class TileMechanicalBrewery extends TileBase {
     private IBrewRecipe recipe = null;
     private boolean initDone;
     private int progress;
-    private int workingDuration = -1;
+    private int maxProgress = -1;
     private boolean update;
     private ItemStack currentOutput = ItemStack.EMPTY;
 
@@ -91,17 +93,17 @@ public class TileMechanicalBrewery extends TileBase {
     @Override
     public void writePacketNBT(CompoundNBT cmp) {
         super.writePacketNBT(cmp);
-        cmp.putInt(TAG_PROGRESS, this.progress);
-        cmp.putInt(TAG_WORKING_DURATION, this.workingDuration);
-        cmp.put(TAG_CURRENT_OUTPUT, this.currentOutput.serializeNBT());
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
+        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
     }
 
     @Override
     public void readPacketNBT(CompoundNBT cmp) {
         super.readPacketNBT(cmp);
-        this.progress = cmp.getInt(TAG_PROGRESS);
-        this.workingDuration = cmp.getInt(TAG_WORKING_DURATION);
-        this.currentOutput = ItemStack.read(cmp.getCompound(TAG_CURRENT_OUTPUT));
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
+        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
     }
 
     @Override
@@ -118,29 +120,27 @@ public class TileMechanicalBrewery extends TileBase {
                 ItemStack output = this.recipe.getOutput(this.inventory.getStackInSlot(0)).copy();
                 ItemStack currentOutput = this.inventory.getStackInSlot(7);
                 if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemStacksEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
-                    int recipeCost = this.getManaCost();
-                    this.workingDuration = recipeCost / 50;
-                    if (this.getCurrentMana() >= recipeCost || this.progress > 0 && this.progress <= this.workingDuration) {
-                        ++this.progress;
-                        this.receiveMana(-(recipeCost / this.workingDuration));
-                        if (this.progress >= this.workingDuration) {
-                            if (currentOutput.isEmpty()) {
-                                this.inventory.setStackInSlot(7, output);
-                            } else {
-                                currentOutput.setCount(currentOutput.getCount() + output.getCount());
-                            }
-                            this.inventory.getStackInSlot(0).shrink(1);
-                            for (Ingredient ingredient : this.recipe.getIngredients()) {
-                                for (ItemStack stack : this.inventory.getStacks()) {
-                                    if (ingredient.test(stack)) {
-                                        stack.shrink(1);
-                                        break;
-                                    }
+                    this.maxProgress = this.getManaCost();
+                    int manaTransfer = Math.min(this.mana, Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
+                    this.progress += manaTransfer;
+                    this.receiveMana(-manaTransfer);
+                    if (this.progress >= this.getMaxProgress()) {
+                        if (currentOutput.isEmpty()) {
+                            this.inventory.setStackInSlot(7, output);
+                        } else {
+                            currentOutput.setCount(currentOutput.getCount() + output.getCount());
+                        }
+                        this.inventory.getStackInSlot(0).shrink(1);
+                        for (Ingredient ingredient : this.recipe.getIngredients()) {
+                            for (ItemStack stack : this.inventory.getStacks()) {
+                                if (ingredient.test(stack)) {
+                                    stack.shrink(1);
+                                    break;
                                 }
                             }
-                            this.update = true;
-                            done = true;
                         }
+                        this.update = true;
+                        done = true;
                     }
                     this.markDirty();
                     this.markDispatchable();
@@ -152,7 +152,7 @@ public class TileMechanicalBrewery extends TileBase {
             }
             if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
                 this.progress = 0;
-                this.workingDuration = -1;
+                this.maxProgress = -1;
                 this.markDirty();
                 this.markDispatchable();
             }
@@ -165,7 +165,7 @@ public class TileMechanicalBrewery extends TileBase {
                             segments += 1;
                         }
                     }
-                    if (this.progress < (segments - 1) * (this.workingDuration / (double) segments) && this.progress > (segments - 2) * (this.workingDuration / (double) segments)) {
+                    if (this.progress < (segments - 1) * (this.maxProgress / (double) segments) && this.progress > (segments - 2) * (this.maxProgress / (double) segments)) {
                         int targetColor = ((IBrewItem) this.currentOutput.getItem()).getBrew(this.currentOutput).getColor(this.currentOutput);
                         float red = (targetColor >> 16 & 255) / 255f;
                         float green = (targetColor >> 8 & 255) / 255f;
@@ -189,8 +189,8 @@ public class TileMechanicalBrewery extends TileBase {
         return this.progress;
     }
 
-    public int getWorkingDuration() {
-        return this.workingDuration;
+    public int getMaxProgress() {
+        return this.maxProgress;
     }
 
     public int getManaCost() {
