@@ -21,6 +21,13 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class LootTables extends LootTableProvider {
+
+    public static final String TAG_INVENTORY = "inv";
+    public static final String TAG_MANA = "mana";
+    public static final String TAG_WORKING_TICKS = "workingTicks";
+    public static final String TAG_SLOT1_LOCKED = "slot1Locked";
+    public static final String TAG_SLOT2_LOCKED = "slot2Locked";
+
     public LootTables(DataGenerator gen) {
         super(gen);
     }
@@ -42,10 +49,13 @@ public class LootTables extends LootTableProvider {
         @Override
         protected void addTables() {
             for (RegistryObject<Block> block : Registration.BLOCKS.getEntries()) {
-                if (block.get() != Registration.BLOCK_MECHANICAL_DAISY.get()) {
-                    this.registerLootTable(block.get(), this.droppingWithMana(block.get()));
+                if (block.get() == Registration.BLOCK_MECHANICAL_DAISY.get()) {
+                    this.registerLootTable(block.get(), this.droppingWith(block.get(), TAG_INVENTORY, TAG_WORKING_TICKS));
+                } else if (block.get() == Registration.BLOCK_MANA_BATTERY.get()
+                        || block.get() == Registration.BLOCK_MANA_BATTERY_CREATIVE.get()) {
+                    this.registerLootTable(block.get(), this.droppingWith(block.get(), TAG_INVENTORY, TAG_MANA, TAG_SLOT1_LOCKED, TAG_SLOT2_LOCKED));
                 } else {
-                    this.registerLootTable(block.get(), this.droppingWithInventoryAndWorkingTicks(block.get()));
+                    this.registerLootTable(block.get(), this.droppingWith(block.get(), TAG_INVENTORY, TAG_MANA));
                 }
             }
         }
@@ -56,18 +66,14 @@ public class LootTables extends LootTableProvider {
             return Registration.BLOCKS.getEntries().stream().map(RegistryObject::get)::iterator;
         }
 
-        protected LootTable.Builder droppingWithMana(Block block) {
-            return LootTable.builder().addLootPool(withSurvivesExplosion(block, LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(block)
-                    .acceptFunction(CopyName.builder(CopyName.Source.BLOCK_ENTITY)).acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY)
-                            .replaceOperation("inv", "BlockEntityTag.inv")
-                            .replaceOperation("mana", "BlockEntityTag.mana")))));
-        }
+        protected LootTable.Builder droppingWith(Block block, String... tags) {
+            CopyNbt.Builder builder = CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY);
+            for (String tag : tags) {
+                builder.replaceOperation(tag, "BlockEntityTag." + tag);
+            }
 
-        protected LootTable.Builder droppingWithInventoryAndWorkingTicks(Block block) {
             return LootTable.builder().addLootPool(withSurvivesExplosion(block, LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(block)
-                    .acceptFunction(CopyName.builder(CopyName.Source.BLOCK_ENTITY)).acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY)
-                            .replaceOperation("inv", "BlockEntityTag.inv")
-                            .replaceOperation("workingTicks", "BlockEntityTag.workingTicks")))));
+                    .acceptFunction(CopyName.builder(CopyName.Source.BLOCK_ENTITY)).acceptFunction(builder))));
         }
     }
 }

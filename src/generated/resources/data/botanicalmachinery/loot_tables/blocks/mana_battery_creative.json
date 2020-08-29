@@ -24,6 +24,16 @@
                   "source": "mana",
                   "target": "BlockEntityTag.mana",
                   "op": "replace"
+                },
+                {
+                  "source": "slot1Locked",
+                  "target": "BlockEntityTag.slot1Locked",
+                  "op": "replace"
+                },
+                {
+                  "source": "slot2Locked",
+                  "target": "BlockEntityTag.slot2Locked",
+                  "op": "replace"
                 }
               ]
             }

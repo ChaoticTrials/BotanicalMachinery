@@ -63,7 +63,7 @@ public class TileManaBattery extends TileBase {
 
     @Override
     public int getCurrentMana() {
-        return ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.CREATIVE ? this.getManaCap() : this.mana;
+        return ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.CREATIVE ? this.getManaCap() / 2 : this.mana;
     }
 
     @Override
