@@ -46,7 +46,7 @@ public class TesrMechanicalRunicAltar extends HorizontalRotatedTesr<TileMechanic
             matrixStack.pop();
         }
 
-        double progressLeft = 1 - ((tile.getProgress() / (double) TileMechanicalRunicAltar.WORKING_DURATION) * 0.9);
+        double progressLeft = 1 - ((tile.getProgress() / (double) tile.getMaxProgress()) * 0.9);
 
         int items = 0;
         for (int slot : tile.getInventory().getInputSlots()) {

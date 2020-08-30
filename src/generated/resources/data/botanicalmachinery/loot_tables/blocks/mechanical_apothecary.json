@@ -24,6 +24,21 @@
                   "source": "mana",
                   "target": "BlockEntityTag.mana",
                   "op": "replace"
+                },
+                {
+                  "source": "progress",
+                  "target": "BlockEntityTag.progress",
+                  "op": "replace"
+                },
+                {
+                  "source": "fluid",
+                  "target": "BlockEntityTag.fluid",
+                  "op": "replace"
+                },
+                {
+                  "source": "maxProgress",
+                  "target": "BlockEntityTag.maxProgress",
+                  "op": "replace"
                 }
               ]
             }

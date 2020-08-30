@@ -1,7 +1,9 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
+import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import net.minecraft.entity.item.ItemEntity;
@@ -25,11 +27,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TileMechanicalRunicAltar extends TileBase {
+public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile  {
 
-    public static final int WORKING_DURATION = 100;
-    public static final String TAG_PROGRESS = "progress";
-    public static final String TAG_USED_SLOTS = "slotsUsed";
+    public static final int MAX_MANA_PER_TICK = 100;
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, slot -> {
         this.update = true;
@@ -38,6 +38,7 @@ public class TileMechanicalRunicAltar extends TileBase {
     private IRuneAltarRecipe recipe = null;
     private boolean initDone;
     private int progress;
+    private int maxProgress;
     private boolean update = true;
     private final List<Integer> slotsUsed = new ArrayList<>();
 
@@ -74,22 +75,31 @@ public class TileMechanicalRunicAltar extends TileBase {
                         stacksToTest.add(recipe.getRecipeOutput());
                         for (Ingredient ingredient : recipe.getIngredients()) {
                             for (ItemStack stack : this.inventory.getStacks()) {
-                                if (ingredient.test(stack) && ModTags.Items.RUNES.contains(stack.getItem())) {
-                                    ItemStack rune = stack.copy();
-                                    rune.setCount(1);
-                                    for (ItemStack testStack : stacksToTest) {
-                                        if (ItemHandlerHelper.canItemStacksStack(testStack, rune)) {
-                                            testStack.grow(1);
-                                            break;
+                                if (ingredient.test(stack)) {
+                                    if (ModTags.Items.RUNES.contains(stack.getItem())) {
+                                        ItemStack rune = stack.copy();
+                                        rune.setCount(1);
+                                        for (ItemStack testStack : stacksToTest) {
+                                            if (ItemHandlerHelper.canItemStacksStack(testStack, rune)) {
+                                                testStack.grow(1);
+                                                break;
+                                            }
                                         }
+                                        stacksToTest.add(rune);
+                                        break;
                                     }
-                                    stacksToTest.add(rune);
-                                    break;
                                 }
                             }
                         }
                         if (this.canInsertAll(stacksToTest)) {
                             this.recipe = (IRuneAltarRecipe) recipe;
+                            this.slotsUsed.clear();
+                            for (Ingredient ingredient : recipe.getIngredients()) {
+                                for (int slot : this.inventory.getInputSlots()) {
+                                    if (!this.slotsUsed.contains(slot) && ingredient.test(this.inventory.getStackInSlot(slot)))
+                                        this.slotsUsed.add(slot);
+                                }
+                            }
                             return;
                         }
                     }
@@ -111,16 +121,18 @@ public class TileMechanicalRunicAltar extends TileBase {
     @Override
     public void writePacketNBT(CompoundNBT cmp) {
         super.writePacketNBT(cmp);
-        cmp.putInt(TAG_PROGRESS, this.progress);
-        cmp.putIntArray(TAG_USED_SLOTS, this.slotsUsed);
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
+        cmp.putIntArray(TileTags.SLOTS_USED, this.slotsUsed);
     }
 
     @Override
     public void readPacketNBT(CompoundNBT cmp) {
         super.readPacketNBT(cmp);
-        this.progress = cmp.getInt(TAG_PROGRESS);
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
         this.slotsUsed.clear();
-        this.slotsUsed.addAll(Arrays.stream(cmp.getIntArray(TAG_USED_SLOTS)).boxed().collect(Collectors.toList()));
+        this.slotsUsed.addAll(Arrays.stream(cmp.getIntArray(TileTags.SLOTS_USED)).boxed().collect(Collectors.toList()));
     }
 
     @Override
@@ -133,35 +145,36 @@ public class TileMechanicalRunicAltar extends TileBase {
             }
             boolean done = false;
             if (this.recipe != null) {
-                if (this.getCurrentMana() >= this.recipe.getManaUsage() || this.progress > 0 && this.progress <= WORKING_DURATION) {
-                    ++this.progress;
-                    this.receiveMana(-(this.recipe.getManaUsage() / WORKING_DURATION));
-                    if (this.progress >= WORKING_DURATION) {
-                        ItemStack output = this.recipe.getRecipeOutput().copy();
-                        for (Ingredient ingredient : this.recipe.getIngredients()) {
-                            for (ItemStack stack : this.inventory.getStacks()) {
-                                if (ingredient.test(stack)) {
-                                    if (ModTags.Items.RUNES.contains(stack.getItem())) {
-                                        ItemStack rune = stack.copy();
-                                        rune.setCount(1);
-                                        this.putIntoOutputOrDrop(rune);
-                                    }
-                                    stack.shrink(1);
-                                    break;
+                this.maxProgress = this.recipe.getManaUsage();
+                int manaTransfer = Math.min(this.mana, Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
+                this.progress += manaTransfer;
+                this.receiveMana(-manaTransfer);
+                if (this.progress >= this.getMaxProgress()) {
+                    ItemStack output = this.recipe.getRecipeOutput().copy();
+                    for (Ingredient ingredient : this.recipe.getIngredients()) {
+                        for (ItemStack stack : this.inventory.getStacks()) {
+                            if (ingredient.test(stack)) {
+                                if (ModTags.Items.RUNES.contains(stack.getItem())) {
+                                    ItemStack rune = stack.copy();
+                                    rune.setCount(1);
+                                    this.putIntoOutputOrDrop(rune);
                                 }
+                                stack.shrink(1);
+                                break;
                             }
                         }
-                        this.inventory.getStackInSlot(0).shrink(1);
-                        this.putIntoOutputOrDrop(output);
-                        this.update = true;
-                        done = true;
                     }
-                    this.markDirty();
-                    this.markDispatchable();
+                    this.inventory.getStackInSlot(0).shrink(1);
+                    this.putIntoOutputOrDrop(output);
+                    this.update = true;
+                    done = true;
                 }
+                this.markDirty();
+                this.markDispatchable();
             }
             if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
                 this.progress = 0;
+                this.maxProgress = -1;
                 this.markDirty();
                 this.markDispatchable();
             }
@@ -170,7 +183,7 @@ public class TileMechanicalRunicAltar extends TileBase {
                 this.update = false;
             }
         } else if (this.world != null) {
-            if (this.progress >= (WORKING_DURATION - 5)) {
+            if (this.getMaxProgress() > 0 && this.progress >= (this.getMaxProgress() - (5 * MAX_MANA_PER_TICK))) {
                 for (int i = 0; i < 5; ++i) {
                     SparkleParticleData data = SparkleParticleData.sparkle(this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), 10);
                     this.world.addParticle(data, this.pos.getX() + 0.3 + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.7, this.pos.getZ() + 0.3 + (this.world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
@@ -224,6 +237,10 @@ public class TileMechanicalRunicAltar extends TileBase {
 
     public int getProgress() {
         return this.progress;
+    }
+
+    public int getMaxProgress() {
+        return this.maxProgress;
     }
 
     public boolean isSlotUsedCurrently(int slot) {

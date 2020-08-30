@@ -20,13 +20,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class LootTables extends LootTableProvider {
+import static de.melanx.botanicalmachinery.core.TileTags.*;
 
-    public static final String TAG_INVENTORY = "inv";
-    public static final String TAG_MANA = "mana";
-    public static final String TAG_WORKING_TICKS = "workingTicks";
-    public static final String TAG_SLOT1_LOCKED = "slot1Locked";
-    public static final String TAG_SLOT2_LOCKED = "slot2Locked";
+public class LootTables extends LootTableProvider {
 
     public LootTables(DataGenerator gen) {
         super(gen);
@@ -49,13 +45,26 @@ public class LootTables extends LootTableProvider {
         @Override
         protected void addTables() {
             for (RegistryObject<Block> block : Registration.BLOCKS.getEntries()) {
-                if (block.get() == Registration.BLOCK_MECHANICAL_DAISY.get()) {
-                    this.registerLootTable(block.get(), this.droppingWith(block.get(), TAG_INVENTORY, TAG_WORKING_TICKS));
-                } else if (block.get() == Registration.BLOCK_MANA_BATTERY.get()
-                        || block.get() == Registration.BLOCK_MANA_BATTERY_CREATIVE.get()) {
-                    this.registerLootTable(block.get(), this.droppingWith(block.get(), TAG_INVENTORY, TAG_MANA, TAG_SLOT1_LOCKED, TAG_SLOT2_LOCKED));
-                } else {
-                    this.registerLootTable(block.get(), this.droppingWith(block.get(), TAG_INVENTORY, TAG_MANA));
+                if (block.get() == Registration.BLOCK_MANA_EMERALD.get()) {
+                    this.registerLootTable(block.get(), this.droppingWith(block.get()));
+                } else if (block.get() == Registration.BLOCK_ALFHEIM_MARKET.get()) {
+                    this.registerLootTable(block.get(), this.droppingWith(block.get(), INVENTORY, MANA, PROGRESS));
+                } else if (block.get() == Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get()) {
+                    this.registerLootTable(block.get(), this.droppingWith(block.get(), INVENTORY, MANA, PROGRESS));
+                } else if (block.get() == Registration.BLOCK_MANA_BATTERY.get()) {
+                    this.registerLootTable(block.get(), this.droppingWith(block.get(), INVENTORY, MANA, PROGRESS, SLOT_1_LOCKED, SLOT_2_LOCKED));
+                } else if (block.get() == Registration.BLOCK_MANA_BATTERY_CREATIVE.get()) {
+                    this.registerLootTable(block.get(), this.droppingWith(block.get(), INVENTORY, MANA, PROGRESS, SLOT_1_LOCKED, SLOT_2_LOCKED));
+                } else if (block.get() == Registration.BLOCK_MECHANICAL_APOTHECARY.get()) {
+                    this.registerLootTable(block.get(), this.droppingWith(block.get(), INVENTORY, MANA, PROGRESS, FLUID, MAX_PROGRESS));
+                } else if (block.get() == Registration.BLOCK_MECHANICAL_BREWERY.get()) {
+                    this.registerLootTable(block.get(), this.droppingWith(block.get(), INVENTORY, MANA, PROGRESS, MAX_PROGRESS));
+                } else if (block.get() == Registration.BLOCK_MECHANICAL_DAISY.get()) {
+                    this.registerLootTable(block.get(), this.droppingWith(block.get(), INVENTORY, WORKING_TICKS));
+                } else if (block.get() == Registration.BLOCK_MECHANICAL_MANA_POOL.get()) {
+                    this.registerLootTable(block.get(), this.droppingWith(block.get(), INVENTORY, MANA));
+                } else if (block.get() == Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get()) {
+                    this.registerLootTable(block.get(), this.droppingWith(block.get(), INVENTORY, MANA, PROGRESS, MAX_PROGRESS));
                 }
             }
         }

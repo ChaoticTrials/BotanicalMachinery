@@ -1,6 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
@@ -154,17 +155,17 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
 
     @Override
     public void writePacketNBT(CompoundNBT tag) {
-        tag.put("inv", this.inventory.serializeNBT());
-        tag.putIntArray("workingTicks", this.workingTicks);
+        tag.put(TileTags.INVENTORY, this.inventory.serializeNBT());
+        tag.putIntArray(TileTags.WORKING_TICKS, this.workingTicks);
     }
 
     @Override
     public void readPacketNBT(CompoundNBT tag) {
-        if (tag.contains("inv")) {
-            this.inventory.deserializeNBT(tag.getCompound("inv"));
+        if (tag.contains(TileTags.INVENTORY)) {
+            this.inventory.deserializeNBT(tag.getCompound(TileTags.INVENTORY));
         }
-        if (tag.contains("workingTicks")) {
-            this.workingTicks = tag.getIntArray("workingTicks");
+        if (tag.contains(TileTags.WORKING_TICKS)) {
+            this.workingTicks = tag.getIntArray(TileTags.WORKING_TICKS);
         }
     }
 

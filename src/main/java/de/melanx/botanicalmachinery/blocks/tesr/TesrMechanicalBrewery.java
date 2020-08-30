@@ -82,7 +82,7 @@ public class TesrMechanicalBrewery extends HorizontalRotatedTesr<TileMechanicalB
         boolean showOutput = false;
 
         if (tile.getProgress() > 0) {
-            double progress = tile.getProgress() / (double) tile.getWorkingDuration();
+            double progress = tile.getProgress() / (double) tile.getMaxProgress();
 
             int segments = 3;
             for (int i = 1; i <= 6; i++) {

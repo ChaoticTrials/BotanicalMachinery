@@ -24,7 +24,7 @@ public class ScreenMechanicalRunicAltar extends ScreenBase<ContainerMechanicalRu
         RenderHelper.renderFadedItem(this, ModBlocks.livingrock.asItem(), this.relX + 90, this.relY + 43);
         TileMechanicalRunicAltar tile = (TileMechanicalRunicAltar) this.container.tile;
         if (tile.getProgress() > 0) {
-            float pct = Math.min(tile.getProgress() / (float) TileMechanicalRunicAltar.WORKING_DURATION, 1.0F);
+            float pct = Math.min(tile.getProgress() / (float) tile.getMaxProgress(), 1.0F);
             //noinspection ConstantConditions
             this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_RUNIC_ALTAR_GUI);
             vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(this.relX + 87, this.relY + 64, this.xSize, 0, Math.round(22 * pct), 16);

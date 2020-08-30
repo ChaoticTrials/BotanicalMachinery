@@ -24,6 +24,11 @@
                   "source": "mana",
                   "target": "BlockEntityTag.mana",
                   "op": "replace"
+                },
+                {
+                  "source": "progress",
+                  "target": "BlockEntityTag.progress",
+                  "op": "replace"
                 }
               ]
             }

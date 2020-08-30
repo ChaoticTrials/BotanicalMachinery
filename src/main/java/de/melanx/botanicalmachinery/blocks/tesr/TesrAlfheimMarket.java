@@ -56,7 +56,7 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
         }
 
         if (tile.getProgress() > 0) {
-            double progress = (tile.getProgress() - (TileAlfheimMarket.WORKING_DURATION / 2d)) / (TileAlfheimMarket.WORKING_DURATION / 2d);
+            double progress = (tile.getProgress() - (tile.getMaxProgress() / 2d)) / (tile.getMaxProgress() / 2d);
             ItemStack stack = progress < 0 ? tile.getCurrentInput() : tile.getCurrentOutput();
             if (!stack.isEmpty()) {
                 double yPos = Math.pow(progress, 2);

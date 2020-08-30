@@ -25,7 +25,7 @@ public class ScreenIndustrialAgglomerationFactory extends ScreenBase<ContainerIn
         RenderHelper.renderFadedItem(this, ModItems.manaPearl, this.relX + 99, this.relY + 83);
         TileIndustrialAgglomerationFactory tile = (TileIndustrialAgglomerationFactory) this.container.tile;
         if (tile.getProgress() > 0) {
-            float pct = Math.min(tile.getProgress() / 100.0F, 1.0F);
+            float pct = Math.min(tile.getProgress() / (float) tile.getMaxProgress(), 1.0F);
             //noinspection ConstantConditions
             this.minecraft.getTextureManager().bindTexture(LibResources.INDUSTRIAL_AGGLOMERATION_FACTORY_GUI);
             vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(this.relX + 73, this.relY + 76, 176, 25, 30, Math.round(-(25 * pct)));

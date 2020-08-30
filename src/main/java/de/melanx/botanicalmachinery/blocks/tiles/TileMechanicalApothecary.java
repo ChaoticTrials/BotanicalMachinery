@@ -1,6 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
@@ -44,10 +45,6 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
 
     public static final int WORKING_DURATION = 20;
     public static final int FLUID_CAPACITY = 8000;
-    public static final String TAG_INV = "inv";
-    public static final String TAG_FLUID = "fluid";
-    public static final String TAG_PROGRESS = "progress";
-    private static final String TAG_CURRENT_OUTPUT = "currentOutput";
 
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.createLazy(this::getInventory);
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(21, slot -> {
@@ -210,20 +207,20 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
 
     @Override
     public void writePacketNBT(CompoundNBT cmp) {
-        cmp.put(TAG_INV, this.getInventory().serializeNBT());
+        cmp.put(TileTags.INVENTORY, this.getInventory().serializeNBT());
         final CompoundNBT tankTag = new CompoundNBT();
         this.getFluidInventory().getFluid().writeToNBT(tankTag);
-        cmp.put(TAG_FLUID, tankTag);
-        cmp.putInt(TAG_PROGRESS, this.progress);
-        cmp.put(TAG_CURRENT_OUTPUT, this.currentOutput.serializeNBT());
+        cmp.put(TileTags.FLUID, tankTag);
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
     }
 
     @Override
     public void readPacketNBT(CompoundNBT cmp) {
-        this.getInventory().deserializeNBT(cmp.getCompound(TAG_INV));
-        this.fluidInventory.setFluid(FluidStack.loadFluidStackFromNBT(cmp.getCompound(TAG_FLUID)));
-        this.progress = cmp.getInt(TAG_PROGRESS);
-        this.currentOutput = ItemStack.read(cmp.getCompound(TAG_CURRENT_OUTPUT));
+        this.getInventory().deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
+        this.fluidInventory.setFluid(FluidStack.loadFluidStackFromNBT(cmp.getCompound(TileTags.FLUID)));
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
     }
 
     @Nonnull
