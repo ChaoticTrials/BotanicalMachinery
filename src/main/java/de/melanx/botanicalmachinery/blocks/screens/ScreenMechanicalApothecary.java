@@ -55,7 +55,7 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
             RenderHelper.renderFadedItem(this, ImmutableList.copyOf(Tags.Items.SEEDS.getAllElements()), this.relX + 90, this.relY + 43);
 
         if (this.tile.getProgress() > 0) {
-            float pctProgress = Math.min(this.tile.getProgress() / (float) TileMechanicalApothecary.WORKING_DURATION, 1.0F);
+            float pctProgress = Math.min(this.tile.getProgress() / (float) TileMechanicalApothecary.getRecipeDuration(), 1.0F);
             this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
             vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(this.relX + 87, this.relY + 64, this.xSize, 0, Math.round(22 * pctProgress), 16);
         }

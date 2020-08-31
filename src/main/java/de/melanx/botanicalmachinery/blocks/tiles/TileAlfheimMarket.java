@@ -2,6 +2,7 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
@@ -110,7 +111,7 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
                 List<ItemStack> outputs = new ArrayList<>(this.recipe.getOutputs());
                 if (outputs.size() == 1) {
                     if (this.inventory.getUnrestricted().insertItem(4, outputs.get(0), true).isEmpty()) {
-                        int manaTransfer = Math.min(this.mana, Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
+                        int manaTransfer = Math.min(this.mana, Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
                         this.progress += manaTransfer;
                         this.receiveMana(-manaTransfer);
                         if (this.progress >= RECIPE_COST) {
@@ -159,6 +160,10 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
 
     public int getMaxProgress() {
         return RECIPE_COST;
+    }
+
+    public int getMaxManaPerTick() {
+        return MAX_MANA_PER_TICK * ServerConfig.alfheimMarket.get();
     }
 
     private static ItemStack getInputStack(IElvenTradeRecipe recipe) {

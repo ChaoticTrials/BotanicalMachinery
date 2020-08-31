@@ -1,5 +1,6 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
+import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
@@ -60,7 +61,7 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
             if (recipe != null) {
                 //noinspection ConstantConditions
                 if (!this.world.isRemote) {
-                    if (this.workingTicks[i] >= recipe.getTime()) {
+                    if (this.workingTicks[i] >= recipe.getTime() * ServerConfig.daisy.get()) {
                         BlockState state = recipe.getOutputState();
                         if (state.getBlock().asItem() != Items.AIR) {
                             //noinspection deprecation

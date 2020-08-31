@@ -2,6 +2,7 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
@@ -191,6 +192,10 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
 
     public int getMaxProgress() {
         return this.maxProgress;
+    }
+
+    public int getMaxManaPerTick() {
+        return MAX_MANA_PER_TICK / ServerConfig.brewery.get();
     }
 
     public int getManaCost() {

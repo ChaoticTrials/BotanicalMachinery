@@ -2,6 +2,7 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
@@ -146,7 +147,7 @@ public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile  
             boolean done = false;
             if (this.recipe != null) {
                 this.maxProgress = this.recipe.getManaUsage();
-                int manaTransfer = Math.min(this.mana, Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
+                int manaTransfer = Math.min(this.mana, Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
                 this.progress += manaTransfer;
                 this.receiveMana(-manaTransfer);
                 if (this.progress >= this.getMaxProgress()) {
@@ -183,7 +184,7 @@ public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile  
                 this.update = false;
             }
         } else if (this.world != null) {
-            if (this.getMaxProgress() > 0 && this.progress >= (this.getMaxProgress() - (5 * MAX_MANA_PER_TICK))) {
+            if (this.getMaxProgress() > 0 && this.progress >= (this.getMaxProgress() - (5 * this.getMaxManaPerTick()))) {
                 for (int i = 0; i < 5; ++i) {
                     SparkleParticleData data = SparkleParticleData.sparkle(this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), 10);
                     this.world.addParticle(data, this.pos.getX() + 0.3 + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.7, this.pos.getZ() + 0.3 + (this.world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
@@ -241,6 +242,10 @@ public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile  
 
     public int getMaxProgress() {
         return this.maxProgress;
+    }
+
+    public int getMaxManaPerTick() {
+        return MAX_MANA_PER_TICK / ServerConfig.runicAltar.get();
     }
 
     public boolean isSlotUsedCurrently(int slot) {

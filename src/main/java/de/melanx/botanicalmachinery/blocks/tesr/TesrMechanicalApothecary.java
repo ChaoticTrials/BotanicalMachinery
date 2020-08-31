@@ -41,11 +41,11 @@ public class TesrMechanicalApothecary extends HorizontalRotatedTesr<TileMechanic
 
             if (tile.getProgress() > 0) {
                 int progress = tile.getProgress();
-                if (progress > TileMechanicalApothecary.WORKING_DURATION / 2) {
-                    progress = (TileMechanicalApothecary.WORKING_DURATION / 2) - Math.abs((TileMechanicalApothecary.WORKING_DURATION / 2) - progress);
+                if (progress > TileMechanicalApothecary.getRecipeDuration() / 2) {
+                    progress = (TileMechanicalApothecary.getRecipeDuration() / 2) - Math.abs((TileMechanicalApothecary.getRecipeDuration() / 2) - progress);
                     stack = tile.getCurrentOutput();
                 }
-                double amount = progress / (TileMechanicalApothecary.WORKING_DURATION / 2d);
+                double amount = progress / (TileMechanicalApothecary.getRecipeDuration() / 2d);
                 matrixStack.translate(0, -amount, 0);
             }
 
@@ -54,7 +54,7 @@ public class TesrMechanicalApothecary extends HorizontalRotatedTesr<TileMechanic
             matrixStack.pop();
         }
 
-        double fluidAmount = (tile.getFluidInventory().getFluidAmount() - ((tile.getProgress() / (double) TileMechanicalApothecary.WORKING_DURATION) * 1000d)) / (double) tile.getFluidInventory().getCapacity();
+        double fluidAmount = (tile.getFluidInventory().getFluidAmount() - ((tile.getProgress() / (double) TileMechanicalApothecary.getRecipeDuration()) * 1000d)) / (double) tile.getFluidInventory().getCapacity();
 
         if (tile.getFluidInventory().getFluidAmount() > 0) {
             matrixStack.push();
