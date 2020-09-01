@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.melanx.botanicalmachinery.blocks.base.HorizontalRotatedTesr;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
+import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Atlases;
@@ -29,6 +30,9 @@ public class TesrMechanicalApothecary extends HorizontalRotatedTesr<TileMechanic
 
     @Override
     protected void doRender(@Nonnull TileMechanicalApothecary tile, float partialTicks, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
+        if (!ClientConfig.everything.get() || !ClientConfig.apothecary.get())
+            return;
+
         if (!tile.getInventory().getStackInSlot(0).isEmpty()) {
             float time = ClientTickHandler.ticksInGame + partialTicks;
 

@@ -1,5 +1,6 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
+import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
@@ -73,7 +74,7 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
                     } else {
                         this.workingTicks[i] += 1;
                     }
-                } else if (!hasSpawnedParticles) {
+                } else if (!hasSpawnedParticles && ClientConfig.everything.get() && ClientConfig.daisy.get()) {
                     hasSpawnedParticles = true;
                     double x = this.pos.getX() + Math.random();
                     double y = this.pos.getY() + Math.random() + 0.25D;

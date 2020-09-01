@@ -2,6 +2,7 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
@@ -158,7 +159,7 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
                 this.markDispatchable();
             }
         } else if (this.world != null) {
-            if (this.progress > 0) {
+            if (this.progress > 0 && ClientConfig.everything.get() && ClientConfig.brewery.get()) {
                 if (this.currentOutput.getItem() instanceof IBrewItem && this.world.rand.nextFloat() < 0.5f) {
                     int segments = 3;
                     for (int i = 1; i <= 6; i++) {

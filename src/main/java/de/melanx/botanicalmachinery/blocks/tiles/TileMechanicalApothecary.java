@@ -1,5 +1,6 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
+import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
@@ -151,7 +152,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
                 this.updateRecipe();
                 this.update = false;
             }
-        } else if (this.world != null) {
+        } else if (this.world != null && ClientConfig.everything.get() && ClientConfig.apothecary.get()) {
             if (this.fluidInventory.getFluidAmount() > 0) {
                 if (this.progress > getRecipeDuration() - 5) {
                     for (int i = 0; i < 5; i++) {

@@ -32,7 +32,7 @@ public class ClientConfig {
 
         builder.push("advanced-rendering");
         builder.comment("Should the machine render its specific rendering if items are in the machine?");
-        everything = builder.comment("If you turn this off, the rendering is disabled for all machines and ignores the other config options")
+        everything = builder.comment("If you turn this off, the special rendering is disabled for all machines and ignores the other config options")
                 .define("all", true);
         alfheimMarket = builder.define("alfheim-market", true);
         agglomerationFactory = builder.define("industrial-agglomeration-factory", true);

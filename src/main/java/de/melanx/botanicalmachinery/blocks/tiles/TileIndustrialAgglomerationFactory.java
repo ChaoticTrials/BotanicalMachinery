@@ -2,6 +2,7 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
@@ -85,7 +86,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
             } else if (this.recipe) {
                 this.recipe = false;
             }
-        } else if (this.world != null) {
+        } else if (this.world != null && ClientConfig.everything.get() && ClientConfig.agglomerationFactory.get()) {
             if (this.progress > 0) {
                 double time = this.progress / (double) this.getMaxProgress();
                 if (time < 0.8) {

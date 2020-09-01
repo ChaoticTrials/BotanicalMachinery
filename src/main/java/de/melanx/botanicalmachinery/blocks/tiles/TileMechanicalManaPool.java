@@ -1,6 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
@@ -109,7 +110,7 @@ public class TileMechanicalManaPool extends TileBase {
                         }
                     }
                 }
-            } else {
+            } else if (ClientConfig.everything.get() && ClientConfig.agglomerationFactory.get()) {
                 double particleChance = (this.getCurrentMana() / (double) this.getManaCap()) * 0.1D;
                 if (Math.random() < particleChance) {
                     float red = 0.0F;

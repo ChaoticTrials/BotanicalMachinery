@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.melanx.botanicalmachinery.blocks.base.HorizontalRotatedTesr;
 import de.melanx.botanicalmachinery.blocks.tiles.TileAlfheimMarket;
+import de.melanx.botanicalmachinery.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -28,6 +29,9 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
 
     @Override
     public void doRender(@Nonnull TileAlfheimMarket tile, float partialTicks, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
+        if (!ClientConfig.everything.get() || !ClientConfig.alfheimMarket.get())
+            return;
+
         matrixStack.push();
         matrixStack.scale(1/16f, 1/16f, 1/16f);
         matrixStack.translate(3.2, 2, 3.6);
