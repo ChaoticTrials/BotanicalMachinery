@@ -27,7 +27,7 @@
   "lexicon.botanicalmachinery.title": "Botanical Machinery",
   "lexicon.botanicalmachinery.description": "Make your farms more compact. This is the chapter for Botanical Machinery, a mod by MelanX.",
   "lexicon.botanicalmachinery.introduction": "A new discovery",
-  "lexicon.botanicalmachinery.introduction.page1": "Elementium has some properties many didn't notice at all. Just setting the to a continuous stream of mana using a $(l:botania:baubles/aura_ring)Greater Band of Aura$() it makes the machines of a botanist available to the world of technic where everything is controlled by pipes. But even the elves don't fully understand this effect and it's not known if it's safe to change the machines of a botanist that much.",
+  "lexicon.botanicalmachinery.introduction.page1": "It is said that $(d)Elementium$(0) possesses certain properties, many of which still need to be uncovered. Using the $(l:botania:baubles/aura_ring)Greater Band of Aura$(), one can put $(d)Elementium$(0) under a constant stream of Mana. Thus, increasing the effectiveness of a botanist's machines by introducing them to the world of modern technology. However, even the elves don't fully grasp the extend of this undergoing and it is unknown if it's safe to tinker with these machines in such a way.",
 
   "lexicon.botanicalmachinery.mana_battery": "Mana Battery",
   "lexicon.botanicalmachinery.mana_battery.recipe": "This is all you need",
@@ -35,23 +35,23 @@
 
   "lexicon.botanicalmachinery.alfheim_market": "Alfheim Market",
   "lexicon.botanicalmachinery.alfheim_market.recipe": "Make the market",
-  "lexicon.botanicalmachinery.alfheim_market.page1": "This one block has a tiny version of an alfheim portal inside. It allows you to trade with the elves without having a gigantic portal around. Just be careful to not put any bread in...",
+  "lexicon.botanicalmachinery.alfheim_market.page1": "This single block has a tiny version of an Alfheim Portal inside. It allows for trade with the elves without the need of having a gigantic portal around. Just be careful not to put any bread inside...",
 
   "lexicon.botanicalmachinery.industrial_agglomeration_factory": "I.A. Factory",
   "lexicon.botanicalmachinery.industrial_agglomeration_factory.recipe": "Can only be powered by green energy",
-  "lexicon.botanicalmachinery.industrial_agglomeration_factory.page1": "The $(l:botania:basics/terrasteel)terra plate$() normally needs a stabilising platform underneath. But this device gets rid of it. This machine is pretty unknown to a regular botanist but who cares?",
+  "lexicon.botanicalmachinery.industrial_agglomeration_factory.page1": "The $(l:botania:basics/terrasteel)terra plate$() usually requires a stabilising platform underneath it. Not anymore with this device. This machine is pretty unknown to the regular botanist, so give it a shot!",
 
   "lexicon.botanicalmachinery.mechanical_mana_pool": "Mechanical Mana Pool",
   "lexicon.botanicalmachinery.mechanical_mana_pool.recipe": "Making a mechanical mana pool",
-  "lexicon.botanicalmachinery.mechanical_mana_pool.page1": "Just like a regular $(l:botania:mana/pool)Mana Pool$() this can store quite some mana. It is also capable of mana infusion. Just like any other pool you can use catalysts but with this one you don't place them below the pool but put them into its inventory.",
+  "lexicon.botanicalmachinery.mechanical_mana_pool.page1": "Just like a regular $(l:botania:mana/pool)Mana Pool$(), this can store quite some mana. It is also capable of mana infusion. As with any other pool, you can use catalysts. However, this pool requires you to put them into its inventory and not to place them below it.",
 
   "lexicon.botanicalmachinery.mechanical_runic_altar": "Mechanical Runic Altar",
   "lexicon.botanicalmachinery.mechanical_runic_altar.recipe": "Runes everywhere",
-  "lexicon.botanicalmachinery.mechanical_runic_altar.page1": "This device allows you to create runes much easier. Really it's nothing more that a normal $(l:botania:basics/rune_altar)Rune Altar$() but automatable with hoppers.",
+  "lexicon.botanicalmachinery.mechanical_runic_altar.page1": "This device allows you to create runes much a lot more easily. Really, it's nothing more than a normal $(l:botania:basics/rune_altar)Rune Altar$(), which can be automated using hoppers.",
 
   "lexicon.botanicalmachinery.mechanical_daisy": "Mechanical Daisy",
   "lexicon.botanicalmachinery.mechanical_daisy.recipe": "This looks sweet",
-  "lexicon.botanicalmachinery.mechanical_daisy.page1": "By planting a Floating $(l:botania:basics/pure_daisy)Pure Daisy$() on a platform made of elementium, it is capable of processing 8 blocks at once in only one block space. It can also handle fluids.",
+  "lexicon.botanicalmachinery.mechanical_daisy.page1": "By planting a Floating $(l:botania:basics/pure_daisy)Pure Daisy$() onto a platform made out of $(d)Elementium$(0), it is capable of processing 8 blocks at once in only a single block space. It can also handle fluids.",
 
   "lexicon.botanicalmachinery.mechanical_brewery": "Mechanical Brewery",
   "lexicon.botanicalmachinery.mechanical_brewery.recipe": "It brews",
@@ -59,5 +59,5 @@
 
   "lexicon.botanicalmachinery.mechanical_apothecary": "Mechanical Apothecary",
   "lexicon.botanicalmachinery.mechanical_apothecary.recipe": "Give me all the flowers",
-  "lexicon.botanicalmachinery.mechanical_apothecary.page1": "An improved version of the $(l:botania:basics/apothecary)Apothecary$() which uses water, seeds and ingredients to create all the flowers you want."
+  "lexicon.botanicalmachinery.mechanical_apothecary.page1": "An improved version of the $(l:botania:basics/apothecary)Apothecary$() that uses water, seeds and ingredients to create all the flowers your heart desires."
 }
