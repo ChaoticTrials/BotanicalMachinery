@@ -35,6 +35,7 @@ public class ServerConfig {
     public static ForgeConfigSpec.IntValue capacityManaPool;
     public static ForgeConfigSpec.IntValue capacityRunicAltar;
     public static ForgeConfigSpec.IntValue capacityBrewery;
+    public static ForgeConfigSpec.IntValue capacityManaBattery;
 
     public static void init(ForgeConfigSpec.Builder builder) {
         builder.push("working-duration-multiplier");
@@ -58,6 +59,7 @@ public class ServerConfig {
         capacityManaPool = builder.defineInRange("mechanical-mana-pool", 100_000, 1, Integer.MAX_VALUE);
         capacityRunicAltar = builder.defineInRange("mechanical-runic-altar", 250_000, 1, Integer.MAX_VALUE);
         capacityBrewery = builder.defineInRange("mechanical-brewery", 100_000, 1, Integer.MAX_VALUE);
+        capacityManaBattery = builder.defineInRange("mana-battery", 10_000_000, 1, Integer.MAX_VALUE);
         builder.pop();
     }
 
