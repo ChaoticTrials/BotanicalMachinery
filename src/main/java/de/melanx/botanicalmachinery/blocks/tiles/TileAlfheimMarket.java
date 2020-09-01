@@ -2,6 +2,7 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
@@ -26,7 +27,7 @@ import java.util.stream.IntStream;
 
 public class TileAlfheimMarket extends TileBase implements IWorkingTile {
 
-    private static final int RECIPE_COST = 500;
+    private static final int RECIPE_COST = ServerConfig.alfheimMarketRecipeCost.get();
     public static final int MAX_MANA_PER_TICK = 25;
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(5, slot -> {
@@ -41,7 +42,7 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
     private ItemStack currentOutput = ItemStack.EMPTY;
 
     public TileAlfheimMarket() {
-        super(Registration.TILE_ALFHEIM_MARKET.get(), 500_000);
+        super(Registration.TILE_ALFHEIM_MARKET.get(), ServerConfig.capacityAlfheimMarket.get());
         this.inventory.setInputSlots(IntStream.range(0, 4).toArray());
         this.inventory.setOutputSlots(4);
         this.update = true;
@@ -110,7 +111,7 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
                 List<ItemStack> outputs = new ArrayList<>(this.recipe.getOutputs());
                 if (outputs.size() == 1) {
                     if (this.inventory.getUnrestricted().insertItem(4, outputs.get(0), true).isEmpty()) {
-                        int manaTransfer = Math.min(this.mana, Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
+                        int manaTransfer = Math.min(this.mana, Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
                         this.progress += manaTransfer;
                         this.receiveMana(-manaTransfer);
                         if (this.progress >= RECIPE_COST) {
@@ -159,6 +160,10 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
 
     public int getMaxProgress() {
         return RECIPE_COST;
+    }
+
+    public int getMaxManaPerTick() {
+        return MAX_MANA_PER_TICK * ServerConfig.multiplierAlfheimMarket.get();
     }
 
     private static ItemStack getInputStack(IElvenTradeRecipe recipe) {

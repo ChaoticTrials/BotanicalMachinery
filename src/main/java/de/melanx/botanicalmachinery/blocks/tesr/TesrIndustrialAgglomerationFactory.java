@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.melanx.botanicalmachinery.blocks.base.HorizontalRotatedTesr;
 import de.melanx.botanicalmachinery.blocks.tiles.TileIndustrialAgglomerationFactory;
+import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -26,6 +27,9 @@ public class TesrIndustrialAgglomerationFactory extends HorizontalRotatedTesr<Ti
 
     @Override
     protected void doRender(@Nonnull TileIndustrialAgglomerationFactory tile, float partialTicks, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
+        if (!ClientConfig.everything.get() || !ClientConfig.agglomerationFactory.get())
+            return;
+
         double progressLeft = 1 - (tile.getProgress() / (double) tile.getMaxProgress());
 
         this.renderStack(tile.getInventory().getStackInSlot(0), matrixStack, buffer, partialTicks, progressLeft, 0);

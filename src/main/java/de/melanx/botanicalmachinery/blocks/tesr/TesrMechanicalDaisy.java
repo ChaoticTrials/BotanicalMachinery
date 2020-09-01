@@ -2,6 +2,7 @@ package de.melanx.botanicalmachinery.blocks.tesr;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalDaisy;
+import de.melanx.botanicalmachinery.config.ClientConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -21,6 +22,9 @@ public class TesrMechanicalDaisy extends TileEntityRenderer<TileMechanicalDaisy>
 
     @Override
     public void render(@Nonnull TileMechanicalDaisy tile, float partialTicks, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
+        if (!ClientConfig.everything.get() || !ClientConfig.daisy.get())
+            return;
+
         matrixStack.push();
         matrixStack.scale(SCALE, SCALE, SCALE);
         matrixStack.translate(0, 0.125f / SCALE, 0);

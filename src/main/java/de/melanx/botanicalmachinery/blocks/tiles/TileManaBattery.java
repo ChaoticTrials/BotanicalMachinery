@@ -2,6 +2,7 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.BlockManaBattery;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
@@ -26,7 +27,7 @@ public class TileManaBattery extends TileBase {
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, slot -> this.sendPacket = true, this::isValidStack);
 
     public TileManaBattery() {
-        super(Registration.TILE_MANA_BATTERY.get(), 10_000_000);
+        super(Registration.TILE_MANA_BATTERY.get(), ServerConfig.capacityManaBattery.get());
     }
 
     @Nonnull

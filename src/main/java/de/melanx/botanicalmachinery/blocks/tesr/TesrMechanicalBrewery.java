@@ -5,6 +5,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.melanx.botanicalmachinery.blocks.base.HorizontalRotatedTesr;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalBrewery;
+import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Atlases;
@@ -74,6 +75,8 @@ public class TesrMechanicalBrewery extends HorizontalRotatedTesr<TileMechanicalB
 
     @Override
     protected void doRender(@Nonnull TileMechanicalBrewery tile, float partialTicks, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
+        if (!ClientConfig.everything.get() || !ClientConfig.brewery.get())
+            return;
 
         int slotToMove = -1;
         double travelCenter = 1;

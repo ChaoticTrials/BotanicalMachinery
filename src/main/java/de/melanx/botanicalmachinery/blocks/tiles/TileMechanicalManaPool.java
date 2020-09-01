@@ -1,6 +1,8 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.config.ClientConfig;
+import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
@@ -23,9 +25,10 @@ public class TileMechanicalManaPool extends TileBase {
     public static final List<Item> CATALYSTS = Arrays.asList(ModBlocks.alchemyCatalyst.asItem(), ModBlocks.conjurationCatalyst.asItem(), ModBlocks.manaVoid.asItem());
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(3, this::onSlotChanged, this::isValidStack);
     public boolean validRecipe = true;
+    private int cooldown = ServerConfig.multiplierManaPool.get();
 
     public TileMechanicalManaPool() {
-        super(Registration.TILE_MECHANICAL_MANA_POOL.get(), 100_000);
+        super(Registration.TILE_MECHANICAL_MANA_POOL.get(), ServerConfig.capacityManaPool.get());
         this.inventory.addSlotLimit(0, 1);
         this.inventory.setOutputSlots(2);
     }
@@ -90,19 +93,24 @@ public class TileMechanicalManaPool extends TileBase {
             IManaInfusionRecipe recipe = this.getMatchingRecipe(stack, cat);
             if (!this.world.isRemote) {
                 if (recipe != null) {
-                    int mana = recipe.getManaToConsume();
-                    if (this.getCurrentMana() >= mana && (this.getInventory().getStackInSlot(2).isEmpty() ||
-                            (recipe.getRecipeOutput().getItem() == this.getInventory().getStackInSlot(2).getItem() &&
-                                    this.getInventory().getStackInSlot(2).getMaxStackSize() > this.getInventory().getStackInSlot(2).getCount()))) {
-                        this.receiveMana(-mana);
-                        stack.shrink(1);
+                    if (this.getCooldown() > 1) {
+                        this.cooldown--;
+                    } else {
+                        int mana = recipe.getManaToConsume();
+                        if (this.getCurrentMana() >= mana && (this.getInventory().getStackInSlot(2).isEmpty() ||
+                                (recipe.getRecipeOutput().getItem() == this.getInventory().getStackInSlot(2).getItem() &&
+                                        this.getInventory().getStackInSlot(2).getMaxStackSize() > this.getInventory().getStackInSlot(2).getCount()))) {
+                            this.receiveMana(-mana);
+                            stack.shrink(1);
 
-                        ItemStack output = recipe.getRecipeOutput().copy();
-                        this.inventory.getUnrestricted().insertItem(2, output, false);
-                        this.markDirty();
+                            ItemStack output = recipe.getRecipeOutput().copy();
+                            this.inventory.getUnrestricted().insertItem(2, output, false);
+                            this.markDirty();
+                            this.cooldown = ServerConfig.multiplierManaPool.get();
+                        }
                     }
                 }
-            } else {
+            } else if (ClientConfig.everything.get() && ClientConfig.agglomerationFactory.get()) {
                 double particleChance = (this.getCurrentMana() / (double) this.getManaCap()) * 0.1D;
                 if (Math.random() < particleChance) {
                     float red = 0.0F;
@@ -130,5 +138,9 @@ public class TileMechanicalManaPool extends TileBase {
     @Override
     public boolean isFull() {
         return this.inventory.getStackInSlot(0).getItem() != ModBlocks.manaVoid.asItem() && super.isFull();
+    }
+
+    public int getCooldown() {
+        return this.cooldown;
     }
 }

@@ -1,5 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
+import de.melanx.botanicalmachinery.config.ClientConfig;
+import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
@@ -117,9 +119,9 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
             }
             boolean done = false;
             if (this.recipe != null) {
-                if (this.progress <= WORKING_DURATION) {
+                if (this.progress <= getRecipeDuration()) {
                     ++this.progress;
-                    if (this.progress >= WORKING_DURATION) {
+                    if (this.progress >= getRecipeDuration()) {
                         ItemStack output = this.recipe.getRecipeOutput().copy();
                         for (Ingredient ingredient : this.recipe.getIngredients()) {
                             for (ItemStack stack : this.inventory.getStacks()) {
@@ -150,9 +152,9 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
                 this.updateRecipe();
                 this.update = false;
             }
-        } else if (this.world != null) {
+        } else if (this.world != null && ClientConfig.everything.get() && ClientConfig.apothecary.get()) {
             if (this.fluidInventory.getFluidAmount() > 0) {
-                if (this.progress > WORKING_DURATION - 5) {
+                if (this.progress > getRecipeDuration() - 5) {
                     for (int i = 0; i < 5; i++) {
                         SparkleParticleData data = SparkleParticleData.sparkle(this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), 10);
                         this.world.addParticle(data, this.pos.getX() + 0.3 + (this.world.rand.nextDouble() * 0.4), this.pos.getY() + 0.6, this.pos.getZ() + 0.3 + (this.world.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
@@ -203,6 +205,10 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
 
     public int getProgress() {
         return this.progress;
+    }
+
+    public static int getRecipeDuration() {
+        return WORKING_DURATION * ServerConfig.multiplierApothecary.get();
     }
 
     @Override

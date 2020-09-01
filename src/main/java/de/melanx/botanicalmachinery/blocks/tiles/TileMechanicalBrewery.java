@@ -2,6 +2,8 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.config.ClientConfig;
+import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.helper.RecipeHelper;
@@ -43,7 +45,7 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
     private ItemStack currentOutput = ItemStack.EMPTY;
 
     public TileMechanicalBrewery() {
-        super(Registration.TILE_MECHANICAL_BREWERY.get(), 100_000);
+        super(Registration.TILE_MECHANICAL_BREWERY.get(), ServerConfig.capacityBrewery.get());
         this.inventory.setInputSlots(IntStream.range(0, 7).toArray());
         this.inventory.setOutputSlots(7);
     }
@@ -157,7 +159,7 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
                 this.markDispatchable();
             }
         } else if (this.world != null) {
-            if (this.progress > 0) {
+            if (this.progress > 0 && ClientConfig.everything.get() && ClientConfig.brewery.get()) {
                 if (this.currentOutput.getItem() instanceof IBrewItem && this.world.rand.nextFloat() < 0.5f) {
                     int segments = 3;
                     for (int i = 1; i <= 6; i++) {
@@ -191,6 +193,10 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
 
     public int getMaxProgress() {
         return this.maxProgress;
+    }
+
+    public int getMaxManaPerTick() {
+        return MAX_MANA_PER_TICK / ServerConfig.multiplierBrewery.get();
     }
 
     public int getManaCost() {

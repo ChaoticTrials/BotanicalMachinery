@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.melanx.botanicalmachinery.blocks.base.HorizontalRotatedTesr;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalManaPool;
+import de.melanx.botanicalmachinery.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Vector3f;
@@ -32,6 +33,9 @@ public class TesrMechanicalManaPool extends HorizontalRotatedTesr<TileMechanical
 
     @Override
     protected void doRender(@Nonnull TileMechanicalManaPool tile, float partialTicks, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
+        if (!ClientConfig.everything.get() || !ClientConfig.manaPool.get())
+            return;
+
         ItemStack catalystStack = tile.getInventory().getStackInSlot(0);
         if (!catalystStack.isEmpty() && catalystStack.getItem() instanceof BlockItem && ((BlockItem) catalystStack.getItem()).getBlock() instanceof IPoolOverlayProvider) {
             IPoolOverlayProvider catalyst = (IPoolOverlayProvider) ((BlockItem) catalystStack.getItem()).getBlock();

@@ -2,6 +2,8 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.config.ClientConfig;
+import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
@@ -24,7 +26,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
     private boolean recipe;
 
     public TileIndustrialAgglomerationFactory() {
-        super(Registration.TILE_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), 1_000_000);
+        super(Registration.TILE_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), ServerConfig.capacityAgglomerationFactory.get());
         this.inventory.setOutputSlots(3);
         this.inventory.setSlotValidator(this::isValidStack);
     }
@@ -65,7 +67,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
             if (!manasteel.isEmpty() && !manadiamond.isEmpty() &&
                     !manapearl.isEmpty() && output.getCount() < 64) {
                 this.recipe = true;
-                    int manaTransfer = Math.min(this.mana, Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
+                    int manaTransfer = Math.min(this.mana, Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
                     this.progress += manaTransfer;
                     this.receiveMana(-manaTransfer);
                     if (this.progress >= this.getMaxProgress()) {
@@ -84,7 +86,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
             } else if (this.recipe) {
                 this.recipe = false;
             }
-        } else if (this.world != null) {
+        } else if (this.world != null && ClientConfig.everything.get() && ClientConfig.agglomerationFactory.get()) {
             if (this.progress > 0) {
                 double time = this.progress / (double) this.getMaxProgress();
                 if (time < 0.8) {
@@ -110,5 +112,9 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
 
     public int getMaxProgress() {
         return RECIPE_COST;
+    }
+
+    public int getMaxManaPerTick() {
+        return MAX_MANA_PER_TICK / ServerConfig.multiplierAgglomerationFactory.get();
     }
 }
