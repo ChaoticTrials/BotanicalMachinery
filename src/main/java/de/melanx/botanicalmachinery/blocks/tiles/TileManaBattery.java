@@ -27,7 +27,7 @@ public class TileManaBattery extends TileBase {
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, slot -> this.sendPacket = true, this::isValidStack);
 
     public TileManaBattery() {
-        super(Registration.TILE_MANA_BATTERY.get(), ServerConfig.capacityManaPool.get());
+        super(Registration.TILE_MANA_BATTERY.get(), ServerConfig.capacityManaBattery.get());
     }
 
     @Nonnull
