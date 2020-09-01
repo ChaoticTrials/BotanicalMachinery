@@ -25,7 +25,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
     private boolean recipe;
 
     public TileIndustrialAgglomerationFactory() {
-        super(Registration.TILE_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), 1_000_000);
+        super(Registration.TILE_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), ServerConfig.capacityAgglomerationFactory.get());
         this.inventory.setOutputSlots(3);
         this.inventory.setSlotValidator(this::isValidStack);
     }
@@ -114,6 +114,6 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
     }
 
     public int getMaxManaPerTick() {
-        return MAX_MANA_PER_TICK / ServerConfig.agglomerationFactory.get();
+        return MAX_MANA_PER_TICK / ServerConfig.multiplierAgglomerationFactory.get();
     }
 }

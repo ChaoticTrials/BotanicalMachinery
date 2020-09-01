@@ -7,7 +7,6 @@ import de.melanx.botanicalmachinery.helper.RecipeHelper;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import vazkii.botania.api.mana.ManaNetworkEvent;
 import vazkii.botania.api.recipe.IManaInfusionRecipe;
 import vazkii.botania.client.fx.WispParticleData;
@@ -25,10 +24,10 @@ public class TileMechanicalManaPool extends TileBase {
     public static final List<Item> CATALYSTS = Arrays.asList(ModBlocks.alchemyCatalyst.asItem(), ModBlocks.conjurationCatalyst.asItem(), ModBlocks.manaVoid.asItem());
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(3, this::onSlotChanged, this::isValidStack);
     public boolean validRecipe = true;
-    private int cooldown = ServerConfig.manaPool.get();
+    private int cooldown = ServerConfig.multiplierManaPool.get();
 
     public TileMechanicalManaPool() {
-        super(Registration.TILE_MECHANICAL_MANA_POOL.get(), 100_000);
+        super(Registration.TILE_MECHANICAL_MANA_POOL.get(), ServerConfig.capacityManaPool.get());
         this.inventory.addSlotLimit(0, 1);
         this.inventory.setOutputSlots(2);
     }
@@ -106,7 +105,7 @@ public class TileMechanicalManaPool extends TileBase {
                             ItemStack output = recipe.getRecipeOutput().copy();
                             this.inventory.getUnrestricted().insertItem(2, output, false);
                             this.markDirty();
-                            this.cooldown = ServerConfig.manaPool.get();
+                            this.cooldown = ServerConfig.multiplierManaPool.get();
                         }
                     }
                 }

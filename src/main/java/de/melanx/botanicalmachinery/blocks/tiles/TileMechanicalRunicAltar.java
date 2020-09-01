@@ -44,7 +44,7 @@ public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile  
     private final List<Integer> slotsUsed = new ArrayList<>();
 
     public TileMechanicalRunicAltar() {
-        super(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), 500_000);
+        super(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), ServerConfig.capacityRunicAltar.get());
         this.inventory.setInputSlots(IntStream.range(1, 17).toArray());
         this.inventory.setOutputSlots(IntStream.range(17, 33).toArray());
     }
@@ -245,7 +245,7 @@ public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile  
     }
 
     public int getMaxManaPerTick() {
-        return MAX_MANA_PER_TICK / ServerConfig.runicAltar.get();
+        return MAX_MANA_PER_TICK / ServerConfig.multiplierRunicAltar.get();
     }
 
     public boolean isSlotUsedCurrently(int slot) {

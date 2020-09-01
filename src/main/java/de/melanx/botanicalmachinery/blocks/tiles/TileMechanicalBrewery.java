@@ -44,7 +44,7 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
     private ItemStack currentOutput = ItemStack.EMPTY;
 
     public TileMechanicalBrewery() {
-        super(Registration.TILE_MECHANICAL_BREWERY.get(), 100_000);
+        super(Registration.TILE_MECHANICAL_BREWERY.get(), ServerConfig.capacityBrewery.get());
         this.inventory.setInputSlots(IntStream.range(0, 7).toArray());
         this.inventory.setOutputSlots(7);
     }
@@ -195,7 +195,7 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
     }
 
     public int getMaxManaPerTick() {
-        return MAX_MANA_PER_TICK / ServerConfig.brewery.get();
+        return MAX_MANA_PER_TICK / ServerConfig.multiplierBrewery.get();
     }
 
     public int getManaCost() {

@@ -27,7 +27,7 @@ import java.util.stream.IntStream;
 
 public class TileAlfheimMarket extends TileBase implements IWorkingTile {
 
-    private static final int RECIPE_COST = 500;
+    private static final int RECIPE_COST = ServerConfig.alfheimMarketRecipeCost.get();
     public static final int MAX_MANA_PER_TICK = 25;
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(5, slot -> {
@@ -42,7 +42,7 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
     private ItemStack currentOutput = ItemStack.EMPTY;
 
     public TileAlfheimMarket() {
-        super(Registration.TILE_ALFHEIM_MARKET.get(), 500_000);
+        super(Registration.TILE_ALFHEIM_MARKET.get(), ServerConfig.capacityAlfheimMarket.get());
         this.inventory.setInputSlots(IntStream.range(0, 4).toArray());
         this.inventory.setOutputSlots(4);
         this.update = true;
@@ -163,7 +163,7 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
     }
 
     public int getMaxManaPerTick() {
-        return MAX_MANA_PER_TICK * ServerConfig.alfheimMarket.get();
+        return MAX_MANA_PER_TICK * ServerConfig.multiplierAlfheimMarket.get();
     }
 
     private static ItemStack getInputStack(IElvenTradeRecipe recipe) {

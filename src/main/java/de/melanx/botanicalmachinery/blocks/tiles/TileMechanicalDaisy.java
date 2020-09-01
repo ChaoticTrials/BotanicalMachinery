@@ -61,7 +61,7 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
             if (recipe != null) {
                 //noinspection ConstantConditions
                 if (!this.world.isRemote) {
-                    if (this.workingTicks[i] >= recipe.getTime() * ServerConfig.daisy.get()) {
+                    if (this.workingTicks[i] >= recipe.getTime() * ServerConfig.multiplierDaisy.get()) {
                         BlockState state = recipe.getOutputState();
                         if (state.getBlock().asItem() != Items.AIR) {
                             //noinspection deprecation

@@ -207,7 +207,7 @@ public class TileMechanicalApothecary extends TileMod implements ITickableTileEn
     }
 
     public static int getRecipeDuration() {
-        return WORKING_DURATION * ServerConfig.apothecary.get();
+        return WORKING_DURATION * ServerConfig.multiplierApothecary.get();
     }
 
     @Override
