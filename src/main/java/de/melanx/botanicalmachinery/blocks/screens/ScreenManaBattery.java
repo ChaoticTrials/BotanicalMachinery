@@ -1,5 +1,6 @@
 package de.melanx.botanicalmachinery.blocks.screens;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerManaBattery;
 import de.melanx.botanicalmachinery.blocks.tiles.TileManaBattery;
@@ -36,8 +37,8 @@ public class ScreenManaBattery extends ScreenBase<ContainerManaBattery> {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        this.drawDefaultGuiBackgroundLayer(LibResources.MANA_BATTERY_GUI, 81, 37);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack ms, float partialTicks, int mouseX, int mouseY) {
+        this.drawDefaultGuiBackgroundLayer(ms, LibResources.MANA_BATTERY_GUI, 81, 37);
 
         BlockPos tilePos = this.container.getPos();
         TileManaBattery tile = (TileManaBattery) this.container.getWorld().getTileEntity(tilePos);
@@ -46,15 +47,15 @@ public class ScreenManaBattery extends ScreenBase<ContainerManaBattery> {
         //noinspection ConstantConditions
         this.minecraft.getTextureManager().bindTexture(LibResources.MANA_BATTERY_GUI);
         if (mouseX >= this.xB1 && mouseX < this.xB1 + 20 && mouseY >= this.yB1 && mouseY < this.yB1 + 20) {
-            this.blit(this.xB1, this.yB1, 20, tile.isSlot1Locked() ? this.ySize + 20 : this.ySize, 20, 20);
+            this.blit(ms, this.xB1, this.yB1, 20, tile.isSlot1Locked() ? this.ySize + 20 : this.ySize, 20, 20);
         } else {
-            this.blit(this.xB1, this.yB1, 0, tile.isSlot1Locked() ? this.ySize + 20 : this.ySize, 20, 20);
+            this.blit(ms, this.xB1, this.yB1, 0, tile.isSlot1Locked() ? this.ySize + 20 : this.ySize, 20, 20);
         }
 
         if (mouseX >= this.xB2 && mouseX < this.xB2 + 20 && mouseY >= this.yB2 && mouseY < this.yB2 + 20) {
-            this.blit(this.xB2, this.yB2, 20, tile.isSlot2Locked() ? this.ySize+ 20 : this.ySize, 20, 20);
+            this.blit(ms, this.xB2, this.yB2, 20, tile.isSlot2Locked() ? this.ySize+ 20 : this.ySize, 20, 20);
         } else {
-            this.blit(this.xB2, this.yB2, 0, tile.isSlot2Locked() ? this.ySize + 20 : this.ySize, 20, 20);
+            this.blit(ms, this.xB2, this.yB2, 0, tile.isSlot2Locked() ? this.ySize + 20 : this.ySize, 20, 20);
         }
     }
 

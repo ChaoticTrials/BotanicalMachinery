@@ -2,10 +2,10 @@
   "parent": "block/block",
   "ambientocclusion": false,
   "textures": {
-    "frame": "botania:blocks/storage2",
-    "wood": "botania:blocks/livingwood0",
-    "glimmering_wood": "botania:blocks/livingwood5",
-    "core": "botania:blocks/alfheim_portal_activated",
+    "frame": "botania:block/elementium_block",
+    "wood": "botania:block/livingwood",
+    "glimmering_wood": "botania:block/glimmering_livingwood",
+    "core": "botania:block/alfheim_portal_activated",
     "particle": "#frame"
   },
   "elements": [

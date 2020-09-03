@@ -7,7 +7,9 @@ import de.melanx.botanicalmachinery.core.LibResources;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.Atlases;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -16,31 +18,31 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.vector.Matrix4f;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 public class RenderHelper {
 
-    public static void renderFadedItem(Screen screen, List<Item> items, int x, int y) {
+    public static void renderFadedItem(MatrixStack ms, Screen screen, List<Item> items, int x, int y) {
         if (items.isEmpty()) {
             items = Collections.singletonList(Items.AIR);
         }
         int idx = (items.size() + ((ClientTickHandler.ticksInGame / 20) % items.size())) % items.size();
-        renderFadedItem(screen, items.get(idx), x, y);
+        renderFadedItem(ms, screen, items.get(idx), x, y);
     }
 
-    public static void renderFadedItem(Screen screen, Item item, int x, int y) {
+    public static void renderFadedItem(MatrixStack ms, Screen screen, Item item, int x, int y) {
         screen.getMinecraft().getItemRenderer().renderItemIntoGUI(new ItemStack(item), x, y);
         GlStateManager.enableBlend();
         GlStateManager.disableDepthTest();
         screen.getMinecraft().getTextureManager().bindTexture(LibResources.HUD);
         //noinspection deprecation
         GlStateManager.color4f(1, 1, 1, 1);
-        vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(x, y, 16, 0, 16, 16);
+        vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(ms, x, y, 16, 0, 16, 16);
     }
 
     /**
@@ -54,11 +56,11 @@ public class RenderHelper {
      * @param displayHeight the height of the blit
      * @param sprite        A texture sprite
      */
-    public static void repeatBlit(int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
-        repeatBlit(x, y, texWidth, texHeight, displayWidth, displayHeight, sprite.getMinU(), sprite.getMaxU(), sprite.getMinV(), sprite.getMaxV());
+    public static void repeatBlit(MatrixStack ms, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, TextureAtlasSprite sprite) {
+        repeatBlit(ms, x, y, texWidth, texHeight, displayWidth, displayHeight, sprite.getMinU(), sprite.getMaxU(), sprite.getMinV(), sprite.getMaxV());
     }
 
-    public static void repeatBlit(int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, float minU, float maxU, float minV, float maxV) {
+    public static void repeatBlit(MatrixStack ms, int x, int y, int texWidth, int texHeight, int displayWidth, int displayHeight, float minU, float maxU, float minV, float maxV) {
         int pixelsRenderedX = 0;
         while (pixelsRenderedX < displayWidth) {
             int pixelsNowX = Math.min(texWidth, displayWidth - pixelsRenderedX);
@@ -75,7 +77,7 @@ public class RenderHelper {
                     maxVnow = minV + ((maxV - minV) * (pixelsNowY / (float) texHeight));
                 }
 
-                AbstractGui.innerBlit(x + pixelsRenderedX, x + pixelsRenderedX + pixelsNowX,
+                AbstractGui.innerBlit(ms.getLast().getMatrix(), x + pixelsRenderedX, x + pixelsRenderedX + pixelsNowX,
                         y + pixelsRenderedY, y + pixelsRenderedY + pixelsNowY,
                         0, minU, maxUnow, minV, maxVnow);
 
@@ -97,17 +99,18 @@ public class RenderHelper {
             matrixStack.translate(-0.5D, -0.5D, -0.5D);
 
             if (!model.isBuiltInRenderer() && (stack.getItem() != Items.TRIDENT || isFixed)) {
-                RenderType type = RenderTypeLookup.getRenderType(stack);
-                if (isGui && Objects.equals(type, Atlases.getTranslucentBlockType())) {
-                    type = Atlases.getTranslucentCullBlockType();
-                }
-
-                IVertexBuilder ivertexbuilder = ItemRenderer.getBuffer(buffer, type, true, stack.hasEffect());
+//                RenderType type = RenderTypeLookup.getRenderType(stack);
+//                if (isGui && Objects.equals(type, Atlases.getTranslucentCullBlockType())) {
+//                    type = Atlases.getTranslucentCullBlockType();
+//                }
+//
+                IVertexBuilder ivertexbuilder = ItemRenderer.getBuffer(buffer, Atlases.getTranslucentCullBlockType(), true, stack.hasEffect());
                 renderTintedModel(model, light, overlay, matrixStack, ivertexbuilder, r, g, b);
             } else {
                 //noinspection deprecation
                 GlStateManager.color4f(r, g, b, 1);
-                stack.getItem().getItemStackTileEntityRenderer().render(stack, matrixStack, buffer, light, overlay);
+//                RenderType type = RenderTypeLookup.getRenderType(stack);
+                stack.getItem().getItemStackTileEntityRenderer().func_239207_a_(stack, ItemCameraTransforms.TransformType.GUI, matrixStack, buffer, light, overlay);
                 //noinspection deprecation
                 GlStateManager.color4f(1, 1, 1, 1);
             }

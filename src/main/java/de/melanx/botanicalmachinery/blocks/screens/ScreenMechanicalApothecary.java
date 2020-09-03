@@ -1,19 +1,24 @@
 package de.melanx.botanicalmachinery.blocks.screens;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.sun.prism.TextureMap;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalApothecary;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
 import de.melanx.botanicalmachinery.core.LibResources;
 import de.melanx.botanicalmachinery.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -42,31 +47,31 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        this.renderBackground();
+    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack ms, float partialTicks, int mouseX, int mouseY) {
+        this.renderBackground(ms);
         //noinspection deprecation
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         //noinspection ConstantConditions
         this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
 
-        this.blit(this.relX, this.relY, 0, 0, this.xSize, this.ySize);
+        this.blit(ms, this.relX, this.relY, 0, 0, this.xSize, this.ySize);
 
         if (this.tile.getInventory().getStackInSlot(0).isEmpty())
-            RenderHelper.renderFadedItem(this, ImmutableList.copyOf(Tags.Items.SEEDS.getAllElements()), this.relX + 90, this.relY + 43);
+            RenderHelper.renderFadedItem(ms, this, ImmutableList.copyOf(Tags.Items.SEEDS.getAllElements()), this.relX + 90, this.relY + 43);
 
         if (this.tile.getProgress() > 0) {
             float pctProgress = Math.min(this.tile.getProgress() / (float) TileMechanicalApothecary.getRecipeDuration(), 1.0F);
             this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
-            vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(this.relX + 87, this.relY + 64, this.xSize, 0, Math.round(22 * pctProgress), 16);
+            vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(ms, this.relX + 87, this.relY + 64, this.xSize, 0, Math.round(22 * pctProgress), 16);
         }
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String s = this.title.getFormattedText();
-        this.font.drawString(s, (float) (this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, Color.DARK_GRAY.getRGB());
-        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float) (this.ySize - 96 + 2), Color.DARK_GRAY.getRGB());
+    protected void drawGuiContainerForegroundLayer(@Nonnull MatrixStack ms, int mouseX, int mouseY) {
+        String s = this.title.getString();
+        this.font.drawString(ms, s, (float) (this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, Color.DARK_GRAY.getRGB());
+        this.font.drawString(ms, this.playerInventory.getDisplayName().getString(), 8.0F, (float) (this.ySize - 96 + 2), Color.DARK_GRAY.getRGB());
 
         float pctFluid = Math.min((float) this.tile.getFluidInventory().getFluidAmount() / TileMechanicalApothecary.FLUID_CAPACITY, 1.0F);
         this.minecraft.getTextureManager().bindTexture(water);
@@ -82,23 +87,23 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         int xPos = 163;
         int ySize = Math.round(81 * pctFluid);
         int yPos = 16 + 81 - ySize;
-        RenderHelper.repeatBlit(xPos, yPos, 16, 16, 17, ySize, sprite);
+        RenderHelper.repeatBlit(ms, xPos, yPos, 16, 16, 17, ySize, sprite);
         //noinspection deprecation
         GlStateManager.color4f(1, 1, 1, 1);
 
         this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
-        this.blit(xPos, 16, this.xSize, 16, 17, 81);
+        this.blit(ms, xPos, 16, this.xSize, 16, 17, 81);
 
-        this.renderHoveredToolTip(mouseX - this.guiLeft, mouseY - this.guiTop);
+        this.func_230459_a_(ms, mouseX - this.guiLeft, mouseY - this.guiTop);
     }
 
     @Override
-    protected void renderHoveredToolTip(int mouseX, int mouseY) {
+    protected void func_230459_a_(@Nonnull MatrixStack ms, int mouseX, int mouseY) {
         if (mouseX >= 163 && mouseX <= 179 &&
                 mouseY >= 16 && mouseY <= 96) {
-            String fluid = this.tile.getFluidInventory().getFluidAmount() + " / " + this.tile.getFluidInventory().getCapacity() + " mB";
-            this.renderTooltip(fluid, mouseX, mouseY);
+            TranslationTextComponent fluid = new TranslationTextComponent(this.tile.getFluidInventory().getFluidAmount() + " / " + this.tile.getFluidInventory().getCapacity() + " mB");
+            this.renderTooltip(ms, fluid, mouseX, mouseY);
         }
-        super.renderHoveredToolTip(mouseX, mouseY);
+        super.func_230459_a_(ms, mouseX, mouseY);
     }
 }

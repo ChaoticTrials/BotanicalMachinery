@@ -2,10 +2,10 @@
   "parent": "block/block",
   "ambientocclusion": false,
   "textures": {
-    "plate": "botania:blocks/storage2",
-    "grass_top": "botania:blocks/enchantedsoil0",
-    "grass_side": "botania:blocks/enchantedsoil1",
-    "flower": "botania:blocks/flower_misc_pure_daisy",
+    "plate": "botania:block/elementium_block",
+    "grass_top": "botania:block/enchanted_soil_top",
+    "grass_side": "botania:block/enchanted_soil_side",
+    "flower": "botania:block/pure_daisy",
     "particle": "#plate"
   },
   "elements": [

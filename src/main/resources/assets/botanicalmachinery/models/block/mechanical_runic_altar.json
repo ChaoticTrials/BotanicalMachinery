@@ -2,10 +2,10 @@
   "parent": "block/block",
   "ambientocclusion": false,
   "textures": {
-    "frame": "botania:blocks/storage2",
-    "bottom": "botania:blocks/runic_altar_bottom",
-    "top": "botania:blocks/runic_altar_top",
-    "side": "botania:blocks/runic_altar_side",
+    "frame": "botania:block/elementium_block",
+    "bottom": "botania:block/runic_altar_bottom",
+    "top": "botania:block/runic_altar_top",
+    "side": "botania:block/runic_altar_side",
     "particle": "#frame"
   },
   "elements": [

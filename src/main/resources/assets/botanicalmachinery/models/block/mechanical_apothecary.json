@@ -2,10 +2,10 @@
   "parent": "block/block",
   "ambientocclusion": false,
   "textures": {
-    "frame": "botania:blocks/storage2",
-    "side": "botania:model/apothecary/stone_side",
-    "goblet": "botania:model/apothecary/stone_goblet",
-    "top_bottom": "botania:model/apothecary/stone_top_bottom",
+    "frame": "botania:block/elementium_block",
+    "side": "botania:block/apothecary_default_side",
+    "goblet": "botania:block/apothecary_default_goblet",
+    "top_bottom": "botania:block/apothecary_default_top_bottom",
     "particle": "#frame"
   },
   "elements": [

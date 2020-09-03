@@ -39,6 +39,7 @@ def createRunConfig(String name, Closure extra = {}) {
     minecraft.runs.create(name) { RunConfig run ->
         run.workingDirectory project.file("run_" + name)
         run.property "forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP"
+        run.jvmArg "-Dmixin.env.disableRefMap=true"
         run.property "forge.logging.console.level", "info"
         run.mods.create(modid) { ModConfig mod ->
             source sourceSets.main
@@ -129,6 +130,6 @@ dependencies {
     compile fg.deobf("vazkii.botania:Botania:${botania_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-${mc_version}-${curios_version}")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}")
     compile fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 }

@@ -7,10 +7,10 @@ import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.LootTableProvider;
 import net.minecraft.data.loot.BlockLootTables;
+import net.minecraft.loot.*;
+import net.minecraft.loot.functions.CopyName;
+import net.minecraft.loot.functions.CopyNbt;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.functions.CopyName;
-import net.minecraft.world.storage.loot.functions.CopyNbt;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;

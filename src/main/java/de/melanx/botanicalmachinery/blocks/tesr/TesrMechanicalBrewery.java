@@ -10,8 +10,6 @@ import de.melanx.botanicalmachinery.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -19,9 +17,10 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.*;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
 import vazkii.botania.api.brew.IBrewItem;
 import vazkii.botania.client.core.handler.ClientTickHandler;
-import vazkii.botania.common.item.Item16Colors;
 import vazkii.botania.common.item.ModItems;
 
 import javax.annotation.Nonnull;
@@ -207,9 +206,7 @@ public class TesrMechanicalBrewery extends HorizontalRotatedTesr<TileMechanicalB
             return ((DyeItem) stack.getItem()).getDyeColor().getColorValue();
         } else if (stack.getItem() instanceof BlockItem) {
             //noinspection deprecation
-            return ((BlockItem) stack.getItem()).getBlock().getMaterial(((BlockItem) stack.getItem()).getBlock().getDefaultState()).getColor().colorValue;
-        } else if (stack.getItem() instanceof Item16Colors) {
-            return ((Item16Colors) stack.getItem()).color.getColorValue();
+            return ((BlockItem) stack.getItem()).getBlock().getMaterialColor().colorValue;
         } else {
             return this.waterColor;
         }
@@ -249,7 +246,7 @@ public class TesrMechanicalBrewery extends HorizontalRotatedTesr<TileMechanicalB
 
         TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(Fluids.WATER.getAttributes().getStillTexture());
 
-        IVertexBuilder vertex = buffer.getBuffer(Atlases.getTranslucentBlockType());
+        IVertexBuilder vertex = buffer.getBuffer(Atlases.getTranslucentCullBlockType());
         RenderHelper.renderIconColored(matrixStack, vertex, 0, 0, sprite, 8, 8, 1.0F, color, light, OverlayTexture.NO_OVERLAY);
 
         matrixStack.pop();

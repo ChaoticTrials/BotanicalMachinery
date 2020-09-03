@@ -1,8 +1,8 @@
 package de.melanx.botanicalmachinery.blocks.base;
 
 import com.google.common.base.Predicates;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import de.melanx.botanicalmachinery.blocks.BlockManaBattery;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
 import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
@@ -91,11 +91,11 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderHUD(Minecraft mc) {
+    public void renderHUD(MatrixStack ms, Minecraft mc) {
         ItemStack block = new ItemStack(this.getBlockState().getBlock());
         String name = block.getDisplayName().getString();
         int color = 0x4444FF;
-        HUDHandler.drawSimpleManaHUD(color, this.getCurrentMana(), this.getManaCap(), name);
+        HUDHandler.drawSimpleManaHUD(ms, color, this.getCurrentMana(), this.getManaCap(), name);
 
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

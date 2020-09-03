@@ -8,13 +8,13 @@ import de.melanx.botanicalmachinery.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Matrix3f;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.vector.Matrix3f;
+import net.minecraft.util.math.vector.Matrix4f;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 import vazkii.botania.client.core.handler.MiscellaneousIcons;
 import vazkii.botania.common.block.ModBlocks;
@@ -80,7 +80,7 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
     }
 
     private void renderPortal(MatrixStack matrixStack, IRenderTypeBuffer buffer, TextureAtlasSprite sprite, int x, int y, int width, int height, float alpha, int overlay) {
-        IVertexBuilder vertex = buffer.getBuffer(Atlases.getTranslucentBlockType());
+        IVertexBuilder vertex = buffer.getBuffer(Atlases.getTranslucentCullBlockType());
         Matrix4f model = matrixStack.getLast().getMatrix();
         Matrix3f normal = matrixStack.getLast().getNormal();
         vertex.pos(model, (float)x, (float)(y + height), 0.0F).color(1.0F, 1.0F, 1.0F, alpha).tex(sprite.getMinU(), sprite.getMaxV()).overlay(overlay).lightmap(15728880).normal(normal, 1.0F, 0.0F, 0.0F).endVertex();

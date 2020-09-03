@@ -2,10 +2,10 @@
   "parent": "block/block",
   "ambientocclusion": false,
   "textures": {
-    "frame": "botania:blocks/storage2",
+    "frame": "botania:block/elementium_block",
     "cauldron": "minecraft:block/cauldron_side",
     "bottom": "minecraft:block/cauldron_inner",
-    "stick": "botania:blocks/livingwood0",
+    "stick": "botania:block/livingwood",
     "particle": "#frame"
   },
   "elements": [

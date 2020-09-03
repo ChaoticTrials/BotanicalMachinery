@@ -1,8 +1,10 @@
 package de.melanx.botanicalmachinery.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.core.LibResources;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.TranslationTextComponent;
 
 /*
  * This class is inspired by Cyclics EnergyBar
@@ -28,23 +30,24 @@ public class ManaBar {
                 && this.guiTop + this.y < mouseY && mouseY < this.guiTop + this.y + this.height;
     }
 
-    public void draw(float mana) {
+    public void draw(MatrixStack ms, float mana) {
         int relX;
         int relY;
         this.parent.getMinecraft().getTextureManager().bindTexture(LibResources.MANA_BAR);
         relX = this.guiLeft + this.x;
         relY = this.guiTop + this.y;
-        Screen.blit(relX, relY, 0, 0, this.width, this.height, this.width, this.height);
+        Screen.blit(ms, relX, relY, 0, 0, this.width, this.height, this.width, this.height);
         this.parent.getMinecraft().getTextureManager().bindTexture(LibResources.MANA_BAR_CURRENT);
         relX += 1;
         relY += this.height - 1;
         float pct = Math.min(mana / this.capacity, 1.0F);
-        Screen.blit(relX, relY, 0, 0, this.width - 2, (int) -((this.height - 2) * pct), this.width - 2, this.height - 2);
+        Screen.blit(ms, relX, relY, 0, 0, this.width - 2, (int) -((this.height - 2) * pct), this.width - 2, this.height - 2);
     }
 
-    public void renderHoveredToolTip(int mouseX, int mouseY, int mana) {
+    public void renderHoveredToolTip(MatrixStack ms, int mouseX, int mouseY, int mana) {
         if (this.isMouseOver(mouseX, mouseY) && ClientConfig.numericalMana.get()) {
-            this.parent.renderTooltip(mana + " / " + this.capacity + " Mana", mouseX, mouseY);
+            TranslationTextComponent text = new TranslationTextComponent("%s / %s Mana", mana, this.capacity);
+            this.parent.renderTooltip(ms, text, mouseX, mouseY);
         }
     }
 }

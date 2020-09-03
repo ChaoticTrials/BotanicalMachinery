@@ -2,11 +2,11 @@
   "parent": "block/block",
   "ambientocclusion": false,
   "textures": {
-    "frame": "botania:blocks/storage2",
-    "livingrock": "botania:blocks/livingrock0",
+    "frame": "botania:block/elementium_block",
+    "livingrock": "botania:block/livingrock",
     "lapis": "minecraft:block/lapis_block",
-    "terra_plate_top": "botania:blocks/terra_plate_1",
-    "terra_plate_side": "botania:blocks/terra_plate_2",
+    "terra_plate_top": "botania:block/terra_plate_top",
+    "terra_plate_side": "botania:block/terra_plate_side",
     "particle": "#frame"
   },
   "elements": [

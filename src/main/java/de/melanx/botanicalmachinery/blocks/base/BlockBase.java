@@ -1,5 +1,6 @@
 package de.melanx.botanicalmachinery.blocks.base;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
@@ -76,9 +77,9 @@ public abstract class BlockBase extends Block implements ITileEntityProvider, IW
     }
 
     @Override
-    public void renderHUD(Minecraft mc, World world, BlockPos pos) {
+    public void renderHUD(MatrixStack ms, Minecraft mc, World world, BlockPos pos) {
         //noinspection ConstantConditions
-        ((TileBase) world.getTileEntity(pos)).renderHUD(mc);
+        ((TileBase) world.getTileEntity(pos)).renderHUD(ms, mc);
     }
 
     @SuppressWarnings("deprecation")

@@ -38,7 +38,7 @@ public class TileMechanicalManaPool extends TileBase {
         List<IManaInfusionRecipe> matchingCatRecipes = new ArrayList<>();
 
         //noinspection ConstantConditions
-        for (IManaInfusionRecipe recipe : TilePool.manaInfusionRecipes(this.world.getRecipeManager())) {
+        for (IManaInfusionRecipe recipe : TilePool.manaInfusionRecipes(this.world)) {
             if (recipe.matches(stack)) {
                 if (recipe.getCatalyst() == null) {
                     matchingNonCatRecipes.add(recipe);

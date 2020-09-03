@@ -1,5 +1,5 @@
 {
-  "parent": "block/orientable",
+  "parent": "minecraft:block/orientable",
   "textures": {
     "side": "botanicalmachinery:block/mana_battery_side",
     "front": "botanicalmachinery:block/mana_battery_front",
