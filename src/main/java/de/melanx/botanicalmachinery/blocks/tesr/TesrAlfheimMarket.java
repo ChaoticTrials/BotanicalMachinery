@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Matrix3f;
 import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3f;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 import vazkii.botania.client.core.handler.MiscellaneousIcons;
 import vazkii.botania.common.block.ModBlocks;
@@ -53,7 +54,8 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
             float alpha = (float)Math.min(1.0D, (Math.sin((double)((float) ClientTickHandler.ticksInGame + partialTicks) / 8.0D) + 1.0D) / 7.0D + 0.6D);
 
             this.renderPortal(matrixStack, buffer, MiscellaneousIcons.INSTANCE.alfPortalTex, 0, 0, 3, 3, alpha, overlay);
-            matrixStack.translate(0.0D, 0.0D, 0.5D);
+            matrixStack.translate(3.0D, 0.0D, 0.5D);
+            matrixStack.rotate(Vector3f.YP.rotationDegrees(180.0F));
             this.renderPortal(matrixStack, buffer, MiscellaneousIcons.INSTANCE.alfPortalTex, 0, 0, 3, 3, alpha, overlay);
 
             matrixStack.pop();
