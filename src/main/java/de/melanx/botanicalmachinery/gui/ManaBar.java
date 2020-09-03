@@ -39,9 +39,10 @@ public class ManaBar {
         Screen.blit(ms, relX, relY, 0, 0, this.width, this.height, this.width, this.height);
         this.parent.getMinecraft().getTextureManager().bindTexture(LibResources.MANA_BAR_CURRENT);
         relX += 1;
-        relY += this.height - 1;
+        relY += 1;
         float pct = Math.min(mana / this.capacity, 1.0F);
-        Screen.blit(ms, relX, relY, 0, 0, this.width - 2, (int) -((this.height - 2) * pct), this.width - 2, this.height - 2);
+        int relHeight = (int) ((this.height - 2) * pct);
+        Screen.blit(ms, relX, relY + (this.height - 2 - relHeight), 0, 0, this.width - 2, relHeight, this.width - 2, this.height - 2);
     }
 
     public void renderHoveredToolTip(MatrixStack ms, int mouseX, int mouseY, int mana) {

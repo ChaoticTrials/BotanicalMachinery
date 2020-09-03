@@ -7,9 +7,7 @@ import de.melanx.botanicalmachinery.core.LibResources;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.Atlases;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -23,6 +21,7 @@ import vazkii.botania.client.core.handler.ClientTickHandler;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class RenderHelper {
@@ -99,18 +98,17 @@ public class RenderHelper {
             matrixStack.translate(-0.5D, -0.5D, -0.5D);
 
             if (!model.isBuiltInRenderer() && (stack.getItem() != Items.TRIDENT || isFixed)) {
-//                RenderType type = RenderTypeLookup.getRenderType(stack);
-//                if (isGui && Objects.equals(type, Atlases.getTranslucentCullBlockType())) {
-//                    type = Atlases.getTranslucentCullBlockType();
-//                }
-//
-                IVertexBuilder ivertexbuilder = ItemRenderer.getBuffer(buffer, Atlases.getTranslucentCullBlockType(), true, stack.hasEffect());
+                RenderType type = RenderTypeLookup.func_239219_a_(stack, true);
+                if (isGui && Objects.equals(type, Atlases.getTranslucentCullBlockType())) {
+                    type = Atlases.getTranslucentCullBlockType();
+                }
+
+                IVertexBuilder ivertexbuilder = ItemRenderer.getBuffer(buffer, type, true, stack.hasEffect());
                 renderTintedModel(model, light, overlay, matrixStack, ivertexbuilder, r, g, b);
             } else {
                 //noinspection deprecation
                 GlStateManager.color4f(r, g, b, 1);
-//                RenderType type = RenderTypeLookup.getRenderType(stack);
-                stack.getItem().getItemStackTileEntityRenderer().func_239207_a_(stack, ItemCameraTransforms.TransformType.GUI, matrixStack, buffer, light, overlay);
+                stack.getItem().getItemStackTileEntityRenderer().func_239207_a_(stack, transformType, matrixStack, buffer, light, overlay);
                 //noinspection deprecation
                 GlStateManager.color4f(1, 1, 1, 1);
             }
