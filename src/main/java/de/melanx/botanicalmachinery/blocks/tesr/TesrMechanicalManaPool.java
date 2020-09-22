@@ -64,7 +64,7 @@ public class TesrMechanicalManaPool extends HorizontalRotatedTesr<TileMechanical
             matrixStack.scale(1/16f, 1/16f, 1/16f);
 
             IVertexBuilder vertex = buffer.getBuffer(RenderHelper.MANA_POOL_WATER);
-            IconHelper.renderIcon(matrixStack, vertex, 0, 0, MiscellaneousIcons.INSTANCE.manaWater, 10, 10, 1.0F);
+            IconHelper.renderIcon(matrixStack, vertex, 0, 0, MiscellaneousIcons.INSTANCE.manaWater.getSprite(), 10, 10, 1.0F);
 
             matrixStack.pop();
         }

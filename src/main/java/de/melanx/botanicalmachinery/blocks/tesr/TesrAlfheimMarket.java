@@ -53,10 +53,10 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
             matrixStack.translate(-1.0D, 1.0D, 0.25D);
             float alpha = (float)Math.min(1.0D, (Math.sin((double)((float) ClientTickHandler.ticksInGame + partialTicks) / 8.0D) + 1.0D) / 7.0D + 0.6D);
 
-            this.renderPortal(matrixStack, buffer, MiscellaneousIcons.INSTANCE.alfPortalTex, 0, 0, 3, 3, alpha, overlay);
+            this.renderPortal(matrixStack, buffer, MiscellaneousIcons.INSTANCE.alfPortalTex.getSprite(), 0, 0, 3, 3, alpha, overlay);
             matrixStack.translate(3.0D, 0.0D, 0.5D);
             matrixStack.rotate(Vector3f.YP.rotationDegrees(180.0F));
-            this.renderPortal(matrixStack, buffer, MiscellaneousIcons.INSTANCE.alfPortalTex, 0, 0, 3, 3, alpha, overlay);
+            this.renderPortal(matrixStack, buffer, MiscellaneousIcons.INSTANCE.alfPortalTex.getSprite(), 0, 0, 3, 3, alpha, overlay);
 
             matrixStack.pop();
         }

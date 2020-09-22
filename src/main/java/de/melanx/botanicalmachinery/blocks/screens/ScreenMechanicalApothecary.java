@@ -91,16 +91,16 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
         this.blit(ms, xPos, 16, this.xSize, 16, 17, 81);
 
-        this.func_230459_a_(ms, mouseX - this.guiLeft, mouseY - this.guiTop);
+        this.renderHoveredTooltip(ms, mouseX - this.guiLeft, mouseY - this.guiTop);
     }
 
     @Override
-    protected void func_230459_a_(@Nonnull MatrixStack ms, int mouseX, int mouseY) {
+    protected void renderHoveredTooltip(@Nonnull MatrixStack ms, int mouseX, int mouseY) {
         if (mouseX >= 163 && mouseX <= 179 &&
                 mouseY >= 16 && mouseY <= 96) {
             TranslationTextComponent fluid = new TranslationTextComponent(this.tile.getFluidInventory().getFluidAmount() + " / " + this.tile.getFluidInventory().getCapacity() + " mB");
             this.renderTooltip(ms, fluid, mouseX, mouseY);
         }
-        super.func_230459_a_(ms, mouseX, mouseY);
+        super.renderHoveredTooltip(ms, mouseX, mouseY);
     }
 }

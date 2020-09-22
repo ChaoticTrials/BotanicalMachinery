@@ -57,7 +57,7 @@ public class ScreenMechanicalDaisy extends ContainerScreen<ContainerMechanicalDa
         blit(ms, 12, 16, 0, 48, 48, sprite);
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
-        this.func_230459_a_(ms, mouseX - this.guiLeft, mouseY - this.guiTop);
+        this.renderHoveredTooltip(ms, mouseX - this.guiLeft, mouseY - this.guiTop);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ScreenMechanicalDaisy extends ContainerScreen<ContainerMechanicalDa
     }
 
     @Override
-    protected void func_230459_a_(@Nonnull MatrixStack ms, int mouseX, int mouseY) {
+    protected void renderHoveredTooltip(@Nonnull MatrixStack ms, int mouseX, int mouseY) {
         //noinspection ConstantConditions
         if (this.minecraft.player.inventory.getItemStack().isEmpty() && this.hoveredSlot != null) {
             if (this.hoveredSlot instanceof ContainerMechanicalDaisy.ItemAndFluidSlot
@@ -106,6 +106,6 @@ public class ScreenMechanicalDaisy extends ContainerScreen<ContainerMechanicalDa
                 return;
             }
         }
-        super.func_230459_a_(ms, mouseX, mouseY);
+        super.renderHoveredTooltip(ms, mouseX, mouseY);
     }
 }

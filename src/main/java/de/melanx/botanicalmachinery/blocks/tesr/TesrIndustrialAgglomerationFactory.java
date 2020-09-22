@@ -60,7 +60,7 @@ public class TesrIndustrialAgglomerationFactory extends HorizontalRotatedTesr<Ti
             ms.translate(0, 0, -0.18850000202655792);
             float alpha = (float) ((Math.sin((ClientTickHandler.ticksInGame + partialTicks) / 8) + 1) / 5 + 0.6) * alphaMod;
             IVertexBuilder vertex = buffer.getBuffer(vazkii.botania.client.core.helper.RenderHelper.TERRA_PLATE);
-            IconHelper.renderIcon(ms, vertex, 0, 0, MiscellaneousIcons.INSTANCE.terraPlateOverlay, 1, 1, alpha);
+            IconHelper.renderIcon(ms, vertex, 0, 0, MiscellaneousIcons.INSTANCE.terraPlateOverlay.getSprite(), 1, 1, alpha);
 
             ms.pop();
         }
