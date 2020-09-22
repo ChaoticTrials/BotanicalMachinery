@@ -73,6 +73,7 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
                 matrixStack.translate(8, 4.6, 8.8);
                 matrixStack.scale(5.4f, 5.4f, 5.4f);
                 matrixStack.translate(0, yPos, zPos);
+                matrixStack.scale(-1, 1, -1);
                 matrixStack.rotate(Minecraft.getInstance().getRenderManager().getCameraOrientation());
 
                 Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, 200, OverlayTexture.NO_OVERLAY, matrixStack, buffer);
