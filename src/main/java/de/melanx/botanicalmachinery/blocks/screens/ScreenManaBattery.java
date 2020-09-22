@@ -51,7 +51,7 @@ public class ScreenManaBattery extends ScreenBase<ContainerManaBattery> {
         }
 
         if (mouseX >= this.xB2 && mouseX < this.xB2 + 20 && mouseY >= this.yB2 && mouseY < this.yB2 + 20) {
-            this.blit(this.xB2, this.yB2, 20, tile.isSlot2Locked() ? this.ySize + 20 : this.ySize, 20, 20);
+            this.blit(ms, this.xB2, this.yB2, 20, tile.isSlot2Locked() ? this.ySize + 20 : this.ySize, 20, 20);
         } else {
             this.blit(ms, this.xB2, this.yB2, 0, tile.isSlot2Locked() ? this.ySize + 20 : this.ySize, 20, 20);
         }
