@@ -67,17 +67,17 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
             if (!manasteel.isEmpty() && !manadiamond.isEmpty() &&
                     !manapearl.isEmpty() && output.getCount() < 64) {
                 this.recipe = true;
-                    int manaTransfer = Math.min(this.mana, Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
-                    this.progress += manaTransfer;
-                    this.receiveMana(-manaTransfer);
-                    if (this.progress >= this.getMaxProgress()) {
-                        manasteel.shrink(1);
-                        manadiamond.shrink(1);
-                        manapearl.shrink(1);
-                        this.inventory.getUnrestricted().insertItem(3, new ItemStack(ModItems.terrasteel), false);
-                        this.recipe = false;
-                    }
-                    this.markDirty();
+                int manaTransfer = Math.min(this.mana, Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
+                this.progress += manaTransfer;
+                this.receiveMana(-manaTransfer);
+                if (this.progress >= this.getMaxProgress()) {
+                    manasteel.shrink(1);
+                    manadiamond.shrink(1);
+                    manapearl.shrink(1);
+                    this.inventory.getUnrestricted().insertItem(3, new ItemStack(ModItems.terrasteel), false);
+                    this.recipe = false;
+                }
+                this.markDirty();
             }
             if (!this.recipe && this.progress > 0) {
                 this.progress = 0;

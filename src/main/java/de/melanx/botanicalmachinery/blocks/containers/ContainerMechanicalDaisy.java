@@ -136,7 +136,7 @@ public class ContainerMechanicalDaisy extends ContainerBase<TileMechanicalDaisy>
         }
 
         if (stack.isStackable()) {
-            while(!stack.isEmpty()) {
+            while (!stack.isEmpty()) {
                 if (reverseDirection) {
                     if (i < startIndex) {
                         break;
@@ -178,7 +178,7 @@ public class ContainerMechanicalDaisy extends ContainerBase<TileMechanicalDaisy>
                 i = startIndex;
             }
 
-            while(true) {
+            while (true) {
                 if (reverseDirection) {
                     if (i < startIndex) {
                         break;

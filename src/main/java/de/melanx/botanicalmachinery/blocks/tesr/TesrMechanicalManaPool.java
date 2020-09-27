@@ -43,11 +43,11 @@ public class TesrMechanicalManaPool extends HorizontalRotatedTesr<TileMechanical
 
             matrixStack.push();
 
-            matrixStack.translate(2/16d, POOL_BOTTOM_HEIGHT, 2/16d);
+            matrixStack.translate(2 / 16d, POOL_BOTTOM_HEIGHT, 2 / 16d);
             matrixStack.rotate(Vector3f.XP.rotationDegrees(90.0F));
-            matrixStack.scale(1/16f, 1/16f, 1/16f);
+            matrixStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
 
-            float alpha = (float)((Math.sin((double)((float) ClientTickHandler.ticksInGame + partialTicks) / 20.0D) + 1.0D) * 0.3D + 0.2D);
+            float alpha = (float) ((Math.sin((double) ((float) ClientTickHandler.ticksInGame + partialTicks) / 20.0D) + 1.0D) * 0.3D + 0.2D);
 
             IVertexBuilder vertex = buffer.getBuffer(RenderHelper.ICON_OVERLAY);
             IconHelper.renderIcon(matrixStack, vertex, 0, 0, sprite, 12, 12, alpha);
@@ -59,9 +59,9 @@ public class TesrMechanicalManaPool extends HorizontalRotatedTesr<TileMechanical
             double amount = tile.getCurrentMana() / (double) tile.getManaCap();
 
             matrixStack.push();
-            matrixStack.translate(3/16d, POOL_BOTTOM_HEIGHT + (amount * INNER_POOL_HEIGHT), 3/16d);
+            matrixStack.translate(3 / 16d, POOL_BOTTOM_HEIGHT + (amount * INNER_POOL_HEIGHT), 3 / 16d);
             matrixStack.rotate(Vector3f.XP.rotationDegrees(90.0F));
-            matrixStack.scale(1/16f, 1/16f, 1/16f);
+            matrixStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
 
             IVertexBuilder vertex = buffer.getBuffer(RenderHelper.MANA_POOL_WATER);
             IconHelper.renderIcon(matrixStack, vertex, 0, 0, MiscellaneousIcons.INSTANCE.manaWater.getSprite(), 10, 10, 1.0F);

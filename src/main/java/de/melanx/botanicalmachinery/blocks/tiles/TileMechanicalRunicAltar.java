@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile  {
+public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile {
 
     public static final int MAX_MANA_PER_TICK = 100;
 
