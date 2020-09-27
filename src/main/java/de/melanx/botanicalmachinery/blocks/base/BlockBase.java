@@ -43,11 +43,11 @@ public abstract class BlockBase extends Block implements ITileEntityProvider, IW
             makeCuboidShape(0, 0, 0, 1, 16, 1),
             makeCuboidShape(15, 0, 0, 16, 16, 1),
             makeCuboidShape(0, 0, 15, 1, 16, 16),
-            makeCuboidShape(15, 0,  15, 16, 16, 16),
-            makeCuboidShape(0, 15,  0, 1, 16, 16),
-            makeCuboidShape(0, 15,  0, 16, 16, 1),
-            makeCuboidShape(15, 15,  0, 16, 16, 16),
-            makeCuboidShape(0, 15,  15, 16, 16, 16)
+            makeCuboidShape(15, 0, 15, 16, 16, 16),
+            makeCuboidShape(0, 15, 0, 1, 16, 16),
+            makeCuboidShape(0, 15, 0, 16, 16, 1),
+            makeCuboidShape(15, 15, 0, 16, 16, 16),
+            makeCuboidShape(0, 15, 15, 16, 16, 16)
     );
 
     private final boolean fullCube;
@@ -141,5 +141,10 @@ public abstract class BlockBase extends Block implements ITileEntityProvider, IW
     @Override
     public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
         return (!this.fullCube) ? FRAME_SHAPE : super.getShape(state, world, pos, context);
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride(@Nonnull BlockState state) {
+        return true;
     }
 }

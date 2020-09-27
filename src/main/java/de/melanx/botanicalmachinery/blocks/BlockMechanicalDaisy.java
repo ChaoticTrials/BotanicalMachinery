@@ -111,4 +111,20 @@ public class BlockMechanicalDaisy extends Block {
     public VoxelShape getRenderShape(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos) {
         return COLLISION_SHAPE;
     }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public int getComparatorInputOverride(@Nonnull BlockState blockState, @Nonnull World worldIn, @Nonnull BlockPos pos) {
+        TileMechanicalDaisy tile = (TileMechanicalDaisy) worldIn.getTileEntity(pos);
+        int x = 0;
+        if (tile != null) {
+            for (int i = 0; i < 8; i++) {
+                if (!tile.getInventory().getStackInSlot(i).isEmpty()) {
+                    x++;
+                }
+            }
+            return x;
+        }
+        return 0;
+    }
 }

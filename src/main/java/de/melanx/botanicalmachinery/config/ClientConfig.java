@@ -10,6 +10,7 @@ import java.nio.file.Path;
 public class ClientConfig {
     public static final ForgeConfigSpec CLIENT_CONFIG;
     private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+
     static {
         init(CLIENT_BUILDER);
         CLIENT_CONFIG = CLIENT_BUILDER.build();

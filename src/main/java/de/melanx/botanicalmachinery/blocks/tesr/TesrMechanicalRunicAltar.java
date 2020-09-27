@@ -36,9 +36,9 @@ public class TesrMechanicalRunicAltar extends HorizontalRotatedTesr<TileMechanic
             BlockState state = ((BlockItem) livingRockStack.getItem()).getBlock().getDefaultState();
 
             matrixStack.push();
-            matrixStack.scale(1/16f, 1/16f,1/16f);
+            matrixStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
             matrixStack.translate(6.5, 10, 6.5);
-            matrixStack.scale(3,3, 3);
+            matrixStack.scale(3, 3, 3);
 
             matrixStack.translate(0.5, 0, 0.5);
             matrixStack.rotate(Vector3f.YP.rotationDegrees(-(ClientTickHandler.ticksInGame + partialTicks)));
@@ -61,14 +61,14 @@ public class TesrMechanicalRunicAltar extends HorizontalRotatedTesr<TileMechanic
         float[] angles = new float[items];
         float anglePer = 360f / items;
         float totalAngle = 0;
-        for(int i = 0; i < angles.length; i++) {
+        for (int i = 0; i < angles.length; i++) {
             angles[i] = totalAngle += anglePer;
         }
 
         float time = ClientTickHandler.ticksInGame + partialTicks;
 
         int nextAngleIdx = 0;
-        for(int slot : tile.getInventory().getInputSlots()) {
+        for (int slot : tile.getInventory().getInputSlots()) {
             if (!tile.getInventory().getStackInSlot(slot).isEmpty()) {
                 double travelCenter = 1;
                 boolean shrink = false;
@@ -83,7 +83,7 @@ public class TesrMechanicalRunicAltar extends HorizontalRotatedTesr<TileMechanic
                     break;
 
                 matrixStack.push();
-                matrixStack.translate(0.5, 10.8/16d, 0.5);
+                matrixStack.translate(0.5, 10.8 / 16d, 0.5);
                 matrixStack.scale(0.3f, 0.3f, 0.3f);
                 matrixStack.rotate(Vector3f.YP.rotationDegrees(angles[angleIdx] + time));
                 matrixStack.translate(travelCenter * 1.125, 0, travelCenter * 0.25);

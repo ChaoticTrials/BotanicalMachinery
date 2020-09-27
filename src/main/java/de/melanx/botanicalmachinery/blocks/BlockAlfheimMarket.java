@@ -13,6 +13,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -53,5 +54,12 @@ public class BlockAlfheimMarket extends BlockBase {
     @Override
     public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
         return SHAPE.getShape(state.get(BlockStateProperties.HORIZONTAL_FACING));
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public int getComparatorInputOverride(@Nonnull BlockState blockState, @Nonnull World worldIn, @Nonnull BlockPos pos) {
+        TileAlfheimMarket tile = (TileAlfheimMarket) worldIn.getTileEntity(pos);
+        return tile != null && tile.getProgress() > 0 ? 15 : 0;
     }
 }

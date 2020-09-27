@@ -145,4 +145,11 @@ public class BlockMechanicalApothecary extends Block {
     public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
         return SHAPE.getShape(state.get(BlockStateProperties.HORIZONTAL_FACING));
     }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public int getComparatorInputOverride(@Nonnull BlockState blockState, @Nonnull World worldIn, @Nonnull BlockPos pos) {
+        TileMechanicalApothecary tile = (TileMechanicalApothecary) worldIn.getTileEntity(pos);
+        return tile != null && tile.getProgress() > 0 ? 15 : 0;
+    }
 }

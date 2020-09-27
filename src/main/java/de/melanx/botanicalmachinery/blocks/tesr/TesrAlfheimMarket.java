@@ -33,24 +33,24 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
             return;
 
         matrixStack.push();
-        matrixStack.scale(1/16f, 1/16f, 1/16f);
+        matrixStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
         matrixStack.translate(3.2, 2, 3.6);
         matrixStack.scale(3.6f, 3.6f, 3.6f);
         //noinspection deprecation
         Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(ModBlocks.naturaPylon.getDefaultState(), matrixStack, buffer, light, overlay);
-        matrixStack.translate(1 + (2/3.6), 0, 0);
+        matrixStack.translate(1 + (2 / 3.6), 0, 0);
         //noinspection deprecation
         Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(ModBlocks.naturaPylon.getDefaultState(), matrixStack, buffer, light, overlay);
         matrixStack.pop();
 
         if (tile.getCurrentMana() > 0) {
             matrixStack.push();
-            matrixStack.scale(1/16f, 1/16f, 1/16f);
+            matrixStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
             matrixStack.translate(6.8, 1, 8.8);
             matrixStack.scale(2.4f, 2.4f, 2.4f);
 
             matrixStack.translate(-1.0D, 1.0D, 0.25D);
-            float alpha = (float)Math.min(1.0D, (Math.sin((double)((float) ClientTickHandler.ticksInGame + partialTicks) / 8.0D) + 1.0D) / 7.0D + 0.6D);
+            float alpha = (float) Math.min(1.0D, (Math.sin((double) ((float) ClientTickHandler.ticksInGame + partialTicks) / 8.0D) + 1.0D) / 7.0D + 0.6D);
 
             this.renderPortal(matrixStack, buffer, MiscellaneousIcons.INSTANCE.alfPortalTex, 0, 0, 3, 3, alpha, overlay);
             matrixStack.translate(0.0D, 0.0D, 0.5D);
@@ -67,7 +67,7 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
                 double zPos = -(progress * 0.75);
 
                 matrixStack.push();
-                matrixStack.scale(1/16f, 1/16f, 1/16f);
+                matrixStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
                 matrixStack.translate(8, 4.6, 8.8);
                 matrixStack.scale(5.4f, 5.4f, 5.4f);
                 matrixStack.translate(0, yPos, zPos);
@@ -83,9 +83,9 @@ public class TesrAlfheimMarket extends HorizontalRotatedTesr<TileAlfheimMarket> 
         IVertexBuilder vertex = buffer.getBuffer(Atlases.getTranslucentBlockType());
         Matrix4f model = matrixStack.getLast().getMatrix();
         Matrix3f normal = matrixStack.getLast().getNormal();
-        vertex.pos(model, (float)x, (float)(y + height), 0.0F).color(1.0F, 1.0F, 1.0F, alpha).tex(sprite.getMinU(), sprite.getMaxV()).overlay(overlay).lightmap(15728880).normal(normal, 1.0F, 0.0F, 0.0F).endVertex();
-        vertex.pos(model, (float)(x + width), (float)(y + height), 0.0F).color(1.0F, 1.0F, 1.0F, alpha).tex(sprite.getMaxU(), sprite.getMaxV()).overlay(overlay).lightmap(15728880).normal(normal, 1.0F, 0.0F, 0.0F).endVertex();
-        vertex.pos(model, (float)(x + width), (float)y, 0.0F).color(1.0F, 1.0F, 1.0F, alpha).tex(sprite.getMaxU(), sprite.getMinV()).overlay(overlay).lightmap(15728880).normal(normal, 1.0F, 0.0F, 0.0F).endVertex();
-        vertex.pos(model, (float)x, (float)y, 0.0F).color(1.0F, 1.0F, 1.0F, alpha).tex(sprite.getMinU(), sprite.getMinV()).overlay(overlay).lightmap(15728880).normal(normal, 1.0F, 0.0F, 0.0F).endVertex();
+        vertex.pos(model, (float) x, (float) (y + height), 0.0F).color(1.0F, 1.0F, 1.0F, alpha).tex(sprite.getMinU(), sprite.getMaxV()).overlay(overlay).lightmap(15728880).normal(normal, 1.0F, 0.0F, 0.0F).endVertex();
+        vertex.pos(model, (float) (x + width), (float) (y + height), 0.0F).color(1.0F, 1.0F, 1.0F, alpha).tex(sprite.getMaxU(), sprite.getMaxV()).overlay(overlay).lightmap(15728880).normal(normal, 1.0F, 0.0F, 0.0F).endVertex();
+        vertex.pos(model, (float) (x + width), (float) y, 0.0F).color(1.0F, 1.0F, 1.0F, alpha).tex(sprite.getMaxU(), sprite.getMinV()).overlay(overlay).lightmap(15728880).normal(normal, 1.0F, 0.0F, 0.0F).endVertex();
+        vertex.pos(model, (float) x, (float) y, 0.0F).color(1.0F, 1.0F, 1.0F, alpha).tex(sprite.getMinU(), sprite.getMinV()).overlay(overlay).lightmap(15728880).normal(normal, 1.0F, 0.0F, 0.0F).endVertex();
     }
 }
