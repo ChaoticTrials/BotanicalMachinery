@@ -4,21 +4,21 @@ import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.BlockBase;
 import de.melanx.botanicalmachinery.core.LibNames;
 import de.melanx.botanicalmachinery.core.Registration;
+import io.github.noeppi_noeppi.libx.data.provider.BlockStateProviderBase;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.fml.RegistryObject;
 
-public class BlockStates extends BlockStateProvider {
+public class BlockStates extends BlockStateProviderBase {
     public BlockStates(DataGenerator gen, ExistingFileHelper helper) {
-        super(gen, BotanicalMachinery.MODID, helper);
+        super(BotanicalMachinery.getInstance(), gen, helper);
     }
 
     @Override
@@ -68,12 +68,12 @@ public class BlockStates extends BlockStateProvider {
 
     private void createStateForManualModel(VariantBlockStateBuilder builder, Block block) {
         //noinspection ConstantConditions
-        builder.partialState().addModels(new ConfiguredModel(this.models().getExistingFile(new ResourceLocation(BotanicalMachinery.MODID, "block/" + block.getRegistryName().getPath()))));
+        builder.partialState().addModels(new ConfiguredModel(this.models().getExistingFile(new ResourceLocation(BotanicalMachinery.getInstance().modid, "block/" + block.getRegistryName().getPath()))));
     }
 
     private void createStateForManualModelRotatable(VariantBlockStateBuilder builder, Block block) {
         @SuppressWarnings("ConstantConditions")
-        ModelFile model = this.models().getExistingFile(new ResourceLocation(BotanicalMachinery.MODID, "block/" + block.getRegistryName().getPath()));
+        ModelFile model = this.models().getExistingFile(new ResourceLocation(BotanicalMachinery.getInstance().modid, "block/" + block.getRegistryName().getPath()));
         for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getAllowedValues()) {
             builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, direction)
                     .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));

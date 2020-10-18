@@ -7,6 +7,7 @@ import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.ModGroup;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.network.BotanicalMachineryNetwork;
+import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -22,31 +23,40 @@ import net.minecraftforge.fml.loading.FMLConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.system.CallbackI;
 
-@Mod(BotanicalMachinery.MODID)
-public class BotanicalMachinery {
-
-    public static final String MODID = "botanicalmachinery";
-    public static final ItemGroup itemGroup = new ModGroup(MODID);
-    public static final Logger LOGGER = LogManager.getLogger(MODID);
-    public final BotanicalMachinery instance;
+@Mod("botanicalmachinery")
+public class BotanicalMachinery extends ModXRegistration {
+    public static BotanicalMachinery instance;
+    public static BotanicalMachineryNetwork network;
 
     public BotanicalMachinery() {
-        this.instance = this;
+        super("botanicalmachinery", new ModGroup("botanicalmachinery"));
+        instance = this;
+        network = new BotanicalMachineryNetwork(this);
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_CONFIG);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_CONFIG);
-        ClientConfig.loadConfig(ClientConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(MODID + "-client.toml"));
-        ServerConfig.loadConfig(ServerConfig.SERVER_CONFIG, FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()).resolve(MODID + "-server.toml"));
+        ClientConfig.loadConfig(ClientConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(this.modid + "-client.toml"));
+        ServerConfig.loadConfig(ServerConfig.SERVER_CONFIG, FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()).resolve(this.modid + "-server.toml"));
         Registration.init();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
     }
 
-    private void onSetup(final FMLCommonSetupEvent event) {
-        BotanicalMachineryNetwork.registerPackets();
+    public static BotanicalMachinery getInstance() {
+        return instance;
     }
 
-    private void onClientSetup(final FMLClientSetupEvent event) {
+    public static BotanicalMachineryNetwork getNetwork() {
+        return network;
+    }
+
+    @Override
+    protected void setup(FMLCommonSetupEvent event) {
+
+    }
+
+    @Override
+    protected void clientSetup(FMLClientSetupEvent event) {
         ScreenManager.registerFactory(Registration.CONTAINER_ALFHEIM_MARKET.get(), ScreenAlfheimMarket::new);
         ScreenManager.registerFactory(Registration.CONTAINER_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), ScreenIndustrialAgglomerationFactory::new);
         ScreenManager.registerFactory(Registration.CONTAINER_MANA_BATTERY.get(), ScreenManaBattery::new);
