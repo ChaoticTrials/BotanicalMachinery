@@ -1,8 +1,11 @@
 package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.core.Registration;
-import net.minecraft.data.*;
+import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeProviderBase;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.data.ShapedRecipeBuilder;
+import net.minecraft.data.ShapelessRecipeBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -16,32 +19,31 @@ import vazkii.botania.common.lib.ModTags;
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
-public class Recipes extends RecipeProvider {
+public class Recipes extends RecipeProviderBase {
 
-    public Recipes(DataGenerator generatorIn) {
-        super(generatorIn);
-        generatorIn.addProvider(new ManaInfusionProvider(generatorIn));
+    public Recipes(DataGenerator generator) {
+        super(BotanicalMachinery.getInstance(), generator);
+        generator.addProvider(new ManaInfusionProvider(generator));
     }
 
     @Override
     protected void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
         this.registerExtraRecipes(consumer);
 
-        this.compress(consumer, Registration.ITEM_MANA_EMERALD_BLOCK.get(), Registration.ITEM_MANA_EMERALD.get());
-        this.decompress(consumer, Registration.ITEM_MANA_EMERALD.get(), Registration.ITEM_MANA_EMERALD_BLOCK.get());
+        this.makeBlockItem(consumer, de.melanx.botanicalmachinery.core.registration.ModBlocks.MANA_EMERALD, de.melanx.botanicalmachinery.core.registration.ModItems.MANA_EMERALD);
 
-        this.shaped(Registration.BLOCK_MANA_BATTERY.get())
+        this.shaped(de.melanx.botanicalmachinery.core.registration.ModBlocks.MANA_BATTERY)
                 .key('d', ModTags.Items.GEMS_DRAGONSTONE)
                 .key('g', ModItems.gaiaIngot)
                 .key('r', ModItems.manaRingGreater)
-                .key('b', Registration.ITEM_MANA_EMERALD_BLOCK.get())
+                .key('b', de.melanx.botanicalmachinery.core.registration.ModBlocks.MANA_EMERALD.asItem())
                 .patternLine("dgd")
                 .patternLine("grg")
                 .patternLine("dbd")
                 .addCriterion("has_item", this.hasItem(ModItems.manaRingGreater))
                 .build(consumer);
 
-        this.shaped(Registration.BLOCK_MECHANICAL_DAISY.get())
+        this.shaped(de.melanx.botanicalmachinery.core.registration.ModBlocks.MECHANICAL_DAISY)
                 .key('e', ModTags.Items.BLOCKS_ELEMENTIUM)
                 .key('a', ModItems.auraRingGreater)
                 .key('d', ModSubtiles.pureDaisyFloating)
@@ -50,25 +52,25 @@ public class Recipes extends RecipeProvider {
                 .addCriterion("has_item", this.hasItem(ModSubtiles.pureDaisyFloating))
                 .build(consumer);
 
-        this.defaultMachine(consumer, Registration.BLOCK_ALFHEIM_MARKET.get(), ModBlocks.alfPortal,
+        this.defaultMachine(consumer, de.melanx.botanicalmachinery.core.registration.ModBlocks.ALFHEIM_MARKET, ModBlocks.alfPortal,
                 ModBlocks.livingwoodGlimmering, ModBlocks.dreamwood, ModBlocks.livingwoodGlimmering);
 
-        this.defaultMachine(consumer, Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), ModBlocks.terraPlate,
+        this.defaultMachine(consumer, de.melanx.botanicalmachinery.core.registration.ModBlocks.INDUSTRIAL_AGGLOMERATION_FACTORY, ModBlocks.terraPlate,
                 Ingredient.fromTag(ModTags.Items.GEMS_MANA_DIAMOND),
                 Ingredient.fromTag(ModTags.Items.INGOTS_MANASTEEL),
                 Ingredient.fromItems(ModItems.manaPearl));
 
-        this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_MANA_POOL.get(), ModBlocks.fabulousPool,
+        this.defaultMachine(consumer, de.melanx.botanicalmachinery.core.registration.ModBlocks.MECHANICAL_MANA_POOL, ModBlocks.fabulousPool,
                 ModBlocks.alchemyCatalyst, ModBlocks.dilutedPool, ModBlocks.conjurationCatalyst);
 
-        this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get(), ModBlocks.runeAltar,
+        this.defaultMachine(consumer, de.melanx.botanicalmachinery.core.registration.ModBlocks.MECHANICAL_RUNIC_ALTAR, ModBlocks.runeAltar,
                 Ingredient.fromItems(ModItems.runeLust, ModItems.runeGluttony, ModItems.runeGreed,
                         ModItems.runeSloth, ModItems.runeWrath, ModItems.runeEnvy, ModItems.runePride));
 
-        this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_BREWERY.get(), ModBlocks.brewery,
+        this.defaultMachine(consumer, de.melanx.botanicalmachinery.core.registration.ModBlocks.MECHANICAL_BREWERY, ModBlocks.brewery,
                 ModItems.flask, Items.BLAZE_ROD, ModItems.flask);
 
-        this.defaultMachine(consumer, Registration.BLOCK_MECHANICAL_APOTHECARY.get(), ModBlocks.defaultAltar,
+        this.defaultMachine(consumer, de.melanx.botanicalmachinery.core.registration.ModBlocks.MECHANICAL_APOTHECARY, ModBlocks.defaultAltar,
                 Ingredient.fromTag(ModTags.Items.PETALS));
     }
 
@@ -125,20 +127,20 @@ public class Recipes extends RecipeProvider {
 
     private void registerExtraRecipes(Consumer<IFinishedRecipe> consumer) {
         this.shaped(ModItems.manaTablet)
-                .key('P', Ingredient.fromItems(Registration.ITEM_MANA_EMERALD.get()))
+                .key('P', Ingredient.fromItems(de.melanx.botanicalmachinery.core.registration.ModItems.MANA_EMERALD))
                 .key('S', ModTags.Items.LIVINGROCK)
                 .patternLine("SSS")
                 .patternLine("SPS")
                 .patternLine("SSS")
-                .addCriterion("has_item", this.hasItem(Registration.ITEM_MANA_EMERALD.get()))
+                .addCriterion("has_item", this.hasItem(de.melanx.botanicalmachinery.core.registration.ModItems.MANA_EMERALD))
                 .build(consumer, this.changedBotaniaLoc(ModItems.manaTablet));
 
         this.shaped(ModBlocks.runeAltar)
-                .key('P', Registration.ITEM_MANA_EMERALD.get())
+                .key('P', de.melanx.botanicalmachinery.core.registration.ModItems.MANA_EMERALD)
                 .key('S', ModTags.Items.LIVINGROCK)
                 .patternLine("SSS")
                 .patternLine("SPS")
-                .addCriterion("has_item", this.hasItem(Registration.ITEM_MANA_EMERALD.get()))
+                .addCriterion("has_item", this.hasItem(de.melanx.botanicalmachinery.core.registration.ModItems.MANA_EMERALD))
                 .build(consumer, this.changedBotaniaLoc(ModBlocks.runeAltar.asItem()));
     }
 

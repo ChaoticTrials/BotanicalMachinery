@@ -2,9 +2,9 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
-import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
 import io.github.noeppi_noeppi.libx.inventory.ItemStackHandlerWrapper;
+import io.github.noeppi_noeppi.libx.mod.registration.TileEntityBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -15,6 +15,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
@@ -28,7 +29,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.api.recipe.IPureDaisyRecipe;
 import vazkii.botania.client.fx.WispParticleData;
-import vazkii.botania.common.block.tile.TileMod;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity {
+public class TileMechanicalDaisy extends TileEntityBase implements ITickableTileEntity {
 
     private int ticksToNextUpdate = 5;
     // Negative value = recipe completed
@@ -50,8 +50,49 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
     private final LazyOptional<IFluidHandler> fluidInventory = LazyOptional.of(() -> this.inventory);
 
 
-    public TileMechanicalDaisy() {
-        super(Registration.TILE_MECHANICAL_DAISY.get());
+    public TileMechanicalDaisy(TileEntityType<?> type) {
+        super(type);
+    }
+
+    @Override
+    public void read(BlockState state, CompoundNBT cmp) {
+        super.read(state, cmp);
+        if (cmp.contains(TileTags.INVENTORY)) {
+            this.inventory.deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
+        }
+        if (cmp.contains(TileTags.WORKING_TICKS)) {
+            this.workingTicks = cmp.getIntArray(TileTags.WORKING_TICKS);
+        }
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT write(CompoundNBT cmp) {
+        cmp.put(TileTags.INVENTORY, this.inventory.serializeNBT());
+        cmp.putIntArray(TileTags.WORKING_TICKS, this.workingTicks);
+        return super.write(cmp);
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (world != null && !world.isRemote) return;
+        super.handleUpdateTag(state, cmp);
+        if (cmp.contains(TileTags.INVENTORY)) {
+            this.inventory.deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
+        }
+        if (cmp.contains(TileTags.WORKING_TICKS)) {
+            this.workingTicks = cmp.getIntArray(TileTags.WORKING_TICKS);
+        }
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (world != null && world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.put(TileTags.INVENTORY, this.inventory.serializeNBT());
+        cmp.putIntArray(TileTags.WORKING_TICKS, this.workingTicks);
+        return cmp;
     }
 
     @Override
@@ -153,22 +194,6 @@ public class TileMechanicalDaisy extends TileMod implements ITickableTileEntity 
             }
         }
         return null;
-    }
-
-    @Override
-    public void writePacketNBT(CompoundNBT tag) {
-        tag.put(TileTags.INVENTORY, this.inventory.serializeNBT());
-        tag.putIntArray(TileTags.WORKING_TICKS, this.workingTicks);
-    }
-
-    @Override
-    public void readPacketNBT(CompoundNBT tag) {
-        if (tag.contains(TileTags.INVENTORY)) {
-            this.inventory.deserializeNBT(tag.getCompound(TileTags.INVENTORY));
-        }
-        if (tag.contains(TileTags.WORKING_TICKS)) {
-            this.workingTicks = tag.getIntArray(TileTags.WORKING_TICKS);
-        }
     }
 
     @Nonnull

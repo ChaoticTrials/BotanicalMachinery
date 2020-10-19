@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.melanx.botanicalmachinery.core.LibResources;
 import de.melanx.botanicalmachinery.gui.ManaBar;
+import io.github.noeppi_noeppi.libx.inventory.container.ContainerBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;

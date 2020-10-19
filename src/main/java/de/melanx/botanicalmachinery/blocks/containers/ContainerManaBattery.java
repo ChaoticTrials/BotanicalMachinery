@@ -1,9 +1,9 @@
 package de.melanx.botanicalmachinery.blocks.containers;
 
-import de.melanx.botanicalmachinery.blocks.base.ContainerBase;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.blocks.tiles.TileManaBattery;
-import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.registration.Registration;
+import io.github.noeppi_noeppi.libx.inventory.container.ContainerBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.math.BlockPos;

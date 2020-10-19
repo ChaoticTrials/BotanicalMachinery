@@ -2,7 +2,7 @@ package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.blocks.base.BaseBlock;
 import de.melanx.botanicalmachinery.blocks.tiles.TileIndustrialAgglomerationFactory;
-import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.registration.Registration;
 import io.github.noeppi_noeppi.libx.block.DirectionShape;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.container.ContainerType;
@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockIndustrialAgglomerationFactory extends BaseBlock {
+public class BlockIndustrialAgglomerationFactory extends BaseBlock<TileIndustrialAgglomerationFactory> {
 
     public static final DirectionShape SHAPE = new DirectionShape(VoxelShapes.or(
             BaseBlock.FRAME_SHAPE,
@@ -26,8 +26,8 @@ public class BlockIndustrialAgglomerationFactory extends BaseBlock {
             makeCuboidShape(6.2, 0, 6.2, 9.8, 5.3, 9.8)
     ));
 
-    public BlockIndustrialAgglomerationFactory() {
-        super(false);
+    public BlockIndustrialAgglomerationFactory(Class<TileIndustrialAgglomerationFactory> teClass) {
+        super(teClass, false);
     }
 
     @Nullable

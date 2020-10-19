@@ -3,13 +3,14 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 import de.melanx.botanicalmachinery.blocks.BlockManaBattery;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.config.ServerConfig;
-import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
 import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import io.github.noeppi_noeppi.libx.inventory.ItemStackHandlerWrapper;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -26,8 +27,8 @@ public class TileManaBattery extends TileBase {
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, slot -> this.sendPacket = true, this::isValidStack);
 
-    public TileManaBattery() {
-        super(Registration.TILE_MANA_BATTERY.get(), ServerConfig.capacityManaBattery.get());
+    public TileManaBattery(TileEntityType<?> type) {
+        super(type, ServerConfig.capacityManaBattery.get());
     }
 
     @Nonnull
@@ -47,17 +48,34 @@ public class TileManaBattery extends TileBase {
     }
 
     @Override
-    public void writePacketNBT(CompoundNBT cmp) {
-        super.writePacketNBT(cmp);
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
+        super.read(state, cmp);
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT write(@Nonnull CompoundNBT cmp) {
         cmp.putBoolean(TileTags.SLOT_1_LOCKED, this.slot1Locked);
         cmp.putBoolean(TileTags.SLOT_2_LOCKED, this.slot2Locked);
+        return super.write(cmp);
     }
 
     @Override
-    public void readPacketNBT(CompoundNBT cmp) {
-        super.readPacketNBT(cmp);
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (world != null && !world.isRemote) return;
+        super.handleUpdateTag(state, cmp);
         this.slot1Locked = cmp.getBoolean(TileTags.SLOT_1_LOCKED);
         this.slot2Locked = cmp.getBoolean(TileTags.SLOT_2_LOCKED);
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (world != null && world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.putBoolean(TileTags.SLOT_1_LOCKED, this.slot1Locked);
+        cmp.putBoolean(TileTags.SLOT_2_LOCKED, this.slot2Locked);
+        return cmp;
     }
 
     @Override

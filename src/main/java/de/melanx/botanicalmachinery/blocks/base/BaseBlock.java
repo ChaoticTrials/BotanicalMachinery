@@ -2,7 +2,7 @@ package de.melanx.botanicalmachinery.blocks.base;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import io.github.noeppi_noeppi.libx.mod.registration.BlockBase;
+import io.github.noeppi_noeppi.libx.mod.registration.BlockTE;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -38,7 +38,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @SuppressWarnings("deprecation")
-public abstract class BaseBlock extends BlockBase implements ITileEntityProvider, IWandHUD {
+public abstract class BaseBlock<T extends TileBase> extends BlockTE<T> implements ITileEntityProvider, IWandHUD {
 
     public static final VoxelShape FRAME_SHAPE = VoxelShapes.or(
             makeCuboidShape(0, 0, 0, 16, 1, 16),
@@ -54,8 +54,8 @@ public abstract class BaseBlock extends BlockBase implements ITileEntityProvider
 
     private final boolean fullCube;
 
-    public BaseBlock(boolean fullCube) {
-        super(BotanicalMachinery.getInstance(), fullCube ? Properties.create(Material.ROCK).hardnessAndResistance(2, 10) : Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity());
+    public BaseBlock(Class<T> teClass, boolean fullCube) {
+        super(BotanicalMachinery.getInstance(), teClass, fullCube ? Properties.create(Material.ROCK).hardnessAndResistance(2, 10) : Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity());
         this.fullCube = fullCube;
     }
 

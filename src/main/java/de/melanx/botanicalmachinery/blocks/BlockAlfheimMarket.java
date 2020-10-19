@@ -2,7 +2,7 @@ package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.blocks.base.BaseBlock;
 import de.melanx.botanicalmachinery.blocks.tiles.TileAlfheimMarket;
-import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.registration.Registration;
 import io.github.noeppi_noeppi.libx.block.DirectionShape;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.container.ContainerType;
@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockAlfheimMarket extends BaseBlock {
+public class BlockAlfheimMarket extends BaseBlock<TileAlfheimMarket> {
 
     public static final DirectionShape SHAPE = new DirectionShape(VoxelShapes.or(
             BaseBlock.FRAME_SHAPE,
@@ -28,8 +28,8 @@ public class BlockAlfheimMarket extends BaseBlock {
             makeCuboidShape(8.8, 0, 3.6, 12.4, 7.4, 7.2)
     ));
 
-    public BlockAlfheimMarket() {
-        super(false);
+    public BlockAlfheimMarket(Class<TileAlfheimMarket> teClass) {
+        super(teClass, false);
     }
 
     @Nullable

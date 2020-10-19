@@ -2,7 +2,7 @@ package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.blocks.base.BaseBlock;
 import de.melanx.botanicalmachinery.blocks.tiles.TileManaBattery;
-import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.registration.Registration;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntity;
@@ -13,12 +13,12 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockManaBattery extends BaseBlock {
+public class BlockManaBattery extends BaseBlock<TileManaBattery> {
 
     public final Variant variant;
 
-    public BlockManaBattery(Variant variant) {
-        super(true);
+    public BlockManaBattery(Class<TileManaBattery> teClass, Variant variant) {
+        super(teClass, true);
         this.variant = variant;
     }
 

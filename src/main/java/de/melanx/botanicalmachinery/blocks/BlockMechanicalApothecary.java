@@ -6,6 +6,7 @@ import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalApothec
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
 import de.melanx.botanicalmachinery.core.LibNames;
 import io.github.noeppi_noeppi.libx.block.DirectionShape;
+import io.github.noeppi_noeppi.libx.mod.registration.BlockTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -38,7 +39,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockMechanicalApothecary extends Block {
+public class BlockMechanicalApothecary extends BlockTE<TileMechanicalApothecary> {
 
     public static final DirectionShape SHAPE = new DirectionShape(VoxelShapes.or(
             BaseBlock.FRAME_SHAPE,
@@ -52,19 +53,13 @@ public class BlockMechanicalApothecary extends Block {
             makeCuboidShape(12, 10, 4, 13, 14, 12)
     ));
 
-    public BlockMechanicalApothecary() {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10));
+    public BlockMechanicalApothecary(Class<TileMechanicalApothecary> teClass) {
+        super(BotanicalMachinery.getInstance(), teClass, Properties.create(Material.ROCK).hardnessAndResistance(2, 10));
     }
 
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileMechanicalApothecary();
     }
 
     @SuppressWarnings("deprecation")

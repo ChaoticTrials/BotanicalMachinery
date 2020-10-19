@@ -4,11 +4,12 @@ import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
-import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
 import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import vazkii.botania.client.fx.WispParticleData;
 import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.item.ModItems;
@@ -25,8 +26,8 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
     private int progress;
     private boolean recipe;
 
-    public TileIndustrialAgglomerationFactory() {
-        super(Registration.TILE_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), ServerConfig.capacityAgglomerationFactory.get());
+    public TileIndustrialAgglomerationFactory(TileEntityType<?> type) {
+        super(type, ServerConfig.capacityAgglomerationFactory.get());
         this.inventory.setOutputSlots(3);
         this.inventory.setSlotValidator(this::isValidStack);
     }
@@ -45,15 +46,31 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
     }
 
     @Override
-    public void writePacketNBT(CompoundNBT cmp) {
-        super.writePacketNBT(cmp);
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
+        super.read(state, cmp);
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT write(@Nonnull CompoundNBT cmp) {
         cmp.putInt(TileTags.PROGRESS, this.progress);
+        return super.write(cmp);
     }
 
     @Override
-    public void readPacketNBT(CompoundNBT cmp) {
-        super.readPacketNBT(cmp);
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (world != null && !world.isRemote) return;
+        super.handleUpdateTag(state, cmp);
         this.progress = cmp.getInt(TileTags.PROGRESS);
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (world != null && world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        return cmp;
     }
 
     @Override

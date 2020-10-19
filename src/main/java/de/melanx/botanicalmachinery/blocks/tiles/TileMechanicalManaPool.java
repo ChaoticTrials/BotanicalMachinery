@@ -3,11 +3,11 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
-import de.melanx.botanicalmachinery.core.Registration;
-import de.melanx.botanicalmachinery.helper.RecipeHelper;
+import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
 import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityType;
 import vazkii.botania.api.mana.ManaNetworkEvent;
 import vazkii.botania.api.recipe.IManaInfusionRecipe;
 import vazkii.botania.client.fx.WispParticleData;
@@ -27,8 +27,8 @@ public class TileMechanicalManaPool extends TileBase {
     public boolean validRecipe = true;
     private int cooldown = ServerConfig.multiplierManaPool.get();
 
-    public TileMechanicalManaPool() {
-        super(Registration.TILE_MECHANICAL_MANA_POOL.get(), ServerConfig.capacityManaPool.get());
+    public TileMechanicalManaPool(TileEntityType<?> type) {
+        super(type, ServerConfig.capacityManaPool.get());
         this.inventory.addSlotLimit(0, 1);
         this.inventory.setOutputSlots(2);
     }
@@ -75,8 +75,9 @@ public class TileMechanicalManaPool extends TileBase {
 
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
+        if (this.world == null) return false;
         if (slot == 0) return CATALYSTS.contains(stack.getItem());
-        if (slot == 1) return RecipeHelper.isItemValid(this.world, ModRecipeTypes.MANA_INFUSION_TYPE, stack);
+        if (slot == 1) return RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.MANA_INFUSION_TYPE, stack);
         return true;
     }
 

@@ -2,7 +2,7 @@ package de.melanx.botanicalmachinery.data;
 
 import com.google.gson.JsonObject;
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.registration.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
@@ -36,8 +36,8 @@ public class ManaInfusionProvider extends RecipeProvider {
 
     @Override
     protected void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
-        registerInfusionRecipe(consumer, Registration.ITEM_MANA_EMERALD.get(), Ingredient.fromTag(Tags.Items.GEMS_EMERALD), 8000);
-        registerInfusionRecipe(consumer, Registration.BLOCK_MANA_EMERALD.get(), Ingredient.fromTag(Tags.Items.STORAGE_BLOCKS_EMERALD), 8000 * 9);
+        registerInfusionRecipe(consumer, ModItems.MANA_EMERALD, Ingredient.fromTag(Tags.Items.GEMS_EMERALD), 8000);
+        registerInfusionRecipe(consumer, de.melanx.botanicalmachinery.core.registration.ModBlocks.MANA_EMERALD, Ingredient.fromTag(Tags.Items.STORAGE_BLOCKS_EMERALD), 8000 * 9);
     }
 
     private static ResourceLocation id(String s) {

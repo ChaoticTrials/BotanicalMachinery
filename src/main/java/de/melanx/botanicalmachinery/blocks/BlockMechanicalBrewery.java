@@ -2,7 +2,7 @@ package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.blocks.base.BaseBlock;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalBrewery;
-import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.registration.Registration;
 import io.github.noeppi_noeppi.libx.block.DirectionShape;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.container.ContainerType;
@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockMechanicalBrewery extends BaseBlock {
+public class BlockMechanicalBrewery extends BaseBlock<TileMechanicalBrewery> {
 
     public static final DirectionShape SHAPE = new DirectionShape(VoxelShapes.or(
             BaseBlock.FRAME_SHAPE,
@@ -33,8 +33,8 @@ public class BlockMechanicalBrewery extends BaseBlock {
             makeCuboidShape(3, 3, 4, 4, 8, 12)
     ));
 
-    public BlockMechanicalBrewery() {
-        super(false);
+    public BlockMechanicalBrewery(Class<TileMechanicalBrewery> teClass) {
+        super(teClass, false);
     }
 
     @Nullable

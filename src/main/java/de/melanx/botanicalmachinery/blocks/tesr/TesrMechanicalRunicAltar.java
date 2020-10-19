@@ -1,9 +1,9 @@
 package de.melanx.botanicalmachinery.blocks.tesr;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import de.melanx.botanicalmachinery.blocks.base.HorizontalRotatedTesr;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalRunicAltar;
 import de.melanx.botanicalmachinery.config.ClientConfig;
+import io.github.noeppi_noeppi.libx.block.tesr.HorizontalRotatedTesr;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

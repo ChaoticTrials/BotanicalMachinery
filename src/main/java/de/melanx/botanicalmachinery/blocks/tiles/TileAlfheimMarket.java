@@ -3,17 +3,17 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.config.ServerConfig;
-import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
-import de.melanx.botanicalmachinery.helper.RecipeHelper;
+import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
 import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.Explosion;
 import vazkii.botania.api.recipe.IElvenTradeRecipe;
 import vazkii.botania.common.crafting.ModRecipeTypes;
@@ -22,7 +22,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.IntStream;
 
 public class TileAlfheimMarket extends TileBase implements IWorkingTile {
@@ -41,8 +40,8 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
     private ItemStack currentInput = ItemStack.EMPTY;
     private ItemStack currentOutput = ItemStack.EMPTY;
 
-    public TileAlfheimMarket() {
-        super(Registration.TILE_ALFHEIM_MARKET.get(), ServerConfig.capacityAlfheimMarket.get());
+    public TileAlfheimMarket(TileEntityType<?> type) {
+        super(type, ServerConfig.capacityAlfheimMarket.get());
         this.inventory.setInputSlots(IntStream.range(0, 4).toArray());
         this.inventory.setOutputSlots(4);
         this.update = true;
@@ -56,18 +55,18 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
 
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
-        return Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot) || RecipeHelper.isItemValid(this.world, ModRecipeTypes.ELVEN_TRADE_TYPE, stack);
+        if (world == null) return false;
+        return Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot) || RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.ELVEN_TRADE_TYPE, stack);
     }
 
     private void updateRecipe() {
         if (this.world != null && !this.world.isRemote) {
             List<ItemStack> stacks = new ArrayList<>(this.inventory.getStacks());
             stacks.remove(4);
-            Map<Item, Integer> items = RecipeHelper.getInvItems(stacks);
 
             for (IRecipe<?> recipe : this.world.getRecipeManager().getRecipes()) {
                 if (recipe instanceof IElvenTradeRecipe) {
-                    if (RecipeHelper.checkIngredients(stacks, items, recipe)) {
+                    if (RecipeHelper.matches(recipe, stacks, false)) {
                         this.recipe = (IElvenTradeRecipe) recipe;
                         this.currentInput = getInputStack(this.recipe).copy();
                         this.currentOutput = this.recipe.getOutputs().get(0).copy();
@@ -83,19 +82,40 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
     }
 
     @Override
-    public void writePacketNBT(CompoundNBT cmp) {
-        super.writePacketNBT(cmp);
-        cmp.putInt(TileTags.PROGRESS, this.progress);
-        cmp.put(TileTags.CURRENT_INPUT, this.currentInput.serializeNBT());
-        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
-    }
-
-    @Override
-    public void readPacketNBT(CompoundNBT cmp) {
-        super.readPacketNBT(cmp);
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
+        super.read(state, cmp);
         this.progress = cmp.getInt(TileTags.PROGRESS);
         this.currentInput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_INPUT));
         this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT write(@Nonnull CompoundNBT cmp) {
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.put(TileTags.CURRENT_INPUT, this.currentInput.serializeNBT());
+        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
+        return super.write(cmp);
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (world != null && !world.isRemote) return;
+        super.handleUpdateTag(state, cmp);
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.currentInput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_INPUT));
+        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (world != null && world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.put(TileTags.CURRENT_INPUT, this.currentInput.serializeNBT());
+        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
+        return cmp;
     }
 
     @Override

@@ -4,16 +4,17 @@ import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
-import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
-import de.melanx.botanicalmachinery.helper.RecipeHelper;
+import de.melanx.botanicalmachinery.helper.RecipeHelper2;
+import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
 import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.items.ItemHandlerHelper;
 import vazkii.botania.api.recipe.IRuneAltarRecipe;
 import vazkii.botania.client.fx.SparkleParticleData;
@@ -25,7 +26,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -44,8 +44,8 @@ public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile {
     private boolean update = true;
     private final List<Integer> slotsUsed = new ArrayList<>();
 
-    public TileMechanicalRunicAltar() {
-        super(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), ServerConfig.capacityRunicAltar.get());
+    public TileMechanicalRunicAltar(TileEntityType<?> type) {
+        super(type, ServerConfig.capacityRunicAltar.get());
         this.inventory.setInputSlots(IntStream.range(1, 17).toArray());
         this.inventory.setOutputSlots(IntStream.range(17, 33).toArray());
     }
@@ -58,21 +58,21 @@ public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile {
 
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
+        if (this.world == null) return false;
         if (slot == 0) return stack.getItem() == ModBlocks.livingrock.asItem();
         else if (Arrays.stream(this.inventory.getInputSlots()).anyMatch(x -> x == slot))
-            return RecipeHelper.isItemValid(this.world, ModRecipeTypes.RUNE_TYPE, stack);
+            return RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.RUNE_TYPE, stack);
         return true;
     }
 
     private void updateRecipe() {
         if (this.world != null && !this.world.isRemote) {
             List<ItemStack> stacks = new ArrayList<>(this.inventory.getStacks());
-            RecipeHelper.removeFromList(stacks, IntStream.range(17, stacks.size() - 1).toArray(), new int[]{0});
-            Map<Item, Integer> items = RecipeHelper.getInvItems(stacks);
+            RecipeHelper2.removeFromList(stacks, IntStream.range(17, stacks.size() - 1).toArray(), new int[]{0});
 
             for (IRecipe<?> recipe : this.world.getRecipeManager().getRecipes()) {
                 if (recipe instanceof IRuneAltarRecipe) {
-                    if (RecipeHelper.checkIngredients(stacks, items, recipe) && !this.inventory.getStackInSlot(0).isEmpty()) {
+                    if (RecipeHelper.matches(recipe, stacks, false) && !this.inventory.getStackInSlot(0).isEmpty()) {
                         List<ItemStack> stacksToTest = new ArrayList<>();
                         stacksToTest.add(recipe.getRecipeOutput());
                         for (Ingredient ingredient : recipe.getIngredients()) {
@@ -121,20 +121,42 @@ public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile {
     }
 
     @Override
-    public void writePacketNBT(CompoundNBT cmp) {
-        super.writePacketNBT(cmp);
-        cmp.putInt(TileTags.PROGRESS, this.progress);
-        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
-        cmp.putIntArray(TileTags.SLOTS_USED, this.slotsUsed);
-    }
-
-    @Override
-    public void readPacketNBT(CompoundNBT cmp) {
-        super.readPacketNBT(cmp);
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
+        super.read(state, cmp);
         this.progress = cmp.getInt(TileTags.PROGRESS);
         this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
         this.slotsUsed.clear();
         this.slotsUsed.addAll(Arrays.stream(cmp.getIntArray(TileTags.SLOTS_USED)).boxed().collect(Collectors.toList()));
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT write(@Nonnull CompoundNBT cmp) {
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
+        cmp.putIntArray(TileTags.SLOTS_USED, this.slotsUsed);
+        return super.write(cmp);
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (world != null && !world.isRemote) return;
+        super.handleUpdateTag(state, cmp);
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
+        this.slotsUsed.clear();
+        this.slotsUsed.addAll(Arrays.stream(cmp.getIntArray(TileTags.SLOTS_USED)).boxed().collect(Collectors.toList()));
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (world != null && world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
+        cmp.putIntArray(TileTags.SLOTS_USED, this.slotsUsed);
+        return cmp;
     }
 
     @Override

@@ -7,7 +7,6 @@ import de.melanx.botanicalmachinery.blocks.containers.ContainerManaBattery;
 import de.melanx.botanicalmachinery.blocks.tiles.TileManaBattery;
 import de.melanx.botanicalmachinery.core.LibResources;
 import de.melanx.botanicalmachinery.helper.SoundHelper;
-import de.melanx.botanicalmachinery.network.BotanicalMachineryNetwork;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.SoundEvents;

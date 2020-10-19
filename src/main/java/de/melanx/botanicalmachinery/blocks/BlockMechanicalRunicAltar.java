@@ -2,7 +2,7 @@ package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.blocks.base.BaseBlock;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalRunicAltar;
-import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.registration.Registration;
 import io.github.noeppi_noeppi.libx.block.DirectionShape;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.container.ContainerType;
@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockMechanicalRunicAltar extends BaseBlock {
+public class BlockMechanicalRunicAltar extends BaseBlock<TileMechanicalRunicAltar> {
 
     public static final DirectionShape SHAPE = new DirectionShape(VoxelShapes.or(
             BaseBlock.FRAME_SHAPE,
@@ -27,8 +27,8 @@ public class BlockMechanicalRunicAltar extends BaseBlock {
             makeCuboidShape(4, 1, 4, 12, 3, 12)
     ));
 
-    public BlockMechanicalRunicAltar() {
-        super(false);
+    public BlockMechanicalRunicAltar(Class<TileMechanicalRunicAltar> teClass) {
+        super(teClass, false);
     }
 
     @Nullable

@@ -6,6 +6,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import de.melanx.botanicalmachinery.core.TileTags;
 import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import io.github.noeppi_noeppi.libx.inventory.ItemStackHandlerWrapper;
+import io.github.noeppi_noeppi.libx.mod.registration.TileEntityBase;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.DyeColor;
@@ -29,13 +31,12 @@ import vazkii.botania.api.mana.IThrottledPacket;
 import vazkii.botania.api.mana.spark.ISparkAttachable;
 import vazkii.botania.api.mana.spark.ISparkEntity;
 import vazkii.botania.client.core.handler.HUDHandler;
-import vazkii.botania.common.block.tile.TileMod;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class TileBase extends TileMod implements IManaPool, IManaMachineTile, IKeyLocked, ISparkAttachable, IThrottledPacket, ITickableTileEntity {
+public abstract class TileBase extends TileEntityBase implements IManaPool, IManaMachineTile, IKeyLocked, ISparkAttachable, IThrottledPacket, ITickableTileEntity {
 
     public int mana;
     private final int manaCap;
@@ -75,19 +76,43 @@ public abstract class TileBase extends TileMod implements IManaPool, IManaMachin
     }
 
     @Override
-    public void writePacketNBT(CompoundNBT cmp) {
-        cmp.put(TileTags.INVENTORY, this.getInventory().serializeNBT());
-        cmp.putInt(TileTags.MANA, this.getCurrentMana());
-        cmp.putString(TileTags.INPUT_KEY, this.inputKey);
-        cmp.putString(TileTags.OUTPUT_KEY, this.outputKey);
-    }
-
-    @Override
-    public void readPacketNBT(CompoundNBT cmp) {
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
+        super.read(state, cmp);
         this.getInventory().deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
         this.mana = cmp.getInt(TileTags.MANA);
         if (cmp.contains(TileTags.INPUT_KEY)) this.inputKey = cmp.getString(TileTags.INPUT_KEY);
         if (cmp.contains(TileTags.OUTPUT_KEY)) this.outputKey = cmp.getString(TileTags.OUTPUT_KEY);
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT write(@Nonnull CompoundNBT cmp) {
+        cmp.put(TileTags.INVENTORY, this.getInventory().serializeNBT());
+        cmp.putInt(TileTags.MANA, this.getCurrentMana());
+        cmp.putString(TileTags.INPUT_KEY, this.inputKey);
+        cmp.putString(TileTags.OUTPUT_KEY, this.outputKey);
+        return super.write(cmp);
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (world != null && !world.isRemote) return;
+        this.getInventory().deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
+        this.mana = cmp.getInt(TileTags.MANA);
+        if (cmp.contains(TileTags.INPUT_KEY)) this.inputKey = cmp.getString(TileTags.INPUT_KEY);
+        if (cmp.contains(TileTags.OUTPUT_KEY)) this.outputKey = cmp.getString(TileTags.OUTPUT_KEY);
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (world != null && world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.put(TileTags.INVENTORY, this.getInventory().serializeNBT());
+        cmp.putInt(TileTags.MANA, this.getCurrentMana());
+        cmp.putString(TileTags.INPUT_KEY, this.inputKey);
+        cmp.putString(TileTags.OUTPUT_KEY, this.outputKey);
+        return cmp;
     }
 
     @OnlyIn(Dist.CLIENT)

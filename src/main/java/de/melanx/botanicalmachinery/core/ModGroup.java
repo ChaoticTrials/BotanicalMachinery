@@ -1,5 +1,6 @@
 package de.melanx.botanicalmachinery.core;
 
+import de.melanx.botanicalmachinery.core.registration.ModBlocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
@@ -13,6 +14,6 @@ public class ModGroup extends ItemGroup {
     @Nonnull
     @Override
     public ItemStack createIcon() {
-        return new ItemStack(Registration.ITEM_MECHANICAL_MANA_POOL.get());
+        return new ItemStack(ModBlocks.MECHANICAL_MANA_POOL);
     }
 }

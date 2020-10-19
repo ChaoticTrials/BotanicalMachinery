@@ -4,7 +4,7 @@ import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalDaisy;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalDaisy;
 import de.melanx.botanicalmachinery.core.LibNames;
-import net.minecraft.block.Block;
+import io.github.noeppi_noeppi.libx.mod.registration.BlockTE;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,9 +28,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-public class BlockMechanicalDaisy extends Block {
+public class BlockMechanicalDaisy extends BlockTE<TileMechanicalDaisy> {
 
     private static final VoxelShape COLLISION_SHAPE = VoxelShapes.combine(
             makeCuboidShape(0, 0, 0, 16, 2, 16),
@@ -40,19 +39,13 @@ public class BlockMechanicalDaisy extends Block {
 
     private static final VoxelShape SHAPE = makeCuboidShape(0, 0, 0, 16, 11.4, 16);
 
-    public BlockMechanicalDaisy() {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity());
+    public BlockMechanicalDaisy(Class<TileMechanicalDaisy> teClass) {
+        super(BotanicalMachinery.getInstance(), teClass, Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity());
     }
 
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileMechanicalDaisy();
     }
 
     @SuppressWarnings("deprecation")

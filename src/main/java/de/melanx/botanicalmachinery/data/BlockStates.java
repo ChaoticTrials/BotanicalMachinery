@@ -3,7 +3,8 @@ package de.melanx.botanicalmachinery.data;
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.BaseBlock;
 import de.melanx.botanicalmachinery.core.LibNames;
-import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.core.registration.ModBlocks;
+import de.melanx.botanicalmachinery.core.registration.Registration;
 import io.github.noeppi_noeppi.libx.data.provider.BlockStateProviderBase;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
@@ -23,20 +24,21 @@ public class BlockStates extends BlockStateProviderBase {
 
     @Override
     protected void registerStatesAndModels() {
+        // todo
         Registration.BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(block -> {
             VariantBlockStateBuilder builder = this.getVariantBuilder(block);
-            if (block == Registration.BLOCK_MECHANICAL_DAISY.get()) {
+            if (block == ModBlocks.MECHANICAL_DAISY) {
                 this.createStateForManualModel(builder, block);
-            } else if (block == Registration.BLOCK_ALFHEIM_MARKET.get()
-                    || block == Registration.BLOCK_MECHANICAL_MANA_POOL.get()
-                    || block == Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get()
-                    || block == Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get()
-                    || block == Registration.BLOCK_MECHANICAL_BREWERY.get()
-                    || block == Registration.BLOCK_MECHANICAL_APOTHECARY.get()) {
+            } else if (block == ModBlocks.ALFHEIM_MARKET
+                    || block == ModBlocks.MECHANICAL_MANA_POOL
+                    || block == ModBlocks.MECHANICAL_RUNIC_ALTAR
+                    || block == ModBlocks.INDUSTRIAL_AGGLOMERATION_FACTORY
+                    || block == ModBlocks.MECHANICAL_BREWERY
+                    || block == ModBlocks.MECHANICAL_APOTHECARY) {
                 this.createStateForManualModelRotatable(builder, block);
-            } else if (block == Registration.BLOCK_MANA_BATTERY.get()) {
+            } else if (block == ModBlocks.MANA_BATTERY) {
                 this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY + "_top"));
-            } else if (block == Registration.BLOCK_MANA_BATTERY_CREATIVE.get()) {
+            } else if (block == ModBlocks.CREATIVE_MANA_BATTERY) {
                 this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY_CREATIVE + "_top"));
             } else if (block instanceof BaseBlock) {
                 this.createModels(builder, block);
