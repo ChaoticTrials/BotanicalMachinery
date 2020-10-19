@@ -6,6 +6,7 @@ import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.ModGroup;
 import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.data.DataCreator;
 import de.melanx.botanicalmachinery.network.BotanicalMachineryNetwork;
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import net.minecraft.client.gui.ScreenManager;
@@ -39,6 +40,8 @@ public class BotanicalMachinery extends ModXRegistration {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_CONFIG);
         ClientConfig.loadConfig(ClientConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(this.modid + "-client.toml"));
         ServerConfig.loadConfig(ServerConfig.SERVER_CONFIG, FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()).resolve(this.modid + "-server.toml"));
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(DataCreator::onGatherData);
         Registration.init();
     }
 

@@ -1,6 +1,6 @@
 package de.melanx.botanicalmachinery.blocks;
 
-import de.melanx.botanicalmachinery.blocks.base.BlockBase;
+import de.melanx.botanicalmachinery.blocks.base.BaseBlock;
 import de.melanx.botanicalmachinery.blocks.tiles.TileManaBattery;
 import de.melanx.botanicalmachinery.core.Registration;
 import net.minecraft.block.BlockState;
@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockManaBattery extends BlockBase {
+public class BlockManaBattery extends BaseBlock {
 
     public final Variant variant;
 

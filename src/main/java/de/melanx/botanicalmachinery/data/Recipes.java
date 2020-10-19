@@ -74,7 +74,7 @@ public class Recipes extends RecipeProvider {
 
     private ShapedRecipeBuilder shaped(IItemProvider result) {
         //noinspection ConstantConditions
-        return ShapedRecipeBuilder.shapedRecipe(result).setGroup(BotanicalMachinery.MODID + ":" + result.asItem().getRegistryName().getPath());
+        return ShapedRecipeBuilder.shapedRecipe(result).setGroup(BotanicalMachinery.getInstance().modid + ":" + result.asItem().getRegistryName().getPath());
     }
 
     private void compress(Consumer<IFinishedRecipe> consumer, IItemProvider output, Item input) {
@@ -85,7 +85,7 @@ public class Recipes extends RecipeProvider {
                 .patternLine("XXX")
                 .patternLine("XXX")
                 .addCriterion("has_item", this.hasItem(input))
-                .build(consumer, new ResourceLocation(BotanicalMachinery.MODID, "compress/" + output.asItem().getRegistryName().getPath()));
+                .build(consumer, new ResourceLocation(BotanicalMachinery.getInstance().modid, "compress/" + output.asItem().getRegistryName().getPath()));
     }
 
     private void decompress(Consumer<IFinishedRecipe> consumer, IItemProvider output, Item input) {
@@ -93,7 +93,7 @@ public class Recipes extends RecipeProvider {
         ShapelessRecipeBuilder.shapelessRecipe(output, 9)
                 .addIngredient(input)
                 .addCriterion("has_item", this.hasItem(input))
-                .build(consumer, new ResourceLocation(BotanicalMachinery.MODID, "decompress/" + output.asItem().getRegistryName().getPath()));
+                .build(consumer, new ResourceLocation(BotanicalMachinery.getInstance().modid, "decompress/" + output.asItem().getRegistryName().getPath()));
     }
 
     private void defaultMachine(Consumer<IFinishedRecipe> consumer, IItemProvider output, IItemProvider special1, IItemProvider special2) {
@@ -145,6 +145,6 @@ public class Recipes extends RecipeProvider {
     private ResourceLocation changedBotaniaLoc(Item item) {
         @SuppressWarnings("ConstantConditions")
         String name = item.asItem().getRegistryName().getPath();
-        return new ResourceLocation(BotanicalMachinery.MODID, "botania/" + name);
+        return new ResourceLocation(BotanicalMachinery.getInstance().modid, "botania/" + name);
     }
 }

@@ -23,11 +23,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 @SuppressWarnings("ConstantConditions")
 public class Registration {
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BotanicalMachinery.MODID);
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, BotanicalMachinery.MODID);
-    public static final DeferredRegister<TileEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, BotanicalMachinery.MODID);
-    public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, BotanicalMachinery.MODID);
-    private static final Item.Properties itemProps = new Item.Properties().group(BotanicalMachinery.itemGroup);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BotanicalMachinery.getInstance().modid);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, BotanicalMachinery.getInstance().modid);
+    public static final DeferredRegister<TileEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, BotanicalMachinery.getInstance().modid);
+    public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, BotanicalMachinery.getInstance().modid);
+    private static final Item.Properties itemProps = new Item.Properties().group(BotanicalMachinery.getInstance().tab);
 
     public static final RegistryObject<Block> BLOCK_MANA_EMERALD = BLOCKS.register(LibNames.MANA_EMERALD_BLOCK, () -> new Block(Block.Properties.create(Material.IRON, MaterialColor.EMERALD).harvestLevel(3).harvestTool(ToolType.PICKAXE).hardnessAndResistance(5.0F, 6.0F).sound(SoundType.METAL)));
     public static final RegistryObject<Block> BLOCK_ALFHEIM_MARKET = BLOCKS.register(LibNames.ALFHEIM_MARKET, BlockAlfheimMarket::new);
@@ -74,12 +74,12 @@ public class Registration {
     public static void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         ITEMS.register(bus);
-        BotanicalMachinery.LOGGER.info(ITEMS.getEntries().size() + " items registered.");
+        BotanicalMachinery.getInstance().logger.info(ITEMS.getEntries().size() + " items registered.");
         BLOCKS.register(bus);
-        BotanicalMachinery.LOGGER.info(BLOCKS.getEntries().size() + " blocks registered.");
+        BotanicalMachinery.getInstance().logger.info(BLOCKS.getEntries().size() + " blocks registered.");
         TILES.register(bus);
-        BotanicalMachinery.LOGGER.info(TILES.getEntries().size() + " tiles registered.");
+        BotanicalMachinery.getInstance().logger.info(TILES.getEntries().size() + " tiles registered.");
         CONTAINERS.register(bus);
-        BotanicalMachinery.LOGGER.info(CONTAINERS.getEntries().size() + " containers registered.");
+        BotanicalMachinery.getInstance().logger.info(CONTAINERS.getEntries().size() + " containers registered.");
     }
 }

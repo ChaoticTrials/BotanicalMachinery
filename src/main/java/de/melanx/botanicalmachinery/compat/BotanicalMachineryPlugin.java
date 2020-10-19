@@ -23,7 +23,7 @@ public class BotanicalMachineryPlugin implements IModPlugin {
     @Nonnull
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(BotanicalMachinery.MODID, "jei_plugin");
+        return new ResourceLocation(BotanicalMachinery.getInstance().modid, "jei_plugin");
     }
 
     @Override

@@ -25,7 +25,7 @@ public class LibResources {
     }
 
     private static ResourceLocation loc(String id) {
-        return new ResourceLocation(BotanicalMachinery.MODID, id + ".png");
+        return new ResourceLocation(BotanicalMachinery.getInstance().modid, id + ".png");
     }
 
 }

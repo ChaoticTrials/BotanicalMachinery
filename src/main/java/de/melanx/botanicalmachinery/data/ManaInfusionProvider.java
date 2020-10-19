@@ -41,7 +41,7 @@ public class ManaInfusionProvider extends RecipeProvider {
     }
 
     private static ResourceLocation id(String s) {
-        return new ResourceLocation(BotanicalMachinery.MODID, "mana_infusion/" + s);
+        return new ResourceLocation(BotanicalMachinery.getInstance().modid, "mana_infusion/" + s);
     }
 
     private static void registerInfusionRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider output, Ingredient input, int mana) {

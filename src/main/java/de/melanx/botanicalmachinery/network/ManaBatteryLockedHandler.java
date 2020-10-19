@@ -1,6 +1,7 @@
 package de.melanx.botanicalmachinery.network;
 
 import de.melanx.botanicalmachinery.blocks.tiles.TileManaBattery;
+import io.github.noeppi_noeppi.libx.network.PacketSerializer;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -11,7 +12,7 @@ import vazkii.botania.api.internal.VanillaPacketDispatcher;
 
 import java.util.function.Supplier;
 
-public class ManaBatteryLockedHandler implements PacketHandler<ManaBatteryLockedHandler.Message> {
+public class ManaBatteryLockedHandler implements PacketHandler<ManaBatteryLockedHandler.Message>, PacketSerializer<ManaBatteryLockedHandler.Message> {
 
     @Override
     public Class<Message> messageClass() {
@@ -30,8 +31,7 @@ public class ManaBatteryLockedHandler implements PacketHandler<ManaBatteryLocked
         return new Message(buffer.readBlockPos(), buffer.readBoolean(), buffer.readBoolean());
     }
 
-    @Override
-    public void handle(Message msg, Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(Message msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity player = ctx.get().getSender();
             if (player == null)

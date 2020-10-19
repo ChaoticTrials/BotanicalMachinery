@@ -10,5 +10,4 @@ public interface PacketHandler<T> {
     Class<T> messageClass();
     void encode(T msg, PacketBuffer buffer);
     T decode(PacketBuffer buffer);
-    void handle(T msg, Supplier<NetworkEvent.Context> ctx);
 }

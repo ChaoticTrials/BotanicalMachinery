@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.blocks.base.BlockBase;
+import de.melanx.botanicalmachinery.blocks.base.BaseBlock;
 import de.melanx.botanicalmachinery.core.LibNames;
 import de.melanx.botanicalmachinery.core.Registration;
 import io.github.noeppi_noeppi.libx.data.provider.BlockStateProviderBase;
@@ -38,7 +38,7 @@ public class BlockStates extends BlockStateProviderBase {
                 this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY + "_top"));
             } else if (block == Registration.BLOCK_MANA_BATTERY_CREATIVE.get()) {
                 this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY_CREATIVE + "_top"));
-            } else if (block instanceof BlockBase) {
+            } else if (block instanceof BaseBlock) {
                 this.createModels(builder, block);
             } else {
                 this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(this.modelDefault(block)).build());

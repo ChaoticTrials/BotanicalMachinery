@@ -1,9 +1,9 @@
 package de.melanx.botanicalmachinery.blocks;
 
-import de.melanx.botanicalmachinery.blocks.base.BlockBase;
+import de.melanx.botanicalmachinery.blocks.base.BaseBlock;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalManaPool;
 import de.melanx.botanicalmachinery.core.Registration;
-import de.melanx.botanicalmachinery.util.DirectionShape;
+import io.github.noeppi_noeppi.libx.block.DirectionShape;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -18,10 +18,10 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockMechanicalManaPool extends BlockBase {
+public class BlockMechanicalManaPool extends BaseBlock {
 
     public static final DirectionShape SHAPE = new DirectionShape(VoxelShapes.or(
-            BlockBase.FRAME_SHAPE,
+            BaseBlock.FRAME_SHAPE,
             makeCuboidShape(2, 1, 2, 14, 1.1, 14),
             makeCuboidShape(2, 1, 13, 14, 6, 14),
             makeCuboidShape(2, 1, 2, 14, 6, 3),

@@ -1,6 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.screens;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerManaBattery;
 import de.melanx.botanicalmachinery.blocks.tiles.TileManaBattery;
@@ -65,12 +66,12 @@ public class ScreenManaBattery extends ScreenBase<ContainerManaBattery> {
             if (tile == null) return super.mouseClicked(mouseX, mouseY, clickedButton);
             if (mouseX >= this.xB1 && mouseX < this.xB1 + 20 && mouseY >= this.yB1 && mouseY < this.yB1 + 20) {
                 tile.setSlot1Locked(!tile.isSlot1Locked());
-                BotanicalMachineryNetwork.updateLockedState(tile);
+                BotanicalMachinery.getNetwork().updateLockedState(tile);
                 SoundHelper.playSound(SoundEvents.UI_BUTTON_CLICK);
             }
             if (mouseX >= this.xB2 && mouseX < this.xB2 + 20 && mouseY >= this.yB2 && mouseY < this.yB2 + 20) {
                 tile.setSlot2Locked(!tile.isSlot2Locked());
-                BotanicalMachineryNetwork.updateLockedState(tile);
+                BotanicalMachinery.getNetwork().updateLockedState(tile);
                 SoundHelper.playSound(SoundEvents.UI_BUTTON_CLICK);
             }
         }

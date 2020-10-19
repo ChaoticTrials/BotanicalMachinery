@@ -1,11 +1,11 @@
 package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.blocks.base.BlockBase;
+import de.melanx.botanicalmachinery.blocks.base.BaseBlock;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalApothecary;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
 import de.melanx.botanicalmachinery.core.LibNames;
-import de.melanx.botanicalmachinery.util.DirectionShape;
+import io.github.noeppi_noeppi.libx.block.DirectionShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 public class BlockMechanicalApothecary extends Block {
 
     public static final DirectionShape SHAPE = new DirectionShape(VoxelShapes.or(
-            BlockBase.FRAME_SHAPE,
+            BaseBlock.FRAME_SHAPE,
             makeCuboidShape(3, 1, 3, 13, 2, 13),
             makeCuboidShape(4, 2, 4, 12, 3, 12),
             makeCuboidShape(6, 3, 6, 10, 8, 10),
@@ -89,7 +89,7 @@ public class BlockMechanicalApothecary extends Block {
                 INamedContainerProvider containerProvider = new INamedContainerProvider() {
                     @Override
                     public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.MECHANICAL_APOTHECARY);
+                        return new TranslationTextComponent("screen." + BotanicalMachinery.getInstance().modid + "." + LibNames.MECHANICAL_APOTHECARY);
                     }
 
                     @Nonnull

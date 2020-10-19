@@ -12,7 +12,7 @@ import net.minecraftforge.fml.RegistryObject;
 
 public class ItemModels extends ItemModelProvider {
     public ItemModels(DataGenerator gen, ExistingFileHelper helper) {
-        super(gen, BotanicalMachinery.MODID, helper);
+        super(gen, BotanicalMachinery.getInstance().modid, helper);
     }
 
     @Override

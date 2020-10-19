@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.base;
 
-import de.melanx.botanicalmachinery.util.functionalinterface.Function4;
-import de.melanx.botanicalmachinery.util.functionalinterface.Function5;
+import io.github.noeppi_noeppi.libx.fi.Function4;
+import io.github.noeppi_noeppi.libx.fi.Function5;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

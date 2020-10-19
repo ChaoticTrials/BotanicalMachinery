@@ -6,7 +6,7 @@ import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
-import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
+import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import vazkii.botania.client.fx.WispParticleData;

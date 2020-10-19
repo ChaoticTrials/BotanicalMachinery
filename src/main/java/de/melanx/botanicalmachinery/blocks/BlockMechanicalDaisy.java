@@ -65,7 +65,7 @@ public class BlockMechanicalDaisy extends Block {
                 INamedContainerProvider containerProvider = new INamedContainerProvider() {
                     @Override
                     public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.MECHANICAL_DAISY);
+                        return new TranslationTextComponent("screen." + BotanicalMachinery.getInstance().modid + "." + LibNames.MECHANICAL_DAISY);
                     }
 
                     @Nonnull
