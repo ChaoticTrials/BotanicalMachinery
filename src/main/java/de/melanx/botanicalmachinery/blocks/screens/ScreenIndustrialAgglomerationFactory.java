@@ -34,9 +34,9 @@ public class ScreenIndustrialAgglomerationFactory extends ScreenBase<ContainerIn
     protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack ms, float partialTicks, int mouseX, int mouseY) {
         this.drawDefaultGuiBackgroundLayer(ms, LibResources.INDUSTRIAL_AGGLOMERATION_FACTORY_GUI, 81, 37);
         if (this.minecraft != null) {
-            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.manaSteel, this.relX + 61, this.relY + 83, 16, false, 1, 1, 1, 0.5f);
-            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.manaDiamond, this.relX + 80, this.relY + 83, 16, false, 1, 1, 1, 0.5f);
-            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.manaPearl, this.relX + 99, this.relY + 83, 16, false, 1, 1, 1, 0.5f);
+            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.manaSteel, this.relX + 61, this.relY + 83, 16, false, 1, 1, 1, 0.3f);
+            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.manaDiamond, this.relX + 80, this.relY + 83, 16, false, 1, 1, 1, 0.3f);
+            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.manaPearl, this.relX + 99, this.relY + 83, 16, false, 1, 1, 1, 0.3f);
         }
         TileIndustrialAgglomerationFactory tile = (TileIndustrialAgglomerationFactory) this.container.tile;
         if (tile.getProgress() > 0) {

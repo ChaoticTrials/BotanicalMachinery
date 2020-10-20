@@ -30,7 +30,7 @@ public class ScreenMechanicalBrewery extends ScreenBase<ContainerMechanicalBrewe
         if (tile.getInventory().getStackInSlot(0).isEmpty() && this.minecraft != null) {
             List<Item> items = TileMechanicalBrewery.BREW_CONTAINER;
             int idx = Math.abs(ClientTickHandler.ticksInGame / 20) % items.size();
-            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), new ItemStack(items.get(idx)), this.relX + 44, this.relY + 48, 16, false, 1, 1, 1, 0.5f);
+            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), new ItemStack(items.get(idx)), this.relX + 44, this.relY + 48, 16, false, 1, 1, 1, 0.3f);
         }
 
         if (tile.getProgress() > 0) {

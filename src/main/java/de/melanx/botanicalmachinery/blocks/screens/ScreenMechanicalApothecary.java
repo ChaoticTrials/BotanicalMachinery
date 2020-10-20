@@ -58,7 +58,7 @@ public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechani
         if (this.tile.getInventory().getStackInSlot(0).isEmpty()) {
             List<Item> items = Tags.Items.SEEDS.getAllElements();
             int idx = Math.abs(ClientTickHandler.ticksInGame / 20) % items.size();
-            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), new ItemStack(items.get(idx)), this.relX + 90, this.relY + 43, 16, false, 1, 1, 1, 0.5f);
+            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), new ItemStack(items.get(idx)), this.relX + 90, this.relY + 43, 16, false, 1, 1, 1, 0.3f);
         }
 
         if (this.tile.getProgress() > 0) {

@@ -33,7 +33,7 @@ public class ScreenMechanicalRunicAltar extends ScreenBase<ContainerMechanicalRu
 
         TileMechanicalRunicAltar tile = (TileMechanicalRunicAltar) this.container.tile;
         if (tile.getInventory().getStackInSlot(0).isEmpty() && minecraft != null) {
-            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.livingRock, this.relX + 90, this.relY + 43, 16, false, 1, 1, 1, 0.5f);
+            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.livingRock, this.relX + 90, this.relY + 43, 16, false, 1, 1, 1, 0.3f);
         }
         if (tile.getProgress() > 0) {
             float pct = Math.min(tile.getProgress() / (float) tile.getMaxProgress(), 1.0F);
