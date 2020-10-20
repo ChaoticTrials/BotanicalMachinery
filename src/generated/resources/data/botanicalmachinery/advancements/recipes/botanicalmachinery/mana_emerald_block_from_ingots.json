@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "botanicalmachinery:compress/mana_emerald_block"
+      "botanicalmachinery:mana_emerald_block_from_ingots"
     ]
   },
   "criteria": {
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "botanicalmachinery:compress/mana_emerald_block"
+        "recipe": "botanicalmachinery:mana_emerald_block_from_ingots"
       }
     }
   },

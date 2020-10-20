@@ -1,13 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
-  "group": "botanicalmachinery:mana_emerald_block",
+  "group": "botanicalmachinery:mana_emerald_block_from_ingots",
   "pattern": [
-    "XXX",
-    "XXX",
-    "XXX"
+    "aaa",
+    "aaa",
+    "aaa"
   ],
   "key": {
-    "X": {
+    "a": {
       "item": "botanicalmachinery:mana_emerald"
     }
   },

@@ -65,36 +65,6 @@ public class TileMechanicalDaisy extends TileEntityBase implements ITickableTile
         }
     }
 
-    @Nonnull
-    @Override
-    public CompoundNBT write(CompoundNBT cmp) {
-        cmp.put(TileTags.INVENTORY, this.inventory.serializeNBT());
-        cmp.putIntArray(TileTags.WORKING_TICKS, this.workingTicks);
-        return super.write(cmp);
-    }
-
-    @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
-        if (world != null && !world.isRemote) return;
-        super.handleUpdateTag(state, cmp);
-        if (cmp.contains(TileTags.INVENTORY)) {
-            this.inventory.deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
-        }
-        if (cmp.contains(TileTags.WORKING_TICKS)) {
-            this.workingTicks = cmp.getIntArray(TileTags.WORKING_TICKS);
-        }
-    }
-
-    @Nonnull
-    @Override
-    public CompoundNBT getUpdateTag() {
-        if (world != null && world.isRemote) return super.getUpdateTag();
-        CompoundNBT cmp = super.getUpdateTag();
-        cmp.put(TileTags.INVENTORY, this.inventory.serializeNBT());
-        cmp.putIntArray(TileTags.WORKING_TICKS, this.workingTicks);
-        return cmp;
-    }
-
     @Override
     public void tick() {
         boolean hasSpawnedParticles = false;
@@ -196,6 +166,10 @@ public class TileMechanicalDaisy extends TileEntityBase implements ITickableTile
         return null;
     }
 
+    public InventoryHandler getInventory() {
+        return this.inventory;
+    }
+
     @Nonnull
     @Override
     public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, @Nullable Direction side) {
@@ -212,8 +186,34 @@ public class TileMechanicalDaisy extends TileEntityBase implements ITickableTile
         return super.getCapability(cap, side);
     }
 
-    public InventoryHandler getInventory() {
-        return this.inventory;
+    @Nonnull
+    @Override
+    public CompoundNBT write(CompoundNBT cmp) {
+        cmp.put(TileTags.INVENTORY, this.inventory.serializeNBT());
+        cmp.putIntArray(TileTags.WORKING_TICKS, this.workingTicks);
+        return super.write(cmp);
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (world != null && !world.isRemote) return;
+        super.handleUpdateTag(state, cmp);
+        if (cmp.contains(TileTags.INVENTORY)) {
+            this.inventory.deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
+        }
+        if (cmp.contains(TileTags.WORKING_TICKS)) {
+            this.workingTicks = cmp.getIntArray(TileTags.WORKING_TICKS);
+        }
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (world != null && world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.put(TileTags.INVENTORY, this.inventory.serializeNBT());
+        cmp.putIntArray(TileTags.WORKING_TICKS, this.workingTicks);
+        return cmp;
     }
 
     public class InventoryHandler extends ItemStackHandler implements IFluidHandler {

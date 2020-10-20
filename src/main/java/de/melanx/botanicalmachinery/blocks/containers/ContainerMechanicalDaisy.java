@@ -1,11 +1,11 @@
 package de.melanx.botanicalmachinery.blocks.containers;
 
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalDaisy;
-import de.melanx.botanicalmachinery.core.registration.Registration;
 import io.github.noeppi_noeppi.libx.inventory.container.ContainerBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -24,8 +24,8 @@ public class ContainerMechanicalDaisy extends ContainerBase<TileMechanicalDaisy>
 
     private final TileMechanicalDaisy.InventoryHandler inventory;
 
-    public ContainerMechanicalDaisy(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
-        super(Registration.CONTAINER_MECHANICAL_DAISY.get(), windowId, world, pos, playerInventory, player, 8, 8);
+    public ContainerMechanicalDaisy(ContainerType<?> type, int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
+        super(type, windowId, world, pos, playerInventory, player, 8, 8);
 
         this.inventory = this.tile.getInventory();
         this.addSlot(new ItemAndFluidSlot(this.inventory, 0, 79, 16));

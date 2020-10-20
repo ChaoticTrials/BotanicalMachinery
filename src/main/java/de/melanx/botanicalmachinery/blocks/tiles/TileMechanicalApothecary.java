@@ -48,11 +48,13 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
     public static final int WORKING_DURATION = 20;
     public static final int FLUID_CAPACITY = 8000;
 
-    private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.createLazy(this::getInventory);
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(21, slot -> {
         this.update = true;
-        this.sendPacket = true;
+        this.markDispatchable();
     }, this::isValidStack);
+
+    private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.createLazy(this::getInventory);
+
     private final ModdedFluidTank fluidInventory = new ModdedFluidTank(FLUID_CAPACITY, fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER));
     private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.fluidInventory);
     private IPetalRecipe recipe = null;
@@ -84,50 +86,6 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
         else if (Arrays.stream(this.inventory.getInputSlots()).anyMatch(x -> x == slot))
             return RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.PETAL_TYPE, stack);
         return true;
-    }
-
-    @Override
-    public void read(BlockState state, CompoundNBT cmp) {
-        super.read(state, cmp);
-        this.getInventory().deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
-        this.fluidInventory.setFluid(FluidStack.loadFluidStackFromNBT(cmp.getCompound(TileTags.FLUID)));
-        this.progress = cmp.getInt(TileTags.PROGRESS);
-        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
-    }
-
-    @Nonnull
-    @Override
-    public CompoundNBT write(CompoundNBT cmp) {
-        cmp.put(TileTags.INVENTORY, this.getInventory().serializeNBT());
-        final CompoundNBT tankTag = new CompoundNBT();
-        this.getFluidInventory().getFluid().writeToNBT(tankTag);
-        cmp.put(TileTags.FLUID, tankTag);
-        cmp.putInt(TileTags.PROGRESS, this.progress);
-        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
-        return cmp;
-    }
-
-    @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
-        if (world != null && !world.isRemote) return;
-        this.getInventory().deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
-        this.fluidInventory.setFluid(FluidStack.loadFluidStackFromNBT(cmp.getCompound(TileTags.FLUID)));
-        this.progress = cmp.getInt(TileTags.PROGRESS);
-        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
-    }
-
-    @Nonnull
-    @Override
-    public CompoundNBT getUpdateTag() {
-        if (world != null && world.isRemote) return super.getUpdateTag();
-        CompoundNBT cmp = super.getUpdateTag();
-        cmp.put(TileTags.INVENTORY, this.getInventory().serializeNBT());
-        final CompoundNBT tankTag = new CompoundNBT();
-        this.getFluidInventory().getFluid().writeToNBT(tankTag);
-        cmp.put(TileTags.FLUID, tankTag);
-        cmp.putInt(TileTags.PROGRESS, this.progress);
-        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
-        return cmp;
     }
 
     private void updateRecipe() {
@@ -251,6 +209,10 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
         return WORKING_DURATION * ServerConfig.multiplierApothecary.get();
     }
 
+    public ItemStack getCurrentOutput() {
+        return this.currentOutput;
+    }
+
     @Nonnull
     @Override
     public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, @Nullable Direction side) {
@@ -262,8 +224,48 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
         return super.getCapability(cap, side);
     }
 
-    public ItemStack getCurrentOutput() {
-        return this.currentOutput;
+    @Override
+    public void read(BlockState state, CompoundNBT cmp) {
+        super.read(state, cmp);
+        this.getInventory().deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
+        this.fluidInventory.setFluid(FluidStack.loadFluidStackFromNBT(cmp.getCompound(TileTags.FLUID)));
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT write(CompoundNBT cmp) {
+        cmp.put(TileTags.INVENTORY, this.getInventory().serializeNBT());
+        CompoundNBT tankTag = new CompoundNBT();
+        this.getFluidInventory().getFluid().writeToNBT(tankTag);
+        cmp.put(TileTags.FLUID, tankTag);
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
+        return cmp;
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (world != null && !world.isRemote) return;
+        this.getInventory().deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
+        this.fluidInventory.setFluid(FluidStack.loadFluidStackFromNBT(cmp.getCompound(TileTags.FLUID)));
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (world != null && world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.put(TileTags.INVENTORY, this.getInventory().serializeNBT());
+        final CompoundNBT tankTag = new CompoundNBT();
+        this.getFluidInventory().getFluid().writeToNBT(tankTag);
+        cmp.put(TileTags.FLUID, tankTag);
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
+        return cmp;
     }
 
     private class ModdedFluidTank extends FluidTank {

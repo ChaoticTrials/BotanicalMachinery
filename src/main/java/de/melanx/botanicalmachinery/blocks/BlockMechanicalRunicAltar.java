@@ -1,9 +1,11 @@
 package de.melanx.botanicalmachinery.blocks;
 
-import de.melanx.botanicalmachinery.blocks.base.BaseBlock;
+import de.melanx.botanicalmachinery.blocks.base.BotanicalBlock;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalRunicAltar;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalRunicAltar;
-import de.melanx.botanicalmachinery.core.registration.Registration;
 import io.github.noeppi_noeppi.libx.block.DirectionShape;
+import io.github.noeppi_noeppi.libx.inventory.container.ContainerBase;
+import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -18,47 +20,22 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockMechanicalRunicAltar extends BaseBlock<TileMechanicalRunicAltar> {
+public class BlockMechanicalRunicAltar extends BotanicalBlock<TileMechanicalRunicAltar, ContainerMechanicalRunicAltar> {
 
     public static final DirectionShape SHAPE = new DirectionShape(VoxelShapes.or(
-            BaseBlock.FRAME_SHAPE,
+            BotanicalBlock.FRAME_SHAPE,
             makeCuboidShape(2, 5, 2, 14, 9, 14),
             makeCuboidShape(6, 3, 6, 10, 5, 10),
             makeCuboidShape(4, 1, 4, 12, 3, 12)
     ));
 
-    public BlockMechanicalRunicAltar(Class<TileMechanicalRunicAltar> teClass) {
-        super(teClass, false);
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createNewTileEntity(@Nonnull IBlockReader worldIn) {
-        return new TileMechanicalRunicAltar();
-    }
-
-    @Nullable
-    @Override
-    protected ContainerType<?> getContainerType() {
-        return Registration.CONTAINER_MECHANICAL_RUNIC_ALTAR.get();
-    }
-
-    @Nonnull
-    @Override
-    public VoxelShape getRenderShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos) {
-        return SHAPE.getShape(state.get(BlockStateProperties.HORIZONTAL_FACING));
+    public BlockMechanicalRunicAltar(ModX mod, Class<TileMechanicalRunicAltar> teClass, ContainerType<ContainerMechanicalRunicAltar> container) {
+        super(mod, teClass, container, false);
     }
 
     @Nonnull
     @Override
     public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
         return SHAPE.getShape(state.get(BlockStateProperties.HORIZONTAL_FACING));
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public int getComparatorInputOverride(@Nonnull BlockState blockState, @Nonnull World worldIn, @Nonnull BlockPos pos) {
-        TileMechanicalRunicAltar tile = (TileMechanicalRunicAltar) worldIn.getTileEntity(pos);
-        return tile != null && tile.getProgress() > 0 ? 15 : 0;
     }
 }

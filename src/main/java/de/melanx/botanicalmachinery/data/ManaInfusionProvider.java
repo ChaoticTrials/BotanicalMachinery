@@ -2,7 +2,8 @@ package de.melanx.botanicalmachinery.data;
 
 import com.google.gson.JsonObject;
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.core.registration.ModItems;
+import de.melanx.botanicalmachinery.ModBlocks;
+import de.melanx.botanicalmachinery.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
@@ -14,7 +15,6 @@ import net.minecraft.state.Property;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
-import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.core.helper.ItemNBTHelper;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 import vazkii.botania.common.crafting.StateIngredientHelper;
@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class ManaInfusionProvider extends RecipeProvider {
+
     public ManaInfusionProvider(DataGenerator gen) {
         super(gen);
     }
@@ -36,8 +37,8 @@ public class ManaInfusionProvider extends RecipeProvider {
 
     @Override
     protected void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
-        registerInfusionRecipe(consumer, ModItems.MANA_EMERALD, Ingredient.fromTag(Tags.Items.GEMS_EMERALD), 8000);
-        registerInfusionRecipe(consumer, de.melanx.botanicalmachinery.core.registration.ModBlocks.MANA_EMERALD, Ingredient.fromTag(Tags.Items.STORAGE_BLOCKS_EMERALD), 8000 * 9);
+        registerInfusionRecipe(consumer, ModItems.manaEmerald, Ingredient.fromTag(Tags.Items.GEMS_EMERALD), 8000);
+        registerInfusionRecipe(consumer, ModBlocks.manaEmeraldBlock, Ingredient.fromTag(Tags.Items.STORAGE_BLOCKS_EMERALD), 8000 * 9);
     }
 
     private static ResourceLocation id(String s) {
@@ -60,7 +61,7 @@ public class ManaInfusionProvider extends RecipeProvider {
         private final BlockState catalyst;
 
         public static FinishedRecipe conjuration(ResourceLocation id, ItemStack output, Ingredient input, int mana) {
-            return new FinishedRecipe(id, output, input, mana, "", ModBlocks.conjurationCatalyst.getDefaultState());
+            return new FinishedRecipe(id, output, input, mana, "", vazkii.botania.common.block.ModBlocks.conjurationCatalyst.getDefaultState());
         }
 
         public static FinishedRecipe alchemy(ResourceLocation id, ItemStack output, Ingredient input, int mana) {
@@ -68,7 +69,7 @@ public class ManaInfusionProvider extends RecipeProvider {
         }
 
         public static FinishedRecipe alchemy(ResourceLocation id, ItemStack output, Ingredient input, int mana, String group) {
-            return new FinishedRecipe(id, output, input, mana, group, ModBlocks.alchemyCatalyst.getDefaultState());
+            return new FinishedRecipe(id, output, input, mana, group, vazkii.botania.common.block.ModBlocks.alchemyCatalyst.getDefaultState());
         }
 
         public FinishedRecipe(ResourceLocation id, ItemStack output, Ingredient input, int mana) {

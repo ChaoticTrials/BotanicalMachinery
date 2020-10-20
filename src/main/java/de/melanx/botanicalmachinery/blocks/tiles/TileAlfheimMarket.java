@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
-import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
 import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
@@ -24,15 +24,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class TileAlfheimMarket extends TileBase implements IWorkingTile {
+public class TileAlfheimMarket extends BotanicalTile implements IWorkingTile {
 
-    private static final int RECIPE_COST = ServerConfig.alfheimMarketRecipeCost.get();
     public static final int MAX_MANA_PER_TICK = 25;
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(5, slot -> {
         this.update = true;
-        this.sendPacket = true;
+        this.markDispatchable();
     }, this::isValidStack);
+
     private IElvenTradeRecipe recipe = null;
     private boolean initDone;
     private int progress;
@@ -70,7 +70,7 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
                         this.recipe = (IElvenTradeRecipe) recipe;
                         this.currentInput = getInputStack(this.recipe).copy();
                         this.currentOutput = this.recipe.getOutputs().get(0).copy();
-                        this.sendPacket = true;
+                        this.markDispatchable();
                         return;
                     }
                 }
@@ -79,6 +79,95 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
         this.currentInput = ItemStack.EMPTY;
         this.currentOutput = ItemStack.EMPTY;
         this.recipe = null;
+    }
+
+    @Override
+    public void tick() {
+        if (this.world != null && !this.world.isRemote) {
+            if (!this.initDone) {
+                this.update = true;
+                this.initDone = true;
+            }
+            boolean done = false;
+            if (this.recipe != null) {
+                List<ItemStack> outputs = new ArrayList<>(this.recipe.getOutputs());
+                if (outputs.size() == 1) {
+                    if (this.inventory.getUnrestricted().insertItem(4, outputs.get(0), true).isEmpty()) {
+                        int manaTransfer = Math.min(this.getCurrentMana(), Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
+                        this.progress += manaTransfer;
+                        this.receiveMana(-manaTransfer);
+                        if (this.progress >= ServerConfig.alfheimMarketRecipeCost.get()) {
+                            this.inventory.getUnrestricted().insertItem(4, outputs.get(0).copy(), false);
+                            for (Ingredient ingredient : this.recipe.getIngredients()) {
+                                for (ItemStack stack : this.inventory.getStacks()) {
+                                    if (ingredient.test(stack)) {
+                                        stack.shrink(1);
+                                        break;
+                                    }
+                                }
+                            }
+                            this.update = true;
+                            done = true;
+                            this.markDirty();
+                            this.markDispatchable();
+                        }
+                    }
+                }
+            }
+            if (this.update) {
+                this.updateRecipe();
+                this.markDirty();
+                this.update = false;
+            }
+            if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
+                this.progress = 0;
+                this.markDirty();
+                this.markDispatchable();
+            }
+            if (this.getCurrentMana() > 0) {
+                for (int i : this.inventory.getInputSlots()) {
+                    if (this.inventory.getStackInSlot(i).getItem() == Items.BREAD) {
+                        this.world.setBlockState(this.pos, Blocks.AIR.getDefaultState());
+                        this.world.createExplosion(null, this.pos.getX(), this.pos.getY(), this.pos.getZ(), 3F, Explosion.Mode.BREAK);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public int getProgress() {
+        return this.progress;
+    }
+
+    public int getMaxProgress() {
+        return ServerConfig.alfheimMarketRecipeCost.get();
+    }
+
+    public int getMaxManaPerTick() {
+        return MAX_MANA_PER_TICK * ServerConfig.multiplierAlfheimMarket.get();
+    }
+
+    private static ItemStack getInputStack(IElvenTradeRecipe recipe) {
+        if (recipe.getIngredients().isEmpty())
+            return ItemStack.EMPTY;
+        ItemStack[] stacks = recipe.getIngredients().get(0).getMatchingStacks();
+        if (stacks.length == 0)
+            return ItemStack.EMPTY;
+        return stacks[0];
+    }
+
+    public ItemStack getCurrentInput() {
+        return this.currentInput;
+    }
+
+    public ItemStack getCurrentOutput() {
+        return this.currentOutput;
+    }
+
+    @Override
+    public int getComparatorOutput() {
+        return 0;
     }
 
     @Override
@@ -116,90 +205,5 @@ public class TileAlfheimMarket extends TileBase implements IWorkingTile {
         cmp.put(TileTags.CURRENT_INPUT, this.currentInput.serializeNBT());
         cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
         return cmp;
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (this.world != null && !this.world.isRemote) {
-            if (!this.initDone) {
-                this.update = true;
-                this.initDone = true;
-            }
-            boolean done = false;
-            if (this.recipe != null) {
-                List<ItemStack> outputs = new ArrayList<>(this.recipe.getOutputs());
-                if (outputs.size() == 1) {
-                    if (this.inventory.getUnrestricted().insertItem(4, outputs.get(0), true).isEmpty()) {
-                        int manaTransfer = Math.min(this.mana, Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
-                        this.progress += manaTransfer;
-                        this.receiveMana(-manaTransfer);
-                        if (this.progress >= RECIPE_COST) {
-                            this.inventory.getUnrestricted().insertItem(4, outputs.get(0).copy(), false);
-                            for (Ingredient ingredient : this.recipe.getIngredients()) {
-                                for (ItemStack stack : this.inventory.getStacks()) {
-                                    if (ingredient.test(stack)) {
-                                        stack.shrink(1);
-                                        break;
-                                    }
-                                }
-                            }
-                            this.update = true;
-                            done = true;
-                            this.markDirty();
-                            this.markDispatchable();
-                        }
-                    }
-                }
-            }
-            if (this.update) {
-                this.updateRecipe();
-                this.markDirty();
-                this.update = false;
-            }
-            if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
-                this.progress = 0;
-                this.markDirty();
-                this.markDispatchable();
-            }
-            if (this.mana > 0) {
-                for (int i : this.inventory.getInputSlots()) {
-                    if (this.inventory.getStackInSlot(i).getItem() == Items.BREAD) {
-                        this.world.setBlockState(this.pos, Blocks.AIR.getDefaultState());
-                        this.world.createExplosion(null, this.pos.getX(), this.pos.getY(), this.pos.getZ(), 3F, Explosion.Mode.BREAK);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    public int getProgress() {
-        return this.progress;
-    }
-
-    public int getMaxProgress() {
-        return RECIPE_COST;
-    }
-
-    public int getMaxManaPerTick() {
-        return MAX_MANA_PER_TICK * ServerConfig.multiplierAlfheimMarket.get();
-    }
-
-    private static ItemStack getInputStack(IElvenTradeRecipe recipe) {
-        if (recipe.getIngredients().isEmpty())
-            return ItemStack.EMPTY;
-        ItemStack[] stacks = recipe.getIngredients().get(0).getMatchingStacks();
-        if (stacks.length == 0)
-            return ItemStack.EMPTY;
-        return stacks[0];
-    }
-
-    public ItemStack getCurrentInput() {
-        return this.currentInput;
-    }
-
-    public ItemStack getCurrentOutput() {
-        return this.currentOutput;
     }
 }

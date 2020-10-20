@@ -2,7 +2,7 @@ package de.melanx.botanicalmachinery.compat;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.screens.*;
-import de.melanx.botanicalmachinery.core.registration.ModBlocks;
+import de.melanx.botanicalmachinery.ModBlocks;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 
 @JeiPlugin
 public class BotanicalMachineryPlugin implements IModPlugin {
+
     @Nonnull
     @Override
     public ResourceLocation getPluginUid() {
@@ -38,11 +39,11 @@ public class BotanicalMachineryPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.ALFHEIM_MARKET), ElvenTradeRecipeCategory.UID);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.MECHANICAL_APOTHECARY), PetalApothecaryRecipeCategory.UID);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.MECHANICAL_BREWERY), BreweryRecipeCategory.UID);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.MECHANICAL_DAISY), PureDaisyRecipeCategory.UID);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.MECHANICAL_MANA_POOL), ManaPoolRecipeCategory.UID);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.MECHANICAL_RUNIC_ALTAR), RunicAltarRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.alfheimMarket), ElvenTradeRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalApothecary), PetalApothecaryRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalBrewery), BreweryRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalDaisy), PureDaisyRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalManaPool), ManaPoolRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalRunicAltar), RunicAltarRecipeCategory.UID);
     }
 }

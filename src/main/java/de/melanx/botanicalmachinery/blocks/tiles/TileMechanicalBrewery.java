@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
-import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
+public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile {
 
     public static final int MAX_MANA_PER_TICK = 50;
 
@@ -36,8 +36,9 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(8, slot -> {
         this.update = true;
-        this.sendPacket = true;
+        this.markDispatchable();
     }, this::isValidStack);
+
     private IBrewRecipe recipe = null;
     private boolean initDone;
     private int progress;
@@ -83,7 +84,7 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
                         } else {
                             this.currentOutput = ((IBrewContainer) this.inventory.getStackInSlot(0).getItem()).getItemForBrew(this.recipe.getBrew(), this.inventory.getStackInSlot(0).copy());
                         }
-                        this.sendPacket = true;
+                        this.markDispatchable();
                         return;
                     }
                 }
@@ -94,45 +95,7 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
     }
 
     @Override
-    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
-        super.read(state, cmp);
-        this.progress = cmp.getInt(TileTags.PROGRESS);
-        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
-        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
-    }
-
-    @Nonnull
-    @Override
-    public CompoundNBT write(@Nonnull CompoundNBT cmp) {
-        cmp.putInt(TileTags.PROGRESS, this.progress);
-        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
-        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
-        return super.write(cmp);
-    }
-
-    @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
-        if (world != null && !world.isRemote) return;
-        super.handleUpdateTag(state, cmp);
-        this.progress = cmp.getInt(TileTags.PROGRESS);
-        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
-        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
-    }
-
-    @Nonnull
-    @Override
-    public CompoundNBT getUpdateTag() {
-        if (world != null && world.isRemote) return super.getUpdateTag();
-        CompoundNBT cmp = super.getUpdateTag();
-        cmp.putInt(TileTags.PROGRESS, this.progress);
-        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
-        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
-        return cmp;
-    }
-
-    @Override
     public void tick() {
-        super.tick();
         if (!this.initDone) {
             this.update = true;
             this.initDone = true;
@@ -145,7 +108,7 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
                 ItemStack currentOutput = this.inventory.getStackInSlot(7);
                 if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemStacksEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
                     this.maxProgress = this.getManaCost();
-                    int manaTransfer = Math.min(this.mana, Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
+                    int manaTransfer = Math.min(this.getCurrentMana(), Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
                     this.progress += manaTransfer;
                     this.receiveMana(-manaTransfer);
                     if (this.progress >= this.getMaxProgress()) {
@@ -232,5 +195,47 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
 
     public ItemStack getCurrentOutput() {
         return this.currentOutput;
+    }
+
+    @Override
+    public int getComparatorOutput() {
+        return 0;
+    }
+
+    @Override
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
+        super.read(state, cmp);
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
+        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT write(@Nonnull CompoundNBT cmp) {
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
+        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
+        return super.write(cmp);
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (world != null && !world.isRemote) return;
+        super.handleUpdateTag(state, cmp);
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
+        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (world != null && world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
+        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
+        return cmp;
     }
 }

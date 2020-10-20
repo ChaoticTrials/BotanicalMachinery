@@ -13,8 +13,7 @@ public class DataCreator {
         if (event.includeServer()) {
             gen.addProvider(new LootTables(gen));
             gen.addProvider(new Recipes(gen));
-        }
-        if (event.includeClient()) {
+            gen.addProvider(new ManaInfusionProvider(gen));
             gen.addProvider(new BlockStates(gen, helper));
             gen.addProvider(new ItemModels(gen, helper));
         }

@@ -18,12 +18,12 @@ public class BotanicalMachineryNetwork extends NetworkX {
 
     @Override
     protected void registerPackets() {
-        this.register(new ManaBatteryLockedHandler(), () -> ManaBatteryLockedHandler::handle, NetworkDirection.PLAY_TO_SERVER);
+        this.register(new ManaBatteryLockedSerializer(), () -> ManaBatteryLockedHandler::handle, NetworkDirection.PLAY_TO_SERVER);
     }
 
     public void updateLockedState(TileManaBattery tile) {
         if (tile.getWorld() != null && tile.getWorld().isRemote) {
-            this.instance.sendToServer(new ManaBatteryLockedHandler.Message(tile.getPos(), tile.isSlot1Locked(), tile.isSlot2Locked()));
+            this.instance.sendToServer(new ManaBatteryLockedSerializer.Message(tile.getPos(), tile.isSlot1Locked(), tile.isSlot2Locked()));
         }
     }
 }

@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
-import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
@@ -29,14 +29,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile {
+public class TileMechanicalRunicAltar extends BotanicalTile implements IWorkingTile {
 
     public static final int MAX_MANA_PER_TICK = 100;
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(33, slot -> {
         this.update = true;
-        this.sendPacket = true;
+        this.markDispatchable();
     }, this::isValidStack);
+
     private IRuneAltarRecipe recipe = null;
     private boolean initDone;
     private int progress;
@@ -121,47 +122,7 @@ public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile {
     }
 
     @Override
-    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
-        super.read(state, cmp);
-        this.progress = cmp.getInt(TileTags.PROGRESS);
-        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
-        this.slotsUsed.clear();
-        this.slotsUsed.addAll(Arrays.stream(cmp.getIntArray(TileTags.SLOTS_USED)).boxed().collect(Collectors.toList()));
-    }
-
-    @Nonnull
-    @Override
-    public CompoundNBT write(@Nonnull CompoundNBT cmp) {
-        cmp.putInt(TileTags.PROGRESS, this.progress);
-        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
-        cmp.putIntArray(TileTags.SLOTS_USED, this.slotsUsed);
-        return super.write(cmp);
-    }
-
-    @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
-        if (world != null && !world.isRemote) return;
-        super.handleUpdateTag(state, cmp);
-        this.progress = cmp.getInt(TileTags.PROGRESS);
-        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
-        this.slotsUsed.clear();
-        this.slotsUsed.addAll(Arrays.stream(cmp.getIntArray(TileTags.SLOTS_USED)).boxed().collect(Collectors.toList()));
-    }
-
-    @Nonnull
-    @Override
-    public CompoundNBT getUpdateTag() {
-        if (world != null && world.isRemote) return super.getUpdateTag();
-        CompoundNBT cmp = super.getUpdateTag();
-        cmp.putInt(TileTags.PROGRESS, this.progress);
-        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
-        cmp.putIntArray(TileTags.SLOTS_USED, this.slotsUsed);
-        return cmp;
-    }
-
-    @Override
     public void tick() {
-        super.tick();
         if (this.world != null && !this.world.isRemote) {
             if (!this.initDone) {
                 this.update = true;
@@ -170,7 +131,7 @@ public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile {
             boolean done = false;
             if (this.recipe != null) {
                 this.maxProgress = this.recipe.getManaUsage();
-                int manaTransfer = Math.min(this.mana, Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
+                int manaTransfer = Math.min(this.getCurrentMana(), Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
                 this.progress += manaTransfer;
                 this.receiveMana(-manaTransfer);
                 if (this.progress >= this.getMaxProgress()) {
@@ -273,5 +234,49 @@ public class TileMechanicalRunicAltar extends TileBase implements IWorkingTile {
 
     public boolean isSlotUsedCurrently(int slot) {
         return this.slotsUsed.contains(slot);
+    }
+
+    @Override
+    public int getComparatorOutput() {
+        return 0;
+    }
+
+    @Override
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
+        super.read(state, cmp);
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
+        this.slotsUsed.clear();
+        this.slotsUsed.addAll(Arrays.stream(cmp.getIntArray(TileTags.SLOTS_USED)).boxed().collect(Collectors.toList()));
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT write(@Nonnull CompoundNBT cmp) {
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
+        cmp.putIntArray(TileTags.SLOTS_USED, this.slotsUsed);
+        return super.write(cmp);
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (world != null && !world.isRemote) return;
+        super.handleUpdateTag(state, cmp);
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
+        this.slotsUsed.clear();
+        this.slotsUsed.addAll(Arrays.stream(cmp.getIntArray(TileTags.SLOTS_USED)).boxed().collect(Collectors.toList()));
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (world != null && world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
+        cmp.putIntArray(TileTags.SLOTS_USED, this.slotsUsed);
+        return cmp;
     }
 }

@@ -1,6 +1,6 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
-import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
@@ -21,9 +21,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TileMechanicalManaPool extends TileBase {
+public class TileMechanicalManaPool extends BotanicalTile {
+
     public static final List<Item> CATALYSTS = Arrays.asList(ModBlocks.alchemyCatalyst.asItem(), ModBlocks.conjurationCatalyst.asItem(), ModBlocks.manaVoid.asItem());
+
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(3, this::onSlotChanged, this::isValidStack);
+
     public boolean validRecipe = true;
     private int cooldown = ServerConfig.multiplierManaPool.get();
 
@@ -69,7 +72,7 @@ public class TileMechanicalManaPool extends TileBase {
                 this.validRecipe = stack.isEmpty();
             }
         }
-        this.sendPacket = true;
+        this.markDispatchable();
         this.markDirty();
     }
 
@@ -83,7 +86,6 @@ public class TileMechanicalManaPool extends TileBase {
 
     @Override
     public void tick() {
-        super.tick();
         if (!ManaNetworkHandler.instance.isPoolIn(this) && !this.isRemoved()) {
             ManaNetworkEvent.addCollector(this);
         }
@@ -131,9 +133,11 @@ public class TileMechanicalManaPool extends TileBase {
 
     @Override
     public void receiveMana(int i) {
-        if (this.inventory.getStackInSlot(0).getItem() == ModBlocks.manaVoid.asItem())
-            this.mana = Math.min(this.getCurrentMana() + i, this.getManaCap());
-        else super.receiveMana(i);
+        if (this.inventory.getStackInSlot(0).getItem() == ModBlocks.manaVoid.asItem()) {
+            super.receiveMana(Math.min(i, this.getAvailableSpaceForMana()));
+        } else {
+            super.receiveMana(i);
+        }
     }
 
     @Override
@@ -143,5 +147,10 @@ public class TileMechanicalManaPool extends TileBase {
 
     public int getCooldown() {
         return this.cooldown;
+    }
+
+    @Override
+    public int getComparatorOutput() {
+        return 0;
     }
 }

@@ -6,6 +6,7 @@ import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.util.SoundEvent;
 
 public class SoundHelper {
+
     public static void playSound(SoundEvent sound) {
         playSound(SimpleSound.master(sound, 1));
     }

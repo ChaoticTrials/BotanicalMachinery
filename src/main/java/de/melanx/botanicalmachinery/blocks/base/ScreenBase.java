@@ -19,6 +19,7 @@ import javax.annotation.Nonnull;
 import java.awt.*;
 
 public abstract class ScreenBase<X extends ContainerBase<?>> extends ContainerScreen<X> {
+
     public final ManaBar manaBar;
     public int relX;
     public int relY;
@@ -44,7 +45,7 @@ public abstract class ScreenBase<X extends ContainerBase<?>> extends ContainerSc
         this.renderBackground(ms);
         super.render(ms, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(ms, mouseX, mouseY);
-        this.manaBar.renderHoveredToolTip(ms, mouseX, mouseY, ((TileBase) this.getContainer().tile).getCurrentMana());
+        this.manaBar.renderHoveredToolTip(ms, mouseX, mouseY, ((BotanicalTile) this.getContainer().tile).getCurrentMana());
     }
 
     @Override
@@ -60,7 +61,7 @@ public abstract class ScreenBase<X extends ContainerBase<?>> extends ContainerSc
         //noinspection ConstantConditions
         this.minecraft.getTextureManager().bindTexture(screenLocation);
         this.blit(ms, this.relX, this.relY, 0, 0, this.xSize, this.ySize);
-        this.manaBar.draw(ms, ((TileBase) this.container.tile).getCurrentMana());
+        this.manaBar.draw(ms, ((BotanicalTile) this.container.tile).getCurrentMana());
     }
 
     public void drawDefaultGuiBackgroundLayer(MatrixStack ms, ResourceLocation screenLocation, int crossX, int crossY) {
@@ -68,7 +69,7 @@ public abstract class ScreenBase<X extends ContainerBase<?>> extends ContainerSc
 
         BlockPos tilePos = this.container.getPos();
         TileEntity tile = this.container.getWorld().getTileEntity(tilePos);
-        if (tile instanceof TileBase && !((TileBase) tile).hasValidRecipe()) {
+        if (tile instanceof BotanicalTile && !((BotanicalTile) tile).hasValidRecipe()) {
             int x = this.relX + crossX;
             int y = this.relY + crossY;
 

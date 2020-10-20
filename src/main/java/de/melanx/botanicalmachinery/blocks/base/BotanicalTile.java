@@ -24,7 +24,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.lwjgl.opengl.GL11;
-import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.api.mana.IKeyLocked;
 import vazkii.botania.api.mana.IManaPool;
 import vazkii.botania.api.mana.IThrottledPacket;
@@ -36,18 +35,16 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class TileBase extends TileEntityBase implements IManaPool, IManaMachineTile, IKeyLocked, ISparkAttachable, IThrottledPacket, ITickableTileEntity {
+public abstract class BotanicalTile extends TileEntityBase implements IManaPool, IManaMachineTile, IKeyLocked, ISparkAttachable, IThrottledPacket, ITickableTileEntity {
 
-    public int mana;
+    private int mana;
     private final int manaCap;
-    public String inputKey = "";
-    public String outputKey = "";
+    private String inputKey = "";
+    private String outputKey = "";
 
-    public boolean sendPacket = false;
+    private final LazyOptional<IItemHandlerModifiable> capability = this.createCap(this::getInventory);
 
-    private final LazyOptional<IItemHandlerModifiable> handler = this.createHandler(this::getInventory);
-
-    public TileBase(TileEntityType<?> tileEntityTypeIn, int manaCap) {
+    public BotanicalTile(TileEntityType<?> tileEntityTypeIn, int manaCap) {
         super(tileEntityTypeIn);
         this.manaCap = manaCap;
     }
@@ -57,7 +54,7 @@ public abstract class TileBase extends TileEntityBase implements IManaPool, IMan
      * now. Always use IItemHandlerModifiable.createLazy. You may call the supplier inside the canExtract and canInsert
      * lambda.
      */
-    protected LazyOptional<IItemHandlerModifiable> createHandler(Supplier<IItemHandlerModifiable> inventory) {
+    protected LazyOptional<IItemHandlerModifiable> createCap(Supplier<IItemHandlerModifiable> inventory) {
         return ItemStackHandlerWrapper.createLazy(inventory);
     }
 
@@ -66,11 +63,21 @@ public abstract class TileBase extends TileEntityBase implements IManaPool, IMan
 
     public abstract boolean isValidStack(int slot, ItemStack stack);
 
+    public abstract int getComparatorOutput();
+
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        if (this.world != null) {
+            this.world.updateComparatorOutputLevel(this.pos, this.getBlockState().getBlock());
+        }
+    }
+
     @Nonnull
     @Override
     public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, Direction direction) {
         if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return this.handler.cast();
+            return this.capability.cast();
         }
         return super.getCapability(cap, direction);
     }
@@ -96,7 +103,7 @@ public abstract class TileBase extends TileEntityBase implements IManaPool, IMan
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
-        if (world != null && !world.isRemote) return;
+        if (this.world != null && !this.world.isRemote) return;
         this.getInventory().deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
         this.mana = cmp.getInt(TileTags.MANA);
         if (cmp.contains(TileTags.INPUT_KEY)) this.inputKey = cmp.getString(TileTags.INPUT_KEY);
@@ -106,7 +113,7 @@ public abstract class TileBase extends TileEntityBase implements IManaPool, IMan
     @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
-        if (world != null && world.isRemote) return super.getUpdateTag();
+        if (this.world != null && this.world.isRemote) return super.getUpdateTag();
         CompoundNBT cmp = super.getUpdateTag();
         cmp.put(TileTags.INVENTORY, this.getInventory().serializeNBT());
         cmp.putInt(TileTags.MANA, this.getCurrentMana());
@@ -132,16 +139,6 @@ public abstract class TileBase extends TileEntityBase implements IManaPool, IMan
     }
 
     @Override
-    public void tick() {
-        if (this.world != null) {
-            if (this.sendPacket) {
-                VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
-                this.sendPacket = false;
-            }
-        }
-    }
-
-    @Override
     public String getInputKey() {
         return this.inputKey;
     }
@@ -152,17 +149,13 @@ public abstract class TileBase extends TileEntityBase implements IManaPool, IMan
     }
 
     @Override
-    public void markDispatchable() {
-        this.sendPacket = true;
-    }
-
-    @Override
     public boolean canAttachSpark(ItemStack itemStack) {
         return true;
     }
 
     @Override
     public void attachSpark(ISparkEntity iSparkEntity) {
+
     }
 
     @Override

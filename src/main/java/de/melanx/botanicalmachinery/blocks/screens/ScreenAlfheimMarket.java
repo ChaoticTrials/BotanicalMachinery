@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
 public class ScreenAlfheimMarket extends ScreenBase<ContainerAlfheimMarket> {
+
     public ScreenAlfheimMarket(ContainerAlfheimMarket container, PlayerInventory inv, ITextComponent titleIn) {
         super(container, inv, titleIn);
     }

@@ -16,6 +16,7 @@ import net.minecraft.util.text.ITextComponent;
 import javax.annotation.Nonnull;
 
 public class ScreenManaBattery extends ScreenBase<ContainerManaBattery> {
+
     private int xB1;
     private int yB1;
     private int xB2;
