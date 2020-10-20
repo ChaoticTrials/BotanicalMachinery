@@ -225,7 +225,7 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT cmp) {
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
         super.read(state, cmp);
         this.getInventory().deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
         this.fluidInventory.setFluid(FluidStack.loadFluidStackFromNBT(cmp.getCompound(TileTags.FLUID)));
@@ -247,7 +247,7 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
-        if (world != null && !world.isRemote) return;
+        if (this.world != null && !this.world.isRemote) return;
         this.getInventory().deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
         this.fluidInventory.setFluid(FluidStack.loadFluidStackFromNBT(cmp.getCompound(TileTags.FLUID)));
         this.progress = cmp.getInt(TileTags.PROGRESS);
@@ -257,7 +257,7 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
     @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
-        if (world != null && world.isRemote) return super.getUpdateTag();
+        if (this.world != null && this.world.isRemote) return super.getUpdateTag();
         CompoundNBT cmp = super.getUpdateTag();
         cmp.put(TileTags.INVENTORY, this.getInventory().serializeNBT());
         final CompoundNBT tankTag = new CompoundNBT();
@@ -269,6 +269,7 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
     }
 
     private class ModdedFluidTank extends FluidTank {
+
         public ModdedFluidTank(int capacity, Predicate<FluidStack> validator) {
             super(capacity, validator);
         }

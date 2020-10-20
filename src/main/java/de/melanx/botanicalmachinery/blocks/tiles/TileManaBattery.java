@@ -124,7 +124,7 @@ public class TileManaBattery extends BotanicalTile {
 
     @Override
     public int getComparatorOutput() {
-        return 0;
+        return (int) Math.round(this.getCurrentMana() / (double) this.getManaCap() * 15d);
     }
 
     @Override
@@ -160,7 +160,7 @@ public class TileManaBattery extends BotanicalTile {
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
-        if (world != null && !world.isRemote) return;
+        if (this.world != null && !this.world.isRemote) return;
         super.handleUpdateTag(state, cmp);
         this.slot1Locked = cmp.getBoolean(TileTags.SLOT_1_LOCKED);
         this.slot2Locked = cmp.getBoolean(TileTags.SLOT_2_LOCKED);
@@ -169,7 +169,7 @@ public class TileManaBattery extends BotanicalTile {
     @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
-        if (world != null && world.isRemote) return super.getUpdateTag();
+        if (this.world != null && this.world.isRemote) return super.getUpdateTag();
         CompoundNBT cmp = super.getUpdateTag();
         cmp.putBoolean(TileTags.SLOT_1_LOCKED, this.slot1Locked);
         cmp.putBoolean(TileTags.SLOT_2_LOCKED, this.slot2Locked);

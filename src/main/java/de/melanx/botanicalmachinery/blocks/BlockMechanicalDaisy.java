@@ -2,7 +2,6 @@ package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalDaisy;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalDaisy;
-import io.github.noeppi_noeppi.libx.inventory.container.ContainerBase;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.BlockGUI;
 import net.minecraft.block.BlockState;
@@ -17,6 +16,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
@@ -69,5 +69,10 @@ public class BlockMechanicalDaisy extends BlockGUI<TileMechanicalDaisy, Containe
     @Override
     public VoxelShape getRenderShape(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos) {
         return SHAPE;
+    }
+
+    @Override
+    protected boolean shouldDropInventory(World world, BlockPos pos, BlockState state) {
+        return false;
     }
 }

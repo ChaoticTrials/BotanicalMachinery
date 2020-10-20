@@ -134,6 +134,7 @@ public abstract class BotanicalTile extends TileEntityBase implements IManaPool,
 
         mc.textureManager.bindTexture(HUDHandler.manaBar);
 
+        //noinspection deprecation
         RenderSystem.disableLighting();
         RenderSystem.disableBlend();
     }

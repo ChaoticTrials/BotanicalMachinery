@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
-import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
+import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
@@ -60,7 +60,7 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
 
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
-        if (world == null) return false;
+        if (this.world == null) return false;
         if (slot == 0)
             return stack.getTag() != null ? !stack.getTag().contains("brewKey") : BREW_CONTAINER.contains(stack.getItem());
         return (Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot)) || RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.BREW_TYPE, stack);
@@ -199,7 +199,7 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
 
     @Override
     public int getComparatorOutput() {
-        return 0;
+        return this.getProgress() > 0 ? 15 : 0;
     }
 
     @Override
@@ -221,7 +221,7 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
-        if (world != null && !world.isRemote) return;
+        if (this.world != null && !this.world.isRemote) return;
         super.handleUpdateTag(state, cmp);
         this.progress = cmp.getInt(TileTags.PROGRESS);
         this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
@@ -231,7 +231,7 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
     @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
-        if (world != null && world.isRemote) return super.getUpdateTag();
+        if (this.world != null && this.world.isRemote) return super.getUpdateTag();
         CompoundNBT cmp = super.getUpdateTag();
         cmp.putInt(TileTags.PROGRESS, this.progress);
         cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);

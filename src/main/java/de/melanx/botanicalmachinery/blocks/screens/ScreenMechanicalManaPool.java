@@ -3,7 +3,6 @@ package de.melanx.botanicalmachinery.blocks.screens;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalManaPool;
-import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalBrewery;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalManaPool;
 import de.melanx.botanicalmachinery.core.LibResources;
 import io.github.noeppi_noeppi.libx.render.RenderHelperItem;

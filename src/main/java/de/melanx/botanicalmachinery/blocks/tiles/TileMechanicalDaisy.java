@@ -55,7 +55,7 @@ public class TileMechanicalDaisy extends TileEntityBase implements ITickableTile
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT cmp) {
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
         super.read(state, cmp);
         if (cmp.contains(TileTags.INVENTORY)) {
             this.inventory.deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
@@ -82,6 +82,7 @@ public class TileMechanicalDaisy extends TileEntityBase implements ITickableTile
                             this.inventory.setStackInSlot(i, new FluidStack(state.getFluidState().getFluid(), 1000));
                         }
                         this.workingTicks[i] = -1;
+                        this.markDispatchable();
                     } else {
                         this.workingTicks[i] += 1;
                     }
@@ -196,7 +197,7 @@ public class TileMechanicalDaisy extends TileEntityBase implements ITickableTile
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
-        if (world != null && !world.isRemote) return;
+        if (this.world != null && !this.world.isRemote) return;
         super.handleUpdateTag(state, cmp);
         if (cmp.contains(TileTags.INVENTORY)) {
             this.inventory.deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
@@ -209,7 +210,7 @@ public class TileMechanicalDaisy extends TileEntityBase implements ITickableTile
     @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
-        if (world != null && world.isRemote) return super.getUpdateTag();
+        if (this.world != null && this.world.isRemote) return super.getUpdateTag();
         CompoundNBT cmp = super.getUpdateTag();
         cmp.put(TileTags.INVENTORY, this.inventory.serializeNBT());
         cmp.putIntArray(TileTags.WORKING_TICKS, this.workingTicks);
@@ -433,6 +434,7 @@ public class TileMechanicalDaisy extends TileEntityBase implements ITickableTile
         @Override
         protected void onContentsChanged(int slot) {
             TileMechanicalDaisy.this.markDirty();
+            TileMechanicalDaisy.this.markDispatchable();
         }
     }
 }

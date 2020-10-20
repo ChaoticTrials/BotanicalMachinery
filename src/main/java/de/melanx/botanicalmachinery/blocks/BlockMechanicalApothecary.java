@@ -4,7 +4,6 @@ import de.melanx.botanicalmachinery.blocks.base.BotanicalBlock;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalApothecary;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
 import io.github.noeppi_noeppi.libx.block.DirectionShape;
-import io.github.noeppi_noeppi.libx.inventory.container.ContainerBase;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.BlockGUI;
 import net.minecraft.block.Block;
@@ -19,6 +18,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -74,5 +74,10 @@ public class BlockMechanicalApothecary extends BlockGUI<TileMechanicalApothecary
     @Override
     public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
         return SHAPE.getShape(state.get(BlockStateProperties.HORIZONTAL_FACING));
+    }
+
+    @Override
+    protected boolean shouldDropInventory(World world, BlockPos pos, BlockState state) {
+        return false;
     }
 }

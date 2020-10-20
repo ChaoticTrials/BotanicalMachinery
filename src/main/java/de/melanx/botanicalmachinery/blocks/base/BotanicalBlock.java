@@ -44,7 +44,7 @@ public abstract class BotanicalBlock<T extends BotanicalTile, C extends Containe
 
     public BotanicalBlock(ModX mod, Class<T> teClass, ContainerType<C> container, boolean fullCube) {
         super(mod, teClass, container, fullCube ?
-                  Properties.create(Material.ROCK).hardnessAndResistance(2, 10)
+                Properties.create(Material.ROCK).hardnessAndResistance(2, 10)
                 : Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity());
         this.fullCube = fullCube;
     }
@@ -106,5 +106,10 @@ public abstract class BotanicalBlock<T extends BotanicalTile, C extends Containe
     @SuppressWarnings("deprecation")
     public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
         return (!this.fullCube) ? FRAME_SHAPE : super.getShape(state, world, pos, context);
+    }
+
+    @Override
+    protected boolean shouldDropInventory(World world, BlockPos pos, BlockState state) {
+        return false;
     }
 }

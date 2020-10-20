@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
-import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
+import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
 import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
@@ -55,7 +55,7 @@ public class TileAlfheimMarket extends BotanicalTile implements IWorkingTile {
 
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
-        if (world == null) return false;
+        if (this.world == null) return false;
         return Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot) || RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.ELVEN_TRADE_TYPE, stack);
     }
 
@@ -167,7 +167,7 @@ public class TileAlfheimMarket extends BotanicalTile implements IWorkingTile {
 
     @Override
     public int getComparatorOutput() {
-        return 0;
+        return this.getProgress() > 0 ? 15 : 0;
     }
 
     @Override
@@ -189,7 +189,7 @@ public class TileAlfheimMarket extends BotanicalTile implements IWorkingTile {
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
-        if (world != null && !world.isRemote) return;
+        if (this.world != null && !this.world.isRemote) return;
         super.handleUpdateTag(state, cmp);
         this.progress = cmp.getInt(TileTags.PROGRESS);
         this.currentInput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_INPUT));
@@ -199,7 +199,7 @@ public class TileAlfheimMarket extends BotanicalTile implements IWorkingTile {
     @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
-        if (world != null && world.isRemote) return super.getUpdateTag();
+        if (this.world != null && this.world.isRemote) return super.getUpdateTag();
         CompoundNBT cmp = super.getUpdateTag();
         cmp.putInt(TileTags.PROGRESS, this.progress);
         cmp.put(TileTags.CURRENT_INPUT, this.currentInput.serializeNBT());

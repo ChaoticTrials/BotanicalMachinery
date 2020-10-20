@@ -205,7 +205,6 @@ public class TesrMechanicalBrewery extends HorizontalRotatedTesr<TileMechanicalB
         } else if (stack.getItem() instanceof DyeItem) {
             return ((DyeItem) stack.getItem()).getDyeColor().getColorValue();
         } else if (stack.getItem() instanceof BlockItem) {
-            //noinspection deprecation
             return ((BlockItem) stack.getItem()).getBlock().getMaterialColor().colorValue;
         } else {
             return this.waterColor;

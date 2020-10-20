@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
-import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
+import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
@@ -238,7 +238,7 @@ public class TileMechanicalRunicAltar extends BotanicalTile implements IWorkingT
 
     @Override
     public int getComparatorOutput() {
-        return 0;
+        return this.getProgress() > 0 ? 15 : 0;
     }
 
     @Override
@@ -261,7 +261,7 @@ public class TileMechanicalRunicAltar extends BotanicalTile implements IWorkingT
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
-        if (world != null && !world.isRemote) return;
+        if (this.world != null && !this.world.isRemote) return;
         super.handleUpdateTag(state, cmp);
         this.progress = cmp.getInt(TileTags.PROGRESS);
         this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
@@ -272,7 +272,7 @@ public class TileMechanicalRunicAltar extends BotanicalTile implements IWorkingT
     @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
-        if (world != null && world.isRemote) return super.getUpdateTag();
+        if (this.world != null && this.world.isRemote) return super.getUpdateTag();
         CompoundNBT cmp = super.getUpdateTag();
         cmp.putInt(TileTags.PROGRESS, this.progress);
         cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);

@@ -80,7 +80,8 @@ public class TileMechanicalManaPool extends BotanicalTile {
     public boolean isValidStack(int slot, ItemStack stack) {
         if (this.world == null) return false;
         if (slot == 0) return CATALYSTS.contains(stack.getItem());
-        if (slot == 1) return RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.MANA_INFUSION_TYPE, stack);
+        if (slot == 1)
+            return RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.MANA_INFUSION_TYPE, stack);
         return true;
     }
 
@@ -151,6 +152,6 @@ public class TileMechanicalManaPool extends BotanicalTile {
 
     @Override
     public int getComparatorOutput() {
-        return 0;
+        return !this.inventory.getStackInSlot(1).isEmpty() ? 15 : 0;
     }
 }

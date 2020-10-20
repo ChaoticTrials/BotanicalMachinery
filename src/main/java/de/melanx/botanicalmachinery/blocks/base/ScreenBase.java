@@ -80,6 +80,7 @@ public abstract class ScreenBase<X extends ContainerBase<?>> extends ContainerSc
             this.minecraft.getTextureManager().bindTexture(LibResources.HUD);
             this.blit(ms, x, y, 0, 0, 13, 13);
 
+            //noinspection deprecation
             RenderSystem.disableLighting();
             RenderSystem.disableBlend();
         }

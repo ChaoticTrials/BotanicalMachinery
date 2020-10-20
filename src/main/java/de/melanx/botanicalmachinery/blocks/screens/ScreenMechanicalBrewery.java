@@ -16,6 +16,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class ScreenMechanicalBrewery extends ScreenBase<ContainerMechanicalBrewery> {
+
     public ScreenMechanicalBrewery(ContainerMechanicalBrewery container, PlayerInventory inv, ITextComponent titleIn) {
         super(container, inv, titleIn);
         this.ySize = 192;

@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
-import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
+import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
@@ -109,7 +109,7 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
 
     @Override
     public int getComparatorOutput() {
-        return 0;
+        return this.getProgress() > 0 ? 15 : 0;
     }
 
     @Override
@@ -127,7 +127,7 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
-        if (world != null && !world.isRemote) return;
+        if (this.world != null && !this.world.isRemote) return;
         super.handleUpdateTag(state, cmp);
         this.progress = cmp.getInt(TileTags.PROGRESS);
     }
@@ -135,7 +135,7 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
     @Nonnull
     @Override
     public CompoundNBT getUpdateTag() {
-        if (world != null && world.isRemote) return super.getUpdateTag();
+        if (this.world != null && this.world.isRemote) return super.getUpdateTag();
         CompoundNBT cmp = super.getUpdateTag();
         cmp.putInt(TileTags.PROGRESS, this.progress);
         return cmp;

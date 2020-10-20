@@ -52,6 +52,7 @@ public class ManaInfusionProvider extends RecipeProvider {
     }
 
     private static class FinishedRecipe implements IFinishedRecipe {
+
         private final ResourceLocation id;
         private final Ingredient input;
         private final ItemStack output;

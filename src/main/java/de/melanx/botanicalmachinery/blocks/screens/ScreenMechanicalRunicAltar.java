@@ -32,7 +32,7 @@ public class ScreenMechanicalRunicAltar extends ScreenBase<ContainerMechanicalRu
         this.drawDefaultGuiBackgroundLayer(ms, LibResources.MECHANICAL_RUNIC_ALTAR_GUI, 91, 65);
 
         TileMechanicalRunicAltar tile = (TileMechanicalRunicAltar) this.container.tile;
-        if (tile.getInventory().getStackInSlot(0).isEmpty() && minecraft != null) {
+        if (tile.getInventory().getStackInSlot(0).isEmpty() && this.minecraft != null) {
             RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.livingRock, this.relX + 90, this.relY + 43, 16, false, 1, 1, 1, 0.3f);
         }
         if (tile.getProgress() > 0) {

@@ -1,8 +1,8 @@
 package de.melanx.botanicalmachinery.compat;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.blocks.screens.*;
 import de.melanx.botanicalmachinery.ModBlocks;
+import de.melanx.botanicalmachinery.blocks.screens.*;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IGuiHandlerRegistration;

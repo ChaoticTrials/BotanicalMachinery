@@ -36,7 +36,7 @@ public class ScreenManaBattery extends ScreenBase<ContainerManaBattery> {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack ms, float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack ms, float partialTicks, int mouseX, int mouseY) {
         this.drawDefaultGuiBackgroundLayer(ms, LibResources.MANA_BATTERY_GUI, 81, 37);
 
         BlockPos tilePos = this.container.getPos();

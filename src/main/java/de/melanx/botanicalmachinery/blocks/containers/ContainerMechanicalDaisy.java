@@ -43,7 +43,7 @@ public class ContainerMechanicalDaisy extends ContainerBase<TileMechanicalDaisy>
     @Nonnull
     @Override
     public ItemStack slotClick(int slot, int dragType, @Nonnull ClickType clickType, @Nonnull PlayerEntity player) {
-        if (clickType == ClickType.PICKUP && slot < 8 && !player.inventory.getItemStack().isEmpty() && player.inventory.getItemStack().getCount() == 1) {
+        if (clickType == ClickType.PICKUP && slot >= 0 && slot < 8 && !player.inventory.getItemStack().isEmpty() && player.inventory.getItemStack().getCount() == 1) {
             ItemStack inMouse = player.inventory.getItemStack();
 
             //noinspection ConstantConditions

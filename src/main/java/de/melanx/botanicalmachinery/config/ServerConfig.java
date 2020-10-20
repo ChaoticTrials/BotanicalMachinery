@@ -12,6 +12,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import java.nio.file.Path;
 
 public class ServerConfig {
+
     public static final ForgeConfigSpec SERVER_CONFIG;
     private static final ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
 

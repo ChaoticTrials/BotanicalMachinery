@@ -4,7 +4,6 @@ import de.melanx.botanicalmachinery.blocks.base.BotanicalBlock;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerAlfheimMarket;
 import de.melanx.botanicalmachinery.blocks.tiles.TileAlfheimMarket;
 import io.github.noeppi_noeppi.libx.block.DirectionShape;
-import io.github.noeppi_noeppi.libx.inventory.container.ContainerBase;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.container.ContainerType;
