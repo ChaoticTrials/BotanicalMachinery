@@ -1,24 +1,43 @@
 package de.melanx.botanicalmachinery.blocks;
 
+import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.BotanicalBlock;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalApothecary;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
+import de.melanx.botanicalmachinery.core.LibNames;
 import io.github.noeppi_noeppi.libx.block.DirectionShape;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.BlockGUI;
+import io.github.noeppi_noeppi.libx.mod.registration.TileEntityBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,6 +58,30 @@ public class BlockMechanicalApothecary extends BlockGUI<TileMechanicalApothecary
 
     public BlockMechanicalApothecary(ModX mod, Class<TileMechanicalApothecary> teClass, ContainerType<ContainerMechanicalApothecary> container) {
         super(mod, teClass, container, Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity());
+    }
+
+    @Nonnull
+    @Override
+    public ActionResultType onBlockActivated(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult hit) {
+        if (!world.isRemote) {
+            TileEntity tile = world.getTileEntity(pos);
+
+            ItemStack held = player.getHeldItemMainhand();
+            @SuppressWarnings("ConstantConditions")
+            FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainer(held, tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).orElse(null), 1000, player, true);
+            if (fluidActionResult.isSuccess()) {
+                if (tile instanceof TileEntityBase) {
+                    ((TileEntityBase) tile).markDispatchable();
+                }
+                if (!player.isCreative()) {
+                    player.setHeldItem(hand, fluidActionResult.getResult());
+                }
+                return ActionResultType.SUCCESS;
+            }
+
+            super.onBlockActivated(state, world, pos, player, hand, hit);
+        }
+        return ActionResultType.SUCCESS;
     }
 
     @Nullable

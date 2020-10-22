@@ -105,12 +105,12 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
             if (this.recipe != null) {
                 ItemStack output = this.recipe.getOutput(this.inventory.getStackInSlot(0)).copy();
                 ItemStack currentOutput = this.inventory.getStackInSlot(7);
-                if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemStacksEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
+                if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemsEqual(output, currentOutput) && ItemStack.areItemStackTagsEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
                     this.maxProgress = this.getManaCost();
                     int manaTransfer = Math.min(this.getCurrentMana(), Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
                     this.progress += manaTransfer;
                     this.receiveMana(-manaTransfer);
-                    if (this.progress >= this.getMaxProgress()) {
+                    if (this.progress >= this.getMaxProgress() && !this.inventory.getStackInSlot(0).isEmpty()) {
                         if (currentOutput.isEmpty()) {
                             this.inventory.setStackInSlot(7, output);
                         } else {
