@@ -31,5 +31,12 @@ pipeline {
                 sh './gradlew publish'
             }
         }
+
+        stage('Upload artifacts to CurseForge') {
+            steps {
+                echo 'Uploading to CurseForge'
+                sh './gradlew curseforge'
+            }
+        }
     }
 }
