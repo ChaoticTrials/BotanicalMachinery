@@ -99,7 +99,8 @@ public class TileAlfheimMarket extends BotanicalTile implements IWorkingTile {
                         if (this.progress >= ServerConfig.alfheimMarketRecipeCost.get()) {
                             this.inventory.getUnrestricted().insertItem(4, outputs.get(0).copy(), false);
                             for (Ingredient ingredient : this.recipe.getIngredients()) {
-                                for (ItemStack stack : this.inventory.getStacks()) {
+                                for (int slot : this.inventory.getInputSlots()) {
+                                    ItemStack stack = this.inventory.getStackInSlot(slot);
                                     if (ingredient.test(stack)) {
                                         stack.shrink(1);
                                         break;

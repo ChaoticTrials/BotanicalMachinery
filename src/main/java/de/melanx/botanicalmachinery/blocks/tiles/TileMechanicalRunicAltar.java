@@ -77,7 +77,8 @@ public class TileMechanicalRunicAltar extends BotanicalTile implements IWorkingT
                         List<ItemStack> stacksToTest = new ArrayList<>();
                         stacksToTest.add(recipe.getRecipeOutput());
                         for (Ingredient ingredient : recipe.getIngredients()) {
-                            for (ItemStack stack : this.inventory.getStacks()) {
+                            for (int slot : this.inventory.getInputSlots()) {
+                                ItemStack stack = this.inventory.getStackInSlot(slot);
                                 if (ingredient.test(stack)) {
                                     if (ModTags.Items.RUNES.contains(stack.getItem())) {
                                         ItemStack rune = stack.copy();
