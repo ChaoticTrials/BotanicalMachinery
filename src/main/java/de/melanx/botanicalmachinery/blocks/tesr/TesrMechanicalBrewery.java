@@ -3,10 +3,10 @@ package de.melanx.botanicalmachinery.blocks.tesr;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import de.melanx.botanicalmachinery.blocks.base.HorizontalRotatedTesr;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalBrewery;
 import de.melanx.botanicalmachinery.config.ClientConfig;
-import de.melanx.botanicalmachinery.helper.RenderHelper;
+import io.github.noeppi_noeppi.libx.block.tesr.HorizontalRotatedTesr;
+import io.github.noeppi_noeppi.libx.render.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -205,7 +205,6 @@ public class TesrMechanicalBrewery extends HorizontalRotatedTesr<TileMechanicalB
         } else if (stack.getItem() instanceof DyeItem) {
             return ((DyeItem) stack.getItem()).getDyeColor().getColorValue();
         } else if (stack.getItem() instanceof BlockItem) {
-            //noinspection deprecation
             return ((BlockItem) stack.getItem()).getBlock().getMaterialColor().colorValue;
         } else {
             return this.waterColor;

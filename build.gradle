@@ -110,6 +110,10 @@ repositories {
         url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
+        name = "MelanX Maven"
+        url = "https://maven.melanx.de/"
+    }
+    maven {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
@@ -127,6 +131,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
+    compile fg.deobf("io.github.noeppi_noeppi.mods:LibX:${mc_version}-${libx_version}")
     compile fg.deobf("vazkii.botania:Botania:${botania_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-1.16.2:${jei_version}:api")

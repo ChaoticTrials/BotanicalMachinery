@@ -1,13 +1,13 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
-import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
-import de.melanx.botanicalmachinery.core.Registration;
-import de.melanx.botanicalmachinery.helper.RecipeHelper;
-import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
+import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
+import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityType;
 import vazkii.botania.api.mana.ManaNetworkEvent;
 import vazkii.botania.api.recipe.IManaInfusionRecipe;
 import vazkii.botania.client.fx.WispParticleData;
@@ -21,14 +21,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TileMechanicalManaPool extends TileBase {
+public class TileMechanicalManaPool extends BotanicalTile {
+
     public static final List<Item> CATALYSTS = Arrays.asList(ModBlocks.alchemyCatalyst.asItem(), ModBlocks.conjurationCatalyst.asItem(), ModBlocks.manaVoid.asItem());
+
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(3, this::onSlotChanged, this::isValidStack);
+
     public boolean validRecipe = true;
     private int cooldown = ServerConfig.multiplierManaPool.get();
 
-    public TileMechanicalManaPool() {
-        super(Registration.TILE_MECHANICAL_MANA_POOL.get(), ServerConfig.capacityManaPool.get());
+    public TileMechanicalManaPool(TileEntityType<?> type) {
+        super(type, ServerConfig.capacityManaPool.get());
         this.inventory.addSlotLimit(0, 1);
         this.inventory.setOutputSlots(2);
     }
@@ -69,20 +72,21 @@ public class TileMechanicalManaPool extends TileBase {
                 this.validRecipe = stack.isEmpty();
             }
         }
-        this.sendPacket = true;
+        this.markDispatchable();
         this.markDirty();
     }
 
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
+        if (this.world == null) return false;
         if (slot == 0) return CATALYSTS.contains(stack.getItem());
-        if (slot == 1) return RecipeHelper.isItemValid(this.world, ModRecipeTypes.MANA_INFUSION_TYPE, stack);
+        if (slot == 1)
+            return RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.MANA_INFUSION_TYPE, stack);
         return true;
     }
 
     @Override
     public void tick() {
-        super.tick();
         if (!ManaNetworkHandler.instance.isPoolIn(this) && !this.isRemoved()) {
             ManaNetworkEvent.addCollector(this);
         }
@@ -130,9 +134,11 @@ public class TileMechanicalManaPool extends TileBase {
 
     @Override
     public void receiveMana(int i) {
-        if (this.inventory.getStackInSlot(0).getItem() == ModBlocks.manaVoid.asItem())
-            this.mana = Math.min(this.getCurrentMana() + i, this.getManaCap());
-        else super.receiveMana(i);
+        if (this.inventory.getStackInSlot(0).getItem() == ModBlocks.manaVoid.asItem()) {
+            super.receiveMana(Math.min(i, this.getAvailableSpaceForMana()));
+        } else {
+            super.receiveMana(i);
+        }
     }
 
     @Override
@@ -142,5 +148,10 @@ public class TileMechanicalManaPool extends TileBase {
 
     public int getCooldown() {
         return this.cooldown;
+    }
+
+    @Override
+    public int getComparatorOutput() {
+        return !this.inventory.getStackInSlot(1).isEmpty() ? 15 : 0;
     }
 }

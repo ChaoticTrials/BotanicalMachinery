@@ -2,10 +2,10 @@ package de.melanx.botanicalmachinery.blocks.tesr;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import de.melanx.botanicalmachinery.blocks.base.HorizontalRotatedTesr;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
 import de.melanx.botanicalmachinery.config.ClientConfig;
-import de.melanx.botanicalmachinery.helper.RenderHelper;
+import io.github.noeppi_noeppi.libx.block.tesr.HorizontalRotatedTesr;
+import io.github.noeppi_noeppi.libx.render.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

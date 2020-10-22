@@ -21,6 +21,7 @@ build
 .cache
 eclipse
 /run*
+/logs
 
 # botania textures for data run
 libs/resources

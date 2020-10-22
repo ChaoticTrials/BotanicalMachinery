@@ -1,18 +1,20 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
+import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
-import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
-import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
-import de.melanx.botanicalmachinery.helper.RecipeHelper;
-import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
+import de.melanx.botanicalmachinery.helper.RecipeHelper2;
+import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
+import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import vazkii.botania.api.brew.IBrewContainer;
 import vazkii.botania.api.brew.IBrewItem;
 import vazkii.botania.api.recipe.IBrewRecipe;
@@ -24,10 +26,9 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.IntStream;
 
-public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
+public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile {
 
     public static final int MAX_MANA_PER_TICK = 50;
 
@@ -35,8 +36,9 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(8, slot -> {
         this.update = true;
-        this.sendPacket = true;
+        this.markDispatchable();
     }, this::isValidStack);
+
     private IBrewRecipe recipe = null;
     private boolean initDone;
     private int progress;
@@ -44,8 +46,8 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
     private boolean update;
     private ItemStack currentOutput = ItemStack.EMPTY;
 
-    public TileMechanicalBrewery() {
-        super(Registration.TILE_MECHANICAL_BREWERY.get(), ServerConfig.capacityBrewery.get());
+    public TileMechanicalBrewery(TileEntityType<?> type) {
+        super(type, ServerConfig.capacityBrewery.get());
         this.inventory.setInputSlots(IntStream.range(0, 7).toArray());
         this.inventory.setOutputSlots(7);
     }
@@ -58,9 +60,10 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
 
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
+        if (this.world == null) return false;
         if (slot == 0)
             return stack.getTag() != null ? !stack.getTag().contains("brewKey") : BREW_CONTAINER.contains(stack.getItem());
-        return (Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot)) || RecipeHelper.isItemValid(this.world, ModRecipeTypes.BREW_TYPE, stack);
+        return (Arrays.stream(this.inventory.getInputSlots()).noneMatch(x -> x == slot)) || RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.BREW_TYPE, stack);
     }
 
     private void updateRecipe() {
@@ -70,19 +73,18 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
                 return;
             }
             List<ItemStack> stacks = new ArrayList<>(this.inventory.getStacks());
-            RecipeHelper.removeFromList(stacks, new int[]{0, 7});
-            Map<Item, Integer> items = RecipeHelper.getInvItems(stacks);
+            RecipeHelper2.removeFromList(stacks, new int[]{0, 7});
 
             for (IRecipe<?> recipe : this.world.getRecipeManager().getRecipes()) {
                 if (recipe instanceof IBrewRecipe) {
-                    if (RecipeHelper.checkIngredients(stacks, items, recipe)) {
+                    if (RecipeHelper.matches(recipe, stacks, false)) {
                         this.recipe = (IBrewRecipe) recipe;
-                        if (this.inventory.getStackInSlot(0).isEmpty() || !(this.inventory.getStackInSlot(0).getItem() instanceof IBrewContainer)) {
+                        if (!(this.inventory.getStackInSlot(0).getItem() instanceof IBrewContainer)) {
                             this.currentOutput = ItemStack.EMPTY;
                         } else {
                             this.currentOutput = ((IBrewContainer) this.inventory.getStackInSlot(0).getItem()).getItemForBrew(this.recipe.getBrew(), this.inventory.getStackInSlot(0).copy());
                         }
-                        this.sendPacket = true;
+                        this.markDispatchable();
                         return;
                     }
                 }
@@ -93,40 +95,22 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
     }
 
     @Override
-    public void writePacketNBT(CompoundNBT cmp) {
-        super.writePacketNBT(cmp);
-        cmp.putInt(TileTags.PROGRESS, this.progress);
-        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
-        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
-    }
-
-    @Override
-    public void readPacketNBT(CompoundNBT cmp) {
-        super.readPacketNBT(cmp);
-        this.progress = cmp.getInt(TileTags.PROGRESS);
-        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
-        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
-    }
-
-    @Override
     public void tick() {
-        super.tick();
         if (!this.initDone) {
             this.update = true;
             this.initDone = true;
         }
         if (this.world != null && !this.world.isRemote) {
-            this.updateRecipe(); // todo remove
             boolean done = false;
             if (this.recipe != null) {
                 ItemStack output = this.recipe.getOutput(this.inventory.getStackInSlot(0)).copy();
                 ItemStack currentOutput = this.inventory.getStackInSlot(7);
-                if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemStacksEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
+                if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemsEqual(output, currentOutput) && ItemStack.areItemStackTagsEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
                     this.maxProgress = this.getManaCost();
-                    int manaTransfer = Math.min(this.mana, Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
+                    int manaTransfer = Math.min(this.getCurrentMana(), Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
                     this.progress += manaTransfer;
                     this.receiveMana(-manaTransfer);
-                    if (this.progress >= this.getMaxProgress()) {
+                    if (this.progress >= this.getMaxProgress() && !this.inventory.getStackInSlot(0).isEmpty()) {
                         if (currentOutput.isEmpty()) {
                             this.inventory.setStackInSlot(7, output);
                         } else {
@@ -134,7 +118,8 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
                         }
                         this.inventory.getStackInSlot(0).shrink(1);
                         for (Ingredient ingredient : this.recipe.getIngredients()) {
-                            for (ItemStack stack : this.inventory.getStacks()) {
+                            for (int slot : this.inventory.getInputSlots()) {
+                                ItemStack stack = this.inventory.getStackInSlot(slot);
                                 if (ingredient.test(stack)) {
                                     stack.shrink(1);
                                     break;
@@ -210,5 +195,47 @@ public class TileMechanicalBrewery extends TileBase implements IWorkingTile {
 
     public ItemStack getCurrentOutput() {
         return this.currentOutput;
+    }
+
+    @Override
+    public int getComparatorOutput() {
+        return this.getProgress() > 0 ? 15 : 0;
+    }
+
+    @Override
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
+        super.read(state, cmp);
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
+        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT write(@Nonnull CompoundNBT cmp) {
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
+        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
+        return super.write(cmp);
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (this.world != null && !this.world.isRemote) return;
+        super.handleUpdateTag(state, cmp);
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
+        this.currentOutput = ItemStack.read(cmp.getCompound(TileTags.CURRENT_OUTPUT));
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (this.world != null && this.world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
+        cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
+        return cmp;
     }
 }

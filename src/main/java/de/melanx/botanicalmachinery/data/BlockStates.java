@@ -1,82 +1,37 @@
 package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.blocks.base.BlockBase;
-import de.melanx.botanicalmachinery.core.LibNames;
-import de.melanx.botanicalmachinery.core.Registration;
-import net.minecraft.block.Block;
+import de.melanx.botanicalmachinery.ModBlocks;
+import io.github.noeppi_noeppi.libx.data.provider.BlockStateProviderBase;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.RegistryObject;
 
-public class BlockStates extends BlockStateProvider {
+public class BlockStates extends BlockStateProviderBase {
+
     public BlockStates(DataGenerator gen, ExistingFileHelper helper) {
-        super(gen, BotanicalMachinery.MODID, helper);
+        super(BotanicalMachinery.getInstance(), gen, helper);
     }
 
     @Override
-    protected void registerStatesAndModels() {
-        Registration.BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(block -> {
-            VariantBlockStateBuilder builder = this.getVariantBuilder(block);
-            if (block == Registration.BLOCK_MECHANICAL_DAISY.get()) {
-                this.createStateForManualModel(builder, block);
-            } else if (block == Registration.BLOCK_ALFHEIM_MARKET.get()
-                    || block == Registration.BLOCK_MECHANICAL_MANA_POOL.get()
-                    || block == Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get()
-                    || block == Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get()
-                    || block == Registration.BLOCK_MECHANICAL_BREWERY.get()
-                    || block == Registration.BLOCK_MECHANICAL_APOTHECARY.get()) {
-                this.createStateForManualModelRotatable(builder, block);
-            } else if (block == Registration.BLOCK_MANA_BATTERY.get()) {
-                this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY + "_top"));
-            } else if (block == Registration.BLOCK_MANA_BATTERY_CREATIVE.get()) {
-                this.createModels(builder, block, this.modLoc("block/" + LibNames.MANA_BATTERY_CREATIVE + "_top"));
-            } else if (block instanceof BlockBase) {
-                this.createModels(builder, block);
-            } else {
-                this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(this.modelDefault(block)).build());
-            }
-        });
-    }
+    protected void setup() {
+        this.manualModel(ModBlocks.mechanicalDaisy);
+        this.manualModel(ModBlocks.alfheimMarket);
+        this.manualModel(ModBlocks.mechanicalManaPool);
+        this.manualModel(ModBlocks.mechanicalRunicAltar);
+        this.manualModel(ModBlocks.industrialAgglommerationFactory);
+        this.manualModel(ModBlocks.mechanicalBrewery);
+        this.manualModel(ModBlocks.mechanicalApothecary);
 
-    private ModelFile modelDefault(Block block) {
-        @SuppressWarnings("ConstantConditions")
-        String name = block.getRegistryName().getPath();
-        return this.models().cubeAll(name, this.modLoc("block/" + name));
-    }
-
-    private void createModels(VariantBlockStateBuilder builder, Block block, ResourceLocation top) {
-        @SuppressWarnings("ConstantConditions")
-        String name = block.getRegistryName().getPath();
-        ModelFile model = this.models().orientable(block.getRegistryName().getPath(), this.modLoc("block/" + name + "_side"), this.modLoc("block/" + name + "_front"), top);
-        for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getAllowedValues()) {
-            builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, direction)
-                    .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));
-        }
-    }
-
-    private void createModels(VariantBlockStateBuilder builder, Block block) {
-        this.createModels(builder, block, this.modLoc("block/machine_top"));
-    }
-
-    private void createStateForManualModel(VariantBlockStateBuilder builder, Block block) {
         //noinspection ConstantConditions
-        builder.partialState().addModels(new ConfiguredModel(this.models().getExistingFile(new ResourceLocation(BotanicalMachinery.MODID, "block/" + block.getRegistryName().getPath()))));
-    }
+        this.manualModel(ModBlocks.manaBattery, this.models().orientable(ModBlocks.manaBattery.getRegistryName().getPath(),
+                this.modLoc("block/" + ModBlocks.manaBattery.getRegistryName().getPath() + "_side"),
+                this.modLoc("block/" + ModBlocks.manaBattery.getRegistryName().getPath() + "_front"),
+                this.modLoc("block/" + ModBlocks.manaBattery.getRegistryName().getPath() + "_top")));
 
-    private void createStateForManualModelRotatable(VariantBlockStateBuilder builder, Block block) {
-        @SuppressWarnings("ConstantConditions")
-        ModelFile model = this.models().getExistingFile(new ResourceLocation(BotanicalMachinery.MODID, "block/" + block.getRegistryName().getPath()));
-        for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getAllowedValues()) {
-            builder.partialState().with(BlockStateProperties.HORIZONTAL_FACING, direction)
-                    .addModels(new ConfiguredModel(model, direction.getHorizontalIndex() == -1 ? direction.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) direction.getOpposite().getHorizontalAngle(), false));
-        }
+        //noinspection ConstantConditions
+        this.manualModel(ModBlocks.manaBatteryCreative, this.models().orientable(ModBlocks.manaBatteryCreative.getRegistryName().getPath(),
+                this.modLoc("block/" + ModBlocks.manaBatteryCreative.getRegistryName().getPath() + "_side"),
+                this.modLoc("block/" + ModBlocks.manaBatteryCreative.getRegistryName().getPath() + "_front"),
+                this.modLoc("block/" + ModBlocks.manaBatteryCreative.getRegistryName().getPath() + "_top")));
     }
 }

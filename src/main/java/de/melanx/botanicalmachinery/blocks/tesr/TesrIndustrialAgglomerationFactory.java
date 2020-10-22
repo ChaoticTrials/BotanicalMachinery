@@ -2,10 +2,10 @@ package de.melanx.botanicalmachinery.blocks.tesr;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import de.melanx.botanicalmachinery.blocks.base.HorizontalRotatedTesr;
 import de.melanx.botanicalmachinery.blocks.tiles.TileIndustrialAgglomerationFactory;
 import de.melanx.botanicalmachinery.config.ClientConfig;
-import de.melanx.botanicalmachinery.helper.RenderHelper;
+import io.github.noeppi_noeppi.libx.block.tesr.HorizontalRotatedTesr;
+import io.github.noeppi_noeppi.libx.render.RenderHelperItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -80,7 +80,7 @@ public class TesrIndustrialAgglomerationFactory extends HorizontalRotatedTesr<Ti
             ms.rotate(Vector3f.YP.rotationDegrees(90f));
             ms.translate(0, 0.075 * Math.sin((time + angle) / 5d), 0);
 
-            RenderHelper.renderItemTinted(stack, ItemCameraTransforms.TransformType.GROUND, 200, OverlayTexture.NO_OVERLAY, ms, buffer, colorTint, 1, colorTint);
+            RenderHelperItem.renderItemTinted(stack, ItemCameraTransforms.TransformType.GROUND, 200, OverlayTexture.NO_OVERLAY, ms, buffer, colorTint, 1, colorTint, 1);
 
             ms.pop();
         }

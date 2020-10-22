@@ -8,6 +8,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import java.nio.file.Path;
 
 public class ClientConfig {
+
     public static final ForgeConfigSpec CLIENT_CONFIG;
     private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 
@@ -46,7 +47,7 @@ public class ClientConfig {
     }
 
     public static void loadConfig(ForgeConfigSpec spec, Path path) {
-        BotanicalMachinery.LOGGER.debug("Loading config file {}", path);
+        BotanicalMachinery.getInstance().logger.debug("Loading config file {}", path);
         final CommentedFileConfig configData = CommentedFileConfig.builder(path).sync().autosave().writingMode(WritingMode.REPLACE).build();
         configData.load();
         spec.setConfig(configData);

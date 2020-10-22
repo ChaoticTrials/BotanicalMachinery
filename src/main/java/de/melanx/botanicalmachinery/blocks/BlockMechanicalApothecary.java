@@ -1,11 +1,14 @@
 package de.melanx.botanicalmachinery.blocks;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import de.melanx.botanicalmachinery.blocks.base.BlockBase;
+import de.melanx.botanicalmachinery.blocks.base.BotanicalBlock;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalApothecary;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
 import de.melanx.botanicalmachinery.core.LibNames;
-import de.melanx.botanicalmachinery.util.DirectionShape;
+import io.github.noeppi_noeppi.libx.block.DirectionShape;
+import io.github.noeppi_noeppi.libx.mod.ModX;
+import io.github.noeppi_noeppi.libx.mod.registration.BlockGUI;
+import io.github.noeppi_noeppi.libx.mod.registration.TileEntityBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -13,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -38,10 +42,10 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockMechanicalApothecary extends Block {
+public class BlockMechanicalApothecary extends BlockGUI<TileMechanicalApothecary, ContainerMechanicalApothecary> {
 
     public static final DirectionShape SHAPE = new DirectionShape(VoxelShapes.or(
-            BlockBase.FRAME_SHAPE,
+            BotanicalBlock.FRAME_SHAPE,
             makeCuboidShape(3, 1, 3, 13, 2, 13),
             makeCuboidShape(4, 2, 4, 12, 3, 12),
             makeCuboidShape(6, 3, 6, 10, 8, 10),
@@ -52,22 +56,10 @@ public class BlockMechanicalApothecary extends Block {
             makeCuboidShape(12, 10, 4, 13, 14, 12)
     ));
 
-    public BlockMechanicalApothecary() {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(2, 10));
+    public BlockMechanicalApothecary(ModX mod, Class<TileMechanicalApothecary> teClass, ContainerType<ContainerMechanicalApothecary> container) {
+        super(mod, teClass, container, Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity());
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileMechanicalApothecary();
-    }
-
-    @SuppressWarnings("deprecation")
     @Nonnull
     @Override
     public ActionResultType onBlockActivated(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult hit) {
@@ -78,28 +70,16 @@ public class BlockMechanicalApothecary extends Block {
             @SuppressWarnings("ConstantConditions")
             FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainer(held, tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).orElse(null), 1000, player, true);
             if (fluidActionResult.isSuccess()) {
+                if (tile instanceof TileEntityBase) {
+                    ((TileEntityBase) tile).markDispatchable();
+                }
                 if (!player.isCreative()) {
-                    player.addItemStackToInventory(fluidActionResult.getResult());
-                    held.shrink(1);
+                    player.setHeldItem(hand, fluidActionResult.getResult());
                 }
                 return ActionResultType.SUCCESS;
             }
 
-            if (tile instanceof TileMechanicalApothecary) {
-                INamedContainerProvider containerProvider = new INamedContainerProvider() {
-                    @Override
-                    public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("screen." + BotanicalMachinery.MODID + "." + LibNames.MECHANICAL_APOTHECARY);
-                    }
-
-                    @Nonnull
-                    @Override
-                    public Container createMenu(int windowId, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity player) {
-                        return new ContainerMechanicalApothecary(windowId, world, pos, playerInventory, player);
-                    }
-                };
-                NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, pos);
-            }
+            super.onBlockActivated(state, world, pos, player, hand, hit);
         }
         return ActionResultType.SUCCESS;
     }
@@ -135,21 +115,12 @@ public class BlockMechanicalApothecary extends Block {
     @SuppressWarnings("deprecation")
     @Nonnull
     @Override
-    public VoxelShape getRenderShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos) {
-        return SHAPE.getShape(state.get(BlockStateProperties.HORIZONTAL_FACING));
-    }
-
-    @SuppressWarnings("deprecation")
-    @Nonnull
-    @Override
     public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
         return SHAPE.getShape(state.get(BlockStateProperties.HORIZONTAL_FACING));
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public int getComparatorInputOverride(@Nonnull BlockState blockState, @Nonnull World worldIn, @Nonnull BlockPos pos) {
-        TileMechanicalApothecary tile = (TileMechanicalApothecary) worldIn.getTileEntity(pos);
-        return tile != null && tile.getProgress() > 0 ? 15 : 0;
+    protected boolean shouldDropInventory(World world, BlockPos pos, BlockState state) {
+        return false;
     }
 }

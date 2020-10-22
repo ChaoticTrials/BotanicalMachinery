@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "group": "botanicalmachinery:mana_emerald_from_block",
   "ingredients": [
     {
       "item": "botanicalmachinery:mana_emerald_block"

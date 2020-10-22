@@ -1,14 +1,15 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
+import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
-import de.melanx.botanicalmachinery.blocks.base.TileBase;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
-import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
-import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
+import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 import vazkii.botania.client.fx.WispParticleData;
 import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.item.ModItems;
@@ -16,17 +17,18 @@ import vazkii.botania.common.lib.ModTags;
 
 import javax.annotation.Nonnull;
 
-public class TileIndustrialAgglomerationFactory extends TileBase implements IWorkingTile {
+public class TileIndustrialAgglomerationFactory extends BotanicalTile implements IWorkingTile {
 
     public static final int RECIPE_COST = TilePool.MAX_MANA / 2;
     public static final int MAX_MANA_PER_TICK = RECIPE_COST / 100;
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(4, slot -> this.sendPacket = true, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(4, slot -> this.markDispatchable(), this::isValidStack);
+
     private int progress;
     private boolean recipe;
 
-    public TileIndustrialAgglomerationFactory() {
-        super(Registration.TILE_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), ServerConfig.capacityAgglomerationFactory.get());
+    public TileIndustrialAgglomerationFactory(TileEntityType<?> type) {
+        super(type, ServerConfig.capacityAgglomerationFactory.get());
         this.inventory.setOutputSlots(3);
         this.inventory.setSlotValidator(this::isValidStack);
     }
@@ -45,20 +47,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
     }
 
     @Override
-    public void writePacketNBT(CompoundNBT cmp) {
-        super.writePacketNBT(cmp);
-        cmp.putInt(TileTags.PROGRESS, this.progress);
-    }
-
-    @Override
-    public void readPacketNBT(CompoundNBT cmp) {
-        super.readPacketNBT(cmp);
-        this.progress = cmp.getInt(TileTags.PROGRESS);
-    }
-
-    @Override
     public void tick() {
-        super.tick();
         if (this.world != null && !this.world.isRemote) {
             ItemStack manasteel = this.inventory.getStackInSlot(0);
             ItemStack manadiamond = this.inventory.getStackInSlot(1);
@@ -67,7 +56,7 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
             if (!manasteel.isEmpty() && !manadiamond.isEmpty() &&
                     !manapearl.isEmpty() && output.getCount() < 64) {
                 this.recipe = true;
-                int manaTransfer = Math.min(this.mana, Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
+                int manaTransfer = Math.min(this.getCurrentMana(), Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
                 this.progress += manaTransfer;
                 this.receiveMana(-manaTransfer);
                 if (this.progress >= this.getMaxProgress()) {
@@ -116,5 +105,39 @@ public class TileIndustrialAgglomerationFactory extends TileBase implements IWor
 
     public int getMaxManaPerTick() {
         return MAX_MANA_PER_TICK / ServerConfig.multiplierAgglomerationFactory.get();
+    }
+
+    @Override
+    public int getComparatorOutput() {
+        return this.getProgress() > 0 ? 15 : 0;
+    }
+
+    @Override
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
+        super.read(state, cmp);
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT write(@Nonnull CompoundNBT cmp) {
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        return super.write(cmp);
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (this.world != null && !this.world.isRemote) return;
+        super.handleUpdateTag(state, cmp);
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (this.world != null && this.world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.putInt(TileTags.PROGRESS, this.progress);
+        return cmp;
     }
 }

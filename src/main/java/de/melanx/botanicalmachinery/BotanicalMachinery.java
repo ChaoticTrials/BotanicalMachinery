@@ -4,13 +4,12 @@ import de.melanx.botanicalmachinery.blocks.screens.*;
 import de.melanx.botanicalmachinery.blocks.tesr.*;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
-import de.melanx.botanicalmachinery.core.ModGroup;
-import de.melanx.botanicalmachinery.core.Registration;
+import de.melanx.botanicalmachinery.data.DataCreator;
 import de.melanx.botanicalmachinery.network.BotanicalMachineryNetwork;
+import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -20,56 +19,69 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-@Mod(BotanicalMachinery.MODID)
-public class BotanicalMachinery {
+import javax.annotation.Nonnull;
 
-    public static final String MODID = "botanicalmachinery";
-    public static final ItemGroup itemGroup = new ModGroup(MODID);
-    public static final Logger LOGGER = LogManager.getLogger(MODID);
-    public final BotanicalMachinery instance;
+@Mod("botanicalmachinery")
+public class BotanicalMachinery extends ModXRegistration {
+
+    public static BotanicalMachinery instance;
+    public static BotanicalMachineryNetwork network;
 
     public BotanicalMachinery() {
-        this.instance = this;
+        super("botanicalmachinery", new ItemGroup("botanicalmachinery") {
+            @Nonnull
+            @Override
+            public ItemStack createIcon() {
+                return new ItemStack(ModBlocks.mechanicalManaPool);
+            }
+        });
+
+        instance = this;
+        network = new BotanicalMachineryNetwork(this);
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_CONFIG);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_CONFIG);
-        ClientConfig.loadConfig(ClientConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(MODID + "-client.toml"));
-        ServerConfig.loadConfig(ServerConfig.SERVER_CONFIG, FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()).resolve(MODID + "-server.toml"));
-        Registration.init();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
+        ClientConfig.loadConfig(ClientConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(this.modid + "-client.toml"));
+        ServerConfig.loadConfig(ServerConfig.SERVER_CONFIG, FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()).resolve(this.modid + "-server.toml"));
+
+        this.addRegistrationHandler(ModBlocks::register);
+        this.addRegistrationHandler(ModItems::register);
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(DataCreator::onGatherData);
     }
 
-    private void onSetup(final FMLCommonSetupEvent event) {
-        BotanicalMachineryNetwork.registerPackets();
+    public static BotanicalMachinery getInstance() {
+        return instance;
     }
 
-    private void onClientSetup(final FMLClientSetupEvent event) {
-        ScreenManager.registerFactory(Registration.CONTAINER_ALFHEIM_MARKET.get(), ScreenAlfheimMarket::new);
-        ScreenManager.registerFactory(Registration.CONTAINER_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), ScreenIndustrialAgglomerationFactory::new);
-        ScreenManager.registerFactory(Registration.CONTAINER_MANA_BATTERY.get(), ScreenManaBattery::new);
-        ScreenManager.registerFactory(Registration.CONTAINER_MECHANICAL_APOTHECARY.get(), ScreenMechanicalApothecary::new);
-        ScreenManager.registerFactory(Registration.CONTAINER_MECHANICAL_BREWERY.get(), ScreenMechanicalBrewery::new);
-        ScreenManager.registerFactory(Registration.CONTAINER_MECHANICAL_DAISY.get(), ScreenMechanicalDaisy::new);
-        ScreenManager.registerFactory(Registration.CONTAINER_MECHANICAL_MANA_POOL.get(), ScreenMechanicalManaPool::new);
-        ScreenManager.registerFactory(Registration.CONTAINER_MECHANICAL_RUNIC_ALTAR.get(), ScreenMechanicalRunicAltar::new);
+    public static BotanicalMachineryNetwork getNetwork() {
+        return network;
+    }
 
-        RenderTypeLookup.setRenderLayer(Registration.BLOCK_MECHANICAL_DAISY.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(Registration.BLOCK_ALFHEIM_MARKET.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(Registration.BLOCK_MECHANICAL_MANA_POOL.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(Registration.BLOCK_MECHANICAL_RUNIC_ALTAR.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(Registration.BLOCK_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(Registration.BLOCK_MECHANICAL_APOTHECARY.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(Registration.BLOCK_MECHANICAL_BREWERY.get(), RenderType.getCutout());
+    @Override
+    protected void setup(FMLCommonSetupEvent event) {
 
-        ClientRegistry.bindTileEntityRenderer(Registration.TILE_MECHANICAL_DAISY.get(), TesrMechanicalDaisy::new);
-        ClientRegistry.bindTileEntityRenderer(Registration.TILE_ALFHEIM_MARKET.get(), TesrAlfheimMarket::new);
-        ClientRegistry.bindTileEntityRenderer(Registration.TILE_MECHANICAL_MANA_POOL.get(), TesrMechanicalManaPool::new);
-        ClientRegistry.bindTileEntityRenderer(Registration.TILE_MECHANICAL_RUNIC_ALTAR.get(), TesrMechanicalRunicAltar::new);
-        ClientRegistry.bindTileEntityRenderer(Registration.TILE_INDUSTRIAL_AGGLOMERATION_FACTORY.get(), TesrIndustrialAgglomerationFactory::new);
-        ClientRegistry.bindTileEntityRenderer(Registration.TILE_MECHANICAL_APOTHECARY.get(), TesrMechanicalApothecary::new);
-        ClientRegistry.bindTileEntityRenderer(Registration.TILE_MECHANICAL_BREWERY.get(), TesrMechanicalBrewery::new);
+    }
+
+    @Override
+    protected void clientSetup(FMLClientSetupEvent event) {
+        ScreenManager.registerFactory(ModBlocks.alfheimMarket.container, ScreenAlfheimMarket::new);
+        ScreenManager.registerFactory(ModBlocks.industrialAgglommerationFactory.container, ScreenIndustrialAgglomerationFactory::new);
+        ScreenManager.registerFactory(ModBlocks.manaBattery.container, ScreenManaBattery::new);
+        ScreenManager.registerFactory(ModBlocks.manaBatteryCreative.container, ScreenManaBattery::new);
+        ScreenManager.registerFactory(ModBlocks.mechanicalApothecary.container, ScreenMechanicalApothecary::new);
+        ScreenManager.registerFactory(ModBlocks.mechanicalBrewery.container, ScreenMechanicalBrewery::new);
+        ScreenManager.registerFactory(ModBlocks.mechanicalDaisy.container, ScreenMechanicalDaisy::new);
+        ScreenManager.registerFactory(ModBlocks.mechanicalManaPool.container, ScreenMechanicalManaPool::new);
+        ScreenManager.registerFactory(ModBlocks.mechanicalRunicAltar.container, ScreenMechanicalRunicAltar::new);
+
+        ClientRegistry.bindTileEntityRenderer(ModBlocks.mechanicalDaisy.getTileType(), TesrMechanicalDaisy::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlocks.alfheimMarket.getTileType(), TesrAlfheimMarket::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlocks.mechanicalManaPool.getTileType(), TesrMechanicalManaPool::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlocks.mechanicalRunicAltar.getTileType(), TesrMechanicalRunicAltar::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlocks.industrialAgglommerationFactory.getTileType(), TesrIndustrialAgglomerationFactory::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlocks.mechanicalApothecary.getTileType(), TesrMechanicalApothecary::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlocks.mechanicalBrewery.getTileType(), TesrMechanicalBrewery::new);
     }
 }

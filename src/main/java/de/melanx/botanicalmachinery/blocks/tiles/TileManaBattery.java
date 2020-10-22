@@ -1,15 +1,16 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.BlockManaBattery;
-import de.melanx.botanicalmachinery.blocks.base.TileBase;
+import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.config.ServerConfig;
-import de.melanx.botanicalmachinery.core.Registration;
 import de.melanx.botanicalmachinery.core.TileTags;
-import de.melanx.botanicalmachinery.util.inventory.BaseItemStackHandler;
-import de.melanx.botanicalmachinery.util.inventory.ItemStackHandlerWrapper;
+import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
+import io.github.noeppi_noeppi.libx.inventory.ItemStackHandlerWrapper;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -18,16 +19,16 @@ import vazkii.botania.api.mana.IManaItem;
 import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
-public class TileManaBattery extends TileBase {
+public class TileManaBattery extends BotanicalTile {
 
     private static final int MANA_TRANSFER_RATE = 5000;
     private boolean slot1Locked;
     private boolean slot2Locked;
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, slot -> this.sendPacket = true, this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, slot -> this.markDispatchable(), this::isValidStack);
 
-    public TileManaBattery() {
-        super(Registration.TILE_MANA_BATTERY.get(), ServerConfig.capacityManaBattery.get());
+    public TileManaBattery(TileEntityType<?> type) {
+        super(type, ServerConfig.capacityManaBattery.get());
     }
 
     @Nonnull
@@ -47,27 +48,12 @@ public class TileManaBattery extends TileBase {
     }
 
     @Override
-    public void writePacketNBT(CompoundNBT cmp) {
-        super.writePacketNBT(cmp);
-        cmp.putBoolean(TileTags.SLOT_1_LOCKED, this.slot1Locked);
-        cmp.putBoolean(TileTags.SLOT_2_LOCKED, this.slot2Locked);
-    }
-
-    @Override
-    public void readPacketNBT(CompoundNBT cmp) {
-        super.readPacketNBT(cmp);
-        this.slot1Locked = cmp.getBoolean(TileTags.SLOT_1_LOCKED);
-        this.slot2Locked = cmp.getBoolean(TileTags.SLOT_2_LOCKED);
-    }
-
-    @Override
     public int getCurrentMana() {
-        return ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.CREATIVE ? this.getManaCap() / 2 : this.mana;
+        return ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.CREATIVE ? this.getManaCap() / 2 : super.getCurrentMana();
     }
 
     @Override
     public void tick() {
-        super.tick();
         if (this.world != null && !this.world.isRemote) {
             ItemStack minus = this.inventory.getStackInSlot(0);
             ItemStack plus = this.inventory.getStackInSlot(1);
@@ -95,8 +81,8 @@ public class TileManaBattery extends TileBase {
             }
             for (Direction direction : Direction.values()) {
                 TileEntity tile = this.world.getTileEntity(this.getPos().offset(direction));
-                if (tile instanceof TileBase) {
-                    TileBase offsetTile = (TileBase) tile;
+                if (tile instanceof BotanicalTile) {
+                    BotanicalTile offsetTile = (BotanicalTile) tile;
                     if (!offsetTile.isFull()) {
                         int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? MANA_TRANSFER_RATE : Integer.MAX_VALUE;
                         int manaValue = Math.min(maxManaValue, Math.min(this.getCurrentMana(), offsetTile.getManaCap() - offsetTile.getCurrentMana()));
@@ -137,7 +123,12 @@ public class TileManaBattery extends TileBase {
     }
 
     @Override
-    protected LazyOptional<IItemHandlerModifiable> createHandler(Supplier<IItemHandlerModifiable> inventory) {
+    public int getComparatorOutput() {
+        return (int) Math.round(this.getCurrentMana() / (double) this.getManaCap() * 15d);
+    }
+
+    @Override
+    protected LazyOptional<IItemHandlerModifiable> createCap(Supplier<IItemHandlerModifiable> inventory) {
         return ItemStackHandlerWrapper.createLazy(inventory, slot -> {
             ItemStack minus = inventory.get().getStackInSlot(0);
             ItemStack plus = inventory.get().getStackInSlot(1);
@@ -150,5 +141,38 @@ public class TileManaBattery extends TileBase {
             }
             return true;
         }, null);
+    }
+
+    @Override
+    public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
+        super.read(state, cmp);
+        this.slot1Locked = cmp.getBoolean(TileTags.SLOT_1_LOCKED);
+        this.slot2Locked = cmp.getBoolean(TileTags.SLOT_2_LOCKED);
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT write(@Nonnull CompoundNBT cmp) {
+        cmp.putBoolean(TileTags.SLOT_1_LOCKED, this.slot1Locked);
+        cmp.putBoolean(TileTags.SLOT_2_LOCKED, this.slot2Locked);
+        return super.write(cmp);
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
+        if (this.world != null && !this.world.isRemote) return;
+        super.handleUpdateTag(state, cmp);
+        this.slot1Locked = cmp.getBoolean(TileTags.SLOT_1_LOCKED);
+        this.slot2Locked = cmp.getBoolean(TileTags.SLOT_2_LOCKED);
+    }
+
+    @Nonnull
+    @Override
+    public CompoundNBT getUpdateTag() {
+        if (this.world != null && this.world.isRemote) return super.getUpdateTag();
+        CompoundNBT cmp = super.getUpdateTag();
+        cmp.putBoolean(TileTags.SLOT_1_LOCKED, this.slot1Locked);
+        cmp.putBoolean(TileTags.SLOT_2_LOCKED, this.slot2Locked);
+        return cmp;
     }
 }
