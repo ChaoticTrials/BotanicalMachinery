@@ -25,17 +25,17 @@ pipeline {
             }
         }
 
-        stage('Publish artifacts') {
-            steps {
-                echo 'Publishing'
-                sh './gradlew publish'
-            }
-        }
-
         stage('Upload artifacts to CurseForge') {
             steps {
                 echo 'Uploading to CurseForge'
                 sh './gradlew curseforge'
+            }
+        }
+
+        stage('Publish artifacts') {
+            steps {
+                echo 'Publishing'
+                sh './gradlew publish'
             }
         }
     }
