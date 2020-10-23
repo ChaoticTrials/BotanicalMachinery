@@ -5,27 +5,32 @@ import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
 import de.melanx.botanicalmachinery.config.ClientConfig;
 import de.melanx.botanicalmachinery.config.ServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
+import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
 import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
+import vazkii.botania.api.recipe.ITerraPlateRecipe;
 import vazkii.botania.client.fx.WispParticleData;
 import vazkii.botania.common.block.tile.mana.TilePool;
-import vazkii.botania.common.item.ModItems;
-import vazkii.botania.common.lib.ModTags;
+import vazkii.botania.common.crafting.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileIndustrialAgglomerationFactory extends BotanicalTile implements IWorkingTile {
 
-    public static final int RECIPE_COST = TilePool.MAX_MANA / 2;
-    public static final int MAX_MANA_PER_TICK = RECIPE_COST / 100;
+    public static final int MAX_MANA_PER_TICK = 5000;
 
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(4, slot -> this.markDispatchable(), this::isValidStack);
 
     private int progress;
-    private boolean recipe;
+    private int maxProgress = -1;
+    private ITerraPlateRecipe recipe;
 
     public TileIndustrialAgglomerationFactory(TileEntityType<?> type) {
         super(type, ServerConfig.capacityAgglomerationFactory.get());
@@ -41,39 +46,61 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
 
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
-        return (slot != 0 || ModTags.Items.INGOTS_MANASTEEL.contains(stack.getItem())) &&
-                (slot != 1 || ModTags.Items.GEMS_MANA_DIAMOND.contains(stack.getItem())) &&
-                (slot != 2 || ModItems.manaPearl == stack.getItem());
+        return true;
+    }
+
+    private void updateRecipe() {
+        if (this.world != null && !this.world.isRemote) {
+            List<ItemStack> stacks = new ArrayList<>(this.inventory.getStacks());
+            stacks.remove(3);
+
+            for (IRecipe<?> recipe : this.world.getRecipeManager().getRecipes()) {
+                if (recipe instanceof ITerraPlateRecipe) {
+                    if (RecipeHelper.matches(recipe, stacks, false)) {
+                        this.recipe = (ITerraPlateRecipe) recipe;
+                        this.markDispatchable();
+                        return;
+                    }
+                }
+            }
+        }
+        this.recipe = null;
     }
 
     @Override
     public void tick() {
         if (this.world != null && !this.world.isRemote) {
-            ItemStack manasteel = this.inventory.getStackInSlot(0);
-            ItemStack manadiamond = this.inventory.getStackInSlot(1);
-            ItemStack manapearl = this.inventory.getStackInSlot(2);
-            ItemStack output = this.inventory.getStackInSlot(3);
-            if (!manasteel.isEmpty() && !manadiamond.isEmpty() &&
-                    !manapearl.isEmpty() && output.getCount() < 64) {
-                this.recipe = true;
-                int manaTransfer = Math.min(this.getCurrentMana(), Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
-                this.progress += manaTransfer;
-                this.receiveMana(-manaTransfer);
-                if (this.progress >= this.getMaxProgress()) {
-                    manasteel.shrink(1);
-                    manadiamond.shrink(1);
-                    manapearl.shrink(1);
-                    this.inventory.getUnrestricted().insertItem(3, new ItemStack(ModItems.terrasteel), false);
-                    this.recipe = false;
+            System.out.println(world.getRecipeManager().getRecipe(ModRecipeTypes.TERRA_PLATE_TYPE, this.inventory.toIInventory(), world).orElse(null));
+            if (this.recipe != null) {
+                ItemStack output = this.recipe.getRecipeOutput().copy();
+                ItemStack currentOutput = this.inventory.getStackInSlot(3);
+                if (this.getInventory().getStackInSlot(3).isEmpty() ||
+                        (output.getItem() == currentOutput.getItem() && currentOutput.getMaxStackSize() > currentOutput.getCount())) {
+                    this.maxProgress = this.recipe.getMana();
+                    int manaTransfer = Math.min(this.getCurrentMana(), Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
+                    this.progress += manaTransfer;
+                    this.receiveMana(-manaTransfer);
+                    if (this.progress >= this.getMaxProgress()) {
+                        for (Ingredient ingredient : this.recipe.getIngredients()) {
+                            for (int slot : this.inventory.getInputSlots()) {
+                                ItemStack stack = this.inventory.getStackInSlot(slot);
+                                if (ingredient.test(stack)) {
+                                    stack.shrink(1);
+                                    break;
+                                }
+                            }
+                        }
+                        this.inventory.getUnrestricted().insertItem(3, output, false);
+                        this.progress = 0;
+                        this.updateRecipe();
+                    }
+                    this.markDirty();
                 }
-                this.markDirty();
-            }
-            if (!this.recipe && this.progress > 0) {
+            } else if (this.progress > 0) {
                 this.progress = 0;
+                this.maxProgress = -1;
                 this.markDirty();
                 this.markDispatchable();
-            } else if (this.recipe) {
-                this.recipe = false;
             }
         } else if (this.world != null && ClientConfig.everything.get() && ClientConfig.agglomerationFactory.get()) {
             if (this.progress > 0) {
@@ -100,7 +127,7 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
     }
 
     public int getMaxProgress() {
-        return RECIPE_COST;
+        return this.maxProgress;
     }
 
     public int getMaxManaPerTick() {

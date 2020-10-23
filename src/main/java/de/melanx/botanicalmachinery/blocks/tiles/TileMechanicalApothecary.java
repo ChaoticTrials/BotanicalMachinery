@@ -110,10 +110,6 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
 
     @Override
     public void tick() {
-        if (this.sendPacket) {
-            VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
-            this.sendPacket = false;
-        }
         if (this.world != null && !this.world.isRemote) {
             if (!this.initDone) {
                 this.update = true;
