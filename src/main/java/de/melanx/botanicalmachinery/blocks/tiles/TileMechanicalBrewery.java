@@ -79,7 +79,7 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
                 if (recipe instanceof IBrewRecipe) {
                     if (RecipeHelper.matches(recipe, stacks, false)) {
                         this.recipe = (IBrewRecipe) recipe;
-                        if (this.inventory.getStackInSlot(0).isEmpty() || !(this.inventory.getStackInSlot(0).getItem() instanceof IBrewContainer)) {
+                        if (!(this.inventory.getStackInSlot(0).getItem() instanceof IBrewContainer)) {
                             this.currentOutput = ItemStack.EMPTY;
                         } else {
                             this.currentOutput = ((IBrewContainer) this.inventory.getStackInSlot(0).getItem()).getItemForBrew(this.recipe.getBrew(), this.inventory.getStackInSlot(0).copy());
@@ -101,17 +101,16 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
             this.initDone = true;
         }
         if (this.world != null && !this.world.isRemote) {
-            this.updateRecipe(); // todo remove
             boolean done = false;
             if (this.recipe != null) {
                 ItemStack output = this.recipe.getOutput(this.inventory.getStackInSlot(0)).copy();
                 ItemStack currentOutput = this.inventory.getStackInSlot(7);
-                if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemStacksEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
+                if (!output.isEmpty() && (currentOutput.isEmpty() || (ItemStack.areItemsEqual(output, currentOutput) && ItemStack.areItemStackTagsEqual(output, currentOutput) && currentOutput.getCount() + output.getCount() <= currentOutput.getMaxStackSize()))) {
                     this.maxProgress = this.getManaCost();
                     int manaTransfer = Math.min(this.getCurrentMana(), Math.min(MAX_MANA_PER_TICK, this.getMaxProgress() - this.progress));
                     this.progress += manaTransfer;
                     this.receiveMana(-manaTransfer);
-                    if (this.progress >= this.getMaxProgress()) {
+                    if (this.progress >= this.getMaxProgress() && !this.inventory.getStackInSlot(0).isEmpty()) {
                         if (currentOutput.isEmpty()) {
                             this.inventory.setStackInSlot(7, output);
                         } else {
@@ -119,7 +118,8 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
                         }
                         this.inventory.getStackInSlot(0).shrink(1);
                         for (Ingredient ingredient : this.recipe.getIngredients()) {
-                            for (ItemStack stack : this.inventory.getStacks()) {
+                            for (int slot : this.inventory.getInputSlots()) {
+                                ItemStack stack = this.inventory.getStackInSlot(slot);
                                 if (ingredient.test(stack)) {
                                     stack.shrink(1);
                                     break;

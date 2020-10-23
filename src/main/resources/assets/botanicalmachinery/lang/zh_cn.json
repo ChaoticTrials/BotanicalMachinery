@@ -1,0 +1,63 @@
+{
+  "itemGroup.botanicalmachinery": "植物魔法：机械",
+
+  "item.botanicalmachinery.mana_emerald": "魔力绿宝石",
+
+  "block.botanicalmachinery.mana_emerald_block": "魔力绿宝石块",
+  "block.botanicalmachinery.alfheim_market": "微型精灵门",
+  "block.botanicalmachinery.industrial_agglomeration_factory": "工业凝聚板",
+  "block.botanicalmachinery.mana_battery": "魔力储存盒",
+  "block.botanicalmachinery.mana_battery_creative": "创造魔力储存盒",
+  "block.botanicalmachinery.mechanical_brewery": "机械植物酿造台",
+  "block.botanicalmachinery.mechanical_apothecary": "机械花药台",
+  "block.botanicalmachinery.mechanical_daisy": "机械白雏菊",
+  "block.botanicalmachinery.mechanical_mana_pool": "机械魔力池",
+  "block.botanicalmachinery.mechanical_runic_altar": "机械符文祭坛",
+
+  "screen.botanicalmachinery.alfheim_market": "微型精灵门",
+  "screen.botanicalmachinery.industrial_agglomeration_factory": "工业凝聚板",
+  "screen.botanicalmachinery.mana_battery": "魔力储存盒",
+  "screen.botanicalmachinery.mana_battery_creative": "创造魔力储存盒",
+  "screen.botanicalmachinery.mechanical_apothecary": "机械花药台",
+  "screen.botanicalmachinery.mechanical_brewery": "机械植物酿造台",
+  "screen.botanicalmachinery.mechanical_daisy": "机械白雏菊",
+  "screen.botanicalmachinery.mechanical_mana_pool": "机械魔力池",
+  "screen.botanicalmachinery.mechanical_runic_altar": "机械符文祭坛",
+
+  "lexicon.botanicalmachinery.title": "植物魔法：机械",
+  "lexicon.botanicalmachinery.description": "精简你的农场。这是植物魔法：机械的页面，模组作者MelanX，翻译者Fodoth_jinzi89。",
+  "lexicon.botanicalmachinery.introduction": "新发现",
+  "lexicon.botanicalmachinery.introduction.page1": "据说$(d)源质钢$(0)具有某些能力，其中许多仍有待挖掘。使用$(l:botania:baubles/aura_ring)高级光环之戒$()，你可以将$(d)源质钢$(0)置于持续的魔力流中。因此，可以将植物学家的装置引入现代技术世界来提高它们的效率。然而，即使是精灵也不能完全理解这种做法所带来的影响，以这种方式制造这些机器是否安全也还不得而知。机器的魔力可以通过在上方放置火花输入。所有机器支持漏斗和管道。",
+
+  "lexicon.botanicalmachinery.mana_battery": "魔力储存盒",
+  "lexicon.botanicalmachinery.mana_battery.recipe": "应汝所需",
+  "lexicon.botanicalmachinery.mana_battery.page1": "使用$(l:botania:alfhomancy/gaia_ritual)盖亚守护者$()的力量，你可以将$(l:botania:baubles/mana_ring)高级魔力之戒$()升级为一个可以存储十倍于正常魔力池魔力的储存盒。可以通过漏斗输入输出储存魔力的物品。",
+
+  "lexicon.botanicalmachinery.alfheim_market": "微型精灵门",
+  "lexicon.botanicalmachinery.alfheim_market.recipe": "制作微型精灵门",
+  "lexicon.botanicalmachinery.alfheim_market.page1": "这个单独的方块内部有一个精灵门的微型版本。它允许与精灵进行贸易，而不需要周围有一个巨大的传送门。小心不要放面包进去…",
+
+  "lexicon.botanicalmachinery.industrial_agglomeration_factory": "工业凝聚板",
+  "lexicon.botanicalmachinery.industrial_agglomeration_factory.recipe": "仅限绿色能量",
+  "lexicon.botanicalmachinery.industrial_agglomeration_factory.page1": "$(l:botania:basics/terrasteel)泰拉凝聚板$()的下方通常需要一个稳定的支持平台。有这个设备就不用了。一般的植物学家对这台机器知之甚少，所以试试看吧!",
+
+  "lexicon.botanicalmachinery.mechanical_mana_pool": "机械魔力池",
+  "lexicon.botanicalmachinery.mechanical_mana_pool.recipe": "制作机械魔力池",
+  "lexicon.botanicalmachinery.mechanical_mana_pool.page1": "正如普通的$(l:botania:mana/pool)魔力池$()，它可以储存相当量的魔力。它也能给物品注入魔力。和其他池一样，你也可以使用炼金/炼造催化器。然而，这个池需要你把催化器放在它的GUI中，而不是放在它之下。",
+
+  "lexicon.botanicalmachinery.mechanical_runic_altar": "机械符文祭坛",
+  "lexicon.botanicalmachinery.mechanical_runic_altar.recipe": "到处都是符文",
+  "lexicon.botanicalmachinery.mechanical_runic_altar.page1": "这个装置可以让你更容易地制造符文。实际上，它只不过是一个普通的$(l:botania:basics/rune_altar)符文祭坛$()，可以使用漏斗自动输入输出。",
+
+  "lexicon.botanicalmachinery.mechanical_daisy": "机械白雏菊",
+  "lexicon.botanicalmachinery.mechanical_daisy.recipe": "看起来真不错",
+  "lexicon.botanicalmachinery.mechanical_daisy.page1": "通过将浮空$(l:botania:basics/pure_daisy)白雏菊$()种植到由$(d)源质钢$(0)制成的平台上，它能够在单个方块空间中一次处理8个方块。它还可以处理液体。",
+
+  "lexicon.botanicalmachinery.mechanical_brewery": "机械植物酿造台",
+  "lexicon.botanicalmachinery.mechanical_brewery.recipe": "酿出来了！",
+  "lexicon.botanicalmachinery.mechanical_brewery.page1": "一个改进版的$(l:botania:devices/brewery)植物酿造台$()，可以从火花接受魔力，方便自动酿造。",
+
+  "lexicon.botanicalmachinery.mechanical_apothecary": "机械花药台",
+  "lexicon.botanicalmachinery.mechanical_apothecary.recipe": "给我所有的花",
+  "lexicon.botanicalmachinery.mechanical_apothecary.page1": "一个改进版的$(l:botania:basics/apothecary)花药台$()，使用水、种子和配料制作任何你想要的花。"
+}

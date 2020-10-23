@@ -122,7 +122,8 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
                     if (this.progress >= getRecipeDuration()) {
                         ItemStack output = this.recipe.getRecipeOutput().copy();
                         for (Ingredient ingredient : this.recipe.getIngredients()) {
-                            for (ItemStack stack : this.inventory.getStacks()) {
+                            for (int slot : this.inventory.getInputSlots()) {
+                                ItemStack stack = this.inventory.getStackInSlot(slot);
                                 if (ingredient.test(stack)) {
                                     stack.shrink(1);
                                     break;

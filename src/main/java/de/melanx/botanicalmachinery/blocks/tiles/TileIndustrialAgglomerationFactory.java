@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import vazkii.botania.api.recipe.ITerraPlateRecipe;
 import vazkii.botania.client.fx.WispParticleData;
-import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
