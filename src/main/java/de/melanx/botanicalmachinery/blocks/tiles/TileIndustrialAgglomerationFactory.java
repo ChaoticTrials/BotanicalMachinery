@@ -19,6 +19,7 @@ import vazkii.botania.common.crafting.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TileIndustrialAgglomerationFactory extends BotanicalTile implements IWorkingTile {
@@ -33,6 +34,7 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
 
     public TileIndustrialAgglomerationFactory(TileEntityType<?> type) {
         super(type, ServerConfig.capacityAgglomerationFactory.get());
+        this.inventory.setInputSlots(0, 1, 2);
         this.inventory.setOutputSlots(3);
         this.inventory.setSlotValidator(this::isValidStack);
     }
@@ -45,6 +47,8 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
 
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
+        if (Arrays.stream(this.inventory.getInputSlots()).anyMatch(x -> x == slot) && this.world != null)
+            return RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.TERRA_PLATE_TYPE, stack);
         return true;
     }
 
@@ -69,7 +73,7 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
     @Override
     public void tick() {
         if (this.world != null && !this.world.isRemote) {
-            System.out.println(world.getRecipeManager().getRecipe(ModRecipeTypes.TERRA_PLATE_TYPE, this.inventory.toIInventory(), world).orElse(null));
+            this.updateRecipe();
             if (this.recipe != null) {
                 ItemStack output = this.recipe.getRecipeOutput().copy();
                 ItemStack currentOutput = this.inventory.getStackInSlot(3);
@@ -141,13 +145,15 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
     @Override
     public void read(@Nonnull BlockState state, @Nonnull CompoundNBT cmp) {
         super.read(state, cmp);
-        cmp.putInt(TileTags.PROGRESS, this.progress);
+        this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
     }
 
     @Nonnull
     @Override
     public CompoundNBT write(@Nonnull CompoundNBT cmp) {
         cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
         return super.write(cmp);
     }
 
@@ -156,6 +162,7 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
         if (this.world != null && !this.world.isRemote) return;
         super.handleUpdateTag(state, cmp);
         this.progress = cmp.getInt(TileTags.PROGRESS);
+        this.maxProgress = cmp.getInt(TileTags.MAX_PROGRESS);
     }
 
     @Nonnull
@@ -164,6 +171,7 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
         if (this.world != null && this.world.isRemote) return super.getUpdateTag();
         CompoundNBT cmp = super.getUpdateTag();
         cmp.putInt(TileTags.PROGRESS, this.progress);
+        cmp.putInt(TileTags.MAX_PROGRESS, this.maxProgress);
         return cmp;
     }
 }
