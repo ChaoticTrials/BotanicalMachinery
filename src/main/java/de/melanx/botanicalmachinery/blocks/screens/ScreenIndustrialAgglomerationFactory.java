@@ -6,7 +6,6 @@ import de.melanx.botanicalmachinery.blocks.containers.ContainerIndustrialAgglome
 import de.melanx.botanicalmachinery.blocks.tiles.TileIndustrialAgglomerationFactory;
 import de.melanx.botanicalmachinery.core.LibResources;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
@@ -18,10 +17,6 @@ public class ScreenIndustrialAgglomerationFactory extends ScreenBase<ContainerIn
         this.ySize = 195;
         this.manaBar.x -= 5;
         this.manaBar.y += 23;
-
-        this.manaSteel = new ItemStack(ModItems.manaSteel);
-        this.manaDiamond = new ItemStack(ModItems.manaDiamond);
-        this.manaPearl = new ItemStack(ModItems.manaPearl);
     }
 
     @Override

@@ -87,7 +87,7 @@ public class TileManaBattery extends BotanicalTile {
                         int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? MANA_TRANSFER_RATE : Integer.MAX_VALUE;
                         int manaValue = Math.min(maxManaValue, Math.min(this.getCurrentMana(), offsetTile.getManaCap() - offsetTile.getCurrentMana()));
                         if (manaValue <= 0 && offsetTile instanceof TileMechanicalManaPool)
-                            manaValue = MANA_TRANSFER_RATE;
+                            manaValue = Math.min(this.getCurrentMana(), MANA_TRANSFER_RATE);
                         this.receiveMana(-manaValue);
                         offsetTile.receiveMana(manaValue);
                         this.markDirty();
