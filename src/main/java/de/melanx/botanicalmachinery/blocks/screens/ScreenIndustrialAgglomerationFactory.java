@@ -6,6 +6,7 @@ import de.melanx.botanicalmachinery.blocks.containers.ContainerIndustrialAgglome
 import de.melanx.botanicalmachinery.blocks.tiles.TileIndustrialAgglomerationFactory;
 import de.melanx.botanicalmachinery.core.LibResources;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
@@ -17,6 +18,10 @@ public class ScreenIndustrialAgglomerationFactory extends ScreenBase<ContainerIn
         this.ySize = 195;
         this.manaBar.x -= 5;
         this.manaBar.y += 23;
+
+        this.manaSteel = new ItemStack(ModItems.manaSteel);
+        this.manaDiamond = new ItemStack(ModItems.manaDiamond);
+        this.manaPearl = new ItemStack(ModItems.manaPearl);
     }
 
     @Override
@@ -25,7 +30,6 @@ public class ScreenIndustrialAgglomerationFactory extends ScreenBase<ContainerIn
         TileIndustrialAgglomerationFactory tile = (TileIndustrialAgglomerationFactory) this.container.tile;
         if (tile.getProgress() > 0) {
             float pct = Math.min(tile.getProgress() / (float) tile.getMaxProgress(), 1.0F);
-            //noinspection ConstantConditions
             this.minecraft.getTextureManager().bindTexture(LibResources.INDUSTRIAL_AGGLOMERATION_FACTORY_GUI);
             vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(ms, this.relX + 73, this.relY + 76, 176, 25, 30, Math.round(-(25 * pct)));
         }
