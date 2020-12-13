@@ -5,19 +5,13 @@ import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerIndustrialAgglomerationFactory;
 import de.melanx.botanicalmachinery.blocks.tiles.TileIndustrialAgglomerationFactory;
 import de.melanx.botanicalmachinery.core.LibResources;
-import io.github.noeppi_noeppi.libx.render.RenderHelperItem;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import vazkii.botania.common.item.ModItems;
 
 import javax.annotation.Nonnull;
 
 public class ScreenIndustrialAgglomerationFactory extends ScreenBase<ContainerIndustrialAgglomerationFactory> {
-
-    private final ItemStack manaSteel;
-    private final ItemStack manaDiamond;
-    private final ItemStack manaPearl;
 
     public ScreenIndustrialAgglomerationFactory(ContainerIndustrialAgglomerationFactory container, PlayerInventory inv, ITextComponent titleIn) {
         super(container, inv, titleIn);
@@ -32,12 +26,7 @@ public class ScreenIndustrialAgglomerationFactory extends ScreenBase<ContainerIn
 
     @Override
     protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack ms, float partialTicks, int mouseX, int mouseY) {
-        this.drawDefaultGuiBackgroundLayer(ms, LibResources.INDUSTRIAL_AGGLOMERATION_FACTORY_GUI, 81, 37);
-        if (this.minecraft != null) {
-            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.manaSteel, this.relX + 61, this.relY + 83, 16, false, 1, 1, 1, 0.3f);
-            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.manaDiamond, this.relX + 80, this.relY + 83, 16, false, 1, 1, 1, 0.3f);
-            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.manaPearl, this.relX + 99, this.relY + 83, 16, false, 1, 1, 1, 0.3f);
-        }
+        this.drawDefaultGuiBackgroundLayer(ms, LibResources.INDUSTRIAL_AGGLOMERATION_FACTORY_GUI);
         TileIndustrialAgglomerationFactory tile = (TileIndustrialAgglomerationFactory) this.container.tile;
         if (tile.getProgress() > 0) {
             float pct = Math.min(tile.getProgress() / (float) tile.getMaxProgress(), 1.0F);
