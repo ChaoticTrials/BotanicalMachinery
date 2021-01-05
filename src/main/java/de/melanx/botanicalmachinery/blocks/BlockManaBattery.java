@@ -11,7 +11,7 @@ public class BlockManaBattery extends BotanicalBlock<TileManaBattery, ContainerM
     public final Variant variant;
 
     public BlockManaBattery(ModX mod, Class<TileManaBattery> teClass, ContainerType<ContainerManaBattery> container, Variant variant) {
-        super(mod, teClass, container, true);
+        super(mod, teClass, container, true, false);
         this.variant = variant;
     }
 

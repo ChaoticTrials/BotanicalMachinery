@@ -32,7 +32,7 @@ public class BlockMechanicalBrewery extends BotanicalBlock<TileMechanicalBrewery
     ));
 
     public BlockMechanicalBrewery(ModX mod, Class<TileMechanicalBrewery> teClass, ContainerType<ContainerMechanicalBrewery> container) {
-        super(mod, teClass, container, false);
+        super(mod, teClass, container, false, true);
     }
 
     @Nonnull

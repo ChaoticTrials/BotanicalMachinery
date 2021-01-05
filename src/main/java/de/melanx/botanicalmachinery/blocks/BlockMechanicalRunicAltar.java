@@ -26,7 +26,7 @@ public class BlockMechanicalRunicAltar extends BotanicalBlock<TileMechanicalRuni
     ));
 
     public BlockMechanicalRunicAltar(ModX mod, Class<TileMechanicalRunicAltar> teClass, ContainerType<ContainerMechanicalRunicAltar> container) {
-        super(mod, teClass, container, false);
+        super(mod, teClass, container, false, true);
     }
 
     @Nonnull

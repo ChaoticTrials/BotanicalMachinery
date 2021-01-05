@@ -7,18 +7,21 @@ import io.github.noeppi_noeppi.libx.block.DirectionShape;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.BlockGUI;
 import io.github.noeppi_noeppi.libx.mod.registration.TileEntityBase;
+import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -48,7 +51,13 @@ public class BlockMechanicalApothecary extends BlockGUI<TileMechanicalApothecary
     ));
 
     public BlockMechanicalApothecary(ModX mod, Class<TileMechanicalApothecary> teClass, ContainerType<ContainerMechanicalApothecary> container) {
-        super(mod, teClass, container, Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity());
+        super(mod, teClass, container, Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity(),
+                new Item.Properties().setISTER(() -> ItemStackRenderer::get));
+    }
+
+    @Override
+    public void registerClient(ResourceLocation id) {
+        ItemStackRenderer.addRenderTile(this.getTileType(), true);
     }
 
     @Nonnull

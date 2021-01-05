@@ -4,11 +4,13 @@ import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalDaisy;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalDaisy;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.BlockGUI;
+import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.IBooleanFunction;
@@ -31,12 +33,14 @@ public class BlockMechanicalDaisy extends BlockGUI<TileMechanicalDaisy, Containe
     private static final VoxelShape SHAPE = makeCuboidShape(0, 0, 0, 16, 11.4, 16);
 
     public BlockMechanicalDaisy(ModX mod, Class<TileMechanicalDaisy> teClass, ContainerType<ContainerMechanicalDaisy> container) {
-        super(mod, teClass, container, Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity());
+        super(mod, teClass, container, Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity(),
+                new Item.Properties().setISTER(() -> ItemStackRenderer::get));
     }
 
     @Override
     public void registerClient(ResourceLocation id) {
         RenderTypeLookup.setRenderLayer(this, RenderType.getCutout());
+        ItemStackRenderer.addRenderTile(this.getTileType(), true);
     }
 
     @SuppressWarnings("deprecation")

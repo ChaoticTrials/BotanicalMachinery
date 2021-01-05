@@ -27,7 +27,7 @@ public class BlockAlfheimMarket extends BotanicalBlock<TileAlfheimMarket, Contai
     ));
 
     public BlockAlfheimMarket(ModX mod, Class<TileAlfheimMarket> teClass, ContainerType<ContainerAlfheimMarket> container) {
-        super(mod, teClass, container, false);
+        super(mod, teClass, container, false, true);
     }
 
     @Nonnull

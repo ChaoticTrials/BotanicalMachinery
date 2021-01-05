@@ -28,7 +28,7 @@ public class BlockMechanicalManaPool extends BotanicalBlock<TileMechanicalManaPo
     ));
 
     public BlockMechanicalManaPool(ModX mod, Class<TileMechanicalManaPool> teClass, ContainerType<ContainerMechanicalManaPool> container) {
-        super(mod, teClass, container, false);
+        super(mod, teClass, container, false, true);
     }
 
     @Nonnull

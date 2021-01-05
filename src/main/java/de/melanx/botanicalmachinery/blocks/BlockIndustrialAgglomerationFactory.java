@@ -25,7 +25,7 @@ public class BlockIndustrialAgglomerationFactory extends BotanicalBlock<TileIndu
     ));
 
     public BlockIndustrialAgglomerationFactory(ModX mod, Class<TileIndustrialAgglomerationFactory> teClass, ContainerType<ContainerIndustrialAgglomerationFactory> container) {
-        super(mod, teClass, container, false);
+        super(mod, teClass, container, false, true);
     }
 
     @Nonnull

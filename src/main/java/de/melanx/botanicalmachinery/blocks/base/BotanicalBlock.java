@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import io.github.noeppi_noeppi.libx.inventory.container.ContainerBase;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.mod.registration.BlockGUI;
+import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
@@ -41,18 +43,24 @@ public abstract class BotanicalBlock<T extends BotanicalTile, C extends Containe
     );
 
     public final boolean fullCube;
+    public final boolean specialRender;
 
-    public BotanicalBlock(ModX mod, Class<T> teClass, ContainerType<C> container, boolean fullCube) {
+    public BotanicalBlock(ModX mod, Class<T> teClass, ContainerType<C> container, boolean fullCube, boolean specialRender) {
         super(mod, teClass, container, fullCube ?
                 Properties.create(Material.ROCK).hardnessAndResistance(2, 10)
-                : Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity());
+                : Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity(),
+                specialRender ? new Item.Properties().setISTER(() -> ItemStackRenderer::get) : new Item.Properties());
         this.fullCube = fullCube;
+        this.specialRender = specialRender;
     }
 
     @Override
     public void registerClient(ResourceLocation id) {
         if (!this.fullCube) {
             RenderTypeLookup.setRenderLayer(this, RenderType.getCutout());
+        }
+        if (this.specialRender) {
+            ItemStackRenderer.addRenderTile(this.getTileType(), true);
         }
     }
 
