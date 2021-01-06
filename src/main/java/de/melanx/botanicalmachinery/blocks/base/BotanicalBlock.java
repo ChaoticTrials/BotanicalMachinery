@@ -11,13 +11,18 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -62,6 +67,16 @@ public abstract class BotanicalBlock<T extends BotanicalTile, C extends Containe
         if (this.specialRender) {
             ItemStackRenderer.addRenderTile(this.getTileType(), true);
         }
+    }
+
+    @Override
+    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+        BotanicalTile tile = (BotanicalTile) world.getTileEntity(pos);
+        if (tile == null) return null;
+        CompoundNBT nbt = tile.serializeNBT();
+        ItemStack stack = new ItemStack(this);
+        stack.setTag(nbt);
+        return stack;
     }
 
     @Nullable
