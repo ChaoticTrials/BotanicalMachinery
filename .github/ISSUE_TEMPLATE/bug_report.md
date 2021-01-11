@@ -13,6 +13,7 @@ Minecraft:
 Forge: 
 Botania: 
 Botanical Machinery: 
+LibX: 
 Modpack: 
 <!-- Do not forget the name of the modpack -->
 
