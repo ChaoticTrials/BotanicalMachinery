@@ -28,7 +28,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import vazkii.botania.api.internal.VanillaPacketDispatcher;
 import vazkii.botania.api.recipe.ICustomApothecaryColor;
 import vazkii.botania.api.recipe.IPetalRecipe;
 import vazkii.botania.client.fx.SparkleParticleData;
@@ -55,13 +54,12 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
 
     private final LazyOptional<IItemHandlerModifiable> handler = ItemStackHandlerWrapper.createLazy(this::getInventory);
 
-    private final ModdedFluidTank fluidInventory = new ModdedFluidTank(FLUID_CAPACITY, fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER));
+    private final ApothecaryFluidTank fluidInventory = new ApothecaryFluidTank(FLUID_CAPACITY, fluidStack -> Fluids.WATER.isEquivalentTo(fluidStack.getFluid()));
     private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.fluidInventory);
     private IPetalRecipe recipe = null;
     private boolean initDone;
     private int progress;
     private boolean update;
-    private boolean sendPacket;
     private ItemStack currentOutput = ItemStack.EMPTY;
 
     public TileMechanicalApothecary(TileEntityType<?> type) {
@@ -98,7 +96,7 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
                     if (RecipeHelper.matches(recipe, stacks, false) && !this.inventory.getStackInSlot(0).isEmpty() && this.fluidInventory.getFluidAmount() >= 1000) {
                         this.recipe = (IPetalRecipe) recipe;
                         this.currentOutput = this.recipe.getRecipeOutput().copy();
-                        this.sendPacket = true;
+                        this.markDispatchable();
                         return;
                     }
                 }
@@ -265,15 +263,15 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
         return cmp;
     }
 
-    private class ModdedFluidTank extends FluidTank {
+    private class ApothecaryFluidTank extends FluidTank {
 
-        public ModdedFluidTank(int capacity, Predicate<FluidStack> validator) {
+        public ApothecaryFluidTank(int capacity, Predicate<FluidStack> validator) {
             super(capacity, validator);
         }
 
         @Override
         protected void onContentsChanged() {
-            TileMechanicalApothecary.this.sendPacket = true;
+            TileMechanicalApothecary.this.markDispatchable();
             TileMechanicalApothecary.this.update = true;
         }
 
