@@ -1,0 +1,63 @@
+{
+  "itemGroup.botanicalmachinery": "Ботанические механизмы",
+
+  "item.botanicalmachinery.mana_emerald": "Манаизумруд",
+
+  "block.botanicalmachinery.mana_emerald_block": "Блок манаизумрудов",
+  "block.botanicalmachinery.alfheim_market": "Обменник Альфхейма",
+  "block.botanicalmachinery.industrial_agglomeration_factory": "Завод промышленной агломерации",
+  "block.botanicalmachinery.mana_battery": "Манабатарея",
+  "block.botanicalmachinery.mana_battery_creative": "Креативная манабатарея",
+  "block.botanicalmachinery.mechanical_brewery": "Механическая варочная стойка",
+  "block.botanicalmachinery.mechanical_apothecary": "Механический аптекарь",
+  "block.botanicalmachinery.mechanical_daisy": "Механическая чистая маргаритка",
+  "block.botanicalmachinery.mechanical_mana_pool": "Механический бассейн маны",
+  "block.botanicalmachinery.mechanical_runic_altar": "Механический рунический алтарь",
+
+  "screen.botanicalmachinery.alfheim_market": "Обменник Альфхейма",
+  "screen.botanicalmachinery.industrial_agglomeration_factory": "Завод промышленной агломерации",
+  "screen.botanicalmachinery.mana_battery": "Манабатарея",
+  "screen.botanicalmachinery.mana_battery_creative": "Креативная манабатарея",
+  "screen.botanicalmachinery.mechanical_apothecary": "Механический аптекарь",
+  "screen.botanicalmachinery.mechanical_brewery": "Механическая варочная стойка",
+  "screen.botanicalmachinery.mechanical_daisy": "Механическая чистая маргаритка",
+  "screen.botanicalmachinery.mechanical_mana_pool": "Механический бассейн маны",
+  "screen.botanicalmachinery.mechanical_runic_altar": "Механический рунический алтарь",
+
+  "lexicon.botanicalmachinery.title": "Ботанические механизмы",
+  "lexicon.botanicalmachinery.description": "Сделайте свои фермы более компактными. Это глава для Botanical Machinery, автор мода MelanX.",
+  "lexicon.botanicalmachinery.introduction": "Новое открытие!",
+  "lexicon.botanicalmachinery.introduction.page1": "Говорят, что $(d)элементиум$(0) обладает определенными свойствами, многие из которых еще предстоит раскрыть. Используя $(l:botania:baubles/aura_ring) кольцо ауры$(), можно поместить $(d)элементиум$(0) в постоянный поток маны. Таким образом, повышается эффективность машин ботаника, вводя их в мир современных технологий. Однако даже эльфы не до конца осознают масштабы происходящего, и неизвестно, безопасно ли возиться с этими машинами таким образом.",
+
+  "lexicon.botanicalmachinery.mana_battery": "Манабатарея",
+  "lexicon.botanicalmachinery.mana_battery.recipe": "Это всё, что тебе нужно!",
+  "lexicon.botanicalmachinery.mana_battery.page1": "Используя силу $(l:botania:alfhomancy/gaia_ritual)Гайи$() вы можете улучшить $(l:botania:baubles/mana_ring) кольцо маны$() чтобы создать блок, который может хранить в десять раз больше, чем один бассейн маны. Вы так же можете автоматизировать заполнение и опустошение планшетов маны с помощью воронок.",
+
+  "lexicon.botanicalmachinery.alfheim_market": "Обменник Альфхейма",
+  "lexicon.botanicalmachinery.alfheim_market.recipe": "Соверши обмен",
+  "lexicon.botanicalmachinery.alfheim_market.page1": "Внутри этого блока находится крошечная версия портала Альфхейма. Он позволяет торговать с эльфами без необходимости иметь поблизости гигантский портал. Только будьте осторожны, не кладите внутрь хлеб ...",
+
+  "lexicon.botanicalmachinery.industrial_agglomeration_factory": "Завод П.А.",
+  "lexicon.botanicalmachinery.industrial_agglomeration_factory.recipe": "Может работать только на зеленой энергии",
+  "lexicon.botanicalmachinery.industrial_agglomeration_factory.page1": "Для $(l:botania:basics/terrasteel)пластины$() обычно требуется стабилизирующая платформа под ней. Это устройство избавит вас от этого. Эта машина практически неизвестна обычному ботанику, так что попробуйте!",
+
+  "lexicon.botanicalmachinery.mechanical_mana_pool": "Механический бассейн маны",
+  "lexicon.botanicalmachinery.mechanical_mana_pool.recipe": "Механическое хранение",
+  "lexicon.botanicalmachinery.mechanical_mana_pool.page1": "Как и обычный $(l:botania:mana/pool)бассейн маны$(), он может хранить довольно много маны. Он также способен накапливать её. Как и с любым другим бассейном, вы можете использовать катализаторы. Однако этот бассейн требует, чтобы вы клали их в него, а не помещали под ним.",
+
+  "lexicon.botanicalmachinery.mechanical_runic_altar": "Механический рунический алтарь",
+  "lexicon.botanicalmachinery.mechanical_runic_altar.recipe": "Руны повсюду",
+  "lexicon.botanicalmachinery.mechanical_runic_altar.page1": "Это устройство позволяет упростить процесс создания рун. На самом деле, это обычный $(l:botania:basics/rune_altar)рунический алтарь$(), который можно автоматизировать с помощью воронок.",
+
+  "lexicon.botanicalmachinery.mechanical_daisy": "Механическая чистая маргаритка",
+  "lexicon.botanicalmachinery.mechanical_daisy.recipe": "Это выглядит мило",
+  "lexicon.botanicalmachinery.mechanical_daisy.page1": "Установив парящую $(l:botania:basics/pure_daisy)чистую маргаритку$() на платформу, сделанную из $(d)элементиума$(0), она сможет обрабатывать 8 блоков одновременно внутри одного единственного блока. Это также работает с жидкостями.",
+
+  "lexicon.botanicalmachinery.mechanical_brewery": "Механическая варочная стойка",
+  "lexicon.botanicalmachinery.mechanical_brewery.recipe": "Варись!",
+  "lexicon.botanicalmachinery.mechanical_brewery.page1": "Улучшенная версия $(l:botania:devices/brewery)ботанической варочной стойки$() , которая получает ману от искр и позволяет легко автоматизировать зельеварение.",
+
+  "lexicon.botanicalmachinery.mechanical_apothecary": "Механический аптекарь",
+  "lexicon.botanicalmachinery.mechanical_apothecary.recipe": "Отдай все свои цветы",
+  "lexicon.botanicalmachinery.mechanical_apothecary.page1": "Усовершенствованная версия $(l:botania:basics/apothecary)аптекаря$() , в котором вода, семена и ингридиенты используются для создания любых цветов, которые ваша душа пожелает."
+}
