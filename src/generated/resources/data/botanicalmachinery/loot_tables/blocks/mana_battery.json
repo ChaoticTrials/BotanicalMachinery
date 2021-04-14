@@ -7,45 +7,45 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "inv",
+                  "target": "BlockEntityTag.inv",
+                  "op": "replace"
+                },
+                {
+                  "source": "mana",
+                  "target": "BlockEntityTag.mana",
+                  "op": "replace"
+                },
+                {
+                  "source": "progress",
+                  "target": "BlockEntityTag.progress",
+                  "op": "replace"
+                },
+                {
+                  "source": "slot1Locked",
+                  "target": "BlockEntityTag.slot1Locked",
+                  "op": "replace"
+                },
+                {
+                  "source": "slot2Locked",
+                  "target": "BlockEntityTag.slot2Locked",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
           "name": "botanicalmachinery:mana_battery"
         }
       ],
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
-        }
-      ],
-      "functions": [
-        {
-          "function": "minecraft:copy_nbt",
-          "source": "block_entity",
-          "ops": [
-            {
-              "source": "inv",
-              "target": "BlockEntityTag.inv",
-              "op": "replace"
-            },
-            {
-              "source": "mana",
-              "target": "BlockEntityTag.mana",
-              "op": "replace"
-            },
-            {
-              "source": "progress",
-              "target": "BlockEntityTag.progress",
-              "op": "replace"
-            },
-            {
-              "source": "slot1Locked",
-              "target": "BlockEntityTag.slot1Locked",
-              "op": "replace"
-            },
-            {
-              "source": "slot2Locked",
-              "target": "BlockEntityTag.slot2Locked",
-              "op": "replace"
-            }
-          ]
         }
       ]
     }

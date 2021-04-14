@@ -7,35 +7,35 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "inv",
+                  "target": "BlockEntityTag.inv",
+                  "op": "replace"
+                },
+                {
+                  "source": "mana",
+                  "target": "BlockEntityTag.mana",
+                  "op": "replace"
+                },
+                {
+                  "source": "progress",
+                  "target": "BlockEntityTag.progress",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
           "name": "botanicalmachinery:industrial_agglomeration_factory"
         }
       ],
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
-        }
-      ],
-      "functions": [
-        {
-          "function": "minecraft:copy_nbt",
-          "source": "block_entity",
-          "ops": [
-            {
-              "source": "inv",
-              "target": "BlockEntityTag.inv",
-              "op": "replace"
-            },
-            {
-              "source": "mana",
-              "target": "BlockEntityTag.mana",
-              "op": "replace"
-            },
-            {
-              "source": "progress",
-              "target": "BlockEntityTag.progress",
-              "op": "replace"
-            }
-          ]
         }
       ]
     }

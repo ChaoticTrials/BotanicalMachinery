@@ -15,14 +15,14 @@ public class LootTables extends BlockLootProviderBase {
 
     @Override
     protected void setup() {
-        this.copyNBT(ModBlocks.alfheimMarket, INVENTORY, MANA, PROGRESS);
-        this.copyNBT(ModBlocks.industrialAgglommerationFactory, INVENTORY, MANA, PROGRESS);
-        this.copyNBT(ModBlocks.manaBattery, INVENTORY, MANA, PROGRESS, SLOT_1_LOCKED, SLOT_2_LOCKED);
-        this.copyNBT(ModBlocks.manaBatteryCreative, INVENTORY, MANA, PROGRESS, SLOT_1_LOCKED, SLOT_2_LOCKED);
-        this.copyNBT(ModBlocks.mechanicalApothecary, INVENTORY, MANA, PROGRESS, FLUID, MAX_PROGRESS);
-        this.copyNBT(ModBlocks.mechanicalBrewery, INVENTORY, MANA, PROGRESS, MAX_PROGRESS);
-        this.copyNBT(ModBlocks.mechanicalDaisy, INVENTORY, WORKING_TICKS);
-        this.copyNBT(ModBlocks.mechanicalManaPool, INVENTORY, MANA);
-        this.copyNBT(ModBlocks.mechanicalRunicAltar, INVENTORY, MANA, PROGRESS, MAX_PROGRESS);
+        this.drops(ModBlocks.alfheimMarket, this.copyNBT(INVENTORY, MANA, PROGRESS));
+        this.drops(ModBlocks.industrialAgglommerationFactory, this.copyNBT(INVENTORY, MANA, PROGRESS));
+        this.drops(ModBlocks.manaBattery, this.copyNBT(INVENTORY, MANA, PROGRESS, SLOT_1_LOCKED, SLOT_2_LOCKED));
+        this.drops(ModBlocks.manaBatteryCreative, this.copyNBT(INVENTORY, MANA, PROGRESS, SLOT_1_LOCKED, SLOT_2_LOCKED));
+        this.drops(ModBlocks.mechanicalApothecary, this.copyNBT(INVENTORY, MANA, PROGRESS, FLUID, MAX_PROGRESS));
+        this.drops(ModBlocks.mechanicalBrewery, this.copyNBT(INVENTORY, MANA, PROGRESS, MAX_PROGRESS));
+        this.drops(ModBlocks.mechanicalDaisy, this.copyNBT(INVENTORY, WORKING_TICKS));
+        this.drops(ModBlocks.mechanicalManaPool, this.copyNBT(INVENTORY, MANA));
+        this.drops(ModBlocks.mechanicalRunicAltar, this.copyNBT(INVENTORY, MANA, PROGRESS, MAX_PROGRESS));
     }
 }

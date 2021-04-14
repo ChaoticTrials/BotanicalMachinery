@@ -7,30 +7,30 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "inv",
+                  "target": "BlockEntityTag.inv",
+                  "op": "replace"
+                },
+                {
+                  "source": "mana",
+                  "target": "BlockEntityTag.mana",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
           "name": "botanicalmachinery:mechanical_mana_pool"
         }
       ],
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
-        }
-      ],
-      "functions": [
-        {
-          "function": "minecraft:copy_nbt",
-          "source": "block_entity",
-          "ops": [
-            {
-              "source": "inv",
-              "target": "BlockEntityTag.inv",
-              "op": "replace"
-            },
-            {
-              "source": "mana",
-              "target": "BlockEntityTag.mana",
-              "op": "replace"
-            }
-          ]
         }
       ]
     }
