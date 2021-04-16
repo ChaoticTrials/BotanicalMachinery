@@ -41,6 +41,6 @@ public class BotanicalMachineryPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalDaisy), PureDaisyRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalManaPool), ManaPoolRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalRunicAltar), RunicAltarRecipeCategory.UID);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.industrialAgglommerationFactory), TerraPlateRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.industrialAgglomerationFactory), TerraPlateRecipeCategory.UID);
     }
 }

@@ -16,7 +16,7 @@ public class LootTables extends BlockLootProviderBase {
     @Override
     protected void setup() {
         this.drops(ModBlocks.alfheimMarket, this.copyNBT(INVENTORY, MANA, PROGRESS));
-        this.drops(ModBlocks.industrialAgglommerationFactory, this.copyNBT(INVENTORY, MANA, PROGRESS));
+        this.drops(ModBlocks.industrialAgglomerationFactory, this.copyNBT(INVENTORY, MANA, PROGRESS));
         this.drops(ModBlocks.manaBattery, this.copyNBT(INVENTORY, MANA, PROGRESS, SLOT_1_LOCKED, SLOT_2_LOCKED));
         this.drops(ModBlocks.manaBatteryCreative, this.copyNBT(INVENTORY, MANA, PROGRESS, SLOT_1_LOCKED, SLOT_2_LOCKED));
         this.drops(ModBlocks.mechanicalApothecary, this.copyNBT(INVENTORY, MANA, PROGRESS, FLUID, MAX_PROGRESS));

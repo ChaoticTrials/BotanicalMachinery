@@ -57,7 +57,7 @@ public class Recipes extends RecipeProviderBase {
                 vazkii.botania.common.block.ModBlocks.dreamwood,
                 vazkii.botania.common.block.ModBlocks.livingwoodGlimmering);
 
-        this.defaultMachine(consumer, de.melanx.botanicalmachinery.ModBlocks.industrialAgglommerationFactory, vazkii.botania.common.block.ModBlocks.terraPlate,
+        this.defaultMachine(consumer, de.melanx.botanicalmachinery.ModBlocks.industrialAgglomerationFactory, vazkii.botania.common.block.ModBlocks.terraPlate,
                 Ingredient.fromTag(ModTags.Items.GEMS_MANA_DIAMOND),
                 Ingredient.fromTag(ModTags.Items.INGOTS_MANASTEEL),
                 Ingredient.fromItems(vazkii.botania.common.item.ModItems.manaPearl));

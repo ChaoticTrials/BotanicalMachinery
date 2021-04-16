@@ -45,9 +45,6 @@ public class BotanicalMachinery extends ModXRegistration {
         ClientConfig.loadConfig(ClientConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(this.modid + "-client.toml"));
         ServerConfig.loadConfig(ServerConfig.SERVER_CONFIG, FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()).resolve(this.modid + "-server.toml"));
 
-        this.addRegistrationHandler(ModBlocks::register);
-        this.addRegistrationHandler(ModItems::register);
-
         FMLJavaModLoadingContext.get().getModEventBus().addListener(DataCreator::onGatherData);
     }
 
@@ -67,7 +64,7 @@ public class BotanicalMachinery extends ModXRegistration {
     @Override
     protected void clientSetup(FMLClientSetupEvent event) {
         ScreenManager.registerFactory(ModBlocks.alfheimMarket.container, ScreenAlfheimMarket::new);
-        ScreenManager.registerFactory(ModBlocks.industrialAgglommerationFactory.container, ScreenIndustrialAgglomerationFactory::new);
+        ScreenManager.registerFactory(ModBlocks.industrialAgglomerationFactory.container, ScreenIndustrialAgglomerationFactory::new);
         ScreenManager.registerFactory(ModBlocks.manaBattery.container, ScreenManaBattery::new);
         ScreenManager.registerFactory(ModBlocks.manaBatteryCreative.container, ScreenManaBattery::new);
         ScreenManager.registerFactory(ModBlocks.mechanicalApothecary.container, ScreenMechanicalApothecary::new);
@@ -80,7 +77,7 @@ public class BotanicalMachinery extends ModXRegistration {
         ClientRegistry.bindTileEntityRenderer(ModBlocks.alfheimMarket.getTileType(), TesrAlfheimMarket::new);
         ClientRegistry.bindTileEntityRenderer(ModBlocks.mechanicalManaPool.getTileType(), TesrMechanicalManaPool::new);
         ClientRegistry.bindTileEntityRenderer(ModBlocks.mechanicalRunicAltar.getTileType(), TesrMechanicalRunicAltar::new);
-        ClientRegistry.bindTileEntityRenderer(ModBlocks.industrialAgglommerationFactory.getTileType(), TesrIndustrialAgglomerationFactory::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlocks.industrialAgglomerationFactory.getTileType(), TesrIndustrialAgglomerationFactory::new);
         ClientRegistry.bindTileEntityRenderer(ModBlocks.mechanicalApothecary.getTileType(), TesrMechanicalApothecary::new);
         ClientRegistry.bindTileEntityRenderer(ModBlocks.mechanicalBrewery.getTileType(), TesrMechanicalBrewery::new);
     }
