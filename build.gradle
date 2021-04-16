@@ -75,20 +75,8 @@ jar {
 
 jar.finalizedBy('reobfJar')
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier 'deobf'
-}
-
 artifacts {
     archives jar
-    archives sourcesJar
-    archives deobfJar
 }
 
 publishing {
@@ -98,8 +86,6 @@ publishing {
             artifactId = project.archivesBaseName
             version = project.version
             artifact jar
-            artifact sourcesJar
-            artifact deobfJar
         }
     }
 
@@ -171,7 +157,7 @@ curseforge {
     project {
         if (project.hasProperty('curse_project')) {
             id = "${curse_project}"
-            releaseType = 'beta'
+            releaseType = 'release'
             changelog = getGitChangelog()
             println(changelog)
             changelogType = 'markdown'
@@ -181,31 +167,24 @@ curseforge {
             }
 
             if (project.hasProperty('curse_requirements') || project.hasProperty('curse_optionals')) {
-
                 mainArtifact(jar) {
-
                     relations {
-
                         if (project.hasProperty('curse_requirements')) {
                             def requirements = "${curse_requirements}".split(', ')
                             requirements.each {
-
-                                requiredLibrary "${it}"
+                                requiredDependency "${it}"
                             }
                         }
 
                         if (project.hasProperty('curse_optionals')) {
                             def optionals = "${curse_optionals}".split(', ')
                             optionals.each {
-
-                                optionalLibrary "${it}"
+                                optionalDependency "${it}"
                             }
                         }
                     }
                 }
             }
-
-            addArtifact(sourcesJar)
         }
     }
 }
