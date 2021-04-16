@@ -30,7 +30,7 @@ public class BotanicalMachineryPlugin implements IModPlugin {
         registration.addRecipeClickArea(ScreenMechanicalDaisy.class, 24, 16, 24, 48, PureDaisyRecipeCategory.UID);
         registration.addRecipeClickArea(ScreenMechanicalManaPool.class, 77, 36, 22, 15, ManaPoolRecipeCategory.UID);
         registration.addRecipeClickArea(ScreenMechanicalRunicAltar.class, 87, 65, 22, 15, RunicAltarRecipeCategory.UID);
-        registration.addRecipeClickArea(ScreenIndustrialAgglomerationFactory.class, 73, 51, 103, 76, TerraPlateRecipeCategory.UID);
+        registration.addRecipeClickArea(ScreenIndustrialAgglomerationFactory.class, 73, 51, 30, 25, TerraPlateRecipeCategory.UID);
     }
 
     @Override
