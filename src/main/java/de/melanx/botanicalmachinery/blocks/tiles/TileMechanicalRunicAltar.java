@@ -2,8 +2,8 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
-import de.melanx.botanicalmachinery.config.ClientConfig;
-import de.melanx.botanicalmachinery.config.ServerConfig;
+import de.melanx.botanicalmachinery.config.LibXClientConfig;
+import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.helper.RecipeHelper2;
 import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
@@ -46,7 +46,7 @@ public class TileMechanicalRunicAltar extends BotanicalTile implements IWorkingT
     private final List<Integer> slotsUsed = new ArrayList<>();
 
     public TileMechanicalRunicAltar(TileEntityType<?> type) {
-        super(type, ServerConfig.capacityRunicAltar.get());
+        super(type, LibXServerConfig.MaxManaCapacity.mechanicalRunicAltar);
         this.inventory.setInputSlots(IntStream.range(1, 17).toArray());
         this.inventory.setOutputSlots(IntStream.range(17, 33).toArray());
     }
@@ -168,7 +168,7 @@ public class TileMechanicalRunicAltar extends BotanicalTile implements IWorkingT
                 this.updateRecipe();
                 this.update = false;
             }
-        } else if (this.world != null && ClientConfig.everything.get() && ClientConfig.agglomerationFactory.get()) {
+        } else if (this.world != null && LibXClientConfig.AdvancedRendering.all && LibXClientConfig.AdvancedRendering.industrialAgglomerationFactory) {
             if (this.getMaxProgress() > 0 && this.progress >= (this.getMaxProgress() - (5 * this.getMaxManaPerTick()))) {
                 for (int i = 0; i < 5; ++i) {
                     SparkleParticleData data = SparkleParticleData.sparkle(this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), this.world.rand.nextFloat(), 10);
@@ -230,7 +230,7 @@ public class TileMechanicalRunicAltar extends BotanicalTile implements IWorkingT
     }
 
     public int getMaxManaPerTick() {
-        return MAX_MANA_PER_TICK / ServerConfig.multiplierRunicAltar.get();
+        return MAX_MANA_PER_TICK / LibXServerConfig.WorkingDurationMultiplier.mechanicalRunicAltar;
     }
 
     public boolean isSlotUsedCurrently(int slot) {

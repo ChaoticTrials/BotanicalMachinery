@@ -2,8 +2,8 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
-import de.melanx.botanicalmachinery.config.ClientConfig;
-import de.melanx.botanicalmachinery.config.ServerConfig;
+import de.melanx.botanicalmachinery.config.LibXClientConfig;
+import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
 import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
 import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
@@ -33,7 +33,7 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
     private ITerraPlateRecipe recipe;
 
     public TileIndustrialAgglomerationFactory(TileEntityType<?> type) {
-        super(type, ServerConfig.capacityAgglomerationFactory.get());
+        super(type, LibXServerConfig.MaxManaCapacity.industrialAgglomerationFactory);
         this.inventory.setInputSlots(0, 1, 2);
         this.inventory.setOutputSlots(3);
         this.inventory.setSlotValidator(this::isValidStack);
@@ -105,7 +105,7 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
                 this.markDirty();
                 this.markDispatchable();
             }
-        } else if (this.world != null && ClientConfig.everything.get() && ClientConfig.agglomerationFactory.get()) {
+        } else if (this.world != null && LibXClientConfig.AdvancedRendering.all && LibXClientConfig.AdvancedRendering.industrialAgglomerationFactory) {
             if (this.progress > 0) {
                 double time = this.progress / (double) this.getMaxProgress();
                 if (time < 0.8) {
@@ -134,7 +134,7 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
     }
 
     public int getMaxManaPerTick() {
-        return MAX_MANA_PER_TICK / ServerConfig.multiplierAgglomerationFactory.get();
+        return MAX_MANA_PER_TICK / LibXServerConfig.WorkingDurationMultiplier.industrialAgglomerationFactory;
     }
 
     @Override

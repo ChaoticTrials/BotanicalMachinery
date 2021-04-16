@@ -2,7 +2,7 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.BlockManaBattery;
 import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
-import de.melanx.botanicalmachinery.config.ServerConfig;
+import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
 import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import io.github.noeppi_noeppi.libx.inventory.ItemStackHandlerWrapper;
@@ -28,7 +28,7 @@ public class TileManaBattery extends BotanicalTile {
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, slot -> this.markDispatchable(), this::isValidStack);
 
     public TileManaBattery(TileEntityType<?> type) {
-        super(type, ServerConfig.capacityManaBattery.get());
+        super(type, LibXServerConfig.MaxManaCapacity.manaBattery);
     }
 
     @Nonnull

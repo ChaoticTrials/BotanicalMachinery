@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalBrewery;
-import de.melanx.botanicalmachinery.config.ClientConfig;
+import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import io.github.noeppi_noeppi.libx.block.tesr.HorizontalRotatedTesr;
 import io.github.noeppi_noeppi.libx.render.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -74,7 +74,7 @@ public class TesrMechanicalBrewery extends HorizontalRotatedTesr<TileMechanicalB
 
     @Override
     protected void doRender(@Nonnull TileMechanicalBrewery tile, float partialTicks, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int light, int overlay) {
-        if (!ClientConfig.everything.get() || !ClientConfig.brewery.get())
+        if (!LibXClientConfig.AdvancedRendering.all || !LibXClientConfig.AdvancedRendering.mechanicalBrewery)
             return;
 
         int slotToMove = -1;

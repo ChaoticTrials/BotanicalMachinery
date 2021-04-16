@@ -2,8 +2,8 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
-import de.melanx.botanicalmachinery.config.ClientConfig;
-import de.melanx.botanicalmachinery.config.ServerConfig;
+import de.melanx.botanicalmachinery.config.LibXClientConfig;
+import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.helper.RecipeHelper2;
 import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
@@ -47,7 +47,7 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
     private ItemStack currentOutput = ItemStack.EMPTY;
 
     public TileMechanicalBrewery(TileEntityType<?> type) {
-        super(type, ServerConfig.capacityBrewery.get());
+        super(type, LibXServerConfig.MaxManaCapacity.mechanicalBrewery);
         this.inventory.setInputSlots(IntStream.range(0, 7).toArray());
         this.inventory.setOutputSlots(7);
     }
@@ -144,7 +144,7 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
                 this.markDispatchable();
             }
         } else if (this.world != null) {
-            if (this.progress > 0 && ClientConfig.everything.get() && ClientConfig.brewery.get()) {
+            if (this.progress > 0 && LibXClientConfig.AdvancedRendering.all && LibXClientConfig.AdvancedRendering.mechanicalBrewery) {
                 if (this.currentOutput.getItem() instanceof IBrewItem && this.world.rand.nextFloat() < 0.5f) {
                     int segments = 3;
                     for (int i = 1; i <= 6; i++) {
@@ -181,7 +181,7 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
     }
 
     public int getMaxManaPerTick() {
-        return MAX_MANA_PER_TICK / ServerConfig.multiplierBrewery.get();
+        return MAX_MANA_PER_TICK / LibXServerConfig.WorkingDurationMultiplier.mechanicalBrewery;
     }
 
     public int getManaCost() {

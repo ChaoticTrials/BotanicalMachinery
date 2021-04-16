@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import de.melanx.botanicalmachinery.config.ClientConfig;
+import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import de.melanx.botanicalmachinery.core.LibResources;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -46,7 +46,7 @@ public class ManaBar {
     }
 
     public void renderHoveredToolTip(MatrixStack ms, int mouseX, int mouseY, int mana) {
-        if (this.isMouseOver(mouseX, mouseY) && ClientConfig.numericalMana.get()) {
+        if (this.isMouseOver(mouseX, mouseY) && LibXClientConfig.numericalMana) {
             TranslationTextComponent text = new TranslationTextComponent("%s / %s Mana", mana, this.capacity);
             this.parent.renderTooltip(ms, text, mouseX, mouseY);
         }

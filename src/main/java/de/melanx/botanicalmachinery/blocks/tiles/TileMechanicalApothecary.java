@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
-import de.melanx.botanicalmachinery.config.ClientConfig;
-import de.melanx.botanicalmachinery.config.ServerConfig;
+import de.melanx.botanicalmachinery.config.LibXClientConfig;
+import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
 import de.melanx.botanicalmachinery.helper.RecipeHelper2;
 import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
@@ -149,7 +149,7 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
                 this.updateRecipe();
                 this.update = false;
             }
-        } else if (this.world != null && ClientConfig.everything.get() && ClientConfig.apothecary.get()) {
+        } else if (this.world != null && LibXClientConfig.AdvancedRendering.all && LibXClientConfig.AdvancedRendering.mechanicalApothecary) {
             if (this.fluidInventory.getFluidAmount() > 0) {
                 if (this.progress > getRecipeDuration() - 5) {
                     for (int i = 0; i < 5; i++) {
@@ -201,7 +201,7 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
     }
 
     public static int getRecipeDuration() {
-        return WORKING_DURATION * ServerConfig.multiplierApothecary.get();
+        return WORKING_DURATION * LibXServerConfig.WorkingDurationMultiplier.mechanicalApothecary;
     }
 
     public ItemStack getCurrentOutput() {

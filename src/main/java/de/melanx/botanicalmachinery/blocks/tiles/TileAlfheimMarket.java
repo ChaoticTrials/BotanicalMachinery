@@ -2,7 +2,7 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.blocks.base.IWorkingTile;
-import de.melanx.botanicalmachinery.config.ServerConfig;
+import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
 import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
 import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
@@ -41,7 +41,7 @@ public class TileAlfheimMarket extends BotanicalTile implements IWorkingTile {
     private ItemStack currentOutput = ItemStack.EMPTY;
 
     public TileAlfheimMarket(TileEntityType<?> type) {
-        super(type, ServerConfig.capacityAlfheimMarket.get());
+        super(type, LibXServerConfig.MaxManaCapacity.alfheimMarket);
         this.inventory.setInputSlots(IntStream.range(0, 4).toArray());
         this.inventory.setOutputSlots(4);
         this.update = true;
@@ -96,7 +96,7 @@ public class TileAlfheimMarket extends BotanicalTile implements IWorkingTile {
                         int manaTransfer = Math.min(this.getCurrentMana(), Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
                         this.progress += manaTransfer;
                         this.receiveMana(-manaTransfer);
-                        if (this.progress >= ServerConfig.alfheimMarketRecipeCost.get()) {
+                        if (this.progress >= LibXServerConfig.AlfheimMarket.recipeCost) {
                             this.inventory.getUnrestricted().insertItem(4, outputs.get(0).copy(), false);
                             for (Ingredient ingredient : this.recipe.getIngredients()) {
                                 for (int slot : this.inventory.getInputSlots()) {
@@ -142,11 +142,11 @@ public class TileAlfheimMarket extends BotanicalTile implements IWorkingTile {
     }
 
     public int getMaxProgress() {
-        return ServerConfig.alfheimMarketRecipeCost.get();
+        return LibXServerConfig.AlfheimMarket.recipeCost;
     }
 
     public int getMaxManaPerTick() {
-        return MAX_MANA_PER_TICK * ServerConfig.multiplierAlfheimMarket.get();
+        return MAX_MANA_PER_TICK * LibXServerConfig.WorkingDurationMultiplier.alfheimMarket;
     }
 
     private static ItemStack getInputStack(IElvenTradeRecipe recipe) {

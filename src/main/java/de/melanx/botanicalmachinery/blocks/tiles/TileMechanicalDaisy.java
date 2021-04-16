@@ -1,7 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
-import de.melanx.botanicalmachinery.config.ClientConfig;
-import de.melanx.botanicalmachinery.config.ServerConfig;
+import de.melanx.botanicalmachinery.config.LibXClientConfig;
+import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
 import io.github.noeppi_noeppi.libx.inventory.ItemStackHandlerWrapper;
 import io.github.noeppi_noeppi.libx.mod.registration.TileEntityBase;
@@ -73,7 +73,7 @@ public class TileMechanicalDaisy extends TileEntityBase implements ITickableTile
             if (recipe != null) {
                 //noinspection ConstantConditions
                 if (!this.world.isRemote) {
-                    if (this.workingTicks[i] >= recipe.getTime() * ServerConfig.multiplierDaisy.get()) {
+                    if (this.workingTicks[i] >= recipe.getTime() * LibXServerConfig.WorkingDurationMultiplier.mechanicalDaisy) {
                         BlockState state = recipe.getOutputState();
                         if (state.getBlock().asItem() != Items.AIR) {
                             //noinspection deprecation
@@ -86,7 +86,7 @@ public class TileMechanicalDaisy extends TileEntityBase implements ITickableTile
                     } else {
                         this.workingTicks[i] += 1;
                     }
-                } else if (!hasSpawnedParticles && ClientConfig.everything.get() && ClientConfig.daisy.get()) {
+                } else if (!hasSpawnedParticles && LibXClientConfig.AdvancedRendering.all && LibXClientConfig.AdvancedRendering.mechanicalDaisy) {
                     hasSpawnedParticles = true;
                     double x = this.pos.getX() + Math.random();
                     double y = this.pos.getY() + Math.random() + 0.25D;

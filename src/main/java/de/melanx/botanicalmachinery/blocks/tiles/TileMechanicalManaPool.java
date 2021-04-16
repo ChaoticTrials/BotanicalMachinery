@@ -1,8 +1,8 @@
 package de.melanx.botanicalmachinery.blocks.tiles;
 
 import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
-import de.melanx.botanicalmachinery.config.ClientConfig;
-import de.melanx.botanicalmachinery.config.ServerConfig;
+import de.melanx.botanicalmachinery.config.LibXClientConfig;
+import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
 import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.item.Item;
@@ -28,10 +28,10 @@ public class TileMechanicalManaPool extends BotanicalTile {
     private final BaseItemStackHandler inventory = new BaseItemStackHandler(3, this::onSlotChanged, this::isValidStack);
 
     public boolean validRecipe = true;
-    private int cooldown = ServerConfig.multiplierManaPool.get();
+    private int cooldown = LibXServerConfig.WorkingDurationMultiplier.mechanicalManaPool;
 
     public TileMechanicalManaPool(TileEntityType<?> type) {
-        super(type, ServerConfig.capacityManaPool.get());
+        super(type, LibXServerConfig.MaxManaCapacity.mechanicalManaPool);
         this.inventory.addSlotLimit(0, 1);
         this.inventory.setOutputSlots(2);
     }
@@ -110,11 +110,11 @@ public class TileMechanicalManaPool extends BotanicalTile {
                             ItemStack output = recipe.getRecipeOutput().copy();
                             this.inventory.getUnrestricted().insertItem(2, output, false);
                             this.markDirty();
-                            this.cooldown = ServerConfig.multiplierManaPool.get();
+                            this.cooldown = LibXServerConfig.WorkingDurationMultiplier.mechanicalManaPool;
                         }
                     }
                 }
-            } else if (ClientConfig.everything.get() && ClientConfig.agglomerationFactory.get()) {
+            } else if (LibXClientConfig.AdvancedRendering.all && LibXClientConfig.AdvancedRendering.industrialAgglomerationFactory) {
                 double particleChance = (this.getCurrentMana() / (double) this.getManaCap()) * 0.1D;
                 if (Math.random() < particleChance) {
                     float red = 0.0F;
