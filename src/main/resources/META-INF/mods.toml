@@ -33,7 +33,7 @@ A Minecraft addon mod for Botania which makes automation easier.
 [[dependencies.botanicalmachinery]]
     modId="botania"
     mandatory=true
-    versionRange="[1.16.3-410,)"
+    versionRange="[1.16.3-413,)"
     ordering="NONE"
     side="BOTH"
 

@@ -9,12 +9,7 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import vazkii.botania.client.integration.jei.brewery.BreweryRecipeCategory;
-import vazkii.botania.client.integration.jei.elventrade.ElvenTradeRecipeCategory;
-import vazkii.botania.client.integration.jei.manapool.ManaPoolRecipeCategory;
-import vazkii.botania.client.integration.jei.petalapothecary.PetalApothecaryRecipeCategory;
-import vazkii.botania.client.integration.jei.puredaisy.PureDaisyRecipeCategory;
-import vazkii.botania.client.integration.jei.runicaltar.RunicAltarRecipeCategory;
+import vazkii.botania.client.integration.jei.*;
 
 import javax.annotation.Nonnull;
 
@@ -35,6 +30,7 @@ public class BotanicalMachineryPlugin implements IModPlugin {
         registration.addRecipeClickArea(ScreenMechanicalDaisy.class, 24, 16, 24, 48, PureDaisyRecipeCategory.UID);
         registration.addRecipeClickArea(ScreenMechanicalManaPool.class, 77, 36, 22, 15, ManaPoolRecipeCategory.UID);
         registration.addRecipeClickArea(ScreenMechanicalRunicAltar.class, 87, 65, 22, 15, RunicAltarRecipeCategory.UID);
+        registration.addRecipeClickArea(ScreenIndustrialAgglomerationFactory.class, 73, 51, 103, 76, TerraPlateRecipeCategory.UID);
     }
 
     @Override
@@ -45,5 +41,6 @@ public class BotanicalMachineryPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalDaisy), PureDaisyRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalManaPool), ManaPoolRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalRunicAltar), RunicAltarRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.industrialAgglommerationFactory), TerraPlateRecipeCategory.UID);
     }
 }
