@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.mana.IManaItem;
@@ -21,11 +22,16 @@ import java.util.function.Supplier;
 
 public class TileManaBattery extends BotanicalTile {
 
+    public static final ResourceLocation SOLIDIFIED_MANA_ID = new ResourceLocation("mythicbotany", "solidified_mana");
+    
     private static final int MANA_TRANSFER_RATE = 5000;
     private boolean slot1Locked;
     private boolean slot2Locked;
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, slot -> this.markDispatchable(), this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(2, slot -> {
+        this.removePhantomItems();
+        this.markDispatchable();
+    }, this::isValidStack);
 
     public TileManaBattery(TileEntityType<?> type) {
         super(type, LibXServerConfig.MaxManaCapacity.manaBattery);
@@ -41,8 +47,8 @@ public class TileManaBattery extends BotanicalTile {
     public boolean isValidStack(int slot, ItemStack stack) {
         if (stack.getItem() instanceof IManaItem) {
             IManaItem item = (IManaItem) stack.getItem();
-            if (slot == 0 && (item.getMana(stack) >= item.getMaxMana(stack) || this.slot1Locked)) return false;
-            if (slot == 1 && (item.getMana(stack) <= 0 || this.slot2Locked)) return false;
+            if (slot == 0 && (item.getMana(stack) >= item.getMaxMana(stack) || !item.canReceiveManaFromPool(stack, this) || this.slot1Locked)) return false;
+            if (slot == 1 && (item.getMana(stack) <= 0 || !item.canExportManaToPool(stack, this) || this.slot2Locked)) return false;
         }
         return stack.getItem() instanceof IManaItem;
     }
@@ -60,23 +66,29 @@ public class TileManaBattery extends BotanicalTile {
             if (!minus.isEmpty()) {
                 if (minus.getItem() instanceof IManaItem) {
                     IManaItem manaItem = (IManaItem) minus.getItem();
-                    int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? MANA_TRANSFER_RATE : Integer.MAX_VALUE;
-                    int manaValue = Math.min(maxManaValue, Math.min(this.getCurrentMana(), manaItem.getMaxMana(minus) - manaItem.getMana(minus)));
-                    manaItem.addMana(minus, manaValue);
-                    this.receiveMana(-manaValue);
-                    this.markDirty();
-                    this.markDispatchable();
+                    if (manaItem.canReceiveManaFromPool(minus, this)) {
+                        int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? MANA_TRANSFER_RATE : Integer.MAX_VALUE;
+                        int manaValue = Math.min(maxManaValue, Math.min(this.getCurrentMana(), manaItem.getMaxMana(minus) - manaItem.getMana(minus)));
+                        manaItem.addMana(minus, manaValue);
+                        this.receiveMana(-manaValue);
+                        this.markDirty();
+                        this.markDispatchable();
+                        this.removePhantomItems();
+                    }
                 }
             }
             if (!plus.isEmpty()) {
                 if (plus.getItem() instanceof IManaItem) {
                     IManaItem manaItem = (IManaItem) plus.getItem();
-                    int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? MANA_TRANSFER_RATE : Integer.MAX_VALUE;
-                    int manaValue = Math.min(maxManaValue, Math.min(this.getManaCap() - this.getCurrentMana(), manaItem.getMana(plus)));
-                    manaItem.addMana(plus, -manaValue);
-                    this.receiveMana(manaValue);
-                    this.markDirty();
-                    this.markDispatchable();
+                    if (manaItem.canExportManaToPool(plus, this)) {
+                        int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? MANA_TRANSFER_RATE : Integer.MAX_VALUE;
+                        int manaValue = Math.min(maxManaValue, Math.min(this.getManaCap() - this.getCurrentMana(), manaItem.getMana(plus)));
+                        manaItem.addMana(plus, -manaValue);
+                        this.receiveMana(manaValue);
+                        this.markDirty();
+                        this.markDispatchable();
+                        this.removePhantomItems();
+                    }
                 }
             }
             for (Direction direction : Direction.values()) {
@@ -137,7 +149,7 @@ public class TileManaBattery extends BotanicalTile {
                 return manaItem.getMana(minus) >= manaItem.getMaxMana(minus);
             } else if (slot == 1 && plus.getItem() instanceof IManaItem) {
                 IManaItem manaItem = (IManaItem) plus.getItem();
-                return manaItem.getMana(plus) <= 0;
+                return manaItem.getMana(plus) <= 0 && !SOLIDIFIED_MANA_ID.equals(plus.getItem().getRegistryName());
             }
             return true;
         }, null);
@@ -174,5 +186,14 @@ public class TileManaBattery extends BotanicalTile {
         cmp.putBoolean(TileTags.SLOT_1_LOCKED, this.slot1Locked);
         cmp.putBoolean(TileTags.SLOT_2_LOCKED, this.slot2Locked);
         return cmp;
+    }
+    
+    private void removePhantomItems() {
+        for (int slot = 0; slot < this.inventory.getSlots(); slot++) {
+            ItemStack stack = this.inventory.getStackInSlot(slot);
+            if (SOLIDIFIED_MANA_ID.equals(stack.getItem().getRegistryName()) && stack.getItem() instanceof IManaItem && ((IManaItem) stack.getItem()).getMana(stack) <= 0) {
+                this.inventory.setStackInSlot(slot, ItemStack.EMPTY);
+            }
+        }
     }
 }
