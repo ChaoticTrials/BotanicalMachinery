@@ -15,6 +15,8 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.mana.IManaItem;
+import vazkii.botania.common.item.ItemBlackLotus;
+import vazkii.botania.common.item.ModItems;
 
 import javax.annotation.Nonnull;
 import java.util.function.Supplier;
@@ -43,7 +45,10 @@ public class TileManaBattery extends BotanicalTile {
             IManaItem item = (IManaItem) stack.getItem();
             if (slot == 0 && (item.getMana(stack) >= item.getMaxMana(stack) || this.slot1Locked)) return false;
             if (slot == 1 && (item.getMana(stack) <= 0 || this.slot2Locked)) return false;
+        } else if (slot == 1 && stack.getItem() instanceof ItemBlackLotus && !this.slot2Locked) {
+            return true;
         }
+
         return stack.getItem() instanceof IManaItem;
     }
 
@@ -75,6 +80,12 @@ public class TileManaBattery extends BotanicalTile {
                     int manaValue = Math.min(maxManaValue, Math.min(this.getManaCap() - this.getCurrentMana(), manaItem.getMana(plus)));
                     manaItem.addMana(plus, -manaValue);
                     this.receiveMana(manaValue);
+                    this.markDirty();
+                    this.markDispatchable();
+                } else if (plus.getItem() instanceof ItemBlackLotus) {
+                    ItemBlackLotus item = (ItemBlackLotus) plus.getItem();
+                    this.receiveMana(item == ModItems.blackerLotus ? 100000 : 8000);
+                    this.inventory.setStackInSlot(1, ItemStack.EMPTY);
                     this.markDirty();
                     this.markDispatchable();
                 }
