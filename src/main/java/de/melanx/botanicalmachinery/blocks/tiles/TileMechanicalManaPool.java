@@ -8,12 +8,10 @@ import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityType;
-import vazkii.botania.api.mana.ManaNetworkEvent;
 import vazkii.botania.api.recipe.IManaInfusionRecipe;
 import vazkii.botania.client.fx.WispParticleData;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.tile.mana.TilePool;
-import vazkii.botania.common.core.handler.ManaNetworkHandler;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
@@ -87,10 +85,6 @@ public class TileMechanicalManaPool extends BotanicalTile {
 
     @Override
     public void tick() {
-        if (!ManaNetworkHandler.instance.isPoolIn(this) && !this.isRemoved()) {
-            ManaNetworkEvent.addCollector(this);
-        }
-
         if (this.world != null) {
             ItemStack stack = this.getInventory().getStackInSlot(1);
             ItemStack cat = this.getInventory().getStackInSlot(0);
