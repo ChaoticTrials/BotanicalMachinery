@@ -13,7 +13,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.9', changing: true
         classpath group: 'org.apache.maven', name: 'maven-artifact', version: '3.6.3+'
         classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
     }
@@ -30,7 +30,7 @@ group = "de.melanx.${modid}"
 archivesBaseName = "${modid}-${mc_version}"
 version = getVersion(group, archivesBaseName, mod_version)
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 minecraft {
     mappings("snapshot", mappings_version)
