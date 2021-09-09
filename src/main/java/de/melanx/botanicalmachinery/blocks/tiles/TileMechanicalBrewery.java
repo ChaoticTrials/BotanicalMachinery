@@ -40,7 +40,6 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
     }, this::isValidStack);
 
     private IBrewRecipe recipe = null;
-    private boolean initDone;
     private int progress;
     private int maxProgress = -1;
     private boolean update;
@@ -50,6 +49,7 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
         super(type, LibXServerConfig.MaxManaCapacity.mechanicalBrewery);
         this.inventory.setInputSlots(IntStream.range(0, 7).toArray());
         this.inventory.setOutputSlots(7);
+        this.update = true;
     }
 
     @Nonnull
@@ -96,12 +96,13 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
 
     @Override
     public void tick() {
-        if (!this.initDone) {
-            this.update = true;
-            this.initDone = true;
-        }
         if (this.world != null && !this.world.isRemote) {
-            boolean done = false;
+            if (this.update) {
+                this.updateRecipe();
+                this.markDirty();
+                this.update = false;
+            }
+
             if (this.recipe != null) {
                 ItemStack output = this.recipe.getOutput(this.inventory.getStackInSlot(0)).copy();
                 ItemStack currentOutput = this.inventory.getStackInSlot(7);
@@ -127,17 +128,14 @@ public class TileMechanicalBrewery extends BotanicalTile implements IWorkingTile
                             }
                         }
                         this.update = true;
-                        done = true;
+                        this.recipe = null;
+                        this.progress = 0;
+                        this.maxProgress = -1;
                     }
                     this.markDirty();
                     this.markDispatchable();
                 }
-            }
-            if (this.update) {
-                this.updateRecipe();
-                this.update = false;
-            }
-            if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
+            } else if (this.progress > 0) {
                 this.progress = 0;
                 this.maxProgress = -1;
                 this.markDirty();

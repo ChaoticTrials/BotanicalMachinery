@@ -57,7 +57,6 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
     private final ApothecaryFluidTank fluidInventory = new ApothecaryFluidTank(FLUID_CAPACITY, fluidStack -> Fluids.WATER.isEquivalentTo(fluidStack.getFluid()));
     private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.fluidInventory);
     private IPetalRecipe recipe = null;
-    private boolean initDone;
     private int progress;
     private boolean update;
     private ItemStack currentOutput = ItemStack.EMPTY;
@@ -66,6 +65,7 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
         super(type);
         this.inventory.setInputSlots(IntStream.range(1, 17).toArray());
         this.inventory.setOutputSlots(IntStream.range(17, 21).toArray());
+        this.update = true;
     }
 
     @Nonnull
@@ -81,8 +81,10 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
     public boolean isValidStack(int slot, ItemStack stack) {
         if (this.world == null) return false;
         if (slot == 0) return Tags.Items.SEEDS.contains(stack.getItem());
-        else if (Arrays.stream(this.inventory.getInputSlots()).anyMatch(x -> x == slot))
+        else if (Arrays.stream(this.inventory.getInputSlots()).anyMatch(x -> x == slot)) {
             return RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.PETAL_TYPE, stack);
+        }
+
         return true;
     }
 
@@ -109,11 +111,12 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
     @Override
     public void tick() {
         if (this.world != null && !this.world.isRemote) {
-            if (!this.initDone) {
-                this.update = true;
-                this.initDone = true;
+            if (this.update) {
+                this.updateRecipe();
+                this.markDirty();
+                this.update = false;
             }
-            boolean done = false;
+
             if (this.recipe != null) {
                 if (this.progress <= getRecipeDuration()) {
                     ++this.progress;
@@ -134,20 +137,16 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
                         this.inventory.getStackInSlot(0).shrink(1);
                         this.putIntoOutput(output);
                         this.update = true;
-                        done = true;
+                        this.recipe = null;
+                        this.progress = 0;
                     }
                     this.markDirty();
                     this.markDispatchable();
                 }
-            }
-            if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
+            } else if (this.progress > 0) {
                 this.progress = 0;
                 this.markDirty();
                 this.markDispatchable();
-            }
-            if (this.update) {
-                this.updateRecipe();
-                this.update = false;
             }
         } else if (this.world != null && LibXClientConfig.AdvancedRendering.all && LibXClientConfig.AdvancedRendering.mechanicalApothecary) {
             if (this.fluidInventory.getFluidAmount() > 0) {
@@ -237,12 +236,13 @@ public class TileMechanicalApothecary extends TileEntityBase implements ITickabl
         cmp.put(TileTags.FLUID, tankTag);
         cmp.putInt(TileTags.PROGRESS, this.progress);
         cmp.put(TileTags.CURRENT_OUTPUT, this.currentOutput.serializeNBT());
-        return cmp;
+        return super.write(cmp);
     }
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT cmp) {
         if (this.world != null && !this.world.isRemote) return;
+        super.handleUpdateTag(state, cmp);
         this.getInventory().deserializeNBT(cmp.getCompound(TileTags.INVENTORY));
         this.fluidInventory.setFluid(FluidStack.loadFluidStackFromNBT(cmp.getCompound(TileTags.FLUID)));
         this.progress = cmp.getInt(TileTags.PROGRESS);

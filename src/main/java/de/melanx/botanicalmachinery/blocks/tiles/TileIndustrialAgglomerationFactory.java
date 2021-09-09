@@ -26,8 +26,12 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
 
     public static final int MAX_MANA_PER_TICK = 5000;
 
-    private final BaseItemStackHandler inventory = new BaseItemStackHandler(4, slot -> this.markDispatchable(), this::isValidStack);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(4, slot -> {
+        this.update = true;
+        this.markDispatchable();
+    }, this::isValidStack);
 
+    private boolean update;
     private int progress;
     private int maxProgress = -1;
     private ITerraPlateRecipe recipe;
@@ -37,6 +41,7 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
         this.inventory.setInputSlots(0, 1, 2);
         this.inventory.setOutputSlots(3);
         this.inventory.setSlotValidator(this::isValidStack);
+        this.update = true;
     }
 
     @Nonnull
@@ -47,8 +52,10 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
 
     @Override
     public boolean isValidStack(int slot, ItemStack stack) {
-        if (Arrays.stream(this.inventory.getInputSlots()).anyMatch(x -> x == slot) && this.world != null)
+        if (Arrays.stream(this.inventory.getInputSlots()).anyMatch(x -> x == slot) && this.world != null) {
             return RecipeHelper.isItemValidInput(this.world.getRecipeManager(), ModRecipeTypes.TERRA_PLATE_TYPE, stack);
+        }
+
         return true;
     }
 
@@ -73,7 +80,11 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
     @Override
     public void tick() {
         if (this.world != null && !this.world.isRemote) {
-            this.updateRecipe();
+            if (this.update) {
+                this.updateRecipe();
+                this.update = false;
+            }
+
             if (this.recipe != null) {
                 ItemStack output = this.recipe.getRecipeOutput().copy();
                 ItemStack currentOutput = this.inventory.getStackInSlot(3);
@@ -95,7 +106,8 @@ public class TileIndustrialAgglomerationFactory extends BotanicalTile implements
                         }
                         this.inventory.getUnrestricted().insertItem(3, output, false);
                         this.progress = 0;
-                        this.updateRecipe();
+                        this.maxProgress = 0;
+                        this.update = true;
                     }
                     this.markDirty();
                 }

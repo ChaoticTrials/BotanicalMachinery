@@ -34,7 +34,6 @@ public class TileAlfheimMarket extends BotanicalTile implements IWorkingTile {
     }, this::isValidStack);
 
     private IElvenTradeRecipe recipe = null;
-    private boolean initDone;
     private int progress;
     private boolean update;
     private ItemStack currentInput = ItemStack.EMPTY;
@@ -84,11 +83,12 @@ public class TileAlfheimMarket extends BotanicalTile implements IWorkingTile {
     @Override
     public void tick() {
         if (this.world != null && !this.world.isRemote) {
-            if (!this.initDone) {
-                this.update = true;
-                this.initDone = true;
+            if (this.update) {
+                this.updateRecipe();
+                this.markDirty();
+                this.update = false;
             }
-            boolean done = false;
+
             if (this.recipe != null) {
                 List<ItemStack> outputs = new ArrayList<>(this.recipe.getOutputs());
                 if (outputs.size() == 1) {
@@ -107,24 +107,21 @@ public class TileAlfheimMarket extends BotanicalTile implements IWorkingTile {
                                     }
                                 }
                             }
+
                             this.update = true;
-                            done = true;
+                            this.recipe = null;
+                            this.progress = 0;
                             this.markDirty();
                             this.markDispatchable();
                         }
                     }
                 }
-            }
-            if (this.update) {
-                this.updateRecipe();
-                this.markDirty();
-                this.update = false;
-            }
-            if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
+            } else if (this.progress > 0) {
                 this.progress = 0;
                 this.markDirty();
                 this.markDispatchable();
             }
+
             if (this.getCurrentMana() > 0) {
                 for (int i : this.inventory.getInputSlots()) {
                     if (this.inventory.getStackInSlot(i).getItem() == Items.BREAD) {

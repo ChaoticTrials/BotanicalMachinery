@@ -39,16 +39,16 @@ public class TileMechanicalRunicAltar extends BotanicalTile implements IWorkingT
     }, this::isValidStack);
 
     private IRuneAltarRecipe recipe = null;
-    private boolean initDone;
     private int progress;
     private int maxProgress;
-    private boolean update = true;
+    private boolean update;
     private final List<Integer> slotsUsed = new ArrayList<>();
 
     public TileMechanicalRunicAltar(TileEntityType<?> type) {
         super(type, LibXServerConfig.MaxManaCapacity.mechanicalRunicAltar);
         this.inventory.setInputSlots(IntStream.range(1, 17).toArray());
         this.inventory.setOutputSlots(IntStream.range(17, 33).toArray());
+        this.update = true;
     }
 
     @Nonnull
@@ -125,11 +125,12 @@ public class TileMechanicalRunicAltar extends BotanicalTile implements IWorkingT
     @Override
     public void tick() {
         if (this.world != null && !this.world.isRemote) {
-            if (!this.initDone) {
-                this.update = true;
-                this.initDone = true;
+            if (this.update) {
+                this.updateRecipe();
+                this.markDirty();
+                this.update = false;
             }
-            boolean done = false;
+
             if (this.recipe != null) {
                 this.maxProgress = this.recipe.getManaUsage();
                 int manaTransfer = Math.min(this.getCurrentMana(), Math.min(this.getMaxManaPerTick(), this.getMaxProgress() - this.progress));
@@ -153,20 +154,16 @@ public class TileMechanicalRunicAltar extends BotanicalTile implements IWorkingT
                     this.inventory.getStackInSlot(0).shrink(1);
                     this.putIntoOutputOrDrop(output);
                     this.update = true;
-                    done = true;
+                    this.progress = 0;
+                    this.maxProgress = -1;
                 }
                 this.markDirty();
                 this.markDispatchable();
-            }
-            if ((done && this.progress > 0) || (this.recipe == null && this.progress > 0)) {
+            } else if (this.progress > 0) {
                 this.progress = 0;
                 this.maxProgress = -1;
                 this.markDirty();
                 this.markDispatchable();
-            }
-            if (this.update) {
-                this.updateRecipe();
-                this.update = false;
             }
         } else if (this.world != null && LibXClientConfig.AdvancedRendering.all && LibXClientConfig.AdvancedRendering.industrialAgglomerationFactory) {
             if (this.getMaxProgress() > 0 && this.progress >= (this.getMaxProgress() - (5 * this.getMaxManaPerTick()))) {

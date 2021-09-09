@@ -35,6 +35,10 @@ public class TileMechanicalManaPool extends BotanicalTile {
     }
 
     public IManaInfusionRecipe getMatchingRecipe(@Nonnull ItemStack stack, @Nonnull ItemStack cat) {
+        if (stack.isEmpty()) {
+            return null;
+        }
+
         List<IManaInfusionRecipe> matchingNonCatRecipes = new ArrayList<>();
         List<IManaInfusionRecipe> matchingCatRecipes = new ArrayList<>();
 
