@@ -29,6 +29,8 @@ import net.minecraftforge.fml.loading.FMLConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.nio.file.Files;
 
 @Mod("botanicalmachinery")
 public class BotanicalMachinery extends ModXRegistration {
@@ -96,7 +98,17 @@ public class BotanicalMachinery extends ModXRegistration {
 
     @Override
     protected void setup(FMLCommonSetupEvent event) {
+        try {
+            Files.deleteIfExists(FMLPaths.CONFIGDIR.get().resolve(this.modid + "-client.toml"));
+        } catch (IOException e) {
+            this.logger.error("config/botanicalmachinery-client.toml could not be deleted");
+        }
 
+        try {
+            Files.deleteIfExists(FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()).resolve(this.modid + "-server.toml"));
+        } catch (IOException e) {
+            this.logger.error("defaultconfigs/botanicalmachinery-server.toml could not be deleted");
+        }
     }
 
     @Override
