@@ -1,8 +1,10 @@
 package de.melanx.botanicalmachinery.config;
 
+import io.github.noeppi_noeppi.libx.annotation.RegisterConfig;
 import io.github.noeppi_noeppi.libx.config.Config;
 import io.github.noeppi_noeppi.libx.config.Group;
 
+@RegisterConfig(value = "client", client = true)
 public class LibXClientConfig {
 
     @Config("Should mana in GUIs be displayed with numbers?")

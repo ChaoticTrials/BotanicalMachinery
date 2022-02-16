@@ -1,13 +1,12 @@
 package de.melanx.botanicalmachinery.config;
 
+import io.github.noeppi_noeppi.libx.annotation.RegisterConfig;
 import io.github.noeppi_noeppi.libx.config.Config;
 import io.github.noeppi_noeppi.libx.config.Group;
 import io.github.noeppi_noeppi.libx.config.validator.IntRange;
 
+@RegisterConfig("server")
 public class LibXServerConfig {
-
-    @Config("This is only as a reminder that the config changed. Turn to true if you accept that I'm the new config")
-    public static boolean reminder = true;
 
     @Group("The amount of mana used in alfheim market to trade items [Default: 500]")
     public static class AlfheimMarket {
