@@ -99,7 +99,7 @@ public class TileManaBattery extends BotanicalTile {
                     int receivingMana = item == ModItems.blackerLotus ? 100000 : 8000;
                     if (this.getManaCap() - this.getCurrentMana() >= receivingMana) {
                         this.receiveMana(receivingMana);
-                        this.inventory.setStackInSlot(1, ItemStack.EMPTY);
+                        this.inventory.extractItem(1, 1, false);
                         this.markDirty();
                         this.markDispatchable();
                     }
