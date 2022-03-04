@@ -96,10 +96,13 @@ public class TileManaBattery extends BotanicalTile {
                     }
                 } else if (plus.getItem() instanceof ItemBlackLotus) {
                     ItemBlackLotus item = (ItemBlackLotus) plus.getItem();
-                    this.receiveMana(item == ModItems.blackerLotus ? 100000 : 8000);
-                    this.inventory.setStackInSlot(1, ItemStack.EMPTY);
-                    this.markDirty();
-                    this.markDispatchable();
+                    int receivingMana = item == ModItems.blackerLotus ? 100000 : 8000;
+                    if (this.getManaCap() - this.getCurrentMana() >= receivingMana) {
+                        this.receiveMana(receivingMana);
+                        this.inventory.setStackInSlot(1, ItemStack.EMPTY);
+                        this.markDirty();
+                        this.markDispatchable();
+                    }
                 }
             }
             for (Direction direction : Direction.values()) {
