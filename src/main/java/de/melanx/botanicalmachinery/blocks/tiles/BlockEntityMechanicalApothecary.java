@@ -77,7 +77,7 @@ public class BlockEntityMechanicalApothecary extends WorkingTile<IPetalRecipe> i
             }
         } else if (this.level != null && LibXClientConfig.AdvancedRendering.all && LibXClientConfig.AdvancedRendering.mechanicalApothecary) {
             if (this.fluidInventory.getFluidAmount() > 0) {
-                if (this.getProgress() > getMaxProgress() - 5) {
+                if (this.getMaxProgress() > 0 && this.getProgress() > this.getMaxProgress() - 5) {
                     for (int i = 0; i < 5; i++) {
                         SparkleParticleData data = SparkleParticleData.sparkle(this.level.random.nextFloat(), this.level.random.nextFloat(), this.level.random.nextFloat(), this.level.random.nextFloat(), 10);
                         this.level.addParticle(data, this.worldPosition.getX() + 0.3 + (this.level.random.nextDouble() * 0.4), this.worldPosition.getY() + 0.6, this.worldPosition.getZ() + 0.3 + (this.level.random.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);

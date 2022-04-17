@@ -88,7 +88,7 @@ public class BlockEntityManaBattery extends BotanicalTile {
                     int manaToTransfer = plus.getItem() == ModItems.blackerLotus ? 100000 : 8000;
                     if (this.getAvailableSpaceForMana() >= manaToTransfer) {
                         this.receiveMana(manaToTransfer);
-                        ItemStack stack = inventory.getStackInSlot(1).copy();
+                        ItemStack stack = this.inventory.getStackInSlot(1).copy();
                         stack.shrink(1);
                         this.inventory.setStackInSlot(1, stack);
                         this.setChanged();
@@ -98,7 +98,7 @@ public class BlockEntityManaBattery extends BotanicalTile {
             }
             for (Direction direction : Direction.values()) {
                 BlockEntity tile = this.level.getBlockEntity(this.getBlockPos().relative(direction));
-                if (tile instanceof BotanicalTile offsetTile && offsetTile.actAsMana() && !(tile instanceof BlockEntityManaBattery)) {
+                if (tile instanceof BotanicalTile offsetTile && offsetTile.actAsMana() && (((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.CREATIVE || !(tile instanceof BlockEntityManaBattery))) {
                     if (!offsetTile.isFull()) {
                         int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? MANA_TRANSFER_RATE : Integer.MAX_VALUE;
                         int manaValue = Math.min(maxManaValue, Math.min(this.getCurrentMana(), offsetTile.getManaCap() - offsetTile.getCurrentMana()));

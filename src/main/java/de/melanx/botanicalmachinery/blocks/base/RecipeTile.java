@@ -37,7 +37,7 @@ public abstract class RecipeTile<T extends Recipe<Container>> extends BotanicalT
     }
     
     protected void updateRecipeIfNeeded() {
-        updateRecipeIfNeeded(() -> {}, (stack, slot) -> {});
+        this.updateRecipeIfNeeded(() -> {}, (stack, slot) -> {});
     }
     
     protected void updateRecipeIfNeeded(Runnable doUpdate, BiConsumer<ItemStack, Integer> usedStacks) {
@@ -50,19 +50,19 @@ public abstract class RecipeTile<T extends Recipe<Container>> extends BotanicalT
     }
     
     protected void updateRecipe() {
-        updateRecipe((stack, slot) -> {});
+        this.updateRecipe((stack, slot) -> {});
     }
     
     protected void updateRecipe(BiConsumer<ItemStack, Integer> usedStacks) {
         if (this.level == null || this.level.isClientSide) return;
-        if (!canMatchRecipes()) {
+        if (!this.canMatchRecipes()) {
             this.recipe = null;
             return;
         }
         IAdvancedItemHandlerModifiable inventory = this.getInventory().getUnrestricted();
         List<ItemStack> stacks = IntStream.range(this.firstInputSlot, this.firstOutputSlot).mapToObj(inventory::getStackInSlot).toList();
         for (T recipe : this.level.getRecipeManager().getAllRecipesFor(this.recipeType)) {
-            if (matchRecipe(recipe, stacks)) {
+            if (this.matchRecipe(recipe, stacks)) {
                 List<ItemStack> consumedStacks = new ArrayList<>();
                 for (Ingredient ingredient : recipe.getIngredients()) {
                     for (int stackIdx = 0; stackIdx < stacks.size(); stackIdx += 1) {
@@ -88,7 +88,7 @@ public abstract class RecipeTile<T extends Recipe<Container>> extends BotanicalT
     }
     
     protected void craftRecipe() {
-        craftRecipe((stack, slot) -> {});
+        this.craftRecipe((stack, slot) -> {});
     }
     
     protected void craftRecipe(BiConsumer<ItemStack, Integer> usedStacks) {
@@ -109,7 +109,7 @@ public abstract class RecipeTile<T extends Recipe<Container>> extends BotanicalT
                 }
             }
             for (ItemStack result : this.resultItems(this.recipe, consumedStacks)) {
-                putIntoOutputOrDrop(result.copy());
+                this.putIntoOutputOrDrop(result.copy());
             }
             this.onCrafted(this.recipe);
             this.recipe = null;

@@ -49,7 +49,7 @@ public class BlockEntityAlfheimMarket extends WorkingTile<IElvenTradeRecipe> {
                 this.currentOutput = this.recipe.getOutputs().size() == 0 ? ItemStack.EMPTY : this.recipe.getOutputs().get(0).copy();
                 this.setChanged();
                 this.setDispatchable();
-            } else if (!currentInput.isEmpty() || !currentOutput.isEmpty()) {
+            } else if (!this.currentInput.isEmpty() || !this.currentOutput.isEmpty()) {
                 this.currentInput = ItemStack.EMPTY;
                 this.currentOutput = ItemStack.EMPTY;
                 this.setChanged();
@@ -89,11 +89,11 @@ public class BlockEntityAlfheimMarket extends WorkingTile<IElvenTradeRecipe> {
     }
 
     public ItemStack getCurrentInput() {
-        return currentInput;
+        return this.currentInput;
     }
 
     public ItemStack getCurrentOutput() {
-        return currentOutput;
+        return this.currentOutput;
     }
 
     @Override

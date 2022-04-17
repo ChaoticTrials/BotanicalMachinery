@@ -6,6 +6,7 @@ import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalRunicAltar;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalRunicAltar;
 import de.melanx.botanicalmachinery.core.LibResources;
+import de.melanx.botanicalmachinery.helper.GhostItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -29,8 +30,7 @@ public class ScreenMechanicalRunicAltar extends ScreenBase<ContainerMenuMechanic
 
         BlockEntityMechanicalRunicAltar blockEntity = this.menu.getBlockEntity();
         if (blockEntity.getInventory().getStackInSlot(0).isEmpty() && this.minecraft != null) {
-            // TODO semi transparent items preview?
-//            RenderHelperItem.renderItemGui(poseStack, this.minecraft.renderBuffers().bufferSource(), this.livingRock, this.relX + 90, this.relY + 43, 16, false, 1, 1, 1, 0.3f);
+            GhostItemRenderer.renderGhostItem(new ItemStack(ModBlocks.livingrock), poseStack, this.relX + 90, this.relY + 43);
         }
 
         if (blockEntity.getProgress() > 0) {

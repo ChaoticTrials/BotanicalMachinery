@@ -50,7 +50,7 @@ public class BlockEntityMechanicalBrewery extends WorkingTile<IBrewRecipe> {
         if (this.level != null && !this.level.isClientSide) {
             this.runRecipeTick();
             if (this.recipe != null) {
-                this.currentOutput = this.recipe.getResultItem().copy();
+                this.currentOutput = recipe.getOutput(this.inventory.getStackInSlot(0));
                 this.setChanged();
                 this.setDispatchable();
             } else if (!this.currentOutput.isEmpty()) {
@@ -114,7 +114,7 @@ public class BlockEntityMechanicalBrewery extends WorkingTile<IBrewRecipe> {
     }
 
     public ItemStack getCurrentOutput() {
-        return currentOutput;
+        return this.currentOutput;
     }
 
     @Override

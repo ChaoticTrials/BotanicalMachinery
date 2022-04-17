@@ -3,8 +3,10 @@ package de.melanx.botanicalmachinery.blocks.screens;
 import com.mojang.blaze3d.vertex.PoseStack;
 import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalManaPool;
+import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalBrewery;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalManaPool;
 import de.melanx.botanicalmachinery.core.LibResources;
+import de.melanx.botanicalmachinery.helper.GhostItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
@@ -29,10 +31,7 @@ public class ScreenMechanicalManaPool extends ScreenBase<ContainerMenuMechanical
 
         BlockEntityMechanicalManaPool blockEntity = this.menu.getBlockEntity();
         if (blockEntity.getInventory().getStackInSlot(0).isEmpty() && this.minecraft != null) {
-            List<Item> items = BlockEntityMechanicalManaPool.CATALYSTS;
-            int idx = Math.abs(ClientTickHandler.ticksInGame / 20) % items.size();
-            // TODO semi transparent items preview?
-//            RenderHelperItem.renderItemGui(poseStack, this.minecraft.renderBuffers().bufferSource(), new ItemStack(items.get(idx)), this.relX + 53, this.relY + 47, 16, false, 1, 1, 1, 0.3f);
+            GhostItemRenderer.renderGhostItem(BlockEntityMechanicalManaPool.CATALYSTS.stream().map(ItemStack::new).toList(), poseStack, this.relX + 53, this.relY + 47);
         }
     }
 }

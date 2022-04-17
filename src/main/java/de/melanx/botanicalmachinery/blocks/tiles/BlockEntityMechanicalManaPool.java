@@ -120,6 +120,25 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<IManaInfusionRecip
     }
 
     @Override
+    public void receiveMana(int i) {
+        if (this.inventory.getStackInSlot(0).getItem() == ModBlocks.manaVoid.asItem()) {
+            super.receiveMana(Math.min(i, this.getAvailableSpaceForMana()));
+        } else {
+            super.receiveMana(i);
+        }
+    }
+
+    @Override
+    public boolean isFull() {
+        return this.inventory.getStackInSlot(0).getItem() != ModBlocks.manaVoid.asItem() && super.isFull();
+    }
+
+    @Override
+    public int getAvailableSpaceForMana() {
+        return this.inventory.getStackInSlot(0).getItem() == ModBlocks.manaVoid.asItem() ? this.getManaCap() : super.getAvailableSpaceForMana();
+    }
+
+    @Override
     public void load(@Nonnull CompoundTag nbt) {
         super.load(nbt);
         this.cooldown = nbt.getInt(TileTags.COOLDOWN);

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalApothecary;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalApothecary;
 import de.melanx.botanicalmachinery.core.LibResources;
+import de.melanx.botanicalmachinery.helper.GhostItemRenderer;
 import io.github.noeppi_noeppi.libx.render.ClientTickHandler;
 import io.github.noeppi_noeppi.libx.render.RenderHelperFluid;
 import io.github.noeppi_noeppi.libx.util.TagAccess;
@@ -54,14 +55,12 @@ public class ScreenMechanicalApothecary extends AbstractContainerScreen<Containe
         this.blit(poseStack, this.relX, this.relY, 0, 0, this.imageWidth, this.imageHeight);
 
         if (this.tile.getInventory().getStackInSlot(0).isEmpty()) {
-            List<Item> items = TagAccess.ROOT.get(Tags.Items.SEEDS).stream().map(Holder::value).toList();
-            int idx = Math.abs(ClientTickHandler.ticksInGame / 20) % items.size();
-            // TODO semi transparent items preview?
-//            RenderHelperItem.renderItemGui(poseStack, this.minecraft.renderBuffers().bufferSource(), new ItemStack(items.get(idx)), this.relX + 90, this.relY + 43, 16, false, 1, 1, 1, 0.3f);
+            List<ItemStack> items = TagAccess.ROOT.get(Tags.Items.SEEDS).stream().map(Holder::value).map(ItemStack::new).toList();
+            GhostItemRenderer.renderGhostItem(items, poseStack, this.relX + 90, this.relY + 43);
         }
 
         if (this.tile.getProgress() > 0) {
-            float pctProgress = Math.min(this.tile.getProgress() / (float) tile.getMaxProgress(), 1.0F);
+            float pctProgress = Math.min(this.tile.getProgress() / (float) this.tile.getMaxProgress(), 1.0F);
             RenderSystem.setShaderTexture(0, LibResources.MECHANICAL_APOTHECARY_GUI);
             vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(poseStack, this.relX + 87, this.relY + 64, this.imageWidth, 0, Math.round(22 * pctProgress), 16);
         }

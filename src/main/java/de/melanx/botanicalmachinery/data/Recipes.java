@@ -44,10 +44,10 @@ public class Recipes extends RecipeProviderBase implements CraftingExtension, Co
     }
 
     private void defaultMachine(Object output, Object special1, Object special2, Object special3, Object special4) {
-        shaped(output, "eye", "xaz", "ese", 'e', ModTags.Items.INGOTS_ELEMENTIUM, 'a', vazkii.botania.common.item.ModItems.auraRingGreater, 's', special1, 'x', special2, 'y', special3, 'z', special4);
+        this.shaped(output, "eye", "xaz", "ese", 'e', ModTags.Items.INGOTS_ELEMENTIUM, 'a', vazkii.botania.common.item.ModItems.auraRingGreater, 's', special1, 'x', special2, 'y', special3, 'z', special4);
     }
     
     private void defaultMachine(Object output, Object special1, Object special2) {
-        shaped(output, "exe", "xax", "ese", 'e', ModTags.Items.INGOTS_ELEMENTIUM, 'a', vazkii.botania.common.item.ModItems.auraRingGreater, 's', special1, 'x', special2);
+        this.shaped(output, "exe", "xax", "ese", 'e', ModTags.Items.INGOTS_ELEMENTIUM, 'a', vazkii.botania.common.item.ModItems.auraRingGreater, 's', special1, 'x', special2);
     }
 }

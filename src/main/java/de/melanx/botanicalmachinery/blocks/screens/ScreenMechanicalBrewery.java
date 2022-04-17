@@ -6,6 +6,7 @@ import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalBrewery;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalBrewery;
 import de.melanx.botanicalmachinery.core.LibResources;
+import de.melanx.botanicalmachinery.helper.GhostItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
@@ -29,10 +30,7 @@ public class ScreenMechanicalBrewery extends ScreenBase<ContainerMenuMechanicalB
 
         BlockEntityMechanicalBrewery blockEntity = this.menu.getBlockEntity();
         if (blockEntity.getInventory().getStackInSlot(0).isEmpty() && this.minecraft != null) {
-            List<Item> items = BlockEntityMechanicalBrewery.BREW_CONTAINER;
-            int idx = Math.abs(ClientTickHandler.ticksInGame / 20) % items.size();
-            // TODO semi transparent items preview?
-//            RenderHelperItem.renderItemGui(poseStack, this.minecraft.renderBuffers().bufferSource(), new ItemStack(items.get(idx)), this.relX + 44, this.relY + 48, 16, false, 1, 1, 1, 0.3f);
+            GhostItemRenderer.renderGhostItem(BlockEntityMechanicalBrewery.BREW_CONTAINER.stream().map(ItemStack::new).toList(), poseStack, this.relX + 44, this.relY + 48);
         }
 
         if (blockEntity.getProgress() > 0) {

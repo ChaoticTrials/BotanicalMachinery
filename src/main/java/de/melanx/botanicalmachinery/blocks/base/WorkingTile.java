@@ -25,7 +25,7 @@ public abstract class WorkingTile<T extends Recipe<Container>> extends RecipeTil
     }
 
     protected void runRecipeTick() {
-        runRecipeTick(() -> {}, (stack, slot) -> {}, (stack, slot) -> {});
+        this.runRecipeTick(() -> {}, (stack, slot) -> {}, (stack, slot) -> {});
     }
 
     protected void runRecipeTick(Runnable doUpdate, BiConsumer<ItemStack, Integer> updateStack, BiConsumer<ItemStack, Integer> consumeStack) {
