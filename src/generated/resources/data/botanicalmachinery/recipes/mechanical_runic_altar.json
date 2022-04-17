@@ -1,14 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
-  "group": "botanicalmachinery:mechanical_runic_altar",
   "pattern": [
-    "eye",
-    "xaz",
+    "exe",
+    "xax",
     "ese"
   ],
   "key": {
     "e": {
-      "tag": "forge:ingots/elementium"
+      "tag": "botania:elementium_ingots"
     },
     "a": {
       "item": "botania:aura_ring_greater"
@@ -17,52 +16,6 @@
       "item": "botania:runic_altar"
     },
     "x": [
-      {
-        "item": "botania:rune_lust"
-      },
-      {
-        "item": "botania:rune_gluttony"
-      },
-      {
-        "item": "botania:rune_greed"
-      },
-      {
-        "item": "botania:rune_sloth"
-      },
-      {
-        "item": "botania:rune_wrath"
-      },
-      {
-        "item": "botania:rune_envy"
-      },
-      {
-        "item": "botania:rune_pride"
-      }
-    ],
-    "y": [
-      {
-        "item": "botania:rune_lust"
-      },
-      {
-        "item": "botania:rune_gluttony"
-      },
-      {
-        "item": "botania:rune_greed"
-      },
-      {
-        "item": "botania:rune_sloth"
-      },
-      {
-        "item": "botania:rune_wrath"
-      },
-      {
-        "item": "botania:rune_envy"
-      },
-      {
-        "item": "botania:rune_pride"
-      }
-    ],
-    "z": [
       {
         "item": "botania:rune_lust"
       },

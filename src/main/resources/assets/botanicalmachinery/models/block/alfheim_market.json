@@ -3,8 +3,8 @@
   "ambientocclusion": false,
   "textures": {
     "frame": "botania:block/elementium_block",
-    "wood": "botania:block/livingwood",
-    "glimmering_wood": "botania:block/glimmering_livingwood",
+    "wood": "botania:block/livingwood_log",
+    "glimmering_wood": "botania:block/glimmering_livingwood_log",
     "core": "botania:block/alfheim_portal_activated",
     "particle": "#frame"
   },

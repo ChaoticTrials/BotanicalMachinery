@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SPS"
+  ],
+  "key": {
+    "S": {
+      "item": "botania:livingrock"
+    },
+    "P": {
+      "item": "botanicalmachinery:mana_emerald"
+    }
+  },
+  "result": {
+    "item": "botania:runic_altar"
+  }
+}

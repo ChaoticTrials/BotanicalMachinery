@@ -7,8 +7,8 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import vazkii.botania.client.integration.jei.*;
 
 import javax.annotation.Nonnull;
@@ -21,8 +21,9 @@ public class BotanicalMachineryPlugin implements IModPlugin {
     public ResourceLocation getPluginUid() {
         return new ResourceLocation(BotanicalMachinery.getInstance().modid, "jei_plugin");
     }
-
+    
     @Override
+    @SuppressWarnings("removal") // TODO wait for botania to use the new system
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(ScreenAlfheimMarket.class, 77, 36, 22, 15, ElvenTradeRecipeCategory.UID);
         registration.addRecipeClickArea(ScreenMechanicalApothecary.class, 87, 65, 22, 15, PetalApothecaryRecipeCategory.UID);
@@ -34,6 +35,7 @@ public class BotanicalMachineryPlugin implements IModPlugin {
     }
 
     @Override
+    @SuppressWarnings("removal") // TODO wait for botania to use the new system
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.alfheimMarket), ElvenTradeRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalApothecary), PetalApothecaryRecipeCategory.UID);

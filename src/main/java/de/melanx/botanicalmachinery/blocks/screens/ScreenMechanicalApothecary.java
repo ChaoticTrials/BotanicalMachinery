@@ -1,99 +1,99 @@
 package de.melanx.botanicalmachinery.blocks.screens;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalApothecary;
-import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalApothecary;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalApothecary;
+import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalApothecary;
 import de.melanx.botanicalmachinery.core.LibResources;
 import io.github.noeppi_noeppi.libx.render.ClientTickHandler;
 import io.github.noeppi_noeppi.libx.render.RenderHelperFluid;
-import io.github.noeppi_noeppi.libx.render.RenderHelperItem;
+import io.github.noeppi_noeppi.libx.util.TagAccess;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
+import java.awt.Color;
 import java.util.List;
 
-public class ScreenMechanicalApothecary extends ContainerScreen<ContainerMechanicalApothecary> {
+public class ScreenMechanicalApothecary extends AbstractContainerScreen<ContainerMenuMechanicalApothecary> {
 
     private int relX;
     private int relY;
-    private final TileMechanicalApothecary tile;
+    private final BlockEntityMechanicalApothecary tile;
 
-    public ScreenMechanicalApothecary(ContainerMechanicalApothecary screenContainer, PlayerInventory inv, ITextComponent titleIn) {
-        super(screenContainer, inv, titleIn);
-        this.xSize = 196;
-        this.ySize = 195;
-        this.relX = (this.width - this.xSize) / 2;
-        this.relY = (this.height - this.ySize) / 2;
-        this.tile = (TileMechanicalApothecary) this.container.getWorld().getTileEntity(this.container.getPos());
+    public ScreenMechanicalApothecary(ContainerMenuMechanicalApothecary screenMenu, Inventory inventory, Component title) {
+        super(screenMenu, inventory, title);
+        this.imageWidth = 196;
+        this.imageHeight = 195;
+        this.relX = (this.width - this.imageWidth) / 2;
+        this.relY = (this.height - this.imageHeight) / 2;
+        this.tile = (BlockEntityMechanicalApothecary) this.menu.getLevel().getBlockEntity(this.menu.getPos());
     }
 
     @Override
-    public void init(@Nonnull Minecraft p_init_1_, int p_init_2_, int p_init_3_) {
-        super.init(p_init_1_, p_init_2_, p_init_3_);
-        this.relX = (p_init_2_ - this.xSize) / 2;
-        this.relY = (p_init_3_ - this.ySize) / 2;
+    public void init(@Nonnull Minecraft minecraft, int width, int height) {
+        super.init(minecraft, width, height);
+        this.relX = (width - this.imageWidth) / 2;
+        this.relY = (height - this.imageHeight) / 2;
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack ms, float partialTicks, int mouseX, int mouseY) {
-        this.renderBackground(ms);
-        //noinspection deprecation
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        //noinspection ConstantConditions
-        this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
+    protected void renderBg(@Nonnull PoseStack poseStack, float partialTicks, int mouseX, int mouseY) {
+        this.renderBackground(poseStack);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, LibResources.MECHANICAL_APOTHECARY_GUI);
 
-        this.blit(ms, this.relX, this.relY, 0, 0, this.xSize, this.ySize);
+        this.blit(poseStack, this.relX, this.relY, 0, 0, this.imageWidth, this.imageHeight);
 
         if (this.tile.getInventory().getStackInSlot(0).isEmpty()) {
-            List<Item> items = Tags.Items.SEEDS.getAllElements();
+            List<Item> items = TagAccess.ROOT.get(Tags.Items.SEEDS).stream().map(Holder::value).toList();
             int idx = Math.abs(ClientTickHandler.ticksInGame / 20) % items.size();
-            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), new ItemStack(items.get(idx)), this.relX + 90, this.relY + 43, 16, false, 1, 1, 1, 0.3f);
+            // TODO semi transparent items preview?
+//            RenderHelperItem.renderItemGui(poseStack, this.minecraft.renderBuffers().bufferSource(), new ItemStack(items.get(idx)), this.relX + 90, this.relY + 43, 16, false, 1, 1, 1, 0.3f);
         }
 
         if (this.tile.getProgress() > 0) {
-            float pctProgress = Math.min(this.tile.getProgress() / (float) TileMechanicalApothecary.getRecipeDuration(), 1.0F);
-            this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
-            vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(ms, this.relX + 87, this.relY + 64, this.xSize, 0, Math.round(22 * pctProgress), 16);
+            float pctProgress = Math.min(this.tile.getProgress() / (float) tile.getMaxProgress(), 1.0F);
+            RenderSystem.setShaderTexture(0, LibResources.MECHANICAL_APOTHECARY_GUI);
+            vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(poseStack, this.relX + 87, this.relY + 64, this.imageWidth, 0, Math.round(22 * pctProgress), 16);
         }
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    protected void drawGuiContainerForegroundLayer(@Nonnull MatrixStack ms, int mouseX, int mouseY) {
+    protected void renderLabels(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
         String s = this.title.getString();
-        this.font.drawString(ms, s, (float) (this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, Color.DARK_GRAY.getRGB());
-        this.font.drawString(ms, this.playerInventory.getDisplayName().getString(), 8.0F, (float) (this.ySize - 96 + 2), Color.DARK_GRAY.getRGB());
+        this.font.draw(poseStack, s, (float) (this.imageWidth / 2 - this.font.width(s) / 2), 6.0F, Color.DARK_GRAY.getRGB());
+        this.font.draw(poseStack, this.playerInventoryTitle.getString(), 8.0F, (float) (this.imageHeight - 96 + 2), Color.DARK_GRAY.getRGB());
 
-        float pctFluid = Math.min((float) this.tile.getFluidInventory().getFluidAmount() / TileMechanicalApothecary.FLUID_CAPACITY, 1.0F);
+        float pctFluid = Math.min((float) this.tile.getFluidInventory().getFluidAmount() / BlockEntityMechanicalApothecary.FLUID_CAPACITY, 1.0F);
         int xPos = 163;
         int ySize = Math.round(81 * pctFluid);
         int yPos = 16 + 81 - ySize;
 
-        RenderHelperFluid.renderFluid(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), Fluids.WATER.getAttributes().getColor(), xPos, yPos, 17, ySize);
+        RenderHelperFluid.renderFluid(poseStack, this.minecraft.renderBuffers().bufferSource(), Fluids.WATER.getAttributes().getColor(), xPos, yPos, 17, ySize);
 
-        this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_APOTHECARY_GUI);
-        this.blit(ms, xPos, 16, this.xSize, 16, 17, 81);
+        RenderSystem.setShaderTexture(0, LibResources.MECHANICAL_APOTHECARY_GUI);
+        this.blit(poseStack, xPos, 16, this.imageWidth, 16, 17, 81);
 
-        this.renderHoveredTooltip(ms, mouseX - this.guiLeft, mouseY - this.guiTop);
+        this.renderTooltip(poseStack, mouseX - this.leftPos, mouseY - this.topPos);
     }
 
     @Override
-    protected void renderHoveredTooltip(@Nonnull MatrixStack ms, int mouseX, int mouseY) {
-        if (mouseX >= 163 && mouseX <= 179 &&
-                mouseY >= 16 && mouseY <= 96) {
-            TranslationTextComponent fluid = new TranslationTextComponent(this.tile.getFluidInventory().getFluidAmount() + " / " + this.tile.getFluidInventory().getCapacity() + " mB");
-            this.renderTooltip(ms, fluid, mouseX, mouseY);
+    protected void renderTooltip(@Nonnull PoseStack poseStack, int x, int y) {
+        if (x >= 163 && x <= 179 &&
+                y >= 16 && y <= 96) {
+            TranslatableComponent fluid = new TranslatableComponent(this.tile.getFluidInventory().getFluidAmount() + " / " + this.tile.getFluidInventory().getCapacity() + " mB");
+            this.renderTooltip(poseStack, fluid, x, y);
         }
-        super.renderHoveredTooltip(ms, mouseX, mouseY);
+        super.renderTooltip(poseStack, x, y);
     }
 }

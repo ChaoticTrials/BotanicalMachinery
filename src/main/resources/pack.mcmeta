@@ -1,6 +1,6 @@
 {
-    "pack": {
-        "description": "botanicalmachinery resources",
-        "pack_format": 6
-    }
+  "pack": {
+    "description": "Botanical Machinery resources",
+    "pack_format": 8
+  }
 }

@@ -6,12 +6,68 @@
     ]
   },
   "criteria": {
-    "has_item": {
+    "criterion0": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "botania:terra_plate"
+            "tag": "botania:elementium_ingots"
+          }
+        ]
+      }
+    },
+    "criterion1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:aura_ring_greater"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:terra_plate"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "botania:mana_diamond_gems"
+          }
+        ]
+      }
+    },
+    "criterion4": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "botania:manasteel_ingots"
+          }
+        ]
+      }
+    },
+    "criterion5": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:mana_pearl"
+            ]
           }
         ]
       }
@@ -25,7 +81,12 @@
   },
   "requirements": [
     [
-      "has_item",
+      "criterion0",
+      "criterion1",
+      "criterion2",
+      "criterion3",
+      "criterion4",
+      "criterion5",
       "has_the_recipe"
     ]
   ]

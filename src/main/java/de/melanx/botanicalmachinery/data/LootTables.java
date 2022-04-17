@@ -2,11 +2,13 @@ package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.ModBlocks;
+import io.github.noeppi_noeppi.libx.annotation.data.Datagen;
 import io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase;
 import net.minecraft.data.DataGenerator;
 
 import static de.melanx.botanicalmachinery.core.TileTags.*;
 
+@Datagen
 public class LootTables extends BlockLootProviderBase {
 
     public LootTables(DataGenerator gen) {

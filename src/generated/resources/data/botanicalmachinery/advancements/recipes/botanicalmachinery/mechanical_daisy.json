@@ -6,12 +6,36 @@
     ]
   },
   "criteria": {
-    "has_item": {
+    "criterion0": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "botania:floating_pure_daisy"
+            "tag": "botania:elementium_blocks"
+          }
+        ]
+      }
+    },
+    "criterion1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:aura_ring_greater"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:floating_pure_daisy"
+            ]
           }
         ]
       }
@@ -25,7 +49,9 @@
   },
   "requirements": [
     [
-      "has_item",
+      "criterion0",
+      "criterion1",
+      "criterion2",
       "has_the_recipe"
     ]
   ]

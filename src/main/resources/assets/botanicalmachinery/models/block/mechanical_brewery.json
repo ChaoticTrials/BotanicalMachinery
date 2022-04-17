@@ -5,7 +5,7 @@
     "frame": "botania:block/elementium_block",
     "cauldron": "minecraft:block/cauldron_side",
     "bottom": "minecraft:block/cauldron_inner",
-    "stick": "botania:block/livingwood",
+    "stick": "botania:block/livingwood_log",
     "particle": "#frame"
   },
   "elements": [

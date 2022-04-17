@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SPS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "botania:livingrock"
+    },
+    "P": {
+      "item": "botanicalmachinery:mana_emerald"
+    }
+  },
+  "result": {
+    "item": "botania:mana_tablet"
+  }
+}

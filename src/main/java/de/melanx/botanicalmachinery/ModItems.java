@@ -1,8 +1,8 @@
 package de.melanx.botanicalmachinery;
 
-import io.github.noeppi_noeppi.libx.annotation.RegisterClass;
-import io.github.noeppi_noeppi.libx.mod.registration.ItemBase;
-import net.minecraft.item.Item;
+import io.github.noeppi_noeppi.libx.annotation.registration.RegisterClass;
+import io.github.noeppi_noeppi.libx.base.ItemBase;
+import net.minecraft.world.item.Item;
 
 @RegisterClass
 public class ModItems {

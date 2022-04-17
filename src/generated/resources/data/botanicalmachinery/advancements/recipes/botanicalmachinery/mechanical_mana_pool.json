@@ -6,12 +6,72 @@
     ]
   },
   "criteria": {
-    "has_item": {
+    "criterion0": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "botania:fabulous_pool"
+            "tag": "botania:elementium_ingots"
+          }
+        ]
+      }
+    },
+    "criterion1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:aura_ring_greater"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:fabulous_pool"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:alchemy_catalyst"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion4": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:diluted_pool"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion5": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:conjuration_catalyst"
+            ]
           }
         ]
       }
@@ -25,7 +85,12 @@
   },
   "requirements": [
     [
-      "has_item",
+      "criterion0",
+      "criterion1",
+      "criterion2",
+      "criterion3",
+      "criterion4",
+      "criterion5",
       "has_the_recipe"
     ]
   ]

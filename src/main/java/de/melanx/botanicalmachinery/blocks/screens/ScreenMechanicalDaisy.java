@@ -1,111 +1,102 @@
 package de.melanx.botanicalmachinery.blocks.screens;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalDaisy;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalDaisy;
 import de.melanx.botanicalmachinery.core.LibResources;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.fluids.FluidStack;
+import vazkii.patchouli.client.RenderHelper;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
+import java.awt.Color;
 import java.util.List;
 
-public class ScreenMechanicalDaisy extends ContainerScreen<ContainerMechanicalDaisy> {
+public class ScreenMechanicalDaisy extends AbstractContainerScreen<ContainerMenuMechanicalDaisy> {
 
     private static final ResourceLocation PURE_DAISY_TEXTURE = new ResourceLocation("botania", "block/pure_daisy");
 
-    public ScreenMechanicalDaisy(ContainerMechanicalDaisy container, PlayerInventory inv, ITextComponent titleIn) {
-        super(container, inv, titleIn);
+    public ScreenMechanicalDaisy(ContainerMenuMechanicalDaisy menu, Inventory inventory, Component title) {
+        super(menu, inventory, title);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack ms, float partialTicks, int mouseX, int mouseY) {
-        this.renderBackground(ms);
-        //noinspection deprecation
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        //noinspection ConstantConditions
-        this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_DAISY_GUI);
-        int relX = (this.width - this.xSize) / 2;
-        int relY = (this.height - this.ySize) / 2;
-        this.blit(ms, relX, relY, 0, 0, this.xSize, this.ySize);
+    protected void renderBg(@Nonnull PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
+        this.renderBackground(poseStack);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, LibResources.MECHANICAL_DAISY_GUI);
+        int relX = (this.width - this.imageWidth) / 2;
+        int relY = (this.height - this.imageHeight) / 2;
+        this.blit(poseStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    protected void drawGuiContainerForegroundLayer(@Nonnull MatrixStack ms, int mouseX, int mouseY) {
+    protected void renderLabels(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
         String s = this.title.getString();
-        this.font.drawString(ms, s, (float) (this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, Color.DARK_GRAY.getRGB());
-        this.font.drawString(ms, this.playerInventory.getDisplayName().getString(), 8.0F, (float) (this.ySize - 96 + 2), Color.DARK_GRAY.getRGB());
+        this.font.draw(poseStack, s, (float) (this.imageWidth / 2 - this.font.width(s) / 2), 6.0F, Color.DARK_GRAY.getRGB());
+        this.font.draw(poseStack, this.playerInventoryTitle.getString(), 8.0F, (float) (this.imageHeight - 96 + 2), Color.DARK_GRAY.getRGB());
 
-        GlStateManager.pushMatrix();
-        GlStateManager.color4f(1, 1, 1, 1);
-        GlStateManager.enableBlend();
-        TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(PURE_DAISY_TEXTURE);
-        //noinspection ConstantConditions
-        this.minecraft.getTextureManager().bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
-        blit(ms, 12, 16, 0, 48, 48, sprite);
-        GlStateManager.disableBlend();
-        GlStateManager.popMatrix();
-        this.renderHoveredTooltip(ms, mouseX - this.guiLeft, mouseY - this.guiTop);
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(PURE_DAISY_TEXTURE);
+        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
+        blit(poseStack, 12, 16, 0, 48, 48, sprite);
+        this.renderTooltip(poseStack, mouseX - this.leftPos, mouseY - this.topPos);
     }
 
     @Override
-    public void moveItems(@Nonnull MatrixStack ms, @Nonnull Slot slot) {
-        if (slot instanceof ContainerMechanicalDaisy.ItemAndFluidSlot) {
-            FluidStack stack = ((ContainerMechanicalDaisy.ItemAndFluidSlot) slot).inventory.getFluidInTank(slot.slotNumber);
+    public void renderSlot(@Nonnull PoseStack poseStack, @Nonnull Slot slot) {
+        if (slot instanceof ContainerMenuMechanicalDaisy.ItemAndFluidSlot) {
+            FluidStack stack = ((ContainerMenuMechanicalDaisy.ItemAndFluidSlot) slot).inventory.getFluidInTank(slot.index);
             if (!stack.isEmpty() && stack.getFluid() != null) {
-                int maxAmount = ((ContainerMechanicalDaisy.ItemAndFluidSlot) slot).inventory.getTankCapacity(slot.slotNumber);
+                int maxAmount = ((ContainerMenuMechanicalDaisy.ItemAndFluidSlot) slot).inventory.getTankCapacity(slot.index);
                 int yHeight = Math.round(stack.getAmount() / (float) maxAmount) * 16;
-                int yPos = slot.yPos + 16 - yHeight;
+                int yPos = slot.y + 16 - yHeight;
 
                 ResourceLocation still = stack.getFluid().getAttributes().getStillTexture(stack);
-                TextureAtlasSprite sprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(still);
-                //noinspection ConstantConditions
-                this.minecraft.getTextureManager().bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+                TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(still);
+                RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
                 int fluidColor = stack.getFluid().getAttributes().getColor(stack);
                 float fluidColorA = ((fluidColor >> 24) & 0xFF) / 255f;
                 float fluidColorR = ((fluidColor >> 16) & 0xFF) / 255f;
                 float fluidColorG = ((fluidColor >> 8) & 0xFF) / 255f;
                 float fluidColorB = ((fluidColor) & 0xFF) / 255f;
-                //noinspection deprecation
-                GlStateManager.color4f(fluidColorR, fluidColorG, fluidColorB, fluidColorA);
-                blit(ms, slot.xPos, yPos, 0, 16, yHeight, sprite);
-                //noinspection deprecation
-                GlStateManager.color4f(1, 1, 1, 1);
+                RenderSystem.setShaderColor(fluidColorR, fluidColorG, fluidColorB, fluidColorA);
+                blit(poseStack, slot.x, yPos, 0, 16, yHeight, sprite);
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             }
         }
-        super.moveItems(ms, slot);
+        super.renderSlot(poseStack, slot);
     }
 
     @Override
-    protected void renderHoveredTooltip(@Nonnull MatrixStack ms, int mouseX, int mouseY) {
+    protected void renderTooltip(@Nonnull PoseStack poseStack, int x, int y) {
         //noinspection ConstantConditions
-        if (this.minecraft.player.inventory.getItemStack().isEmpty() && this.hoveredSlot != null) {
-            if (this.hoveredSlot instanceof ContainerMechanicalDaisy.ItemAndFluidSlot
-                    && ((ContainerMechanicalDaisy.ItemAndFluidSlot) this.hoveredSlot).inventory.getStackInSlot(this.hoveredSlot.slotNumber).isEmpty()
-                    && !((ContainerMechanicalDaisy.ItemAndFluidSlot) this.hoveredSlot).inventory.getFluidInTank(this.hoveredSlot.slotNumber).isEmpty()) {
+        if (this.minecraft.player.containerMenu.getCarried().isEmpty() && this.hoveredSlot != null) {
+            if (this.hoveredSlot instanceof ContainerMenuMechanicalDaisy.ItemAndFluidSlot
+                    && ((ContainerMenuMechanicalDaisy.ItemAndFluidSlot) this.hoveredSlot).inventory.getStackInSlot(this.hoveredSlot.index).isEmpty()
+                    && !((ContainerMenuMechanicalDaisy.ItemAndFluidSlot) this.hoveredSlot).inventory.getFluidInTank(this.hoveredSlot.index).isEmpty()) {
 
-                FluidStack stack = ((ContainerMechanicalDaisy.ItemAndFluidSlot) this.hoveredSlot).inventory.getFluidInTank(this.hoveredSlot.slotNumber);
-                List<ITextComponent> list = ImmutableList.of(
-                        new TranslationTextComponent(stack.getTranslationKey()),
-                        new StringTextComponent(stack.getAmount() + " / 1000")
+                FluidStack stack = ((ContainerMenuMechanicalDaisy.ItemAndFluidSlot) this.hoveredSlot).inventory.getFluidInTank(this.hoveredSlot.index);
+                List<Component> list = ImmutableList.of(
+                        new TranslatableComponent(stack.getTranslationKey()),
+                        new TextComponent(stack.getAmount() + " / 1000")
                 );
 
-                this.func_243308_b(ms, list, mouseX, mouseY);
+                this.renderComponentTooltip(poseStack, list, x, y);
                 return;
             }
         }
-        super.renderHoveredTooltip(ms, mouseX, mouseY);
+
+        super.renderTooltip(poseStack, x, y);
     }
 }

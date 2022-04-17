@@ -1,45 +1,42 @@
 package de.melanx.botanicalmachinery.blocks.screens;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
-import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalRunicAltar;
-import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalRunicAltar;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalRunicAltar;
+import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalRunicAltar;
 import de.melanx.botanicalmachinery.core.LibResources;
-import io.github.noeppi_noeppi.libx.render.RenderHelperItem;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import vazkii.botania.common.block.ModBlocks;
 
 import javax.annotation.Nonnull;
 
-public class ScreenMechanicalRunicAltar extends ScreenBase<ContainerMechanicalRunicAltar> {
+public class ScreenMechanicalRunicAltar extends ScreenBase<ContainerMenuMechanicalRunicAltar> {
 
-    private final ItemStack livingRock;
-
-    public ScreenMechanicalRunicAltar(ContainerMechanicalRunicAltar container, PlayerInventory inv, ITextComponent titleIn) {
-        super(container, inv, titleIn);
-        this.xSize = 216;
-        this.ySize = 195;
+    public ScreenMechanicalRunicAltar(ContainerMenuMechanicalRunicAltar menu, Inventory inventory, Component title) {
+        super(menu, inventory, title);
+        this.imageWidth = 216;
+        this.imageHeight = 195;
         this.manaBar.x += 40;
         this.manaBar.y += 20;
-
-        this.livingRock = new ItemStack(ModBlocks.livingrock);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack ms, float partialTicks, int mouseX, int mouseY) {
-        this.drawDefaultGuiBackgroundLayer(ms, LibResources.MECHANICAL_RUNIC_ALTAR_GUI, 91, 65);
+    protected void renderBg(@Nonnull PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
+        this.drawDefaultGuiBackgroundLayer(poseStack, LibResources.MECHANICAL_RUNIC_ALTAR_GUI);
 
-        TileMechanicalRunicAltar tile = (TileMechanicalRunicAltar) this.container.tile;
-        if (tile.getInventory().getStackInSlot(0).isEmpty() && this.minecraft != null) {
-            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), this.livingRock, this.relX + 90, this.relY + 43, 16, false, 1, 1, 1, 0.3f);
+        BlockEntityMechanicalRunicAltar blockEntity = this.menu.getBlockEntity();
+        if (blockEntity.getInventory().getStackInSlot(0).isEmpty() && this.minecraft != null) {
+            // TODO semi transparent items preview?
+//            RenderHelperItem.renderItemGui(poseStack, this.minecraft.renderBuffers().bufferSource(), this.livingRock, this.relX + 90, this.relY + 43, 16, false, 1, 1, 1, 0.3f);
         }
-        if (tile.getProgress() > 0) {
-            float pct = Math.min(tile.getProgress() / (float) tile.getMaxProgress(), 1.0F);
-            //noinspection ConstantConditions
-            this.minecraft.getTextureManager().bindTexture(LibResources.MECHANICAL_RUNIC_ALTAR_GUI);
-            vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(ms, this.relX + 87, this.relY + 64, this.xSize, 0, Math.round(22 * pct), 16);
+
+        if (blockEntity.getProgress() > 0) {
+            float pct = Math.min(blockEntity.getProgress() / (float) blockEntity.getMaxProgress(), 1.0F);
+            RenderSystem.setShaderTexture(0, LibResources.MECHANICAL_RUNIC_ALTAR_GUI);
+            vazkii.botania.client.core.helper.RenderHelper.drawTexturedModalRect(poseStack, this.relX + 87, this.relY + 64, this.imageWidth, 0, Math.round(22 * pct), 16);
         }
     }
 }

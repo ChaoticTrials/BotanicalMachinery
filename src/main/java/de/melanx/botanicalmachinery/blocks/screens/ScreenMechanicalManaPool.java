@@ -1,15 +1,14 @@
 package de.melanx.botanicalmachinery.blocks.screens;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
-import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalManaPool;
-import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalManaPool;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalManaPool;
+import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalManaPool;
 import de.melanx.botanicalmachinery.core.LibResources;
-import io.github.noeppi_noeppi.libx.render.RenderHelperItem;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.botania.client.core.handler.ClientTickHandler;
@@ -17,22 +16,23 @@ import vazkii.botania.client.core.handler.ClientTickHandler;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class ScreenMechanicalManaPool extends ScreenBase<ContainerMechanicalManaPool> {
+public class ScreenMechanicalManaPool extends ScreenBase<ContainerMenuMechanicalManaPool> {
 
-    public ScreenMechanicalManaPool(ContainerMechanicalManaPool container, PlayerInventory inv, ITextComponent titleIn) {
-        super(container, inv, titleIn);
+    public ScreenMechanicalManaPool(ContainerMenuMechanicalManaPool menu, Inventory inventory, Component title) {
+        super(menu, inventory, title);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack ms, float partialTicks, int mouseX, int mouseY) {
-        this.drawDefaultGuiBackgroundLayer(ms, LibResources.MECHANICAL_MANA_POOL_GUI, 81, 37);
+    protected void renderBg(@Nonnull PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
+        this.drawDefaultGuiBackgroundLayer(poseStack, LibResources.MECHANICAL_MANA_POOL_GUI);
 
-        TileMechanicalManaPool tile = (TileMechanicalManaPool) this.container.tile;
-        if (tile.getInventory().getStackInSlot(0).isEmpty() && this.minecraft != null) {
-            List<Item> items = TileMechanicalManaPool.CATALYSTS;
+        BlockEntityMechanicalManaPool blockEntity = this.menu.getBlockEntity();
+        if (blockEntity.getInventory().getStackInSlot(0).isEmpty() && this.minecraft != null) {
+            List<Item> items = BlockEntityMechanicalManaPool.CATALYSTS;
             int idx = Math.abs(ClientTickHandler.ticksInGame / 20) % items.size();
-            RenderHelperItem.renderItemGui(ms, this.minecraft.getRenderTypeBuffers().getBufferSource(), new ItemStack(items.get(idx)), this.relX + 53, this.relY + 47, 16, false, 1, 1, 1, 0.3f);
+            // TODO semi transparent items preview?
+//            RenderHelperItem.renderItemGui(poseStack, this.minecraft.renderBuffers().bufferSource(), new ItemStack(items.get(idx)), this.relX + 53, this.relY + 47, 16, false, 1, 1, 1, 0.3f);
         }
     }
 }

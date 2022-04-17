@@ -1,8 +1,8 @@
 package de.melanx.botanicalmachinery.network;
 
 import io.github.noeppi_noeppi.libx.network.PacketSerializer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class ManaBatteryLockedSerializer implements PacketSerializer<ManaBatteryLockedSerializer.Message> {
 
@@ -12,14 +12,14 @@ public class ManaBatteryLockedSerializer implements PacketSerializer<ManaBattery
     }
 
     @Override
-    public void encode(Message msg, PacketBuffer buffer) {
+    public void encode(Message msg, FriendlyByteBuf buffer) {
         buffer.writeBlockPos(msg.pos);
         buffer.writeBoolean(msg.locked1);
         buffer.writeBoolean(msg.locked2);
     }
 
     @Override
-    public Message decode(PacketBuffer buffer) {
+    public Message decode(FriendlyByteBuf buffer) {
         return new Message(buffer.readBlockPos(), buffer.readBoolean(), buffer.readBoolean());
     }
 

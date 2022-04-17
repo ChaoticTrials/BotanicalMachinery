@@ -2,10 +2,12 @@ package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.ModBlocks;
+import io.github.noeppi_noeppi.libx.annotation.data.Datagen;
 import io.github.noeppi_noeppi.libx.data.provider.BlockStateProviderBase;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+@Datagen
 public class BlockStates extends BlockStateProviderBase {
 
     public BlockStates(DataGenerator gen, ExistingFileHelper helper) {

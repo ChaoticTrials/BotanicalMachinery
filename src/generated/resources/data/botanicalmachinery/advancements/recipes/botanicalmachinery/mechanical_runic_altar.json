@@ -6,12 +6,120 @@
     ]
   },
   "criteria": {
-    "has_item": {
+    "criterion0": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "botania:runic_altar"
+            "tag": "botania:elementium_ingots"
+          }
+        ]
+      }
+    },
+    "criterion1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:aura_ring_greater"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:runic_altar"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:rune_lust"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion4": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:rune_gluttony"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion5": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:rune_greed"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion6": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:rune_sloth"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion7": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:rune_wrath"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion8": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:rune_envy"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion9": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:rune_pride"
+            ]
           }
         ]
       }
@@ -25,7 +133,16 @@
   },
   "requirements": [
     [
-      "has_item",
+      "criterion0",
+      "criterion1",
+      "criterion2",
+      "criterion3",
+      "criterion4",
+      "criterion5",
+      "criterion6",
+      "criterion7",
+      "criterion8",
+      "criterion9",
       "has_the_recipe"
     ]
   ]

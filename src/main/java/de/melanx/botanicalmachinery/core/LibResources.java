@@ -1,13 +1,12 @@
 package de.melanx.botanicalmachinery.core;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class LibResources {
 
     private static final String GUI_PREFIX = "textures/gui/";
 
-    public static final ResourceLocation HUD = loc(GUI_PREFIX + "misc/hud");
     public static final ResourceLocation MANA_BAR = loc(GUI_PREFIX + "misc/mana_bar");
     public static final ResourceLocation MANA_BAR_CURRENT = loc(GUI_PREFIX + "misc/current_mana");
 

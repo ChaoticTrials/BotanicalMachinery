@@ -15,4 +15,5 @@ public class TileTags {
     public static final String MAX_PROGRESS = "maxProgress";
     public static final String WORKING_TICKS = "workingTicks";
     public static final String SLOTS_USED = "slotsUsed";
+    public static final String COOLDOWN = "cooldown";
 }

@@ -1,82 +1,99 @@
 package de.melanx.botanicalmachinery.blocks;
 
-import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalDaisy;
-import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalDaisy;
+import de.melanx.botanicalmachinery.ModBlocks;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalDaisy;
+import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalDaisy;
+import de.melanx.botanicalmachinery.blocks.tesr.MechanicalDaisyRenderer;
+import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalDaisy;
+import io.github.noeppi_noeppi.libx.base.tile.MenuBlockBE;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.libx.mod.registration.BlockGUI;
 import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.IItemRenderProperties;
 
 import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
-public class BlockMechanicalDaisy extends BlockGUI<TileMechanicalDaisy, ContainerMechanicalDaisy> {
+public class BlockMechanicalDaisy extends MenuBlockBE<BlockEntityMechanicalDaisy, ContainerMenuMechanicalDaisy> {
 
-    private static final VoxelShape COLLISION_SHAPE = VoxelShapes.combine(
-            makeCuboidShape(0, 0, 0, 16, 2, 16),
-            makeCuboidShape(5, 2, 5, 11, 3, 11),
-            IBooleanFunction.OR
+    private static final VoxelShape COLLISION_SHAPE = Shapes.joinUnoptimized(
+            box(0, 0, 0, 16, 2, 16),
+            box(5, 2, 5, 11, 3, 11),
+            BooleanOp.OR
     );
 
-    private static final VoxelShape SHAPE = makeCuboidShape(0, 0, 0, 16, 11.4, 16);
+    private static final VoxelShape SHAPE = box(0, 0, 0, 16, 11.4, 16);
 
-    public BlockMechanicalDaisy(ModX mod, Class<TileMechanicalDaisy> teClass, ContainerType<ContainerMechanicalDaisy> container) {
-        super(mod, teClass, container, Properties.create(Material.ROCK).hardnessAndResistance(2, 10).variableOpacity(),
-                new Item.Properties().setISTER(() -> ItemStackRenderer::get));
+    public BlockMechanicalDaisy(ModX mod, Class<BlockEntityMechanicalDaisy> teClass, MenuType<ContainerMenuMechanicalDaisy> menu) {
+        super(mod, teClass, menu, Properties.of(Material.STONE).strength(2, 10).dynamicShape(),
+                new Item.Properties());
     }
 
     @Override
-    public void registerClient(ResourceLocation id) {
-        RenderTypeLookup.setRenderLayer(this, RenderType.getCutout());
-        ItemStackRenderer.addRenderTile(this.getTileType(), true);
+    public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
+        ItemBlockRenderTypes.setRenderLayer(this, RenderType.cutout());
+        ItemStackRenderer.addRenderBlock(this.getBlockEntityType(), true);
+        MenuScreens.register(ModBlocks.mechanicalDaisy.menu, ScreenMechanicalDaisy::new);
+        BlockEntityRenderers.register(this.getBlockEntityType(), context -> new MechanicalDaisyRenderer());
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initializeItemClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
+        consumer.accept(ItemStackRenderer.createProperties());
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public int getOpacity(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos) {
+    public int getLightBlock(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos) {
         return 0;
     }
 
     @Override
-    public boolean propagatesSkylightDown(@Nonnull BlockState state, @Nonnull IBlockReader reader, @Nonnull BlockPos pos) {
+    public boolean propagatesSkylightDown(@Nonnull BlockState state, @Nonnull BlockGetter reader, @Nonnull BlockPos pos) {
         return true;
     }
 
     @SuppressWarnings("deprecation")
     @Nonnull
     @Override
-    public VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
+    public VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
         return COLLISION_SHAPE;
     }
 
     @SuppressWarnings("deprecation")
     @Nonnull
     @Override
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
+    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
         return SHAPE;
     }
 
     @SuppressWarnings("deprecation")
     @Nonnull
     @Override
-    public VoxelShape getRenderShape(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos) {
+    public VoxelShape getOcclusionShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos) {
         return SHAPE;
     }
 
     @Override
-    protected boolean shouldDropInventory(World world, BlockPos pos, BlockState state) {
+    protected boolean shouldDropInventory(Level level, BlockPos pos, BlockState state) {
         return false;
     }
 }

@@ -1,10 +1,11 @@
 package de.melanx.botanicalmachinery.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import de.melanx.botanicalmachinery.core.LibResources;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TranslatableComponent;
 
 /*
  * This class is inspired by Cyclics EnergyBar
@@ -30,14 +31,14 @@ public class ManaBar {
                 && this.guiTop + this.y < mouseY && mouseY < this.guiTop + this.y + this.height;
     }
 
-    public void draw(MatrixStack ms, float mana) {
+    public void draw(PoseStack ms, float mana) {
         int relX;
         int relY;
-        this.parent.getMinecraft().getTextureManager().bindTexture(LibResources.MANA_BAR);
+        RenderSystem.setShaderTexture(0, LibResources.MANA_BAR);
         relX = this.guiLeft + this.x;
         relY = this.guiTop + this.y;
         Screen.blit(ms, relX, relY, 0, 0, this.width, this.height, this.width, this.height);
-        this.parent.getMinecraft().getTextureManager().bindTexture(LibResources.MANA_BAR_CURRENT);
+        RenderSystem.setShaderTexture(0, LibResources.MANA_BAR_CURRENT);
         relX += 1;
         relY += 1;
         float pct = Math.min(mana / this.capacity, 1.0F);
@@ -45,9 +46,9 @@ public class ManaBar {
         Screen.blit(ms, relX, relY + (this.height - 2 - relHeight), 0, 0, this.width - 2, relHeight, this.width - 2, this.height - 2);
     }
 
-    public void renderHoveredToolTip(MatrixStack ms, int mouseX, int mouseY, int mana) {
+    public void renderHoveredToolTip(PoseStack ms, int mouseX, int mouseY, int mana) {
         if (this.isMouseOver(mouseX, mouseY) && LibXClientConfig.numericalMana) {
-            TranslationTextComponent text = new TranslationTextComponent("%s / %s Mana", mana, this.capacity);
+            TranslatableComponent text = new TranslatableComponent("%s / %s Mana", mana, this.capacity);
             this.parent.renderTooltip(ms, text, mouseX, mouseY);
         }
     }

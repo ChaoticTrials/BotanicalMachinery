@@ -1,6 +1,6 @@
 package de.melanx.botanicalmachinery.config;
 
-import io.github.noeppi_noeppi.libx.annotation.RegisterConfig;
+import io.github.noeppi_noeppi.libx.annotation.config.RegisterConfig;
 import io.github.noeppi_noeppi.libx.config.Config;
 import io.github.noeppi_noeppi.libx.config.Group;
 import io.github.noeppi_noeppi.libx.config.validator.IntRange;

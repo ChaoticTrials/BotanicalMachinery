@@ -1,13 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
-  "group": "botanicalmachinery:mechanical_daisy",
   "pattern": [
     " d ",
     "eae"
   ],
   "key": {
     "e": {
-      "tag": "forge:storage_blocks/elementium"
+      "tag": "botania:elementium_blocks"
     },
     "a": {
       "item": "botania:aura_ring_greater"

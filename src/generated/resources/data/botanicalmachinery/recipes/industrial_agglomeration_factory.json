@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "group": "botanicalmachinery:industrial_agglomeration_factory",
   "pattern": [
     "eye",
     "xaz",
@@ -8,7 +7,7 @@
   ],
   "key": {
     "e": {
-      "tag": "forge:ingots/elementium"
+      "tag": "botania:elementium_ingots"
     },
     "a": {
       "item": "botania:aura_ring_greater"
@@ -17,10 +16,10 @@
       "item": "botania:terra_plate"
     },
     "x": {
-      "tag": "forge:gems/mana_diamond"
+      "tag": "botania:mana_diamond_gems"
     },
     "y": {
-      "tag": "forge:ingots/manasteel"
+      "tag": "botania:manasteel_ingots"
     },
     "z": {
       "item": "botania:mana_pearl"

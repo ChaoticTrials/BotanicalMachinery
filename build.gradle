@@ -1,189 +1,24 @@
-import net.minecraftforge.gradle.common.util.ModConfig
-import net.minecraftforge.gradle.common.util.RunConfig
-import org.apache.maven.artifact.versioning.ComparableVersion
-
-import java.nio.file.Files
-import java.nio.file.Paths
-
 buildscript {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = 'https://plugins.gradle.org/m2/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.9', changing: true
-        classpath group: 'org.apache.maven', name: 'maven-artifact', version: '3.6.3+'
-        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
-    }
-}
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'com.matthewprenger.cursegradle'
-apply plugin: 'maven-publish'
-
-apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/generic/secrets.gradle'
-apply from: 'https://raw.githubusercontent.com/MinecraftModDevelopment/Gradle-Collection/master/generic/markdown-git-changelog.gradle'
-
-loadSecrets()
-group = "de.melanx.${modid}"
-archivesBaseName = "${modid}-${mc_version}"
-version = getVersion(group, archivesBaseName, mod_version)
-
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
-
-minecraft {
-    mappings("snapshot", mappings_version)
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    createRunConfig("client")
-    createRunConfig("server")
-    createRunConfig("data", { RunConfig run ->
-        run.args "--mod", modid, "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources"), "--existing", file("libs/resources")
-    })
+    apply from: 'https://noeppi-noeppi.github.io/ModUtils/v3/buildscript.gradle', to: buildscript
 }
 
-def createRunConfig(String name, Closure extra = {}) {
-    minecraft.runs.create(name) { RunConfig run ->
-        run.workingDirectory project.file("run_" + name)
-        run.property "forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP"
-        run.jvmArg "-Dmixin.env.disableRefMap=true"
-        run.property "forge.logging.console.level", "info"
-        run.mods.create(modid) { ModConfig mod ->
-            source sourceSets.main
-        }
-    }.with(extra)
-}
-
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-}
-
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : modid,
-                "Specification-Vendor"    : "MelanX",
-                "Specification-Version"   : "1",
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : "${version}",
-                "Implementation-Vendor"   : "MelanX",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
-jar.finalizedBy('reobfJar')
-
-artifacts {
-    archives jar
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId = project.group
-            artifactId = project.archivesBaseName
-            version = project.version
-            artifact jar
-        }
-    }
-
-    repositories {
-        maven {
-            url "/var/www/maven"
-        }
-    }
-}
+apply from: 'https://noeppi-noeppi.github.io/ModUtils/v3/mod.gradle'
 
 repositories {
-    maven {
-        name = "JEI"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        name = "MelanX Maven"
-        url = "https://maven.melanx.de/"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
-    }
-    maven {
-        name = "botania"
-        url = "https://maven.blamejared.com/"
-    }
-    maven {
-        name = "curios"
-        url = "https://maven.theillusivec4.top/"
-    }
+    maven { url 'https://dvs1.progwml6.com/files/maven/' }
+    maven { url 'https://maven.melanx.de/' }
+    maven { url 'https://maven.blamejared.com/' }
+    maven { url 'https://maven.theillusivec4.top/' }
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    annotationProcessor fg.deobf('io.github.noeppi_noeppi.mods:LibX:1.18.2-3.2.15')
+    
+    implementation fg.deobf('io.github.noeppi_noeppi.mods:LibX:1.18.2-3.2.15')
+    implementation fg.deobf('vazkii.botania:Botania:1.18.2-431')
+    implementation fg.deobf('vazkii.patchouli:Patchouli:1.18.2-67')
+    implementation fg.deobf('top.theillusivec4.curios:curios-forge:1.18.2-5.0.6.3')
 
-    annotationProcessor fg.deobf("io.github.noeppi_noeppi.mods:LibX:1.16.3-${libx_version}")
-
-    compile fg.deobf("io.github.noeppi_noeppi.mods:LibX:1.16.3-${libx_version}")
-    compile fg.deobf("vazkii.botania:Botania:${botania_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}")
-    compile fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
-}
-
-private static String getVersion(String group, String artifact, String baseVersion) {
-    java.nio.file.Path mavenPath = Paths.get('/var/www/maven').resolve(group.replace('.', '/')).resolve(artifact)
-    if (!Files.isDirectory(mavenPath)) {
-        return "${baseVersion}.0"
-    }
-    return "${baseVersion}." + Files.walk(mavenPath)
-            .filter { path -> Files.isRegularFile(path) && path.getFileName().toString().endsWith('.pom') }
-            .map { path ->
-                String fileName = path.getFileName().toString()
-                fileName.substring(fileName.indexOf('-', artifact.size()) + 1, fileName.length() - 4)
-            }.filter { version -> version.startsWith(baseVersion) }
-            .max { s1, s2 -> new ComparableVersion(s1).compareTo(new ComparableVersion(s2)) }
-            .map { ver -> ver.substring(ver.findLastIndexOf { str -> !"0123456789".contains(str) } + 1) }
-            .map { ver -> ver.isEmpty() ? "-1" : ver }
-            .map { ver -> (ver.toInteger() + 1).toString() }
-            .orElse("0")
-}
-
-curseforge {
-    apiKey = findProperty('curse_auth') ?: 0
-    def versions = "${curse_versions}".split(', ')
-    project {
-        if (project.hasProperty('curse_project')) {
-            id = "${curse_project}"
-            releaseType = 'release'
-            changelog = getGitChangelog()
-            println(changelog)
-            changelogType = 'markdown'
-
-            versions.each {
-                addGameVersion "${it}"
-            }
-
-            if (project.hasProperty('curse_requirements') || project.hasProperty('curse_optionals')) {
-                mainArtifact(jar) {
-                    relations {
-                        if (project.hasProperty('curse_requirements')) {
-                            def requirements = "${curse_requirements}".split(', ')
-                            requirements.each {
-                                requiredDependency "${it}"
-                            }
-                        }
-
-                        if (project.hasProperty('curse_optionals')) {
-                            def optionals = "${curse_optionals}".split(', ')
-                            optionals.each {
-                                optionalDependency "${it}"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    compileOnly fg.deobf('mezz.jei:jei-1.18.2:9.7.0.180:api')
+    runtimeOnly fg.deobf('mezz.jei:jei-1.18.2:9.7.0.180')
 }

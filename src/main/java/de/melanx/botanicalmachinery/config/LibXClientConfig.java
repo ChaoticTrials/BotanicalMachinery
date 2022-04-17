@@ -1,6 +1,6 @@
 package de.melanx.botanicalmachinery.config;
 
-import io.github.noeppi_noeppi.libx.annotation.RegisterConfig;
+import io.github.noeppi_noeppi.libx.annotation.config.RegisterConfig;
 import io.github.noeppi_noeppi.libx.config.Config;
 import io.github.noeppi_noeppi.libx.config.Group;
 
@@ -12,6 +12,7 @@ public class LibXClientConfig {
 
     @Group("If you turn this off, the special rendering is disabled for all machines and ignores the other config options")
     public static class AdvancedRendering {
+        
         @Config
         public static boolean all = true;
 

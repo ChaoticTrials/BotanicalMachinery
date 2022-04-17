@@ -1,14 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
-  "group": "botanicalmachinery:mechanical_apothecary",
   "pattern": [
-    "eye",
-    "xaz",
+    "exe",
+    "xax",
     "ese"
   ],
   "key": {
     "e": {
-      "tag": "forge:ingots/elementium"
+      "tag": "botania:elementium_ingots"
     },
     "a": {
       "item": "botania:aura_ring_greater"
@@ -17,12 +16,6 @@
       "item": "botania:apothecary_default"
     },
     "x": {
-      "tag": "botania:petals"
-    },
-    "y": {
-      "tag": "botania:petals"
-    },
-    "z": {
       "tag": "botania:petals"
     }
   },

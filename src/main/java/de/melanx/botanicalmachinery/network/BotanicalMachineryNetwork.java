@@ -1,9 +1,9 @@
 package de.melanx.botanicalmachinery.network;
 
-import de.melanx.botanicalmachinery.blocks.tiles.TileManaBattery;
+import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityManaBattery;
 import io.github.noeppi_noeppi.libx.mod.ModX;
 import io.github.noeppi_noeppi.libx.network.NetworkX;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.network.NetworkDirection;
 
 public class BotanicalMachineryNetwork extends NetworkX {
 
@@ -12,8 +12,8 @@ public class BotanicalMachineryNetwork extends NetworkX {
     }
 
     @Override
-    protected String getProtocolVersion() {
-        return "2";
+    protected Protocol getProtocol() {
+        return Protocol.of("3");
     }
 
     @Override
@@ -21,9 +21,9 @@ public class BotanicalMachineryNetwork extends NetworkX {
         this.register(new ManaBatteryLockedSerializer(), () -> ManaBatteryLockedHandler::handle, NetworkDirection.PLAY_TO_SERVER);
     }
 
-    public void updateLockedState(TileManaBattery tile) {
-        if (tile.getWorld() != null && tile.getWorld().isRemote) {
-            this.instance.sendToServer(new ManaBatteryLockedSerializer.Message(tile.getPos(), tile.isSlot1Locked(), tile.isSlot2Locked()));
+    public void updateLockedState(BlockEntityManaBattery tile) {
+        if (tile.getLevel() != null && tile.getLevel().isClientSide) {
+            this.channel.sendToServer(new ManaBatteryLockedSerializer.Message(tile.getBlockPos(), tile.isSlot1Locked(), tile.isSlot2Locked()));
         }
     }
 }

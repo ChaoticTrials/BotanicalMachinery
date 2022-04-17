@@ -1,43 +1,57 @@
 package de.melanx.botanicalmachinery.blocks;
 
+import de.melanx.botanicalmachinery.ModBlocks;
 import de.melanx.botanicalmachinery.blocks.base.BotanicalBlock;
-import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalBrewery;
-import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalBrewery;
-import io.github.noeppi_noeppi.libx.block.DirectionShape;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalBrewery;
+import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalBrewery;
+import de.melanx.botanicalmachinery.blocks.tesr.MechanicalBreweryRenderer;
+import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalBrewery;
+import io.github.noeppi_noeppi.libx.block.RotationShape;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
-public class BlockMechanicalBrewery extends BotanicalBlock<TileMechanicalBrewery, ContainerMechanicalBrewery> {
+public class BlockMechanicalBrewery extends BotanicalBlock<BlockEntityMechanicalBrewery, ContainerMenuMechanicalBrewery> {
 
-    public static final DirectionShape SHAPE = new DirectionShape(VoxelShapes.or(
+    public static final RotationShape SHAPE = new RotationShape(Shapes.or(
             BotanicalBlock.FRAME_SHAPE,
-            makeCuboidShape(5, 1, 5, 6, 2, 6),
-            makeCuboidShape(5, 1, 10, 6, 2, 11),
-            makeCuboidShape(10, 1, 5, 11, 2, 6),
-            makeCuboidShape(10, 1, 10, 11, 2, 11),
-            makeCuboidShape(3, 2, 3, 13, 3, 13),
-            makeCuboidShape(3, 3, 12, 13, 8, 13),
-            makeCuboidShape(3, 3, 3, 13, 8, 4),
-            makeCuboidShape(12, 3, 4, 13, 8, 12),
-            makeCuboidShape(3, 3, 4, 4, 8, 12)
+            box(5, 1, 5, 6, 2, 6),
+            box(5, 1, 10, 6, 2, 11),
+            box(10, 1, 5, 11, 2, 6),
+            box(10, 1, 10, 11, 2, 11),
+            box(3, 2, 3, 13, 3, 13),
+            box(3, 3, 12, 13, 8, 13),
+            box(3, 3, 3, 13, 8, 4),
+            box(12, 3, 4, 13, 8, 12),
+            box(3, 3, 4, 4, 8, 12)
     ));
 
-    public BlockMechanicalBrewery(ModX mod, Class<TileMechanicalBrewery> teClass, ContainerType<ContainerMechanicalBrewery> container) {
-        super(mod, teClass, container, false, true);
+    public BlockMechanicalBrewery(ModX mod, Class<BlockEntityMechanicalBrewery> teClass, MenuType<ContainerMenuMechanicalBrewery> menu) {
+        super(mod, teClass, menu, false, true);
+    }
+
+    @Override
+    public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
+        super.registerClient(id, defer);
+        MenuScreens.register(ModBlocks.mechanicalBrewery.menu, ScreenMechanicalBrewery::new);
+        BlockEntityRenderers.register(this.getBlockEntityType(), context -> new MechanicalBreweryRenderer());
     }
 
     @Nonnull
     @Override
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
-        return SHAPE.getShape(state.get(BlockStateProperties.HORIZONTAL_FACING));
+    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
+        return SHAPE.getShape(state.getValue(BlockStateProperties.HORIZONTAL_FACING));
     }
 }

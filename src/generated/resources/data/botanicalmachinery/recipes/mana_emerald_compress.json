@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "aaa",
+    "aaa",
+    "aaa"
+  ],
+  "key": {
+    "a": {
+      "item": "botanicalmachinery:mana_emerald"
+    }
+  },
+  "result": {
+    "item": "botanicalmachinery:mana_emerald_block"
+  }
+}

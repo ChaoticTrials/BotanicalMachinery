@@ -1,37 +1,51 @@
 package de.melanx.botanicalmachinery.blocks;
 
+import de.melanx.botanicalmachinery.ModBlocks;
 import de.melanx.botanicalmachinery.blocks.base.BotanicalBlock;
-import de.melanx.botanicalmachinery.blocks.containers.ContainerMechanicalRunicAltar;
-import de.melanx.botanicalmachinery.blocks.tiles.TileMechanicalRunicAltar;
-import io.github.noeppi_noeppi.libx.block.DirectionShape;
+import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalRunicAltar;
+import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalRunicAltar;
+import de.melanx.botanicalmachinery.blocks.tesr.MechanicalRunicAltarRenderer;
+import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalRunicAltar;
+import io.github.noeppi_noeppi.libx.block.RotationShape;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
-public class BlockMechanicalRunicAltar extends BotanicalBlock<TileMechanicalRunicAltar, ContainerMechanicalRunicAltar> {
+public class BlockMechanicalRunicAltar extends BotanicalBlock<BlockEntityMechanicalRunicAltar, ContainerMenuMechanicalRunicAltar> {
 
-    public static final DirectionShape SHAPE = new DirectionShape(VoxelShapes.or(
+    public static final RotationShape SHAPE = new RotationShape(Shapes.or(
             BotanicalBlock.FRAME_SHAPE,
-            makeCuboidShape(2, 5, 2, 14, 9, 14),
-            makeCuboidShape(6, 3, 6, 10, 5, 10),
-            makeCuboidShape(4, 1, 4, 12, 3, 12)
+            box(2, 5, 2, 14, 9, 14),
+            box(6, 3, 6, 10, 5, 10),
+            box(4, 1, 4, 12, 3, 12)
     ));
 
-    public BlockMechanicalRunicAltar(ModX mod, Class<TileMechanicalRunicAltar> teClass, ContainerType<ContainerMechanicalRunicAltar> container) {
-        super(mod, teClass, container, false, true);
+    public BlockMechanicalRunicAltar(ModX mod, Class<BlockEntityMechanicalRunicAltar> teClass, MenuType<ContainerMenuMechanicalRunicAltar> menu) {
+        super(mod, teClass, menu, false, true);
+    }
+
+    @Override
+    public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
+        super.registerClient(id, defer);
+        MenuScreens.register(ModBlocks.mechanicalRunicAltar.menu, ScreenMechanicalRunicAltar::new);
+        BlockEntityRenderers.register(this.getBlockEntityType(), context -> new MechanicalRunicAltarRenderer());
     }
 
     @Nonnull
     @Override
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
-        return SHAPE.getShape(state.get(BlockStateProperties.HORIZONTAL_FACING));
+    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
+        return SHAPE.getShape(state.getValue(BlockStateProperties.HORIZONTAL_FACING));
     }
 }
