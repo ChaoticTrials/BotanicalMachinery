@@ -19,6 +19,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -35,6 +37,7 @@ public class BlockIndustrialAgglomerationFactory extends BotanicalBlock<BlockEnt
         super(mod, teClass, menu, false, true);
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
         super.registerClient(id, defer);

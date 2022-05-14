@@ -46,6 +46,7 @@ public class BlockMechanicalDaisy extends MenuBlockBE<BlockEntityMechanicalDaisy
                 new Item.Properties());
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
         ItemBlockRenderTypes.setRenderLayer(this, RenderType.cutout());

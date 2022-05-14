@@ -63,6 +63,7 @@ public class BlockMechanicalApothecary extends MenuBlockBE<BlockEntityMechanical
         super(mod, teClass, menu, Properties.of(Material.STONE).strength(2, 10).dynamicShape(), new Item.Properties());
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
         ItemStackRenderer.addRenderBlock(this.getBlockEntityType(), true);

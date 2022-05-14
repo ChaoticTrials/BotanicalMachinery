@@ -9,6 +9,8 @@ import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.Consumer;
 
@@ -21,6 +23,7 @@ public class BlockManaBattery extends BotanicalBlock<BlockEntityManaBattery, Con
         this.variant = variant;
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
         super.registerClient(id, defer);
