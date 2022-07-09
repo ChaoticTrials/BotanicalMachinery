@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.recipe.ICustomApothecaryColor;
 import vazkii.botania.api.recipe.IPetalRecipe;
 import vazkii.botania.client.fx.SparkleParticleData;
@@ -33,8 +34,8 @@ import vazkii.botania.common.handler.ModSounds;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class BlockEntityMechanicalApothecary extends WorkingTile<IPetalRecipe> implements TickableBlock {
 
@@ -106,7 +107,12 @@ public class BlockEntityMechanicalApothecary extends WorkingTile<IPetalRecipe> i
             }
         }
     }
-    
+
+    @Override
+    protected Predicate<Integer> getExtracts(Supplier<IItemHandlerModifiable> inventory) {
+        return slot -> slot >= 17 && slot <= 20;
+    }
+
     @Nonnull
     public BaseItemStackHandler getInventory() {
         return this.inventory;

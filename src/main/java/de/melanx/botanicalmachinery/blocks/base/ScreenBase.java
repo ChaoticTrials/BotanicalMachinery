@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
+import java.awt.Color;
 
 public abstract class ScreenBase<X extends BlockEntityMenu<?>> extends AbstractContainerScreen<X> {
 

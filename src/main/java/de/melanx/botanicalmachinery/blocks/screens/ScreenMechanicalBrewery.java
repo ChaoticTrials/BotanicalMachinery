@@ -9,12 +9,9 @@ import de.melanx.botanicalmachinery.core.LibResources;
 import de.melanx.botanicalmachinery.helper.GhostItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import vazkii.botania.client.core.handler.ClientTickHandler;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 public class ScreenMechanicalBrewery extends ScreenBase<ContainerMenuMechanicalBrewery> {
 

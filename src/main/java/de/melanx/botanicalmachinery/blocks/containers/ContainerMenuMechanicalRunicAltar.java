@@ -4,7 +4,6 @@ import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalRunicAltar;
 import de.melanx.botanicalmachinery.helper.UnrestrictedOutputSlot;
 import io.github.noeppi_noeppi.libx.menu.BlockEntityMenu;
-import io.github.noeppi_noeppi.libx.menu.slot.OutputSlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

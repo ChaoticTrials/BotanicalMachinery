@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.recipe.IManaInfusionRecipe;
 import vazkii.botania.client.fx.WispParticleData;
 import vazkii.botania.common.block.ModBlocks;
@@ -23,6 +24,8 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class BlockEntityMechanicalManaPool extends RecipeTile<IManaInfusionRecipe> {
 
@@ -70,6 +73,11 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<IManaInfusionRecip
                 this.level.addParticle(data, this.worldPosition.getX() + 0.3D + (this.level.random.nextDouble() * 0.4), this.worldPosition.getY() + 0.5D + (this.level.random.nextDouble() * 0.25D), this.worldPosition.getZ() + 0.3D + (this.level.random.nextDouble() * 0.4), 0, this.level.random.nextFloat() / 25, 0);
             }
         }
+    }
+
+    @Override
+    protected Predicate<Integer> getExtracts(Supplier<IItemHandlerModifiable> inventory) {
+        return slot -> slot == 2;
     }
 
     @Nonnull

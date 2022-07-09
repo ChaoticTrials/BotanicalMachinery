@@ -4,9 +4,7 @@ import de.melanx.botanicalmachinery.blocks.BlockManaBattery;
 import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
-import io.github.noeppi_noeppi.libx.capability.ItemCapabilities;
 import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
-import io.github.noeppi_noeppi.libx.inventory.IAdvancedItemHandlerModifiable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.mana.IManaItem;
@@ -23,10 +20,11 @@ import vazkii.botania.common.item.ModItems;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class BlockEntityManaBattery extends BotanicalTile {
-    
+
     private static final int MANA_TRANSFER_RATE = 5000;
     private boolean slot1Locked;
     private boolean slot2Locked;
@@ -50,7 +48,7 @@ public class BlockEntityManaBattery extends BotanicalTile {
     public BaseItemStackHandler getInventory() {
         return this.inventory;
     }
-    
+
     @Override
     public int getCurrentMana() {
         return ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.CREATIVE ? this.getManaCap() / 2 : super.getCurrentMana();
@@ -144,8 +142,8 @@ public class BlockEntityManaBattery extends BotanicalTile {
     }
 
     @Override
-    protected LazyOptional<IAdvancedItemHandlerModifiable> createCap(Supplier<IItemHandlerModifiable> inventory) {
-        return ItemCapabilities.create(inventory, slot -> {
+    protected Predicate<Integer> getExtracts(Supplier<IItemHandlerModifiable> inventory) {
+        return slot -> {
             ItemStack minus = inventory.get().getStackInSlot(0);
             ItemStack plus = inventory.get().getStackInSlot(1);
             if (slot == 0) {
@@ -158,7 +156,7 @@ public class BlockEntityManaBattery extends BotanicalTile {
                 return manaItem.get().getMana() <= 0;
             }
             return true;
-        }, null);
+        };
     }
 
     @Override

@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.recipe.IRuneAltarRecipe;
 import vazkii.botania.client.fx.SparkleParticleData;
 import vazkii.botania.common.block.ModBlocks;
@@ -23,6 +24,8 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class BlockEntityMechanicalRunicAltar extends WorkingTile<IRuneAltarRecipe> {
 
@@ -46,12 +49,17 @@ public class BlockEntityMechanicalRunicAltar extends WorkingTile<IRuneAltarRecip
                 .build();
     }
 
+    @Override
+    protected Predicate<Integer> getExtracts(Supplier<IItemHandlerModifiable> inventory) {
+        return slot -> slot >= 17 && slot <= 33;
+    }
+
     @Nonnull
     @Override
     public BaseItemStackHandler getInventory() {
         return this.inventory;
     }
-    
+
     @Override
     public void tick() {
         if (this.level != null && !this.level.isClientSide) {

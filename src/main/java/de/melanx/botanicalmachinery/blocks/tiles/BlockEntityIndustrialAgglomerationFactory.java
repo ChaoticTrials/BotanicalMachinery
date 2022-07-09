@@ -8,11 +8,14 @@ import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.recipe.ITerraPlateRecipe;
 import vazkii.botania.client.fx.WispParticleData;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class BlockEntityIndustrialAgglomerationFactory extends WorkingTile<ITerraPlateRecipe> {
 
@@ -55,6 +58,11 @@ public class BlockEntityIndustrialAgglomerationFactory extends WorkingTile<ITerr
                 }
             }
         }
+    }
+
+    @Override
+    protected Predicate<Integer> getExtracts(Supplier<IItemHandlerModifiable> inventory) {
+        return slot -> slot == 3;
     }
 
     @Nonnull

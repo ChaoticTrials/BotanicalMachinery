@@ -13,11 +13,14 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.recipe.IElvenTradeRecipe;
 import vazkii.botania.common.crafting.ModRecipeTypes;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class BlockEntityAlfheimMarket extends WorkingTile<IElvenTradeRecipe> {
 
@@ -65,6 +68,11 @@ public class BlockEntityAlfheimMarket extends WorkingTile<IElvenTradeRecipe> {
                 }
             }
         }
+    }
+
+    @Override
+    protected Predicate<Integer> getExtracts(Supplier<IItemHandlerModifiable> inventory) {
+        return slot -> slot == 4;
     }
 
     @Nonnull

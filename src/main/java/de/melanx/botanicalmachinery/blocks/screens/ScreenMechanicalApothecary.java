@@ -6,7 +6,6 @@ import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalApo
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalApothecary;
 import de.melanx.botanicalmachinery.core.LibResources;
 import de.melanx.botanicalmachinery.helper.GhostItemRenderer;
-import io.github.noeppi_noeppi.libx.render.ClientTickHandler;
 import io.github.noeppi_noeppi.libx.render.RenderHelperFluid;
 import io.github.noeppi_noeppi.libx.util.TagAccess;
 import net.minecraft.client.Minecraft;
@@ -15,7 +14,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.Tags;

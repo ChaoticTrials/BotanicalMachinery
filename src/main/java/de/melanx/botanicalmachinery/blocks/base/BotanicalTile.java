@@ -34,16 +34,15 @@ import vazkii.botania.api.block.IWandHUD;
 import vazkii.botania.api.item.ISparkEntity;
 import vazkii.botania.api.mana.IKeyLocked;
 import vazkii.botania.api.mana.IManaPool;
-import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.mana.spark.IManaSpark;
 import vazkii.botania.api.mana.spark.ISparkAttachable;
 import vazkii.botania.client.gui.HUDHandler;
 import vazkii.botania.common.block.tile.mana.IThrottledPacket;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @OnlyIn(value = Dist.CLIENT, _interface = IWandHUD.class)
@@ -67,7 +66,13 @@ public abstract class BotanicalTile extends BlockEntityBase implements IManaPool
      * lambda.
      */
     protected LazyOptional<IAdvancedItemHandlerModifiable> createCap(Supplier<IItemHandlerModifiable> inventory) {
-        return ItemCapabilities.create(inventory);
+        return ItemCapabilities.create(inventory, this.getExtracts(inventory), this.getInserts(inventory));
+    }
+
+    protected abstract Predicate<Integer> getExtracts(Supplier<IItemHandlerModifiable> inventory);
+
+    protected BiPredicate<Integer, ItemStack> getInserts(Supplier<IItemHandlerModifiable> inventory) {
+        return null;
     }
 
     @Nonnull

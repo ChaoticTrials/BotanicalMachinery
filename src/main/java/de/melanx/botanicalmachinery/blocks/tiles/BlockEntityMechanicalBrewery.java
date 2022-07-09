@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import vazkii.botania.api.brew.IBrewItem;
 import vazkii.botania.api.recipe.IBrewRecipe;
 import vazkii.botania.client.fx.WispParticleData;
@@ -21,6 +22,8 @@ import vazkii.botania.common.item.ModItems;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class BlockEntityMechanicalBrewery extends WorkingTile<IBrewRecipe> {
 
@@ -80,6 +83,11 @@ public class BlockEntityMechanicalBrewery extends WorkingTile<IBrewRecipe> {
                 }
             }
         }
+    }
+
+    @Override
+    protected Predicate<Integer> getExtracts(Supplier<IItemHandlerModifiable> inventory) {
+        return slot -> slot == 7;
     }
 
     @Nonnull

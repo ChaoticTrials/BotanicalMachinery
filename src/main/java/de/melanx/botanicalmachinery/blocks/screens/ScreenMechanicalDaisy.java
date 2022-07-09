@@ -1,7 +1,6 @@
 package de.melanx.botanicalmachinery.blocks.screens;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalDaisy;
@@ -17,7 +16,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.fluids.FluidStack;
-import vazkii.patchouli.client.RenderHelper;
 
 import javax.annotation.Nonnull;
 import java.awt.Color;
