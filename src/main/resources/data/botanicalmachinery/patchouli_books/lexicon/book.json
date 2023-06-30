@@ -1,4 +1,5 @@
 {
+  "name": "item.botania.lexicon",
   "extend": "botania:lexicon",
   "macros": {
     "$(item)": "$(1)",

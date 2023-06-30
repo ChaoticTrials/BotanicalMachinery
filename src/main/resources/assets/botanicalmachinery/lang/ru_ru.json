@@ -25,7 +25,7 @@
   "screen.botanicalmachinery.mechanical_runic_altar": "Механический рунический алтарь",
 
   "lexicon.botanicalmachinery.title": "Ботанические механизмы",
-  "lexicon.botanicalmachinery.description": "Сделайте свои фермы более компактными. Это глава для Botanical Machinery, автор мода MelanX.",
+  "lexicon.botanicalmachinery.description": "Сделайте свои фермы более компактными. Это глава для Botanical Machinery, автор мода $(item)MelanX$().",
   "lexicon.botanicalmachinery.introduction": "Новое открытие!",
   "lexicon.botanicalmachinery.introduction.page1": "Говорят, что $(d)элементиум$(0) обладает определенными свойствами, многие из которых еще предстоит раскрыть. Используя $(l:botania:baubles/aura_ring) кольцо ауры$(), можно поместить $(d)элементиум$(0) в постоянный поток маны. Таким образом, повышается эффективность машин ботаника, вводя их в мир современных технологий. Однако даже эльфы не до конца осознают масштабы происходящего, и неизвестно, безопасно ли возиться с этими машинами таким образом.",
 
