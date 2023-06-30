@@ -1,7 +1,6 @@
 package de.melanx.botanicalmachinery.blocks.containers;
 
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalDaisy;
-import io.github.noeppi_noeppi.libx.menu.BlockEntityMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -11,11 +10,12 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.SlotItemHandler;
+import org.moddingx.libx.menu.BlockEntityMenu;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,7 +47,7 @@ public class ContainerMenuMechanicalDaisy extends BlockEntityMenu<BlockEntityMec
 
             //noinspection ConstantConditions
             @Nullable
-            IFluidHandlerItem fluidCap = inMouse.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
+            IFluidHandlerItem fluidCap = inMouse.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
 
             //noinspection ConstantConditions
             if (inMouse.getItem() instanceof BlockItem || fluidCap == null || fluidCap.getTanks() != 1) {
@@ -103,7 +103,7 @@ public class ContainerMenuMechanicalDaisy extends BlockEntityMenu<BlockEntityMec
                 slot.onQuickCraft(stack, itemstack);
             } else {
                 //noinspection ConstantConditions
-                IFluidHandlerItem fluidCap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
+                IFluidHandlerItem fluidCap = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
                 //noinspection ConstantConditions
                 if (fluidCap != null && fluidCap.getTanks() == 1) {
                     this.getSlot(index).set(this.tryToDepositFluid(fluidCap));

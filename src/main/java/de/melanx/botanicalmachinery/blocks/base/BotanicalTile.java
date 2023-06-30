@@ -4,11 +4,6 @@ import com.google.common.base.Predicates;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import de.melanx.botanicalmachinery.core.TileTags;
-import io.github.noeppi_noeppi.libx.base.tile.BlockEntityBase;
-import io.github.noeppi_noeppi.libx.base.tile.TickableBlock;
-import io.github.noeppi_noeppi.libx.capability.ItemCapabilities;
-import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
-import io.github.noeppi_noeppi.libx.inventory.IAdvancedItemHandlerModifiable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,30 +18,36 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.lwjgl.opengl.GL11;
+import org.moddingx.libx.base.tile.BlockEntityBase;
+import org.moddingx.libx.base.tile.TickingBlock;
+import org.moddingx.libx.capability.ItemCapabilities;
+import org.moddingx.libx.inventory.BaseItemStackHandler;
+import org.moddingx.libx.inventory.IAdvancedItemHandlerModifiable;
 import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.BotaniaForgeClientCapabilities;
-import vazkii.botania.api.block.IWandHUD;
-import vazkii.botania.api.item.ISparkEntity;
-import vazkii.botania.api.mana.IKeyLocked;
-import vazkii.botania.api.mana.IManaPool;
-import vazkii.botania.api.mana.spark.IManaSpark;
-import vazkii.botania.api.mana.spark.ISparkAttachable;
+import vazkii.botania.api.block.WandHUD;
+import vazkii.botania.api.item.SparkEntity;
+import vazkii.botania.api.mana.KeyLocked;
+import vazkii.botania.api.mana.ManaPool;
+import vazkii.botania.api.mana.spark.ManaSpark;
+import vazkii.botania.api.mana.spark.SparkAttachable;
 import vazkii.botania.client.gui.HUDHandler;
-import vazkii.botania.common.block.tile.mana.IThrottledPacket;
+import vazkii.botania.common.block.block_entity.mana.ThrottledPacket;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-@OnlyIn(value = Dist.CLIENT, _interface = IWandHUD.class)
-public abstract class BotanicalTile extends BlockEntityBase implements IManaPool, IKeyLocked, ISparkAttachable, IThrottledPacket, IWandHUD, TickableBlock {
+@OnlyIn(value = Dist.CLIENT, _interface = WandHUD.class)
+public abstract class BotanicalTile extends BlockEntityBase implements ManaPool, KeyLocked, SparkAttachable, ThrottledPacket, WandHUD, TickingBlock {
 
     private int mana;
     private final int manaCap;
@@ -91,7 +92,7 @@ public abstract class BotanicalTile extends BlockEntityBase implements IManaPool
     @Nonnull
     @Override
     public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, Direction direction) {
-        if (!this.remove && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (!this.remove && cap == ForgeCapabilities.ITEM_HANDLER) {
             return this.capability.cast();
         } else if (!this.remove && this.actAsMana() && (cap == BotaniaForgeCapabilities.MANA_RECEIVER || cap == BotaniaForgeCapabilities.SPARK_ATTACHABLE)) {
             return LazyOptional.of(() -> this).cast();
@@ -149,7 +150,7 @@ public abstract class BotanicalTile extends BlockEntityBase implements IManaPool
         ItemStack block = new ItemStack(this.getBlockState().getBlock());
         String name = block.getHoverName().getString();
         int color = 0x4444FF;
-        HUDHandler.drawSimpleManaHUD(poseStack, color, this.getCurrentMana(), this.getManaCap(), name);
+        HUDHandler.drawSimpleManaHUD(poseStack, color, this.getCurrentMana(), this.getMaxMana(), name);
 
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -175,25 +176,20 @@ public abstract class BotanicalTile extends BlockEntityBase implements IManaPool
     }
 
     @Override
-    public void attachSpark(IManaSpark entity) {
-
-    }
-
-    @Override
     public int getAvailableSpaceForMana() {
         if (!this.actAsMana()) return 0;
-        return Math.max(Math.max(0, this.getManaCap() - this.getCurrentMana()), 0);
+        return Math.max(Math.max(0, this.getMaxMana() - this.getCurrentMana()), 0);
     }
 
 
     @Override
-    public IManaSpark getAttachedSpark() {
+    public ManaSpark getAttachedSpark() {
         if (!this.actAsMana()) return null;
         //noinspection ConstantConditions
-        List<Entity> sparks = this.level.getEntitiesOfClass(Entity.class, new AABB(this.worldPosition.above(), this.worldPosition.above().offset(1, 1, 1)), Predicates.instanceOf(ISparkEntity.class));
+        List<Entity> sparks = this.level.getEntitiesOfClass(Entity.class, new AABB(this.worldPosition.above(), this.worldPosition.above().offset(1, 1, 1)), Predicates.instanceOf(SparkEntity.class));
         if (sparks.size() == 1) {
             Entity entity = sparks.get(0);
-            return (IManaSpark) entity;
+            return (ManaSpark) entity;
         }
         return null;
     }
@@ -205,13 +201,13 @@ public abstract class BotanicalTile extends BlockEntityBase implements IManaPool
 
     @Override
     public boolean isFull() {
-        return this.getCurrentMana() >= this.getManaCap();
+        return this.getCurrentMana() >= this.getMaxMana();
     }
 
     @Override
     public void receiveMana(int i) {
         int old = this.getCurrentMana();
-        this.mana = Math.max(0, Math.min(this.getCurrentMana() + i, this.getManaCap()));
+        this.mana = Math.max(0, Math.min(this.getCurrentMana() + i, this.getMaxMana()));
         if (old != this.getCurrentMana()) {
             this.setChanged();
             this.setDispatchable();
@@ -228,7 +224,8 @@ public abstract class BotanicalTile extends BlockEntityBase implements IManaPool
         return this.mana;
     }
 
-    public int getManaCap() {
+    @Override
+    public int getMaxMana() {
         return this.manaCap;
     }
 
@@ -238,12 +235,12 @@ public abstract class BotanicalTile extends BlockEntityBase implements IManaPool
     }
 
     @Override
-    public DyeColor getColor() {
-        return null;
+    public Optional<DyeColor> getColor() {
+        return Optional.empty();
     }
 
     @Override
-    public void setColor(DyeColor dyeColor) {
+    public void setColor(Optional<DyeColor> color) {
         // unused
     }
 

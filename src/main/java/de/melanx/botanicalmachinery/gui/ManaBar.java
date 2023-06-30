@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import de.melanx.botanicalmachinery.core.LibResources;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 
 /*
  * This class is inspired by Cyclics EnergyBar
@@ -48,7 +48,7 @@ public class ManaBar {
 
     public void renderHoveredToolTip(PoseStack ms, int mouseX, int mouseY, int mana) {
         if (this.isMouseOver(mouseX, mouseY) && LibXClientConfig.numericalMana) {
-            TranslatableComponent text = new TranslatableComponent("%s / %s Mana", mana, this.capacity);
+            Component text = Component.literal(String.format("%s / %s Mana", mana, this.capacity));
             this.parent.renderTooltip(ms, text, mouseX, mouseY);
         }
     }

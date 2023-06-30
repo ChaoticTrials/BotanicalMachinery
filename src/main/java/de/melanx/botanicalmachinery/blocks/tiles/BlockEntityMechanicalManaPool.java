@@ -4,8 +4,6 @@ import de.melanx.botanicalmachinery.blocks.base.RecipeTile;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
-import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
-import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -15,10 +13,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import vazkii.botania.api.recipe.IManaInfusionRecipe;
+import org.moddingx.libx.crafting.recipe.RecipeHelper;
+import org.moddingx.libx.inventory.BaseItemStackHandler;
+import vazkii.botania.api.recipe.ManaInfusionRecipe;
 import vazkii.botania.client.fx.WispParticleData;
-import vazkii.botania.common.block.ModBlocks;
-import vazkii.botania.common.crafting.ModRecipeTypes;
+import vazkii.botania.common.block.BotaniaBlocks;
+import vazkii.botania.common.crafting.BotaniaRecipeTypes;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -27,9 +27,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class BlockEntityMechanicalManaPool extends RecipeTile<IManaInfusionRecipe> {
+public class BlockEntityMechanicalManaPool extends RecipeTile<ManaInfusionRecipe> {
 
-    public static final List<Item> CATALYSTS = Arrays.asList(ModBlocks.alchemyCatalyst.asItem(), ModBlocks.conjurationCatalyst.asItem(), ModBlocks.manaVoid.asItem());
+    public static final List<Item> CATALYSTS = Arrays.asList(BotaniaBlocks.alchemyCatalyst.asItem(), BotaniaBlocks.conjurationCatalyst.asItem(), BotaniaBlocks.manaVoid.asItem());
 
     private final BaseItemStackHandler inventory;
 
@@ -37,10 +37,10 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<IManaInfusionRecip
     private boolean checkWithCatalyst = false;
 
     public BlockEntityMechanicalManaPool(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, ModRecipeTypes.MANA_INFUSION_TYPE, pos, state, LibXServerConfig.MaxManaCapacity.mechanicalManaPool, 1, 2);
+        super(type, BotaniaRecipeTypes.MANA_INFUSION_TYPE, pos, state, LibXServerConfig.MaxManaCapacity.mechanicalManaPool, 1, 2);
         this.inventory = BaseItemStackHandler.builder(3)
                 .validator(stack -> CATALYSTS.contains(stack.getItem()), 0)
-                .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), ModRecipeTypes.MANA_INFUSION_TYPE, stack))
+                .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), BotaniaRecipeTypes.MANA_INFUSION_TYPE, stack))
                 .slotLimit(1, 0)
                 .output(2)
                 .contentsChanged(() -> {
@@ -50,7 +50,7 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<IManaInfusionRecip
                 })
                 .build();
     }
-    
+
     @Override
     public void tick() {
         if (this.level != null && !this.level.isClientSide) {
@@ -64,7 +64,7 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<IManaInfusionRecip
                 this.craftRecipe();
             }
         } else if (this.level != null && LibXClientConfig.AdvancedRendering.all && LibXClientConfig.AdvancedRendering.industrialAgglomerationFactory) {
-            double particleChance = (this.getCurrentMana() / (double) this.getManaCap()) * 0.1D;
+            double particleChance = (this.getCurrentMana() / (double) this.getMaxMana()) * 0.1D;
             if (Math.random() < particleChance) {
                 float red = 0.0F;
                 float green = 0.7764706F;
@@ -98,7 +98,7 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<IManaInfusionRecip
     }
 
     @Override
-    protected boolean matchRecipe(IManaInfusionRecipe recipe, List<ItemStack> stacks) {
+    protected boolean matchRecipe(ManaInfusionRecipe recipe, List<ItemStack> stacks) {
         if (recipe.getManaToConsume() > this.getCurrentMana()) return false;
         Item catalystItem = (this.checkWithCatalyst && !this.inventory.getStackInSlot(0).isEmpty()) ? this.inventory.getStackInSlot(0).getItem() : null;
         Block catalyst = catalystItem == null ? null : Block.byItem(catalystItem);
@@ -111,7 +111,7 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<IManaInfusionRecip
     }
 
     @Override
-    protected void onCrafted(IManaInfusionRecipe recipe) {
+    protected void onCrafted(ManaInfusionRecipe recipe) {
         this.cooldown = Math.max(1, LibXServerConfig.WorkingDurationMultiplier.mechanicalManaPool);
         this.receiveMana(-recipe.getManaToConsume());
     }
@@ -129,7 +129,7 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<IManaInfusionRecip
 
     @Override
     public void receiveMana(int i) {
-        if (this.inventory.getStackInSlot(0).getItem() == ModBlocks.manaVoid.asItem()) {
+        if (this.inventory.getStackInSlot(0).getItem() == BotaniaBlocks.manaVoid.asItem()) {
             super.receiveMana(Math.min(i, this.getAvailableSpaceForMana()));
         } else {
             super.receiveMana(i);
@@ -138,12 +138,12 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<IManaInfusionRecip
 
     @Override
     public boolean isFull() {
-        return this.inventory.getStackInSlot(0).getItem() != ModBlocks.manaVoid.asItem() && super.isFull();
+        return this.inventory.getStackInSlot(0).getItem() != BotaniaBlocks.manaVoid.asItem() && super.isFull();
     }
 
     @Override
     public int getAvailableSpaceForMana() {
-        return this.inventory.getStackInSlot(0).getItem() == ModBlocks.manaVoid.asItem() ? this.getManaCap() : super.getAvailableSpaceForMana();
+        return this.inventory.getStackInSlot(0).getItem() == BotaniaBlocks.manaVoid.asItem() ? this.getMaxMana() : super.getAvailableSpaceForMana();
     }
 
     @Override

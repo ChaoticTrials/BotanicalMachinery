@@ -3,30 +3,30 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 import de.melanx.botanicalmachinery.blocks.base.WorkingTile;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import de.melanx.botanicalmachinery.config.LibXServerConfig;
-import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
-import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import vazkii.botania.api.recipe.ITerraPlateRecipe;
+import org.moddingx.libx.crafting.recipe.RecipeHelper;
+import org.moddingx.libx.inventory.BaseItemStackHandler;
+import vazkii.botania.api.recipe.TerrestrialAgglomerationRecipe;
 import vazkii.botania.client.fx.WispParticleData;
-import vazkii.botania.common.crafting.ModRecipeTypes;
+import vazkii.botania.common.crafting.BotaniaRecipeTypes;
 
 import javax.annotation.Nonnull;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class BlockEntityIndustrialAgglomerationFactory extends WorkingTile<ITerraPlateRecipe> {
+public class BlockEntityIndustrialAgglomerationFactory extends WorkingTile<TerrestrialAgglomerationRecipe> {
 
     public static final int MAX_MANA_PER_TICK = 5000;
 
     private final BaseItemStackHandler inventory;
 
     public BlockEntityIndustrialAgglomerationFactory(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, ModRecipeTypes.TERRA_PLATE_TYPE, pos, state, LibXServerConfig.MaxManaCapacity.industrialAgglomerationFactory, 0, 3);
+        super(type, BotaniaRecipeTypes.TERRA_PLATE_TYPE, pos, state, LibXServerConfig.MaxManaCapacity.industrialAgglomerationFactory, 0, 3);
         this.inventory = BaseItemStackHandler.builder(4)
-                .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), ModRecipeTypes.TERRA_PLATE_TYPE, stack), 0, 1, 2)
+                .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), BotaniaRecipeTypes.TERRA_PLATE_TYPE, stack), 0, 1, 2)
                 .output(3)
                 .contentsChanged(() -> {
                     this.setChanged();
@@ -72,7 +72,7 @@ public class BlockEntityIndustrialAgglomerationFactory extends WorkingTile<ITerr
     }
 
     @Override
-    protected int getMaxProgress(ITerraPlateRecipe recipe) {
+    protected int getMaxProgress(TerrestrialAgglomerationRecipe recipe) {
         return recipe.getMana();
     }
 

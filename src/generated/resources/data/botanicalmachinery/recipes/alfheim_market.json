@@ -1,16 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "eye",
-    "xaz",
-    "ese"
-  ],
   "key": {
-    "e": {
-      "tag": "botania:elementium_ingots"
-    },
     "a": {
       "item": "botania:aura_ring_greater"
+    },
+    "e": {
+      "tag": "botania:elementium_ingots"
     },
     "s": {
       "item": "botania:alfheim_portal"
@@ -25,6 +20,11 @@
       "item": "botania:glimmering_livingwood"
     }
   },
+  "pattern": [
+    "eye",
+    "xaz",
+    "ese"
+  ],
   "result": {
     "item": "botanicalmachinery:alfheim_market"
   }

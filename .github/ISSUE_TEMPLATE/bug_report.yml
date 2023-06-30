@@ -2,13 +2,13 @@ name: Bug Report
 description: Report an issue with supported versions of BotanicalMachinery
 labels: [ bug ]
 body:
-  - type: input
+  - type: dropdown
     id: mc-version
     attributes:
       label: Minecraft version
-      placeholder: eg. 1.18.2
-    validations:
-      required: true
+      options:
+        - 1.18.2
+        - 1.19.2
   - type: input
     id: mod-version
     attributes:

@@ -1,5 +1,9 @@
 {
   "variants": {
+    "facing=east": {
+      "model": "botanicalmachinery:block/mana_battery_creative",
+      "y": 90
+    },
     "facing=north": {
       "model": "botanicalmachinery:block/mana_battery_creative"
     },
@@ -10,10 +14,6 @@
     "facing=west": {
       "model": "botanicalmachinery:block/mana_battery_creative",
       "y": 270
-    },
-    "facing=east": {
-      "model": "botanicalmachinery:block/mana_battery_creative",
-      "y": 90
     }
   }
 }

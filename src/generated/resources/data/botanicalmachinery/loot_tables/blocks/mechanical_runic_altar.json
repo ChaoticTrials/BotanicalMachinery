@@ -2,48 +2,72 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "main",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:copy_nbt",
-              "source": "block_entity",
-              "ops": [
-                {
-                  "source": "inv",
-                  "target": "BlockEntityTag.inv",
-                  "op": "replace"
-                },
-                {
-                  "source": "mana",
-                  "target": "BlockEntityTag.mana",
-                  "op": "replace"
-                },
-                {
-                  "source": "progress",
-                  "target": "BlockEntityTag.progress",
-                  "op": "replace"
-                },
-                {
-                  "source": "maxProgress",
-                  "target": "BlockEntityTag.maxProgress",
-                  "op": "replace"
-                }
-              ]
-            }
-          ],
-          "name": "botanicalmachinery:mechanical_runic_altar"
-        }
-      ],
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
         }
-      ]
+      ],
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "enchantments": [
+                      {
+                        "enchantment": "minecraft:silk_touch",
+                        "levels": {
+                          "min": 1
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "name": "botanicalmachinery:mechanical_runic_altar"
+            },
+            {
+              "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "minecraft:copy_nbt",
+                  "ops": [
+                    {
+                      "op": "replace",
+                      "source": "inv",
+                      "target": "BlockEntityTag.inv"
+                    },
+                    {
+                      "op": "replace",
+                      "source": "mana",
+                      "target": "BlockEntityTag.mana"
+                    },
+                    {
+                      "op": "replace",
+                      "source": "progress",
+                      "target": "BlockEntityTag.progress"
+                    },
+                    {
+                      "op": "replace",
+                      "source": "maxProgress",
+                      "target": "BlockEntityTag.maxProgress"
+                    }
+                  ],
+                  "source": "block_entity"
+                }
+              ],
+              "name": "botanicalmachinery:mechanical_runic_altar"
+            }
+          ]
+        }
+      ],
+      "name": "main",
+      "rolls": 1.0
     }
   ]
 }

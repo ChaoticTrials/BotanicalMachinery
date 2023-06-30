@@ -4,7 +4,6 @@ import de.melanx.botanicalmachinery.blocks.BlockManaBattery;
 import de.melanx.botanicalmachinery.blocks.base.BotanicalTile;
 import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
-import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -13,10 +12,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import org.moddingx.libx.inventory.BaseItemStackHandler;
 import vazkii.botania.api.BotaniaForgeCapabilities;
-import vazkii.botania.api.mana.IManaItem;
-import vazkii.botania.common.item.ItemBlackLotus;
-import vazkii.botania.common.item.ModItems;
+import vazkii.botania.api.mana.ManaItem;
+import vazkii.botania.common.item.BlackLotusItem;
+import vazkii.botania.common.item.BotaniaItems;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -51,7 +51,7 @@ public class BlockEntityManaBattery extends BotanicalTile {
 
     @Override
     public int getCurrentMana() {
-        return ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.CREATIVE ? this.getManaCap() / 2 : super.getCurrentMana();
+        return ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.CREATIVE ? this.getMaxMana() / 2 : super.getCurrentMana();
     }
 
     @Override
@@ -75,15 +75,15 @@ public class BlockEntityManaBattery extends BotanicalTile {
                 plus.getCapability(BotaniaForgeCapabilities.MANA_ITEM).ifPresent(manaItem -> {
                     if (manaItem.canExportManaToPool(this)) {
                         int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? MANA_TRANSFER_RATE : Integer.MAX_VALUE;
-                        int manaValue = Math.min(maxManaValue, Math.min(this.getManaCap() - this.getCurrentMana(), manaItem.getMana()));
+                        int manaValue = Math.min(maxManaValue, Math.min(this.getMaxMana() - this.getCurrentMana(), manaItem.getMana()));
                         manaItem.addMana(-manaValue);
                         this.receiveMana(manaValue);
                         this.setChanged();
                         this.setDispatchable();
                     }
                 });
-                if (plus.getItem() instanceof ItemBlackLotus) {
-                    int manaToTransfer = plus.getItem() == ModItems.blackerLotus ? 100000 : 8000;
+                if (plus.getItem() instanceof BlackLotusItem) {
+                    int manaToTransfer = plus.getItem() == BotaniaItems.blackerLotus ? 100000 : 8000;
                     if (this.getAvailableSpaceForMana() >= manaToTransfer) {
                         this.receiveMana(manaToTransfer);
                         ItemStack stack = this.inventory.getStackInSlot(1).copy();
@@ -99,7 +99,7 @@ public class BlockEntityManaBattery extends BotanicalTile {
                 if (tile instanceof BotanicalTile offsetTile && offsetTile.actAsMana() && (((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.CREATIVE || !(tile instanceof BlockEntityManaBattery))) {
                     if (!offsetTile.isFull()) {
                         int maxManaValue = ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.NORMAL ? MANA_TRANSFER_RATE : Integer.MAX_VALUE;
-                        int manaValue = Math.min(maxManaValue, Math.min(this.getCurrentMana(), offsetTile.getManaCap() - offsetTile.getCurrentMana()));
+                        int manaValue = Math.min(maxManaValue, Math.min(this.getCurrentMana(), offsetTile.getMaxMana() - offsetTile.getCurrentMana()));
                         if (manaValue <= 0 && offsetTile instanceof BlockEntityMechanicalManaPool)
                             manaValue = Math.min(this.getCurrentMana(), MANA_TRANSFER_RATE);
                         this.receiveMana(-manaValue);
@@ -138,7 +138,7 @@ public class BlockEntityManaBattery extends BotanicalTile {
 
     @Override
     public int getComparatorOutput() {
-        return (int) Math.round(this.getCurrentMana() / (double) this.getManaCap() * 15d);
+        return (int) Math.round(this.getCurrentMana() / (double) this.getMaxMana() * 15d);
     }
 
     @Override
@@ -147,14 +147,13 @@ public class BlockEntityManaBattery extends BotanicalTile {
             ItemStack minus = inventory.get().getStackInSlot(0);
             ItemStack plus = inventory.get().getStackInSlot(1);
             if (slot == 0) {
-                Optional<IManaItem> manaItem = minus.getCapability(BotaniaForgeCapabilities.MANA_ITEM).resolve();
-                if (manaItem.isEmpty()) return true;
-                return manaItem.get().getMana() >= manaItem.get().getMaxMana();
-            } else if (slot == 1 && plus.getItem() instanceof IManaItem) {
-                Optional<IManaItem> manaItem = plus.getCapability(BotaniaForgeCapabilities.MANA_ITEM).resolve();
-                if (manaItem.isEmpty()) return true;
-                return manaItem.get().getMana() <= 0;
+                Optional<ManaItem> manaItem = minus.getCapability(BotaniaForgeCapabilities.MANA_ITEM).resolve();
+                return manaItem.map(item -> item.getMana() >= item.getMaxMana()).orElse(true);
+            } else if (slot == 1 && plus.getItem() instanceof ManaItem) {
+                Optional<ManaItem> manaItem = plus.getCapability(BotaniaForgeCapabilities.MANA_ITEM).resolve();
+                return manaItem.map(item -> item.getMana() <= 0).orElse(true);
             }
+
             return true;
         };
     }

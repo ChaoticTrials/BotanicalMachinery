@@ -1,8 +1,9 @@
 {
   "parent": "block/block",
+  "render_type": "cutout",
   "ambientocclusion": false,
   "textures": {
-    "plate": "botania:block/elementium_block",
+    "plate": "botania:block/dragonstone_block",
     "grass_top": "botania:block/enchanted_soil_top",
     "grass_side": "botania:block/enchanted_soil_side",
     "flower": "botania:block/pure_daisy",

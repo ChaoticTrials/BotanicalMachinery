@@ -1,24 +1,24 @@
 buildscript {
-    apply from: 'https://noeppi-noeppi.github.io/ModUtils/v3/buildscript.gradle', to: buildscript
+    apply from: 'https://moddingx.github.io/ModUtils/v5/buildscript.gradle', to: buildscript
 }
 
-apply from: 'https://noeppi-noeppi.github.io/ModUtils/v3/mod.gradle'
+apply from: 'https://moddingx.github.io/ModUtils/v5/mod.gradle'
 
 repositories {
-    maven { url 'https://dvs1.progwml6.com/files/maven/' }
+    maven { url 'https://modmaven.dev/' }
     maven { url 'https://maven.melanx.de/' }
     maven { url 'https://maven.blamejared.com/' }
     maven { url 'https://maven.theillusivec4.top/' }
 }
 
 dependencies {
-    annotationProcessor fg.deobf('io.github.noeppi_noeppi.mods:LibX:1.18.2-3.2.15')
-    
-    implementation fg.deobf('io.github.noeppi_noeppi.mods:LibX:1.18.2-3.2.15')
-    implementation fg.deobf('vazkii.botania:Botania:1.18.2-431')
-    implementation fg.deobf('vazkii.patchouli:Patchouli:1.18.2-67')
-    implementation fg.deobf('top.theillusivec4.curios:curios-forge:1.18.2-5.0.6.3')
+    annotationProcessor fg.deobf('org.moddingx:LibX:1.19.2-4.2.8')
 
-    compileOnly fg.deobf('mezz.jei:jei-1.18.2:9.7.0.180:api')
-    runtimeOnly fg.deobf('mezz.jei:jei-1.18.2:9.7.0.180')
+    implementation fg.deobf('org.moddingx:LibX:1.19.2-4.2.8')
+    implementation fg.deobf('vazkii.botania:Botania:1.19.2-439-FORGE')
+    implementation fg.deobf('vazkii.patchouli:Patchouli:1.19.2-77')
+    implementation fg.deobf('top.theillusivec4.curios:curios-forge:1.19.2-5.1.4.0')
+
+    compileOnly fg.deobf('mezz.jei:jei-1.19.2-common-api:11.6.0.1015')
+    runtimeOnly fg.deobf('mezz.jei:jei-1.19.2-forge:11.6.0.1015')
 }

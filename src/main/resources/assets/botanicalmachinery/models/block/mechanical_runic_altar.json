@@ -1,12 +1,9 @@
 {
-  "parent": "block/block",
-  "ambientocclusion": false,
+  "parent": "botanicalmachinery:block/botanical_block",
   "textures": {
-    "frame": "botania:block/elementium_block",
     "bottom": "botania:block/runic_altar_bottom",
     "top": "botania:block/runic_altar_top",
-    "side": "botania:block/runic_altar_side",
-    "particle": "#frame"
+    "side": "botania:block/runic_altar_side"
   },
   "elements": [
     {
@@ -70,39 +67,27 @@
       }
     },
     {
-      "from": [ 15, 1, 15 ],
-      "to": [ 16, 15, 16 ],
+      "from": [ 0, 15, 1 ],
+      "to": [ 1, 16, 15 ],
       "faces": {
-        "down":  { "texture": "#frame", "uv": [ 0, 0, 1, 1 ] },
-        "up":    { "texture": "#frame", "uv": [ 0, 0, 1, 1 ] },
-        "north": { "texture": "#frame", "uv": [ 0, 1, 1, 15 ] },
-        "south": { "texture": "#frame", "uv": [ 0, 1, 1, 15 ] },
-        "west":  { "texture": "#frame", "uv": [ 0, 1, 1, 15 ] },
-        "east":  { "texture": "#frame", "uv": [ 0, 1, 1, 15 ] }
+        "down":  { "texture": "#frame", "uv": [ 0, 1, 1, 15 ] },
+        "up":    { "texture": "#frame", "uv": [ 0, 1, 1, 15 ] },
+        "north": { "texture": "#frame", "uv": [ 0, 0, 1, 1 ] },
+        "south": { "texture": "#frame", "uv": [ 0, 0, 1, 1 ] },
+        "west":  { "texture": "#frame", "uv": [ 1, 0, 15, 1 ] },
+        "east":  { "texture": "#frame", "uv": [ 1, 0, 15, 1 ] }
       }
     },
     {
-      "from": [ 0, 15, 0 ],
-      "to": [ 1, 16, 16 ],
+      "from": [ 15, 15, 1 ],
+      "to": [ 16, 16, 15 ],
       "faces": {
-        "down":  { "texture": "#frame", "uv": [ 0, 0, 1, 16 ] },
-        "up":    { "texture": "#frame", "uv": [ 0, 0, 1, 16 ] },
+        "down":  { "texture": "#frame", "uv": [ 0, 1, 1, 15 ] },
+        "up":    { "texture": "#frame", "uv": [ 0, 1, 1, 15 ] },
         "north": { "texture": "#frame", "uv": [ 0, 0, 1, 1 ] },
         "south": { "texture": "#frame", "uv": [ 0, 0, 1, 1 ] },
-        "west":  { "texture": "#frame", "uv": [ 0, 0, 16, 1 ] },
-        "east":  { "texture": "#frame", "uv": [ 0, 0, 16, 1 ] }
-      }
-    },
-    {
-      "from": [ 15, 15, 0 ],
-      "to": [ 16, 16, 16 ],
-      "faces": {
-        "down":  { "texture": "#frame", "uv": [ 0, 0, 1, 16 ] },
-        "up":    { "texture": "#frame", "uv": [ 0, 0, 1, 16 ] },
-        "north": { "texture": "#frame", "uv": [ 0, 0, 1, 1 ] },
-        "south": { "texture": "#frame", "uv": [ 0, 0, 1, 1 ] },
-        "west":  { "texture": "#frame", "uv": [ 0, 0, 16, 1 ] },
-        "east":  { "texture": "#frame", "uv": [ 0, 0, 16, 1 ] }
+        "west":  { "texture": "#frame", "uv": [ 1, 0, 15, 1 ] },
+        "east":  { "texture": "#frame", "uv": [ 1, 0, 15, 1 ] }
       }
     },
     {
@@ -127,18 +112,6 @@
         "south": { "texture": "#frame", "uv": [ 0, 0, 16, 1 ] },
         "west":  { "texture": "#frame", "uv": [ 0, 0, 1, 1 ] },
         "east":  { "texture": "#frame", "uv": [ 0, 0, 1, 1 ] }
-      }
-    },
-    {
-      "from": [ 15, 1, 15 ],
-      "to": [ 16, 15, 16 ],
-      "faces": {
-        "down":  { "texture": "#frame", "uv": [ 0, 0, 1, 1 ] },
-        "up":    { "texture": "#frame", "uv": [ 0, 0, 1, 1 ] },
-        "north": { "texture": "#frame", "uv": [ 0, 1, 1, 15 ] },
-        "south": { "texture": "#frame", "uv": [ 0, 1, 1, 15 ] },
-        "west":  { "texture": "#frame", "uv": [ 0, 1, 1, 15 ] },
-        "east":  { "texture": "#frame", "uv": [ 0, 1, 1, 15 ] }
       }
     },
     {

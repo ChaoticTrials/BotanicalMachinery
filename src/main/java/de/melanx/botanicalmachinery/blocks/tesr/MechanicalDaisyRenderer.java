@@ -35,10 +35,10 @@ public class MechanicalDaisyRenderer implements BlockEntityRenderer<BlockEntityM
         poseStack.popPose();
     }
 
-    private void renderState(@Nullable BlockState state, float translabeX, float translabeZ, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
+    private void renderState(@Nullable BlockState state, float translateX, float translateZ, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
         if (state != null) {
             poseStack.pushPose();
-            poseStack.translate(translabeX, 0, translabeZ);
+            poseStack.translate(translateX, 0, translateZ);
             //noinspection deprecation
             Minecraft.getInstance().getBlockRenderer().renderSingleBlock(state, poseStack, buffer, light, overlay);
             poseStack.popPose();

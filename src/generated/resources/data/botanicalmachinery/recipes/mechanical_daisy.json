@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " d ",
-    "eae"
-  ],
   "key": {
-    "e": {
-      "tag": "botania:elementium_blocks"
-    },
     "a": {
       "item": "botania:aura_ring_greater"
     },
     "d": {
       "item": "botania:floating_pure_daisy"
+    },
+    "e": {
+      "tag": "botania:elementium_blocks"
     }
   },
+  "pattern": [
+    " d ",
+    "eae"
+  ],
   "result": {
     "item": "botanicalmachinery:mechanical_daisy"
   }

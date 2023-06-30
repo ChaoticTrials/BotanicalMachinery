@@ -1,10 +1,10 @@
 package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
-import io.github.noeppi_noeppi.libx.annotation.data.Datagen;
-import io.github.noeppi_noeppi.libx.data.provider.ItemModelProviderBase;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import org.moddingx.libx.annotation.data.Datagen;
+import org.moddingx.libx.datagen.provider.ItemModelProviderBase;
 
 @Datagen
 public class ItemModels extends ItemModelProviderBase {
@@ -15,6 +15,6 @@ public class ItemModels extends ItemModelProviderBase {
 
     @Override
     protected void setup() {
-
+        // NO-OP
     }
 }

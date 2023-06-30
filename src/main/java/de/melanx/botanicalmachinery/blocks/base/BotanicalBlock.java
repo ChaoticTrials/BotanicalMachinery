@@ -1,12 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.base;
 
-import io.github.noeppi_noeppi.libx.base.tile.MenuBlockBE;
-import io.github.noeppi_noeppi.libx.menu.BlockEntityMenu;
-import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
@@ -25,7 +20,12 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import org.moddingx.libx.base.tile.MenuBlockBE;
+import org.moddingx.libx.menu.BlockEntityMenu;
+import org.moddingx.libx.mod.ModX;
+import org.moddingx.libx.registration.SetupContext;
+import org.moddingx.libx.render.ItemStackRenderer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,7 +58,7 @@ public abstract class BotanicalBlock<T extends BotanicalTile, C extends BlockEnt
     }
 
     @Override
-    public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
+    public void registerClient(SetupContext ctx) {
         if (this.specialRender) {
             ItemStackRenderer.addRenderBlock(this.getBlockEntityType(), true);
         }
@@ -66,7 +66,7 @@ public abstract class BotanicalBlock<T extends BotanicalTile, C extends BlockEnt
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void initializeItemClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
+    public void initializeItemClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
         consumer.accept(ItemStackRenderer.createProperties());
     }
 

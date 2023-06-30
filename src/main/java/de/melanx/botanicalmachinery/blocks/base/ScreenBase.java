@@ -3,13 +3,13 @@ package de.melanx.botanicalmachinery.blocks.base;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import de.melanx.botanicalmachinery.gui.ManaBar;
-import io.github.noeppi_noeppi.libx.menu.BlockEntityMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import org.moddingx.libx.menu.BlockEntityMenu;
 
 import javax.annotation.Nonnull;
 import java.awt.Color;
@@ -23,7 +23,7 @@ public abstract class ScreenBase<X extends BlockEntityMenu<?>> extends AbstractC
     public ScreenBase(X menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         if (this.menu.getBlockEntity() instanceof BotanicalTile botanicalTile) {
-            this.manaBar = new ManaBar(this, botanicalTile.getManaCap());
+            this.manaBar = new ManaBar(this, botanicalTile.getMaxMana());
         } else {
             this.manaBar = new ManaBar(this, 0);
         }

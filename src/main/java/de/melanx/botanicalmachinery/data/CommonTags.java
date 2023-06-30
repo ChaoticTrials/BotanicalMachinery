@@ -1,12 +1,12 @@
 package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.ModBlocks;
-import io.github.noeppi_noeppi.libx.annotation.data.Datagen;
-import io.github.noeppi_noeppi.libx.data.provider.CommonTagsProviderBase;
-import io.github.noeppi_noeppi.libx.mod.ModX;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import org.moddingx.libx.annotation.data.Datagen;
+import org.moddingx.libx.datagen.provider.CommonTagsProviderBase;
+import org.moddingx.libx.mod.ModX;
 
 @Datagen
 public class CommonTags extends CommonTagsProviderBase {

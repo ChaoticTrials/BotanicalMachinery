@@ -7,7 +7,6 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityAlfheimMarket;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
-import io.github.noeppi_noeppi.libx.render.block.RotatedBlockRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -16,9 +15,10 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.item.ItemStack;
+import org.moddingx.libx.render.block.RotatedBlockRenderer;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 import vazkii.botania.client.core.handler.MiscellaneousModels;
-import vazkii.botania.common.block.ModBlocks;
+import vazkii.botania.common.block.BotaniaBlocks;
 
 import javax.annotation.Nonnull;
 
@@ -34,10 +34,10 @@ public class AlfheimMarketRenderer extends RotatedBlockRenderer<BlockEntityAlfhe
         poseStack.translate(3.2, 2, 3.6);
         poseStack.scale(3.6f, 3.6f, 3.6f);
         //noinspection deprecation
-        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(ModBlocks.naturaPylon.defaultBlockState(), poseStack, buffer, light, overlay);
+        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(BotaniaBlocks.naturaPylon.defaultBlockState(), poseStack, buffer, light, overlay);
         poseStack.translate(1 + (2 / 3.6), 0, 0);
         //noinspection deprecation
-        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(ModBlocks.naturaPylon.defaultBlockState(), poseStack, buffer, light, overlay);
+        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(BotaniaBlocks.naturaPylon.defaultBlockState(), poseStack, buffer, light, overlay);
         poseStack.popPose();
 
         if (tile.getCurrentMana() > 0) {

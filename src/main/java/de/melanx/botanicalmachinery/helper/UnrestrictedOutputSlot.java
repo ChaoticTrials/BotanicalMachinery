@@ -1,8 +1,8 @@
 package de.melanx.botanicalmachinery.helper;
 
-import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
-import io.github.noeppi_noeppi.libx.menu.slot.OutputSlot;
 import net.minecraftforge.items.IItemHandler;
+import org.moddingx.libx.inventory.BaseItemStackHandler;
+import org.moddingx.libx.menu.slot.OutputSlot;
 
 public class UnrestrictedOutputSlot extends OutputSlot {
 

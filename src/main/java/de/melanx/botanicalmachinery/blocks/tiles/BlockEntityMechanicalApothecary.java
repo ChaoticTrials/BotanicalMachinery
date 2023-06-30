@@ -5,9 +5,6 @@ import de.melanx.botanicalmachinery.blocks.base.WorkingTile;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
-import io.github.noeppi_noeppi.libx.base.tile.TickableBlock;
-import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
-import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,41 +16,44 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import vazkii.botania.api.recipe.ICustomApothecaryColor;
-import vazkii.botania.api.recipe.IPetalRecipe;
+import org.moddingx.libx.base.tile.TickingBlock;
+import org.moddingx.libx.crafting.recipe.RecipeHelper;
+import org.moddingx.libx.inventory.BaseItemStackHandler;
+import vazkii.botania.api.recipe.CustomApothecaryColor;
+import vazkii.botania.api.recipe.PetalApothecaryRecipe;
 import vazkii.botania.client.fx.SparkleParticleData;
-import vazkii.botania.common.crafting.ModRecipeTypes;
-import vazkii.botania.common.handler.ModSounds;
+import vazkii.botania.common.crafting.BotaniaRecipeTypes;
+import vazkii.botania.common.handler.BotaniaSounds;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class BlockEntityMechanicalApothecary extends WorkingTile<IPetalRecipe> implements TickableBlock {
+public class BlockEntityMechanicalApothecary extends WorkingTile<PetalApothecaryRecipe> implements TickingBlock {
 
     public static final int WORKING_DURATION = 20;
     public static final int FLUID_CAPACITY = 8000;
 
     private final BaseItemStackHandler inventory;
-    
+
     private final ApothecaryFluidTank fluidInventory = new ApothecaryFluidTank(FLUID_CAPACITY, fluidStack -> Fluids.WATER.isSame(fluidStack.getFluid()));
     private final LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> this.fluidInventory);
-    
+
     private ItemStack currentOutput = ItemStack.EMPTY;
 
     public BlockEntityMechanicalApothecary(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, ModRecipeTypes.PETAL_TYPE, pos, state, 0, 1, 17);
+        super(type, BotaniaRecipeTypes.PETAL_TYPE, pos, state, 0, 1, 17);
         this.inventory = BaseItemStackHandler.builder(21)
                 .validator(stack -> stack.is(Tags.Items.SEEDS), 0)
-                .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), ModRecipeTypes.PETAL_TYPE, stack), Range.closedOpen(1, 17))
+                .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), BotaniaRecipeTypes.PETAL_TYPE, stack), Range.closedOpen(1, 17))
                 .output(17, 18, 19, 20)
                 .contentsChanged(() -> {
                     this.setChanged();
@@ -83,7 +83,7 @@ public class BlockEntityMechanicalApothecary extends WorkingTile<IPetalRecipe> i
                         SparkleParticleData data = SparkleParticleData.sparkle(this.level.random.nextFloat(), this.level.random.nextFloat(), this.level.random.nextFloat(), this.level.random.nextFloat(), 10);
                         this.level.addParticle(data, this.worldPosition.getX() + 0.3 + (this.level.random.nextDouble() * 0.4), this.worldPosition.getY() + 0.6, this.worldPosition.getZ() + 0.3 + (this.level.random.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
                     }
-                    this.level.playLocalSound(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5, ModSounds.altarCraft, SoundSource.BLOCKS, 1.0F, 1.0F, false);
+                    this.level.playLocalSound(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5, BotaniaSounds.altarCraft, SoundSource.BLOCKS, 1.0F, 1.0F, false);
                 } else {
                     for (int slot = 0; slot < this.inventory.getSlots(); slot++) {
                         ItemStack stack = this.inventory.getStackInSlot(slot);
@@ -92,7 +92,7 @@ public class BlockEntityMechanicalApothecary extends WorkingTile<IPetalRecipe> i
                         }
 
                         if (this.level.random.nextFloat() >= 0.97f) {
-                            int color = stack.getItem() instanceof ICustomApothecaryColor ? ((ICustomApothecaryColor) stack.getItem()).getParticleColor(stack) : 0x888888;
+                            int color = stack.getItem() instanceof CustomApothecaryColor item ? item.getParticleColor(stack) : 0x888888;
                             float red = (float) (color >> 16 & 255) / 255f;
                             float green = (float) (color >> 8 & 255) / 255f;
                             float blue = (float) (color & 255) / 255f;
@@ -137,21 +137,22 @@ public class BlockEntityMechanicalApothecary extends WorkingTile<IPetalRecipe> i
     protected boolean canMatchRecipes() {
         if (this.inventory.getStackInSlot(0).isEmpty()) return false;
         FluidStack fluid = this.getFluidInventory().getFluid();
-        return !fluid.isEmpty() && fluid.getFluid() == Fluids.WATER && fluid.getAmount() >= FluidAttributes.BUCKET_VOLUME;
+
+        return !fluid.isEmpty() && fluid.getFluid() == Fluids.WATER && fluid.getAmount() >= FluidType.BUCKET_VOLUME;
     }
 
     @Override
-    protected void onCrafted(IPetalRecipe recipe) {
+    protected void onCrafted(PetalApothecaryRecipe recipe) {
         this.inventory.extractItem(0, 1, false);
         FluidStack fluid = this.getFluidInventory().getFluid().copy();
         if (fluid.getFluid() != Fluids.WATER) return;
-        int newAmount = Math.max(0, fluid.getAmount() - FluidAttributes.BUCKET_VOLUME);
+        int newAmount = Math.max(0, fluid.getAmount() - FluidType.BUCKET_VOLUME);
         fluid.setAmount(newAmount);
         this.fluidInventory.setFluid(fluid);
     }
 
     @Override
-    protected int getMaxProgress(IPetalRecipe recipe) {
+    protected int getMaxProgress(PetalApothecaryRecipe recipe) {
         return WORKING_DURATION * LibXServerConfig.WorkingDurationMultiplier.mechanicalApothecary;
     }
 
@@ -167,9 +168,10 @@ public class BlockEntityMechanicalApothecary extends WorkingTile<IPetalRecipe> i
     @Nonnull
     @Override
     public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, @Nullable Direction side) {
-        if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+        if (cap == ForgeCapabilities.FLUID_HANDLER) {
             return this.fluidHandler.cast();
         }
+
         return super.getCapability(cap, side);
     }
 

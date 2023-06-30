@@ -3,9 +3,6 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
-import io.github.noeppi_noeppi.libx.base.tile.BlockEntityBase;
-import io.github.noeppi_noeppi.libx.base.tile.TickableBlock;
-import io.github.noeppi_noeppi.libx.capability.ItemCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,24 +16,26 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
+import org.moddingx.libx.base.tile.BlockEntityBase;
+import org.moddingx.libx.base.tile.TickingBlock;
+import org.moddingx.libx.capability.ItemCapabilities;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
-import vazkii.botania.api.recipe.IPureDaisyRecipe;
+import vazkii.botania.api.recipe.PureDaisyRecipe;
 import vazkii.botania.client.fx.WispParticleData;
-import vazkii.botania.common.crafting.ModRecipeTypes;
+import vazkii.botania.common.crafting.BotaniaRecipeTypes;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockEntityMechanicalDaisy extends BlockEntityBase implements TickableBlock {
+public class BlockEntityMechanicalDaisy extends BlockEntityBase implements TickingBlock {
 
     private int ticksToNextUpdate = 5;
     // Negative value = recipe completed
@@ -68,7 +67,7 @@ public class BlockEntityMechanicalDaisy extends BlockEntityBase implements Ticka
     public void tick() {
         boolean hasSpawnedParticles = false;
         for (int i = 0; i < 8; i++) {
-            IPureDaisyRecipe recipe = this.getRecipe(i);
+            PureDaisyRecipe recipe = this.getRecipe(i);
             if (recipe != null) {
                 //noinspection ConstantConditions
                 if (!this.level.isClientSide) {
@@ -113,10 +112,12 @@ public class BlockEntityMechanicalDaisy extends BlockEntityBase implements Ticka
     }
 
     @Nullable
-    private IPureDaisyRecipe getRecipe(int slot) {
+    private PureDaisyRecipe getRecipe(int slot) {
         BlockState state = this.getState(slot);
-        if (state == null)
+        if (state == null) {
             return null;
+        }
+
         return this.getRecipe(state);
     }
 
@@ -139,12 +140,12 @@ public class BlockEntityMechanicalDaisy extends BlockEntityBase implements Ticka
     }
 
     @Nullable
-    public IPureDaisyRecipe getRecipe(BlockState state) {
+    public PureDaisyRecipe getRecipe(BlockState state) {
         if (this.level == null)
             return null;
 
-        for (Recipe<?> genericRecipe : this.level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.PURE_DAISY_TYPE)) {
-            if (genericRecipe instanceof IPureDaisyRecipe recipe) {
+        for (Recipe<?> genericRecipe : this.level.getRecipeManager().getAllRecipesFor(BotaniaRecipeTypes.PURE_DAISY_TYPE)) {
+            if (genericRecipe instanceof PureDaisyRecipe recipe) {
                 if (recipe.matches(this.level, this.worldPosition, null, state)) {
                     return recipe;
                 }
@@ -160,12 +161,12 @@ public class BlockEntityMechanicalDaisy extends BlockEntityBase implements Ticka
     @Nonnull
     @Override
     public <X> LazyOptional<X> getCapability(@Nonnull Capability<X> cap, @Nullable Direction side) {
-        if (!this.remove && (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) {
+        if (!this.remove && (cap == ForgeCapabilities.ITEM_HANDLER)) {
             // If the side is null (e.g we're in the gui) we return the normal inventory.
             // For world interactions (direction != null) we return the inventory that block slots of not finished recipes.
             //noinspection unchecked
             return (LazyOptional<X>) (side == null ? this.lazyInventory : this.hopperInventory);
-        } else if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+        } else if (cap == ForgeCapabilities.FLUID_HANDLER) {
             //noinspection unchecked
             return (LazyOptional<X>) this.fluidInventory;
         }

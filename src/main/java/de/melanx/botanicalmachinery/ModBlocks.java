@@ -3,16 +3,16 @@ package de.melanx.botanicalmachinery;
 import de.melanx.botanicalmachinery.blocks.*;
 import de.melanx.botanicalmachinery.blocks.containers.*;
 import de.melanx.botanicalmachinery.blocks.tiles.*;
-import io.github.noeppi_noeppi.libx.annotation.registration.RegisterClass;
-import io.github.noeppi_noeppi.libx.base.BlockBase;
-import io.github.noeppi_noeppi.libx.base.tile.MenuBlockBE;
-import io.github.noeppi_noeppi.libx.menu.BlockEntityMenu;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+import org.moddingx.libx.annotation.registration.RegisterClass;
+import org.moddingx.libx.base.BlockBase;
+import org.moddingx.libx.base.tile.MenuBlockBE;
+import org.moddingx.libx.menu.BlockEntityMenu;
 
-@RegisterClass
+@RegisterClass(registry = "BLOCK_REGISTRY")
 public class ModBlocks {
 
     public static final BlockBase manaEmeraldBlock = new BlockBase(BotanicalMachinery.getInstance(), Block.Properties.of(Material.METAL, MaterialColor.EMERALD).strength(5.0F, 6.0F).sound(SoundType.METAL));

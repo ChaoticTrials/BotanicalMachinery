@@ -9,12 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -60,10 +59,11 @@ public class ScreenMechanicalDaisy extends AbstractContainerScreen<ContainerMenu
                 int yHeight = Math.round(stack.getAmount() / (float) maxAmount) * 16;
                 int yPos = slot.y + 16 - yHeight;
 
-                ResourceLocation still = stack.getFluid().getAttributes().getStillTexture(stack);
+                IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(stack.getFluid());
+                ResourceLocation still = fluidTypeExtensions.getStillTexture(stack);
                 TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(still);
                 RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
-                int fluidColor = stack.getFluid().getAttributes().getColor(stack);
+                int fluidColor = fluidTypeExtensions.getTintColor(stack);
                 float fluidColorA = ((fluidColor >> 24) & 0xFF) / 255f;
                 float fluidColorR = ((fluidColor >> 16) & 0xFF) / 255f;
                 float fluidColorG = ((fluidColor >> 8) & 0xFF) / 255f;
@@ -86,8 +86,8 @@ public class ScreenMechanicalDaisy extends AbstractContainerScreen<ContainerMenu
 
                 FluidStack stack = ((ContainerMenuMechanicalDaisy.ItemAndFluidSlot) this.hoveredSlot).inventory.getFluidInTank(this.hoveredSlot.index);
                 List<Component> list = ImmutableList.of(
-                        new TranslatableComponent(stack.getTranslationKey()),
-                        new TextComponent(stack.getAmount() + " / 1000")
+                        Component.translatable(stack.getTranslationKey()),
+                        Component.literal(stack.getAmount() + " / 1000")
                 );
 
                 this.renderComponentTooltip(poseStack, list, x, y);

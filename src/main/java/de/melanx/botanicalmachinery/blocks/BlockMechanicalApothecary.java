@@ -6,15 +6,9 @@ import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalApo
 import de.melanx.botanicalmachinery.blocks.screens.ScreenMechanicalApothecary;
 import de.melanx.botanicalmachinery.blocks.tesr.MechanicalApothecaryRenderer;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalApothecary;
-import io.github.noeppi_noeppi.libx.base.tile.BlockEntityBase;
-import io.github.noeppi_noeppi.libx.base.tile.MenuBlockBE;
-import io.github.noeppi_noeppi.libx.block.RotationShape;
-import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -36,10 +30,16 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import org.moddingx.libx.base.tile.BlockEntityBase;
+import org.moddingx.libx.base.tile.MenuBlockBE;
+import org.moddingx.libx.block.RotationShape;
+import org.moddingx.libx.mod.ModX;
+import org.moddingx.libx.registration.SetupContext;
+import org.moddingx.libx.render.ItemStackRenderer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,14 +49,22 @@ public class BlockMechanicalApothecary extends MenuBlockBE<BlockEntityMechanical
 
     public static final RotationShape SHAPE = new RotationShape(Shapes.or(
             BotanicalBlock.FRAME_SHAPE,
+            box(0, 0, 0, 16, 1, 16),
+            box(0, 1, 0, 1, 15, 1),
+            box(15, 1, 0, 16, 15, 1),
+            box(0, 1, 15, 1, 15, 16),
+            box(15, 1, 15, 16, 15, 16),
+            box(0, 15, 1, 1, 16, 15),
+            box(15, 15, 1, 16, 16, 15),
+            box(0, 15, 0, 16, 16, 1),
+            box(0, 15, 15, 16, 16, 16),
+            box(12, 10, 4, 13, 13, 12),
             box(3, 1, 3, 13, 2, 13),
-            box(4, 2, 4, 12, 3, 12),
-            box(6, 3, 6, 10, 8, 10),
-            box(4, 8, 4, 12, 10, 12),
-            box(3, 10, 12, 13, 14, 13),
-            box(3, 10, 3, 13, 14, 4),
-            box(3, 10, 4, 4, 14, 12),
-            box(12, 10, 4, 13, 14, 12)
+            box(5, 2, 5, 11, 9, 11),
+            box(3, 9, 3, 13, 10, 13),
+            box(3, 10, 12, 13, 13, 13),
+            box(3, 10, 3, 13, 13, 4),
+            box(3, 10, 4, 4, 13, 12)
     ));
 
     public BlockMechanicalApothecary(ModX mod, Class<BlockEntityMechanicalApothecary> teClass, MenuType<ContainerMenuMechanicalApothecary> menu) {
@@ -65,7 +73,7 @@ public class BlockMechanicalApothecary extends MenuBlockBE<BlockEntityMechanical
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
+    public void registerClient(SetupContext ctx) {
         ItemStackRenderer.addRenderBlock(this.getBlockEntityType(), true);
         MenuScreens.register(ModBlocks.mechanicalApothecary.menu, ScreenMechanicalApothecary::new);
         BlockEntityRenderers.register(this.getBlockEntityType(), context -> new MechanicalApothecaryRenderer());
@@ -73,7 +81,7 @@ public class BlockMechanicalApothecary extends MenuBlockBE<BlockEntityMechanical
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void initializeItemClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
+    public void initializeItemClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
         consumer.accept(ItemStackRenderer.createProperties());
     }
 
@@ -85,7 +93,7 @@ public class BlockMechanicalApothecary extends MenuBlockBE<BlockEntityMechanical
 
             ItemStack held = player.getMainHandItem();
             @SuppressWarnings("ConstantConditions")
-            FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainer(held, tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).orElse(null), 1000, player, true);
+            FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainer(held, tile.getCapability(ForgeCapabilities.FLUID_HANDLER, null).orElse(null), 1000, player, true);
             if (fluidActionResult.isSuccess()) {
                 if (tile instanceof BlockEntityBase) {
                     ((BlockEntityBase) tile).setDispatchable();

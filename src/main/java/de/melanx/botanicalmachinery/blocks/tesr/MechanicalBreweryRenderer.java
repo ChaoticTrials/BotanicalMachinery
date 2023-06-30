@@ -7,8 +7,6 @@ import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalBrewery;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
-import io.github.noeppi_noeppi.libx.render.RenderHelper;
-import io.github.noeppi_noeppi.libx.render.block.RotatedBlockRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
@@ -18,9 +16,12 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.material.Fluids;
-import vazkii.botania.api.brew.IBrewItem;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import org.moddingx.libx.render.RenderHelper;
+import org.moddingx.libx.render.block.RotatedBlockRenderer;
+import vazkii.botania.api.brew.BrewItem;
 import vazkii.botania.client.core.handler.ClientTickHandler;
-import vazkii.botania.common.item.ModItems;
+import vazkii.botania.common.item.BotaniaItems;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -49,7 +50,7 @@ public class MechanicalBreweryRenderer extends RotatedBlockRenderer<BlockEntityM
             .put(Items.STRING, 0xdbdbdb)
             .put(Items.ENDER_PEARL, 0x349988)
             .put(Items.BLAZE_POWDER, 0xffe000)
-            .put(ModItems.manaSteel, 0x006bff)
+            .put(BotaniaItems.manaSteel, 0x006bff)
             .put(Items.SPIDER_EYE, 0x9d1e2d)
             .put(Items.GOLDEN_CARROT, 0xdba213)
             .put(Items.PAPER, 0xe9eaeb)
@@ -67,7 +68,7 @@ public class MechanicalBreweryRenderer extends RotatedBlockRenderer<BlockEntityM
     private final int waterColor;
 
     public MechanicalBreweryRenderer() {
-        this.waterColor = Fluids.WATER.getAttributes().getColor();
+        this.waterColor = IClientFluidTypeExtensions.of(Fluids.WATER).getTintColor();
     }
 
     @Override
@@ -210,8 +211,8 @@ public class MechanicalBreweryRenderer extends RotatedBlockRenderer<BlockEntityM
     }
 
     private int getTargetColor(BlockEntityMechanicalBrewery tile) {
-        if (tile.getCurrentOutput().getItem() instanceof IBrewItem) {
-            return ((IBrewItem) tile.getCurrentOutput().getItem()).getBrew(tile.getCurrentOutput()).getColor(tile.getCurrentOutput());
+        if (tile.getCurrentOutput().getItem() instanceof BrewItem brewItem) {
+            return brewItem.getBrew(tile.getCurrentOutput()).getColor(tile.getCurrentOutput());
         } else {
             return this.waterColor;
         }
@@ -241,7 +242,7 @@ public class MechanicalBreweryRenderer extends RotatedBlockRenderer<BlockEntityM
         poseStack.translate(4, 3 + (4.4 * fillLevel), 4);
         poseStack.mulPose(Vector3f.XP.rotationDegrees(90));
 
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(Fluids.WATER.getAttributes().getStillTexture());
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture());
 
         VertexConsumer vertex = buffer.getBuffer(Sheets.translucentCullBlockSheet());
         RenderHelper.renderIconColored(poseStack, vertex, 0, 0, sprite, 8, 8, 1.0F, color, light, OverlayTexture.NO_OVERLAY);

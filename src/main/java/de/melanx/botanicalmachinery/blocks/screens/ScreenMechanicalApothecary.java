@@ -6,17 +6,17 @@ import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalApo
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalApothecary;
 import de.melanx.botanicalmachinery.core.LibResources;
 import de.melanx.botanicalmachinery.helper.GhostItemRenderer;
-import io.github.noeppi_noeppi.libx.render.RenderHelperFluid;
-import io.github.noeppi_noeppi.libx.util.TagAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.Tags;
+import org.moddingx.libx.render.RenderHelperFluid;
+import org.moddingx.libx.util.data.TagAccess;
 
 import javax.annotation.Nonnull;
 import java.awt.Color;
@@ -76,7 +76,7 @@ public class ScreenMechanicalApothecary extends AbstractContainerScreen<Containe
         int ySize = Math.round(81 * pctFluid);
         int yPos = 16 + 81 - ySize;
 
-        RenderHelperFluid.renderFluid(poseStack, this.minecraft.renderBuffers().bufferSource(), Fluids.WATER.getAttributes().getColor(), xPos, yPos, 17, ySize);
+        RenderHelperFluid.renderFluid(poseStack, this.minecraft.renderBuffers().bufferSource(), IClientFluidTypeExtensions.of(Fluids.WATER).getTintColor(), xPos, yPos, 17, ySize);
 
         RenderSystem.setShaderTexture(0, LibResources.MECHANICAL_APOTHECARY_GUI);
         this.blit(poseStack, xPos, 16, this.imageWidth, 16, 17, 81);
@@ -88,7 +88,7 @@ public class ScreenMechanicalApothecary extends AbstractContainerScreen<Containe
     protected void renderTooltip(@Nonnull PoseStack poseStack, int x, int y) {
         if (x >= 163 && x <= 179 &&
                 y >= 16 && y <= 96) {
-            TranslatableComponent fluid = new TranslatableComponent(this.tile.getFluidInventory().getFluidAmount() + " / " + this.tile.getFluidInventory().getCapacity() + " mB");
+            Component fluid = Component.translatable(this.tile.getFluidInventory().getFluidAmount() + " / " + this.tile.getFluidInventory().getCapacity() + " mB");
             this.renderTooltip(poseStack, fluid, x, y);
         }
         super.renderTooltip(poseStack, x, y);

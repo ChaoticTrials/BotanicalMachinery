@@ -5,8 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalApothecary;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
-import io.github.noeppi_noeppi.libx.render.RenderHelper;
-import io.github.noeppi_noeppi.libx.render.block.RotatedBlockRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
@@ -15,8 +13,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
+import org.moddingx.libx.render.RenderHelper;
+import org.moddingx.libx.render.block.RotatedBlockRenderer;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 
 import javax.annotation.Nonnull;
@@ -62,9 +62,10 @@ public class MechanicalApothecaryRenderer extends RotatedBlockRenderer<BlockEnti
             poseStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
 
             FluidStack fluidStack = tile.getFluidInventory().getFluid();
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStack.getFluid().getAttributes().getStillTexture(fluidStack));
+            IClientFluidTypeExtensions fluidTypeExtensions = IClientFluidTypeExtensions.of(fluidStack.getFluid());
+            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidTypeExtensions.getStillTexture(fluidStack));
 
-            int fluidColor = Fluids.WATER.getAttributes().getColor(tile.getLevel(), tile.getBlockPos());
+            int fluidColor = fluidTypeExtensions.getTintColor(fluidStack);
 
             VertexConsumer vertex = buffer.getBuffer(Sheets.translucentCullBlockSheet());
             RenderHelper.renderIconColored(poseStack, vertex, 0, 0, sprite, 8, 8, 1.0F, fluidColor, light, OverlayTexture.NO_OVERLAY);

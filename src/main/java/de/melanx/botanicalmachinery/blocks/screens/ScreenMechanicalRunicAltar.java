@@ -10,7 +10,7 @@ import de.melanx.botanicalmachinery.helper.GhostItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import vazkii.botania.common.block.ModBlocks;
+import vazkii.botania.common.block.BotaniaBlocks;
 
 import javax.annotation.Nonnull;
 
@@ -30,7 +30,7 @@ public class ScreenMechanicalRunicAltar extends ScreenBase<ContainerMenuMechanic
 
         BlockEntityMechanicalRunicAltar blockEntity = this.menu.getBlockEntity();
         if (blockEntity.getInventory().getStackInSlot(0).isEmpty() && this.minecraft != null) {
-            GhostItemRenderer.renderGhostItem(new ItemStack(ModBlocks.livingrock), poseStack, this.relX + 90, this.relY + 43);
+            GhostItemRenderer.renderGhostItem(new ItemStack(BotaniaBlocks.livingrock), poseStack, this.relX + 90, this.relY + 43);
         }
 
         if (blockEntity.getProgress() > 0) {

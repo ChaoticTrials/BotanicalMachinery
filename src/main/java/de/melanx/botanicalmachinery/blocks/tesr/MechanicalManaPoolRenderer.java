@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalManaPool;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
-import io.github.noeppi_noeppi.libx.render.block.RotatedBlockRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -15,7 +14,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import vazkii.botania.api.mana.IPoolOverlayProvider;
+import org.moddingx.libx.render.block.RotatedBlockRenderer;
+import vazkii.botania.api.mana.PoolOverlayProvider;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 import vazkii.botania.client.core.handler.MiscellaneousModels;
 import vazkii.botania.client.core.helper.RenderHelper;
@@ -33,7 +33,7 @@ public class MechanicalManaPoolRenderer extends RotatedBlockRenderer<BlockEntity
             return;
 
         ItemStack catalystStack = tile.getInventory().getStackInSlot(0);
-        if (!catalystStack.isEmpty() && catalystStack.getItem() instanceof BlockItem && ((BlockItem) catalystStack.getItem()).getBlock() instanceof IPoolOverlayProvider catalyst) {
+        if (!catalystStack.isEmpty() && catalystStack.getItem() instanceof BlockItem && ((BlockItem) catalystStack.getItem()).getBlock() instanceof PoolOverlayProvider catalyst) {
             ResourceLocation spriteId = catalyst.getIcon(tile.getLevel(), tile.getBlockPos());
             TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(spriteId);
 
@@ -45,21 +45,21 @@ public class MechanicalManaPoolRenderer extends RotatedBlockRenderer<BlockEntity
             float alpha = (float) ((Math.sin((double) ((float) ClientTickHandler.ticksInGame + partialTick) / 20.0D) + 1.0D) * 0.3D + 0.2D);
 
             VertexConsumer vertex = buffer.getBuffer(RenderHelper.ICON_OVERLAY);
-            RenderHelper.renderIcon(poseStack, vertex, 0, 0, sprite, 12, 12, alpha);
+            RenderHelper.renderIconFullBright(poseStack, vertex, sprite, alpha);
 
             poseStack.popPose();
         }
 
         if (tile.getCurrentMana() > 0) {
-            double amount = tile.getCurrentMana() / (double) tile.getManaCap();
+            double amount = tile.getCurrentMana() / (double) tile.getMaxMana();
 
             poseStack.pushPose();
             poseStack.translate(3 / 16d, POOL_BOTTOM_HEIGHT + (amount * INNER_POOL_HEIGHT), 3 / 16d);
             poseStack.mulPose(Vector3f.XP.rotationDegrees(90.0F));
-            poseStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
+            poseStack.scale(10 / 16f, 10 / 16f, 10 / 16f);
 
             VertexConsumer vertex = buffer.getBuffer(RenderHelper.MANA_POOL_WATER);
-            RenderHelper.renderIcon(poseStack, vertex, 0, 0, MiscellaneousModels.INSTANCE.manaWater.sprite(), 10, 10, 1.0F);
+            RenderHelper.renderIconFullBright(poseStack, vertex, MiscellaneousModels.INSTANCE.manaWater.sprite(), 1.0F);
 
             poseStack.popPose();
         }

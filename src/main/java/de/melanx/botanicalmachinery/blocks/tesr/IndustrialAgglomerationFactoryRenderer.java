@@ -5,12 +5,12 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityIndustrialAgglomerationFactory;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
-import io.github.noeppi_noeppi.libx.render.block.RotatedBlockRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemStack;
+import org.moddingx.libx.render.block.RotatedBlockRenderer;
 import vazkii.botania.client.core.handler.ClientTickHandler;
 import vazkii.botania.client.core.handler.MiscellaneousModels;
 import vazkii.botania.client.core.helper.RenderHelper;
@@ -20,43 +20,43 @@ import javax.annotation.Nonnull;
 public class IndustrialAgglomerationFactoryRenderer extends RotatedBlockRenderer<BlockEntityIndustrialAgglomerationFactory> {
 
     @Override
-    protected void doRender(@Nonnull BlockEntityIndustrialAgglomerationFactory tile, float partialTick, @Nonnull PoseStack ms, @Nonnull MultiBufferSource buffer, int light, int overlay) {
+    protected void doRender(@Nonnull BlockEntityIndustrialAgglomerationFactory tile, float partialTick, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
         if (!LibXClientConfig.AdvancedRendering.all || !LibXClientConfig.AdvancedRendering.industrialAgglomerationFactory)
             return;
 
         double progressLeft = 1 - (tile.getProgress() / (double) tile.getMaxProgress());
 
-        this.renderStack(tile.getInventory().getStackInSlot(0), ms, buffer, partialTick, progressLeft, 0, light);
-        this.renderStack(tile.getInventory().getStackInSlot(1), ms, buffer, partialTick, progressLeft, 120, light);
-        this.renderStack(tile.getInventory().getStackInSlot(2), ms, buffer, partialTick, progressLeft, 240, light);
+        this.renderStack(tile.getInventory().getStackInSlot(0), poseStack, buffer, partialTick, progressLeft, 0, light);
+        this.renderStack(tile.getInventory().getStackInSlot(1), poseStack, buffer, partialTick, progressLeft, 120, light);
+        this.renderStack(tile.getInventory().getStackInSlot(2), poseStack, buffer, partialTick, progressLeft, 240, light);
 
         if (!tile.getInventory().getStackInSlot(3).isEmpty()) {
             float time = ClientTickHandler.ticksInGame + partialTick;
 
-            ms.pushPose();
-            ms.translate(0.5, 11.2 / 16d, 0.5);
-            ms.scale(0.3f, 0.3f, 0.3f);
-            ms.mulPose(Vector3f.YP.rotationDegrees(-time));
-            ms.translate(0, 0.075 * Math.sin(time / 5d), 0);
+            poseStack.pushPose();
+            poseStack.translate(0.5, 11.2 / 16d, 0.5);
+            poseStack.scale(0.3f, 0.3f, 0.3f);
+            poseStack.mulPose(Vector3f.YP.rotationDegrees(-time));
+            poseStack.translate(0, 0.075 * Math.sin(time / 5d), 0);
 
-            Minecraft.getInstance().getItemRenderer().renderStatic(tile.getInventory().getStackInSlot(3), ItemTransforms.TransformType.GROUND, light, OverlayTexture.NO_OVERLAY, ms, buffer, (int) tile.getBlockPos().asLong());
+            Minecraft.getInstance().getItemRenderer().renderStatic(tile.getInventory().getStackInSlot(3), ItemTransforms.TransformType.GROUND, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, (int) tile.getBlockPos().asLong());
 
-            ms.popPose();
+            poseStack.popPose();
         }
 
         if (tile.getProgress() > 0) {
-            ms.pushPose();
-            ms.translate(6.2 / 16, 4.7 / 16, 6.2 / 16);
-            ms.scale(3.6f / 16, 3.6f / 16, 3.6f / 16);
+            poseStack.pushPose();
+            poseStack.translate(6.2 / 16, 4.7 / 16, 6.2 / 16);
+            poseStack.scale(3.6f / 16, 3.6f / 16, 3.6f / 16);
 
             float alphaMod = 50000 * (tile.getProgress() / (float) tile.getMaxProgress());
-            ms.mulPose(Vector3f.XP.rotationDegrees(90));
-            ms.translate(0, 0, -0.18850000202655792);
+            poseStack.mulPose(Vector3f.XP.rotationDegrees(90));
+            poseStack.translate(0, 0, -0.18850000202655792);
             float alpha = (float) ((Math.sin((ClientTickHandler.ticksInGame + partialTick) / 8) + 1) / 5 + 0.6) * alphaMod;
             VertexConsumer vertex = buffer.getBuffer(vazkii.botania.client.core.helper.RenderHelper.TERRA_PLATE);
-            RenderHelper.renderIcon(ms, vertex, 0, 0, MiscellaneousModels.INSTANCE.terraPlateOverlay.sprite(), 1, 1, alpha);
+            RenderHelper.renderIconFullBright(poseStack, vertex, MiscellaneousModels.INSTANCE.terraPlateOverlay.sprite(), alpha);
 
-            ms.popPose();
+            poseStack.popPose();
         }
     }
 

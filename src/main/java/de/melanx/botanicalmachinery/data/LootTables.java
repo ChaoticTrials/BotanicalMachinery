@@ -2,9 +2,9 @@ package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.ModBlocks;
-import io.github.noeppi_noeppi.libx.annotation.data.Datagen;
-import io.github.noeppi_noeppi.libx.data.provider.BlockLootProviderBase;
 import net.minecraft.data.DataGenerator;
+import org.moddingx.libx.annotation.data.Datagen;
+import org.moddingx.libx.datagen.provider.loot.BlockLootProviderBase;
 
 import static de.melanx.botanicalmachinery.core.TileTags.*;
 

@@ -3,8 +3,6 @@ package de.melanx.botanicalmachinery.blocks.tiles;
 import de.melanx.botanicalmachinery.blocks.base.WorkingTile;
 import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
-import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
-import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -14,15 +12,17 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import vazkii.botania.api.recipe.IElvenTradeRecipe;
-import vazkii.botania.common.crafting.ModRecipeTypes;
+import org.moddingx.libx.crafting.recipe.RecipeHelper;
+import org.moddingx.libx.inventory.BaseItemStackHandler;
+import vazkii.botania.api.recipe.ElvenTradeRecipe;
+import vazkii.botania.common.crafting.BotaniaRecipeTypes;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class BlockEntityAlfheimMarket extends WorkingTile<IElvenTradeRecipe> {
+public class BlockEntityAlfheimMarket extends WorkingTile<ElvenTradeRecipe> {
 
     public static final int MAX_MANA_PER_TICK = 25;
 
@@ -32,9 +32,9 @@ public class BlockEntityAlfheimMarket extends WorkingTile<IElvenTradeRecipe> {
     private ItemStack currentOutput = ItemStack.EMPTY;
 
     public BlockEntityAlfheimMarket(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, ModRecipeTypes.ELVEN_TRADE_TYPE, pos, state, LibXServerConfig.MaxManaCapacity.alfheimMarket, 0, 4);
+        super(type, BotaniaRecipeTypes.ELVEN_TRADE_TYPE, pos, state, LibXServerConfig.MaxManaCapacity.alfheimMarket, 0, 4);
         this.inventory = BaseItemStackHandler.builder(5)
-                .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), ModRecipeTypes.ELVEN_TRADE_TYPE, stack), 0, 1, 2, 3)
+                .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), BotaniaRecipeTypes.ELVEN_TRADE_TYPE, stack), 0, 1, 2, 3)
                 .output(4)
                 .contentsChanged(() -> {
                     this.setChanged();
@@ -47,7 +47,8 @@ public class BlockEntityAlfheimMarket extends WorkingTile<IElvenTradeRecipe> {
     @Override
     public void tick() {
         if (this.level != null && !this.level.isClientSide) {
-            this.runRecipeTick(() -> this.currentInput = ItemStack.EMPTY, (stack, slot) -> this.currentInput = stack.copy(), (stack, slot) -> {});
+            this.runRecipeTick(() -> this.currentInput = ItemStack.EMPTY, (stack, slot) -> this.currentInput = stack.copy(), (stack, slot) -> {
+            });
             if (this.recipe != null) {
                 this.currentOutput = this.recipe.getOutputs().size() == 0 ? ItemStack.EMPTY : this.recipe.getOutputs().get(0).copy();
                 this.setChanged();
@@ -82,12 +83,12 @@ public class BlockEntityAlfheimMarket extends WorkingTile<IElvenTradeRecipe> {
     }
 
     @Override
-    protected List<ItemStack> resultItems(IElvenTradeRecipe recipe, List<ItemStack> stacks) {
+    protected List<ItemStack> resultItems(ElvenTradeRecipe recipe, List<ItemStack> stacks) {
         return recipe.getOutputs().stream().map(ItemStack::copy).toList();
     }
 
     @Override
-    public int getMaxProgress(IElvenTradeRecipe recipe) {
+    public int getMaxProgress(ElvenTradeRecipe recipe) {
         return LibXServerConfig.AlfheimMarket.recipeCost;
     }
 

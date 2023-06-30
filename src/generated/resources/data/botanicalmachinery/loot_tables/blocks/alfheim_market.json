@@ -2,43 +2,67 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "main",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:copy_nbt",
-              "source": "block_entity",
-              "ops": [
-                {
-                  "source": "inv",
-                  "target": "BlockEntityTag.inv",
-                  "op": "replace"
-                },
-                {
-                  "source": "mana",
-                  "target": "BlockEntityTag.mana",
-                  "op": "replace"
-                },
-                {
-                  "source": "progress",
-                  "target": "BlockEntityTag.progress",
-                  "op": "replace"
-                }
-              ]
-            }
-          ],
-          "name": "botanicalmachinery:alfheim_market"
-        }
-      ],
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
         }
-      ]
+      ],
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "enchantments": [
+                      {
+                        "enchantment": "minecraft:silk_touch",
+                        "levels": {
+                          "min": 1
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "name": "botanicalmachinery:alfheim_market"
+            },
+            {
+              "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "minecraft:copy_nbt",
+                  "ops": [
+                    {
+                      "op": "replace",
+                      "source": "inv",
+                      "target": "BlockEntityTag.inv"
+                    },
+                    {
+                      "op": "replace",
+                      "source": "mana",
+                      "target": "BlockEntityTag.mana"
+                    },
+                    {
+                      "op": "replace",
+                      "source": "progress",
+                      "target": "BlockEntityTag.progress"
+                    }
+                  ],
+                  "source": "block_entity"
+                }
+              ],
+              "name": "botanicalmachinery:alfheim_market"
+            }
+          ]
+        }
+      ],
+      "name": "main",
+      "rolls": 1.0
     }
   ]
 }

@@ -1,5 +1,9 @@
 {
   "variants": {
+    "facing=east": {
+      "model": "botanicalmachinery:block/mechanical_brewery",
+      "y": 90
+    },
     "facing=north": {
       "model": "botanicalmachinery:block/mechanical_brewery"
     },
@@ -10,10 +14,6 @@
     "facing=west": {
       "model": "botanicalmachinery:block/mechanical_brewery",
       "y": 270
-    },
-    "facing=east": {
-      "model": "botanicalmachinery:block/mechanical_brewery",
-      "y": 90
     }
   }
 }

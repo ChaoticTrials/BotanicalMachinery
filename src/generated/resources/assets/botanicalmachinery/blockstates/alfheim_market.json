@@ -1,5 +1,9 @@
 {
   "variants": {
+    "facing=east": {
+      "model": "botanicalmachinery:block/alfheim_market",
+      "y": 90
+    },
     "facing=north": {
       "model": "botanicalmachinery:block/alfheim_market"
     },
@@ -10,10 +14,6 @@
     "facing=west": {
       "model": "botanicalmachinery:block/alfheim_market",
       "y": 270
-    },
-    "facing=east": {
-      "model": "botanicalmachinery:block/alfheim_market",
-      "y": 90
     }
   }
 }

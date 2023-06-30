@@ -6,19 +6,19 @@ import de.melanx.botanicalmachinery.blocks.base.WorkingTile;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
-import io.github.noeppi_noeppi.libx.crafting.recipe.RecipeHelper;
-import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import vazkii.botania.api.recipe.IRuneAltarRecipe;
+import org.moddingx.libx.crafting.recipe.RecipeHelper;
+import org.moddingx.libx.inventory.BaseItemStackHandler;
+import vazkii.botania.api.recipe.RunicAltarRecipe;
 import vazkii.botania.client.fx.SparkleParticleData;
-import vazkii.botania.common.block.ModBlocks;
-import vazkii.botania.common.crafting.ModRecipeTypes;
-import vazkii.botania.common.lib.ModTags;
+import vazkii.botania.common.block.BotaniaBlocks;
+import vazkii.botania.common.crafting.BotaniaRecipeTypes;
+import vazkii.botania.common.lib.BotaniaTags;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -27,19 +27,19 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class BlockEntityMechanicalRunicAltar extends WorkingTile<IRuneAltarRecipe> {
+public class BlockEntityMechanicalRunicAltar extends WorkingTile<RunicAltarRecipe> {
 
     public static final int MAX_MANA_PER_TICK = 100;
 
     private final BaseItemStackHandler inventory;
-    
+
     private final List<Integer> slotsUsed = new ArrayList<>();
 
     public BlockEntityMechanicalRunicAltar(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, ModRecipeTypes.RUNE_TYPE, pos, state, LibXServerConfig.MaxManaCapacity.mechanicalRunicAltar, 1, 17);
+        super(type, BotaniaRecipeTypes.RUNE_TYPE, pos, state, LibXServerConfig.MaxManaCapacity.mechanicalRunicAltar, 1, 17);
         this.inventory = BaseItemStackHandler.builder(33)
-                .validator(stack -> stack.getItem() == ModBlocks.livingrock.asItem(), 0)
-                .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), ModRecipeTypes.RUNE_TYPE, stack), Range.closedOpen(1, 17))
+                .validator(stack -> stack.getItem() == BotaniaBlocks.livingrock.asItem(), 0)
+                .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), BotaniaRecipeTypes.RUNE_TYPE, stack), Range.closedOpen(1, 17))
                 .output(Range.closedOpen(17, 33))
                 .contentsChanged(() -> {
                     this.setChanged();
@@ -63,7 +63,8 @@ public class BlockEntityMechanicalRunicAltar extends WorkingTile<IRuneAltarRecip
     @Override
     public void tick() {
         if (this.level != null && !this.level.isClientSide) {
-            this.runRecipeTick(this.slotsUsed::clear, (stack, slot) -> this.slotsUsed.add(slot), (stack, slot) -> {});
+            this.runRecipeTick(this.slotsUsed::clear, (stack, slot) -> this.slotsUsed.add(slot), (stack, slot) -> {
+            });
         } else if (this.level != null && LibXClientConfig.AdvancedRendering.all && LibXClientConfig.AdvancedRendering.industrialAgglomerationFactory) {
             if (this.getMaxProgress() > 0 && this.getProgress() >= (this.getMaxProgress() - (5 * this.getMaxManaPerTick()))) {
                 for (int i = 0; i < 5; ++i) {
@@ -80,20 +81,20 @@ public class BlockEntityMechanicalRunicAltar extends WorkingTile<IRuneAltarRecip
     }
 
     @Override
-    protected List<ItemStack> resultItems(IRuneAltarRecipe recipe, List<ItemStack> stacks) {
+    protected List<ItemStack> resultItems(RunicAltarRecipe recipe, List<ItemStack> stacks) {
         return Streams.concat(
-                stacks.stream().filter(s -> s.is(ModTags.Items.RUNES)).map(ItemStack::copy),
+                stacks.stream().filter(s -> s.is(BotaniaTags.Items.RUNES)).map(ItemStack::copy),
                 super.resultItems(recipe, stacks).stream()
         ).toList();
     }
 
     @Override
-    protected void onCrafted(IRuneAltarRecipe recipe) {
+    protected void onCrafted(RunicAltarRecipe recipe) {
         this.inventory.extractItem(0, 1, false);
     }
 
     @Override
-    protected int getMaxProgress(IRuneAltarRecipe recipe) {
+    protected int getMaxProgress(RunicAltarRecipe recipe) {
         return recipe.getManaUsage();
     }
 

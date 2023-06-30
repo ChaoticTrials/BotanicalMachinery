@@ -4,14 +4,16 @@ import de.melanx.botanicalmachinery.blocks.base.BotanicalBlock;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuManaBattery;
 import de.melanx.botanicalmachinery.blocks.screens.ScreenManaBattery;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityManaBattery;
-import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.libx.render.ItemStackRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import org.moddingx.libx.mod.ModX;
+import org.moddingx.libx.registration.SetupContext;
+import org.moddingx.libx.render.ItemStackRenderer;
 
+import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 public class BlockManaBattery extends BotanicalBlock<BlockEntityManaBattery, ContainerMenuManaBattery> {
@@ -25,10 +27,15 @@ public class BlockManaBattery extends BotanicalBlock<BlockEntityManaBattery, Con
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void registerClient(ResourceLocation id, Consumer<Runnable> defer) {
-        super.registerClient(id, defer);
+    public void registerClient(SetupContext ctx) {
+        super.registerClient(ctx);
         ItemStackRenderer.addRenderBlock(this.getBlockEntityType(), true);
         MenuScreens.register(this.menu, ScreenManaBattery::new);
+    }
+
+    @Override
+    public void initializeItemClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
+        // NO-OP
     }
 
     public enum Variant {
