@@ -25,7 +25,7 @@
   "screen.botanicalmachinery.mechanical_runic_altar": "机械符文祭坛",
 
   "lexicon.botanicalmachinery.title": "植物魔法：机械",
-  "lexicon.botanicalmachinery.description": "精简你的农场。这是植物魔法：机械的页面，模组作者MelanX，翻译者Fodoth_jinzi89。",
+  "lexicon.botanicalmachinery.description": "精简你的农场。这是植物魔法：机械的页面，模组作者$(item)MelanX$()，翻译者$(item)Fodoth_jinzi89$()。",
   "lexicon.botanicalmachinery.introduction": "新发现",
   "lexicon.botanicalmachinery.introduction.page1": "据说$(d)源质钢$(0)具有某些能力，其中许多仍有待挖掘。使用$(l:botania:baubles/aura_ring)高级光环之戒$()，你可以将$(d)源质钢$(0)置于持续的魔力流中。因此，可以将植物学家的装置引入现代技术世界来提高它们的效率。然而，即使是精灵也不能完全理解这种做法所带来的影响，以这种方式制造这些机器是否安全也还不得而知。机器的魔力可以通过在上方放置火花输入。所有机器支持漏斗和管道。",
 
