@@ -16,6 +16,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.moddingx.libx.block.RotationShape;
 import org.moddingx.libx.mod.ModX;
 import org.moddingx.libx.registration.SetupContext;
@@ -36,6 +38,7 @@ public class BlockAlfheimMarket extends BotanicalBlock<BlockEntityAlfheimMarket,
         super(mod, teClass, menu, false, true);
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerClient(SetupContext ctx) {
         super.registerClient(ctx);
