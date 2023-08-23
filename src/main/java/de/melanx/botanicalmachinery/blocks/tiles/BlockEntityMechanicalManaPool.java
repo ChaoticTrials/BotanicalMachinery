@@ -21,7 +21,7 @@ import vazkii.botania.common.block.BotaniaBlocks;
 import vazkii.botania.common.crafting.BotaniaRecipeTypes;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
@@ -29,7 +29,7 @@ import java.util.function.Supplier;
 
 public class BlockEntityMechanicalManaPool extends RecipeTile<ManaInfusionRecipe> {
 
-    public static final List<Item> CATALYSTS = Arrays.asList(BotaniaBlocks.alchemyCatalyst.asItem(), BotaniaBlocks.conjurationCatalyst.asItem(), BotaniaBlocks.manaVoid.asItem());
+    private static List<Item> CACHED_CATALYSTS;
 
     private final BaseItemStackHandler inventory;
 
@@ -39,7 +39,7 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<ManaInfusionRecipe
     public BlockEntityMechanicalManaPool(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, BotaniaRecipeTypes.MANA_INFUSION_TYPE, pos, state, LibXServerConfig.MaxManaCapacity.mechanicalManaPool, 1, 2);
         this.inventory = BaseItemStackHandler.builder(3)
-                .validator(stack -> CATALYSTS.contains(stack.getItem()), 0)
+                .validator(stack -> this.getCatalysts().contains(stack.getItem()), 0)
                 .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), BotaniaRecipeTypes.MANA_INFUSION_TYPE, stack))
                 .slotLimit(1, 0)
                 .output(2)
@@ -120,8 +120,8 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<ManaInfusionRecipe
     public int getComparatorOutput() {
         if (this.inventory.getStackInSlot(0).isEmpty()) return 0;
         Item item = this.inventory.getStackInSlot(0).getItem();
-        if (CATALYSTS.contains(item)) {
-            return Mth.clamp(1 + CATALYSTS.indexOf(item), 0, 15);
+        if (this.getCatalysts().contains(item)) {
+            return Mth.clamp(1 + this.getCatalysts().indexOf(item), 0, 15);
         } else {
             return 0;
         }
@@ -172,5 +172,32 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<ManaInfusionRecipe
         CompoundTag nbt = super.getUpdateTag();
         nbt.putInt(TileTags.COOLDOWN, this.cooldown);
         return nbt;
+    }
+
+    public static void invalidateCatalysts() {
+        CACHED_CATALYSTS = null;
+    }
+
+    public List<Item> getCatalysts() {
+        if (CACHED_CATALYSTS == null) {
+            if (this.level == null) {
+                return List.of();
+            }
+
+            List<Item> catalysts = new ArrayList<>();
+            this.level.getRecipeManager().getAllRecipesFor(BotaniaRecipeTypes.MANA_INFUSION_TYPE)
+                    .forEach(recipe -> {
+                        if (recipe.getRecipeCatalyst() != null) {
+                            recipe.getRecipeCatalyst().getDisplayedStacks().stream().map(ItemStack::getItem).forEach(item -> {
+                                if (!catalysts.contains(item)) {
+                                    catalysts.add(item);
+                                }
+                            });
+                        }
+                    });
+            CACHED_CATALYSTS = List.copyOf(catalysts);
+        }
+
+        return CACHED_CATALYSTS;
     }
 }

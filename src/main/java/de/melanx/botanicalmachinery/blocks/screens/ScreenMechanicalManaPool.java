@@ -27,7 +27,7 @@ public class ScreenMechanicalManaPool extends ScreenBase<ContainerMenuMechanical
 
         BlockEntityMechanicalManaPool blockEntity = this.menu.getBlockEntity();
         if (blockEntity.getInventory().getStackInSlot(0).isEmpty() && this.minecraft != null) {
-            GhostItemRenderer.renderGhostItem(BlockEntityMechanicalManaPool.CATALYSTS.stream().map(ItemStack::new).toList(), poseStack, this.relX + 53, this.relY + 47);
+            GhostItemRenderer.renderGhostItem(blockEntity.getCatalysts().stream().map(ItemStack::new).toList(), poseStack, this.relX + 53, this.relY + 47);
         }
     }
 }

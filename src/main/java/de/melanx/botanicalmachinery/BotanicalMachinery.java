@@ -47,11 +47,11 @@ public final class BotanicalMachinery extends ModXRegistration {
 
     @Override
     protected void setup(FMLCommonSetupEvent event) {
-
+        // NO-OP
     }
 
     @Override
     protected void clientSetup(FMLClientSetupEvent event) {
-
+        // NO-OP
     }
 }
