@@ -60,7 +60,7 @@ public class TileManaBattery extends BotanicalTile {
 
     @Override
     public int getCurrentMana() {
-        return ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.CREATIVE ? this.getManaCap() / 2 : super.getCurrentMana();
+        return this.getBlockState().getBlock() instanceof BlockManaBattery ? ((BlockManaBattery) this.getBlockState().getBlock()).variant == BlockManaBattery.Variant.CREATIVE ? this.getManaCap() / 2 : super.getCurrentMana() : 0;
     }
 
     @Override
