@@ -5,6 +5,7 @@ import de.melanx.botanicalmachinery.blocks.base.WorkingTile;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import de.melanx.botanicalmachinery.config.LibXServerConfig;
 import de.melanx.botanicalmachinery.core.TileTags;
+import de.melanx.botanicalmachinery.data.CommonTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -52,7 +52,7 @@ public class BlockEntityMechanicalApothecary extends WorkingTile<PetalApothecary
     public BlockEntityMechanicalApothecary(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, BotaniaRecipeTypes.PETAL_TYPE, pos, state, 0, 1, 17);
         this.inventory = BaseItemStackHandler.builder(21)
-                .validator(stack -> stack.is(Tags.Items.SEEDS), 0)
+                .validator(stack -> stack.is(CommonTags.MECHANICAL_APOTHECARY_CATALYSTS), 0)
                 .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), BotaniaRecipeTypes.PETAL_TYPE, stack), Range.closedOpen(1, 17))
                 .output(17, 18, 19, 20)
                 .contentsChanged(() -> {
