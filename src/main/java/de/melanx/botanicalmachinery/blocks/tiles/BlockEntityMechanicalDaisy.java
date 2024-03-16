@@ -417,6 +417,9 @@ public class BlockEntityMechanicalDaisy extends BlockEntityBase implements Ticki
 
         @Override
         protected void onContentsChanged(int slot) {
+            if (slot >= 0 && slot < 8 && this.getStackInSlot(slot).isEmpty() && this.getFluidInTank(slot).isEmpty()) {
+                BlockEntityMechanicalDaisy.this.workingTicks[slot] = 0;
+            }
             BlockEntityMechanicalDaisy.this.setChanged();
             BlockEntityMechanicalDaisy.this.setDispatchable();
         }
