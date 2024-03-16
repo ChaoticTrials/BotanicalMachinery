@@ -52,6 +52,7 @@ public class ContainerMenuMechanicalDaisy extends BlockEntityMenu<BlockEntityMec
             //noinspection ConstantConditions
             if (inMouse.getItem() instanceof BlockItem || fluidCap == null || fluidCap.getTanks() != 1) {
                 super.clicked(slot, dragType, clickType, player);
+                return;
             }
 
             if (fluidCap.getFluidInTank(0).isEmpty()) {
