@@ -68,7 +68,7 @@ public class BlockEntityMechanicalDaisy extends BlockEntityBase implements Ticki
         boolean hasSpawnedParticles = false;
         for (int i = 0; i < 8; i++) {
             PureDaisyRecipe recipe = this.getRecipe(i);
-            if (recipe != null) {
+            if (recipe != null && this.workingTicks[i] >= 0) {
                 //noinspection ConstantConditions
                 if (!this.level.isClientSide) {
                     if (this.workingTicks[i] >= recipe.getTime() * LibXServerConfig.WorkingDurationMultiplier.mechanicalDaisy) {
