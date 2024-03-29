@@ -134,6 +134,10 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<ManaInfusionRecipe
         } else {
             super.receiveMana(i);
         }
+
+        if (this.recipe == null && !this.inventory.getStackInSlot(1).isEmpty()) {
+            this.needsRecipeUpdate();
+        }
     }
 
     @Override
