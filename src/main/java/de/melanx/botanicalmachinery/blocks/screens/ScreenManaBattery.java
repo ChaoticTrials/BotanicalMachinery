@@ -1,7 +1,5 @@
 package de.melanx.botanicalmachinery.blocks.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.blocks.base.ScreenBase;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuManaBattery;
@@ -9,6 +7,7 @@ import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityManaBattery;
 import de.melanx.botanicalmachinery.core.LibResources;
 import de.melanx.botanicalmachinery.helper.SoundHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -37,24 +36,23 @@ public class ScreenManaBattery extends ScreenBase<ContainerMenuManaBattery> {
     }
 
     @Override
-    protected void renderBg(@Nonnull PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
-        this.drawDefaultGuiBackgroundLayer(poseStack, LibResources.MANA_BATTERY_GUI);
+    protected void renderBg(@Nonnull GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+        this.drawDefaultGuiBackgroundLayer(guiGraphics, LibResources.MANA_BATTERY_GUI);
 
         BlockPos tilePos = this.menu.getPos();
         BlockEntityManaBattery blockEntity = (BlockEntityManaBattery) this.menu.getLevel().getBlockEntity(tilePos);
         if (blockEntity == null) return;
 
-        RenderSystem.setShaderTexture(0, LibResources.MANA_BATTERY_GUI);
         if (mouseX >= this.xB1 && mouseX < this.xB1 + 20 && mouseY >= this.yB1 && mouseY < this.yB1 + 20) {
-            this.blit(poseStack, this.xB1, this.yB1, 20, blockEntity.isSlot1Locked() ? this.imageHeight + 20 : this.imageHeight, 20, 20);
+            guiGraphics.blit(LibResources.MANA_BATTERY_GUI, this.xB1, this.yB1, 20, blockEntity.isSlot1Locked() ? this.imageHeight + 20 : this.imageHeight, 20, 20);
         } else {
-            this.blit(poseStack, this.xB1, this.yB1, 0, blockEntity.isSlot1Locked() ? this.imageHeight + 20 : this.imageHeight, 20, 20);
+            guiGraphics.blit(LibResources.MANA_BATTERY_GUI, this.xB1, this.yB1, 0, blockEntity.isSlot1Locked() ? this.imageHeight + 20 : this.imageHeight, 20, 20);
         }
 
         if (mouseX >= this.xB2 && mouseX < this.xB2 + 20 && mouseY >= this.yB2 && mouseY < this.yB2 + 20) {
-            this.blit(poseStack, this.xB2, this.yB2, 20, blockEntity.isSlot2Locked() ? this.imageHeight + 20 : this.imageHeight, 20, 20);
+            guiGraphics.blit(LibResources.MANA_BATTERY_GUI, this.xB2, this.yB2, 20, blockEntity.isSlot2Locked() ? this.imageHeight + 20 : this.imageHeight, 20, 20);
         } else {
-            this.blit(poseStack, this.xB2, this.yB2, 0, blockEntity.isSlot2Locked() ? this.imageHeight + 20 : this.imageHeight, 20, 20);
+            guiGraphics.blit(LibResources.MANA_BATTERY_GUI, this.xB2, this.yB2, 0, blockEntity.isSlot2Locked() ? this.imageHeight + 20 : this.imageHeight, 20, 20);
         }
     }
 

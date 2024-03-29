@@ -28,7 +28,7 @@
         "items": [
           {
             "items": [
-              "botania:apothecary_default"
+              "botania:alfheim_portal"
             ]
           }
         ]
@@ -39,7 +39,33 @@
       "conditions": {
         "items": [
           {
-            "tag": "botania:petals"
+            "items": [
+              "botania:glimmering_livingwood"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "criterion4": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:dreamwood"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "criterion5": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:glimmering_livingwood"
+            ]
           }
         ]
       },
@@ -47,7 +73,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "botanicalmachinery:mechanical_apothecary"
+        "recipe": "botanicalmachinery:alfheim_market"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -58,12 +84,15 @@
       "criterion1",
       "criterion2",
       "criterion3",
+      "criterion4",
+      "criterion5",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "botanicalmachinery:mechanical_apothecary"
+      "botanicalmachinery:alfheim_market"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -1,6 +1,6 @@
 {
   "name": "lexicon.botanicalmachinery.alfheim_market",
-  "category": "botanicalmachinery:botanicalmachinery",
+  "category": "botania:botanicalmachinery",
   "icon": "botanicalmachinery:alfheim_market",
   "entry_color": "aa00aa",
   "advancement": "botania:main/elf_portal_open",

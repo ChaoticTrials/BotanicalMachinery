@@ -12,13 +12,13 @@ repositories {
 }
 
 dependencies {
-    annotationProcessor fg.deobf('org.moddingx:LibX:1.19.2-4.2.8')
+    annotationProcessor fg.deobf('org.moddingx:LibX:1.20.1-5.0.12')
 
-    implementation fg.deobf('org.moddingx:LibX:1.19.2-4.2.8')
-    implementation fg.deobf('vazkii.botania:Botania:1.19.2-439-FORGE')
-    implementation fg.deobf('vazkii.patchouli:Patchouli:1.19.2-77')
-    implementation fg.deobf('top.theillusivec4.curios:curios-forge:1.19.2-5.1.4.0')
+    implementation fg.deobf('org.moddingx:LibX:1.20.1-5.0.12')
+    implementation fg.deobf('vazkii.botania:Botania:1.20.1-441-FORGE')
+    implementation fg.deobf('vazkii.patchouli:Patchouli:1.20.1-83-FORGE')
+    implementation fg.deobf('top.theillusivec4.curios:curios-forge:5.4.5+1.20.1')
 
-    compileOnly fg.deobf('mezz.jei:jei-1.19.2-common-api:11.6.0.1015')
-    runtimeOnly fg.deobf('mezz.jei:jei-1.19.2-forge:11.6.0.1015')
+    compileOnly fg.deobf('mezz.jei:jei-1.20.1-common-api:15.2.0.27')
+    runtimeOnly fg.deobf('mezz.jei:jei-1.20.1-forge:15.2.0.27')
 }

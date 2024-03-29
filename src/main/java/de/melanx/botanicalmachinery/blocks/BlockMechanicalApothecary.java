@@ -19,11 +19,11 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -68,7 +68,7 @@ public class BlockMechanicalApothecary extends MenuBlockBE<BlockEntityMechanical
     ));
 
     public BlockMechanicalApothecary(ModX mod, Class<BlockEntityMechanicalApothecary> teClass, MenuType<ContainerMenuMechanicalApothecary> menu) {
-        super(mod, teClass, menu, Properties.of(Material.STONE).strength(2, 10).dynamicShape(), new Item.Properties());
+        super(mod, teClass, menu, Properties.copy(Blocks.STONE).strength(2, 10).dynamicShape(), new Item.Properties());
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -5,17 +5,17 @@ import de.melanx.botanicalmachinery.blocks.containers.*;
 import de.melanx.botanicalmachinery.blocks.tiles.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import org.moddingx.libx.annotation.registration.RegisterClass;
 import org.moddingx.libx.base.BlockBase;
 import org.moddingx.libx.base.tile.MenuBlockBE;
 import org.moddingx.libx.menu.BlockEntityMenu;
+import vazkii.botania.common.block.BotaniaBlocks;
 
-@RegisterClass(registry = "BLOCK_REGISTRY")
+@RegisterClass(registry = "BLOCKS", priority = 1)
 public class ModBlocks {
 
-    public static final BlockBase manaEmeraldBlock = new BlockBase(BotanicalMachinery.getInstance(), Block.Properties.of(Material.METAL, MaterialColor.EMERALD).strength(5.0F, 6.0F).sound(SoundType.METAL));
+    public static final BlockBase manaEmeraldBlock = new BlockBase(BotanicalMachinery.getInstance(), Block.Properties.copy(BotaniaBlocks.manaDiamondBlock).mapColor(MapColor.EMERALD).strength(5.0F, 6.0F).sound(SoundType.METAL));
     public static final MenuBlockBE<BlockEntityAlfheimMarket, ContainerMenuAlfheimMarket> alfheimMarket = new BlockAlfheimMarket(BotanicalMachinery.getInstance(), BlockEntityAlfheimMarket.class, BlockEntityMenu.createMenuType(ContainerMenuAlfheimMarket::new));
     public static final MenuBlockBE<BlockEntityIndustrialAgglomerationFactory, ContainerMenuIndustrialAgglomerationFactory> industrialAgglomerationFactory = new BlockIndustrialAgglomerationFactory(BotanicalMachinery.getInstance(), BlockEntityIndustrialAgglomerationFactory.class, BlockEntityMenu.createMenuType(ContainerMenuIndustrialAgglomerationFactory::new));
     public static final MenuBlockBE<BlockEntityManaBattery, ContainerMenuManaBattery> manaBattery = new BlockManaBattery(BotanicalMachinery.getInstance(), BlockEntityManaBattery.class, BlockEntityMenu.createMenuType(ContainerMenuManaBattery::new), BlockManaBattery.Variant.NORMAL);

@@ -2,24 +2,21 @@ package de.melanx.botanicalmachinery.data;
 
 import de.melanx.botanicalmachinery.ModBlocks;
 import de.melanx.botanicalmachinery.ModItems;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.moddingx.libx.annotation.data.Datagen;
+import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.provider.recipe.RecipeProviderBase;
 import org.moddingx.libx.datagen.provider.recipe.crafting.CompressionExtension;
 import org.moddingx.libx.datagen.provider.recipe.crafting.CraftingExtension;
-import org.moddingx.libx.mod.ModX;
 import vazkii.botania.common.block.BotaniaBlocks;
 import vazkii.botania.common.block.BotaniaFlowerBlocks;
 import vazkii.botania.common.item.BotaniaItems;
 import vazkii.botania.common.lib.BotaniaTags;
 
-@Datagen
 public class Recipes extends RecipeProviderBase implements CraftingExtension, CompressionExtension {
 
-    public Recipes(ModX mod, DataGenerator generator) {
-        super(mod, generator);
+    public Recipes(DatagenContext context) {
+        super(context);
     }
 
     @Override

@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "a": {
       "item": "botanicalmachinery:mana_emerald"
@@ -12,5 +13,6 @@
   ],
   "result": {
     "item": "botanicalmachinery:mana_emerald_block"
-  }
+  },
+  "show_notification": true
 }

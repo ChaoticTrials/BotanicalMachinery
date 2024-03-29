@@ -12,8 +12,8 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -40,7 +40,7 @@ public class BlockMechanicalDaisy extends MenuBlockBE<BlockEntityMechanicalDaisy
     private static final VoxelShape SHAPE = box(0, 0, 0, 16, 11.4, 16);
 
     public BlockMechanicalDaisy(ModX mod, Class<BlockEntityMechanicalDaisy> teClass, MenuType<ContainerMenuMechanicalDaisy> menu) {
-        super(mod, teClass, menu, Properties.of(Material.STONE).strength(2, 10).dynamicShape(),
+        super(mod, teClass, menu, Properties.copy(Blocks.STONE).strength(2, 10).dynamicShape(),
                 new Item.Properties());
     }
 

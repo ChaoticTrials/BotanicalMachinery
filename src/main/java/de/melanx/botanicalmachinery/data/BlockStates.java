@@ -1,18 +1,14 @@
 package de.melanx.botanicalmachinery.data;
 
-import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.ModBlocks;
-import net.minecraft.data.DataGenerator;
-import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.moddingx.libx.annotation.data.Datagen;
-import org.moddingx.libx.datagen.provider.BlockStateProviderBase;
+import org.moddingx.libx.datagen.DatagenContext;
+import org.moddingx.libx.datagen.provider.model.BlockStateProviderBase;
 
-@Datagen
 public class BlockStates extends BlockStateProviderBase {
 
-    public BlockStates(DataGenerator gen, ExistingFileHelper helper) {
-        super(BotanicalMachinery.getInstance(), gen, helper);
+    public BlockStates(DatagenContext context) {
+        super(context);
     }
 
     @Override

@@ -1,16 +1,12 @@
 package de.melanx.botanicalmachinery.data;
 
-import de.melanx.botanicalmachinery.BotanicalMachinery;
-import net.minecraft.data.DataGenerator;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import org.moddingx.libx.annotation.data.Datagen;
-import org.moddingx.libx.datagen.provider.ItemModelProviderBase;
+import org.moddingx.libx.datagen.DatagenContext;
+import org.moddingx.libx.datagen.provider.model.ItemModelProviderBase;
 
-@Datagen
 public class ItemModels extends ItemModelProviderBase {
 
-    public ItemModels(DataGenerator gen, ExistingFileHelper helper) {
-        super(BotanicalMachinery.getInstance(), gen, helper);
+    public ItemModels(DatagenContext context) {
+        super(context);
     }
 
     @Override

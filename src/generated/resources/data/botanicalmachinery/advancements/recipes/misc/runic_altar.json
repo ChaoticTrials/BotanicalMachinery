@@ -43,5 +43,6 @@
     "recipes": [
       "botanicalmachinery:runic_altar"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

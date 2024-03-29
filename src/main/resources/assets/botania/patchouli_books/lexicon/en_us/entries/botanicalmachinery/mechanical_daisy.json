@@ -1,6 +1,6 @@
 {
   "name": "lexicon.botanicalmachinery.mechanical_daisy",
-  "category": "botanicalmachinery:botanicalmachinery",
+  "category": "botania:botanicalmachinery",
   "icon": "botanicalmachinery:mechanical_daisy",
   "entry_color": "aa00aa",
   "advancement": "botania:main/pure_daisy_pickup",

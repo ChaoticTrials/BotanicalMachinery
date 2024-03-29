@@ -7,12 +7,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import org.moddingx.libx.crafting.recipe.RecipeHelper;
+import org.moddingx.libx.crafting.RecipeHelper;
 import org.moddingx.libx.inventory.BaseItemStackHandler;
 import vazkii.botania.api.recipe.ElvenTradeRecipe;
 import vazkii.botania.common.crafting.BotaniaRecipeTypes;
@@ -50,7 +50,7 @@ public class BlockEntityAlfheimMarket extends WorkingTile<ElvenTradeRecipe> {
             this.runRecipeTick(() -> this.currentInput = ItemStack.EMPTY, (stack, slot) -> this.currentInput = stack.copy(), (stack, slot) -> {
             });
             if (this.recipe != null) {
-                this.currentOutput = this.recipe.getOutputs().size() == 0 ? ItemStack.EMPTY : this.recipe.getOutputs().get(0).copy();
+                this.currentOutput = this.recipe.getOutputs().isEmpty() ? ItemStack.EMPTY : this.recipe.getOutputs().get(0).copy();
                 this.setChanged();
                 this.setDispatchable();
             } else if (!this.currentInput.isEmpty() || !this.currentOutput.isEmpty()) {
@@ -63,7 +63,7 @@ public class BlockEntityAlfheimMarket extends WorkingTile<ElvenTradeRecipe> {
                 for (int slot = 0; slot < 4; slot++) {
                     if (this.inventory.getStackInSlot(slot).getItem() == Items.BREAD) {
                         this.level.setBlock(this.worldPosition, Blocks.AIR.defaultBlockState(), 3);
-                        this.level.explode(null, this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), 3, Explosion.BlockInteraction.BREAK);
+                        this.level.explode(null, this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), 3, Level.ExplosionInteraction.BLOCK);
                         break;
                     }
                 }

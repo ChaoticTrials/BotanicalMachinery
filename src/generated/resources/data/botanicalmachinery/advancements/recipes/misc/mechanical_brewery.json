@@ -93,5 +93,6 @@
     "recipes": [
       "botanicalmachinery:mechanical_brewery"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

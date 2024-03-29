@@ -1,18 +1,15 @@
 package de.melanx.botanicalmachinery.data;
 
-import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.ModBlocks;
-import net.minecraft.data.DataGenerator;
-import org.moddingx.libx.annotation.data.Datagen;
+import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.provider.loot.BlockLootProviderBase;
 
 import static de.melanx.botanicalmachinery.core.TileTags.*;
 
-@Datagen
 public class LootTables extends BlockLootProviderBase {
 
-    public LootTables(DataGenerator gen) {
-        super(BotanicalMachinery.getInstance(), gen);
+    public LootTables(DatagenContext context) {
+        super(context);
     }
 
     @Override

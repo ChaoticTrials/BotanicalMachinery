@@ -28,7 +28,7 @@
         "items": [
           {
             "items": [
-              "botania:fabulous_pool"
+              "botania:apothecary_default"
             ]
           }
         ]
@@ -39,33 +39,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "botania:alchemy_catalyst"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "criterion4": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "botania:diluted_pool"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "criterion5": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "botania:conjuration_catalyst"
-            ]
+            "tag": "botania:petals"
           }
         ]
       },
@@ -73,7 +47,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "botanicalmachinery:mechanical_mana_pool"
+        "recipe": "botanicalmachinery:mechanical_apothecary"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -84,14 +58,13 @@
       "criterion1",
       "criterion2",
       "criterion3",
-      "criterion4",
-      "criterion5",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "botanicalmachinery:mechanical_mana_pool"
+      "botanicalmachinery:mechanical_apothecary"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

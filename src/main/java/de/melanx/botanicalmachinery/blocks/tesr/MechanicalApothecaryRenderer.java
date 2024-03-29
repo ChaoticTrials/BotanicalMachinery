@@ -2,19 +2,21 @@ package de.melanx.botanicalmachinery.blocks.tesr;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalApothecary;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.moddingx.libx.render.RenderHelper;
 import org.moddingx.libx.render.block.RotatedBlockRenderer;
 import vazkii.botania.client.core.handler.ClientTickHandler;
@@ -34,7 +36,7 @@ public class MechanicalApothecaryRenderer extends RotatedBlockRenderer<BlockEnti
             poseStack.pushPose();
             poseStack.translate(0.5, 14.3 / 16, 0.5);
             poseStack.scale(6 / 16f, 6 / 16f, 6 / 16f);
-            poseStack.mulPose(Vector3f.YP.rotationDegrees(time / 1.3f));
+            poseStack.mulPose(Axis.YP.rotationDegrees(time / 1.3f));
 
             ItemStack stack = tile.getInventory().getStackInSlot(0);
 
@@ -48,7 +50,7 @@ public class MechanicalApothecaryRenderer extends RotatedBlockRenderer<BlockEnti
                 poseStack.translate(0, -amount, 0);
             }
 
-            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, (int) tile.getBlockPos().asLong());
+            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, tile.getLevel(), (int) tile.getBlockPos().asLong());
 
             poseStack.popPose();
         }
@@ -58,7 +60,7 @@ public class MechanicalApothecaryRenderer extends RotatedBlockRenderer<BlockEnti
         if (tile.getFluidInventory().getFluidAmount() > 0) {
             poseStack.pushPose();
             poseStack.translate(4 / 16d, (10 + (fluidAmount * 3.8)) / 16, 4 / 16d);
-            poseStack.mulPose(Vector3f.XP.rotationDegrees(90.0F));
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
             poseStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
 
             FluidStack fluidStack = tile.getFluidInventory().getFluid();
@@ -125,14 +127,17 @@ public class MechanicalApothecaryRenderer extends RotatedBlockRenderer<BlockEnti
                     float xRotate = (float) Math.sin(flowerTicks * 0.25) / 2;
                     float yRotate = (float) Math.max(0.6000000238418579, Math.sin(flowerTicks * 0.10000000149011612) / 2 + 0.5);
                     float zRotate = (float) Math.cos(flowerTicks * 0.25) / 2;
-                    poseStack.mulPose((new Vector3f(xRotate, yRotate, zRotate)).rotationDegrees((float) deg));
+                    Vector3f rotationAxis = new Vector3f(xRotate, yRotate, zRotate);
+                    float angleInRadians = (float) Math.toRadians(deg);
+                    Quaternionf quaternion = new Quaternionf().rotateAxis(angleInRadians, rotationAxis);
+                    poseStack.mulPose(quaternion);
                 } else {
-                    poseStack.mulPose((Vector3f.XP.rotationDegrees(90)));
+                    poseStack.mulPose((Axis.XP.rotationDegrees(90)));
                 }
                 poseStack.translate(-0.0625f, -0.0625f, -0.0625f);
 
                 ItemStack stack = tile.getInventory().getStackInSlot(slot);
-                Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, light, overlay, poseStack, buffer, (int) tile.getBlockPos().asLong() + slot);
+                Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, light, overlay, poseStack, buffer, tile.getLevel(), (int) tile.getBlockPos().asLong() + slot);
                 poseStack.popPose();
             }
         }

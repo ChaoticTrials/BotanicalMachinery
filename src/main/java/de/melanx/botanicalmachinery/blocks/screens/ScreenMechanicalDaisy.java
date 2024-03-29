@@ -2,10 +2,10 @@ package de.melanx.botanicalmachinery.blocks.screens;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import de.melanx.botanicalmachinery.blocks.containers.ContainerMenuMechanicalDaisy;
 import de.melanx.botanicalmachinery.core.LibResources;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
@@ -29,29 +29,28 @@ public class ScreenMechanicalDaisy extends AbstractContainerScreen<ContainerMenu
     }
 
     @Override
-    protected void renderBg(@Nonnull PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
-        this.renderBackground(poseStack);
+    protected void renderBg(@Nonnull GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+        this.renderBackground(guiGraphics);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, LibResources.MECHANICAL_DAISY_GUI);
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
-        this.blit(poseStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
+        guiGraphics.blit(LibResources.MECHANICAL_DAISY_GUI, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
     }
 
     @Override
-    protected void renderLabels(@Nonnull PoseStack poseStack, int mouseX, int mouseY) {
+    protected void renderLabels(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY) {
         String s = this.title.getString();
-        this.font.draw(poseStack, s, (float) (this.imageWidth / 2 - this.font.width(s) / 2), 6.0F, Color.DARK_GRAY.getRGB());
-        this.font.draw(poseStack, this.playerInventoryTitle.getString(), 8.0F, (float) (this.imageHeight - 96 + 2), Color.DARK_GRAY.getRGB());
+        guiGraphics.drawString(this.font, s, (float) (this.imageWidth / 2 - this.font.width(s) / 2), 6.0F, Color.DARK_GRAY.getRGB(), false);
+        guiGraphics.drawString(this.font, this.playerInventoryTitle.getString(), 8.0F, (float) (this.imageHeight - 96 + 2), Color.DARK_GRAY.getRGB(), false);
 
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(PURE_DAISY_TEXTURE);
         RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
-        blit(poseStack, 12, 16, 0, 48, 48, sprite);
-        this.renderTooltip(poseStack, mouseX - this.leftPos, mouseY - this.topPos);
+        guiGraphics.blit(12, 16, 0, 48, 48, sprite);
+        this.renderTooltip(guiGraphics, mouseX - this.leftPos, mouseY - this.topPos);
     }
 
     @Override
-    public void renderSlot(@Nonnull PoseStack poseStack, @Nonnull Slot slot) {
+    public void renderSlot(@Nonnull GuiGraphics guiGraphics, @Nonnull Slot slot) {
         if (slot instanceof ContainerMenuMechanicalDaisy.ItemAndFluidSlot) {
             FluidStack stack = ((ContainerMenuMechanicalDaisy.ItemAndFluidSlot) slot).inventory.getFluidInTank(slot.index);
             if (!stack.isEmpty() && stack.getFluid() != null) {
@@ -69,15 +68,16 @@ public class ScreenMechanicalDaisy extends AbstractContainerScreen<ContainerMenu
                 float fluidColorG = ((fluidColor >> 8) & 0xFF) / 255f;
                 float fluidColorB = ((fluidColor) & 0xFF) / 255f;
                 RenderSystem.setShaderColor(fluidColorR, fluidColorG, fluidColorB, fluidColorA);
-                blit(poseStack, slot.x, yPos, 0, 16, yHeight, sprite);
+                guiGraphics.blit(slot.x, yPos, 0, 16, yHeight, sprite);
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             }
         }
-        super.renderSlot(poseStack, slot);
+
+        super.renderSlot(guiGraphics, slot);
     }
 
     @Override
-    protected void renderTooltip(@Nonnull PoseStack poseStack, int x, int y) {
+    protected void renderTooltip(@Nonnull GuiGraphics guiGraphics, int x, int y) {
         //noinspection ConstantConditions
         if (this.minecraft.player.containerMenu.getCarried().isEmpty() && this.hoveredSlot != null) {
             if (this.hoveredSlot instanceof ContainerMenuMechanicalDaisy.ItemAndFluidSlot
@@ -90,11 +90,11 @@ public class ScreenMechanicalDaisy extends AbstractContainerScreen<ContainerMenu
                         Component.literal(stack.getAmount() + " / 1000")
                 );
 
-                this.renderComponentTooltip(poseStack, list, x, y);
+                guiGraphics.renderComponentTooltip(this.font, list, x, y);
                 return;
             }
         }
 
-        super.renderTooltip(poseStack, x, y);
+        super.renderTooltip(guiGraphics, x, y);
     }
 }

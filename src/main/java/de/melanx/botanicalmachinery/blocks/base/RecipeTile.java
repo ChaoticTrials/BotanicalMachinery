@@ -10,7 +10,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.moddingx.libx.crafting.recipe.RecipeHelper;
+import org.moddingx.libx.crafting.RecipeHelper;
 import org.moddingx.libx.inventory.IAdvancedItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
@@ -132,7 +132,8 @@ public abstract class RecipeTile<T extends Recipe<Container>> extends BotanicalT
     
     // May not modify the stacks
     protected List<ItemStack> resultItems(T recipe, List<ItemStack> stacks) {
-        ItemStack stack = recipe.getResultItem();
+        //noinspection DataFlowIssue
+        ItemStack stack = recipe.getResultItem(this.level.registryAccess());
         if (stack.isEmpty()) return List.of();
         return List.of(stack.copy());
     }

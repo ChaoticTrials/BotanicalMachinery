@@ -1,9 +1,9 @@
 {
   "name": "lexicon.botanicalmachinery.mechanical_apothecary",
-  "category": "botanicalmachinery:botanicalmachinery",
+  "category": "botania:botanicalmachinery",
   "icon": "botanicalmachinery:mechanical_apothecary",
   "entry_color": "aa00aa",
-  "advancement": "botania:recipes/botania/apothecary_default",
+  "advancement": "botania:recipes/redstone/apothecary_default",
   "pages": [
     {
       "type": "text",

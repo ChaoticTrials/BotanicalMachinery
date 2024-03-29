@@ -43,5 +43,6 @@
     "recipes": [
       "botanicalmachinery:mana_tablet"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

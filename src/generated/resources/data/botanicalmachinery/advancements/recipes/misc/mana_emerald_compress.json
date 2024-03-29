@@ -30,5 +30,6 @@
     "recipes": [
       "botanicalmachinery:mana_emerald_compress"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

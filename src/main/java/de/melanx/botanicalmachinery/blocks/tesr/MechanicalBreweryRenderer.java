@@ -3,20 +3,19 @@ package de.melanx.botanicalmachinery.blocks.tesr;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalBrewery;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import org.joml.Quaternionf;
 import org.moddingx.libx.render.RenderHelper;
 import org.moddingx.libx.render.block.RotatedBlockRenderer;
 import vazkii.botania.api.brew.BrewItem;
@@ -78,7 +77,7 @@ public class MechanicalBreweryRenderer extends RotatedBlockRenderer<BlockEntityM
 
         int slotToMove = -1;
         double travelCenter = 1;
-        Quaternion vialRotate = null;
+        Quaternionf vialRotate = null;
         double vialDown = 0;
         boolean showOutput = false;
 
@@ -99,7 +98,7 @@ public class MechanicalBreweryRenderer extends RotatedBlockRenderer<BlockEntityM
 
                 double progressMinusHalf = segmentProgress - 0.5;
                 vialDown = (progressMinusHalf * progressMinusHalf) - 0.25;
-                vialRotate = Vector3f.XP.rotationDegrees((float) (480 * vialDown));
+                vialRotate = Axis.XP.rotationDegrees((float) (480 * vialDown));
                 vialDown = 1.8 * vialDown;
                 showOutput = progressMinusHalf >= 0;
                 this.renderFluid(poseStack, buffer, partialTick, light, (float) (1 - segmentProgress), this.getTargetColor(tile));
@@ -152,11 +151,11 @@ public class MechanicalBreweryRenderer extends RotatedBlockRenderer<BlockEntityM
         poseStack.pushPose();
         poseStack.translate(0.5, 0.8 + vialDown, 0.5);
         poseStack.scale(0.5f, 0.5f, 0.5f);
-        poseStack.mulPose(Vector3f.YP.rotationDegrees((ClientTickHandler.ticksInGame + partialTick) / 1.3f));
+        poseStack.mulPose(Axis.YP.rotationDegrees((ClientTickHandler.ticksInGame + partialTick) / 1.3f));
         if (vialRotate != null)
             poseStack.mulPose(vialRotate);
 
-        Minecraft.getInstance().getItemRenderer().renderStatic(topStack, ItemTransforms.TransformType.GROUND, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, (int) tile.getBlockPos().asLong());
+        Minecraft.getInstance().getItemRenderer().renderStatic(topStack, ItemDisplayContext.GROUND, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, tile.getLevel(), (int) tile.getBlockPos().asLong());
 
         poseStack.popPose();
 
@@ -179,17 +178,17 @@ public class MechanicalBreweryRenderer extends RotatedBlockRenderer<BlockEntityM
                 poseStack.pushPose();
                 poseStack.translate(0.5, 0.7, 0.5);
                 poseStack.scale(0.3f, 0.3f, 0.3f);
-                poseStack.mulPose(Vector3f.YP.rotationDegrees((float) -((angle * idxNow) + time)));
+                poseStack.mulPose(Axis.YP.rotationDegrees((float) -((angle * idxNow) + time)));
                 if (i == slotToMove) {
                     poseStack.translate((1 - travelCenter) * 1.125, travelCenter * -1, (1 - travelCenter) * 0.25);
-                    poseStack.mulPose(Vector3f.XP.rotationDegrees((float) (90 * travelCenter)));
+                    poseStack.mulPose(Axis.XP.rotationDegrees((float) (90 * travelCenter)));
                 } else {
                     poseStack.translate(1.125, 0, 0.25);
                 }
-                poseStack.mulPose(Vector3f.YP.rotationDegrees(90f));
+                poseStack.mulPose(Axis.YP.rotationDegrees(90f));
                 poseStack.translate(0, 0.075 * Math.sin((time + (idxNow * 10)) / 5d), 0);
 
-                Minecraft.getInstance().getItemRenderer().renderStatic(tile.getInventory().getStackInSlot(i), ItemTransforms.TransformType.GROUND, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, (int) tile.getBlockPos().asLong());
+                Minecraft.getInstance().getItemRenderer().renderStatic(tile.getInventory().getStackInSlot(i), ItemDisplayContext.GROUND, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, tile.getLevel(), (int) tile.getBlockPos().asLong());
 
                 poseStack.popPose();
             }
@@ -204,7 +203,7 @@ public class MechanicalBreweryRenderer extends RotatedBlockRenderer<BlockEntityM
         } else if (stack.getItem() instanceof DyeItem) {
             return ((DyeItem) stack.getItem()).getDyeColor().getTextColor();
         } else if (stack.getItem() instanceof BlockItem) {
-            return ((BlockItem) stack.getItem()).getBlock().defaultMaterialColor().col;
+            return ((BlockItem) stack.getItem()).getBlock().defaultMapColor().col;
         } else {
             return this.waterColor;
         }
@@ -240,7 +239,7 @@ public class MechanicalBreweryRenderer extends RotatedBlockRenderer<BlockEntityM
         poseStack.pushPose();
         poseStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
         poseStack.translate(4, 3 + (4.4 * fillLevel), 4);
-        poseStack.mulPose(Vector3f.XP.rotationDegrees(90));
+        poseStack.mulPose(Axis.XP.rotationDegrees(90));
 
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(Fluids.WATER).getStillTexture());
 

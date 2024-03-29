@@ -28,7 +28,7 @@
         "items": [
           {
             "items": [
-              "botania:alfheim_portal"
+              "botania:runic_altar"
             ]
           }
         ]
@@ -40,7 +40,7 @@
         "items": [
           {
             "items": [
-              "botania:glimmering_livingwood"
+              "botania:rune_lust"
             ]
           }
         ]
@@ -52,7 +52,7 @@
         "items": [
           {
             "items": [
-              "botania:dreamwood"
+              "botania:rune_gluttony"
             ]
           }
         ]
@@ -64,7 +64,55 @@
         "items": [
           {
             "items": [
-              "botania:glimmering_livingwood"
+              "botania:rune_greed"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "criterion6": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:rune_sloth"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "criterion7": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:rune_wrath"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "criterion8": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:rune_envy"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "criterion9": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:rune_pride"
             ]
           }
         ]
@@ -73,7 +121,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "botanicalmachinery:alfheim_market"
+        "recipe": "botanicalmachinery:mechanical_runic_altar"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -86,12 +134,17 @@
       "criterion3",
       "criterion4",
       "criterion5",
+      "criterion6",
+      "criterion7",
+      "criterion8",
+      "criterion9",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "botanicalmachinery:alfheim_market"
+      "botanicalmachinery:mechanical_runic_altar"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

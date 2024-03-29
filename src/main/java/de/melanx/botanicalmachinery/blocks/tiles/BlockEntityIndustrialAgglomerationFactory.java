@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import org.moddingx.libx.crafting.recipe.RecipeHelper;
+import org.moddingx.libx.crafting.RecipeHelper;
 import org.moddingx.libx.inventory.BaseItemStackHandler;
 import vazkii.botania.api.recipe.TerrestrialAgglomerationRecipe;
 import vazkii.botania.client.fx.WispParticleData;

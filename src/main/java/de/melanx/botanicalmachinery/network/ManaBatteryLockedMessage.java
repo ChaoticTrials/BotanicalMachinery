@@ -26,9 +26,11 @@ public record ManaBatteryLockedMessage(BlockPos pos, boolean locked1, boolean lo
         public boolean handle(ManaBatteryLockedMessage msg, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
                 ServerPlayer player = ctx.get().getSender();
-                if (player == null)
+                if (player == null) {
                     return;
-                ServerLevel level = player.getLevel();
+                }
+
+                ServerLevel level = (ServerLevel) player.level();
                 //noinspection deprecation
                 if (level.hasChunkAt(msg.pos)) {
                     BlockEntity te = level.getBlockEntity(msg.pos);

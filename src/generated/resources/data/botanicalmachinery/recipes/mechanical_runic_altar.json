@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "a": {
       "item": "botania:aura_ring_greater"
@@ -41,5 +42,6 @@
   ],
   "result": {
     "item": "botanicalmachinery:mechanical_runic_altar"
-  }
+  },
+  "show_notification": true
 }

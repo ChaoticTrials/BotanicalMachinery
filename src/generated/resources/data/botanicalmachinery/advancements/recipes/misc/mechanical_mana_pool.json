@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "botania:dragonstone_gems"
+            "tag": "botania:elementium_ingots"
           }
         ]
       },
@@ -16,7 +16,7 @@
         "items": [
           {
             "items": [
-              "botania:gaia_ingot"
+              "botania:aura_ring_greater"
             ]
           }
         ]
@@ -28,7 +28,7 @@
         "items": [
           {
             "items": [
-              "botania:mana_ring_greater"
+              "botania:fabulous_pool"
             ]
           }
         ]
@@ -40,7 +40,31 @@
         "items": [
           {
             "items": [
-              "botanicalmachinery:mana_emerald_block"
+              "botania:alchemy_catalyst"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "criterion4": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:diluted_pool"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "criterion5": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "botania:conjuration_catalyst"
             ]
           }
         ]
@@ -49,7 +73,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "botanicalmachinery:mana_battery"
+        "recipe": "botanicalmachinery:mechanical_mana_pool"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -60,12 +84,15 @@
       "criterion1",
       "criterion2",
       "criterion3",
+      "criterion4",
+      "criterion5",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "botanicalmachinery:mana_battery"
+      "botanicalmachinery:mechanical_mana_pool"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

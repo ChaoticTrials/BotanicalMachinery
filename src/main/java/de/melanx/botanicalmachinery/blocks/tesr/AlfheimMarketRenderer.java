@@ -2,28 +2,38 @@ package de.melanx.botanicalmachinery.blocks.tesr;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityAlfheimMarket;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 import org.moddingx.libx.render.block.RotatedBlockRenderer;
 import vazkii.botania.client.core.handler.ClientTickHandler;
-import vazkii.botania.client.core.handler.MiscellaneousModels;
 import vazkii.botania.common.block.BotaniaBlocks;
+import vazkii.botania.common.lib.ResourceLocationHelper;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public class AlfheimMarketRenderer extends RotatedBlockRenderer<BlockEntityAlfheimMarket> {
 
+    private final TextureAtlasSprite portalSprite;
+
+    public AlfheimMarketRenderer() {
+        this.portalSprite = Objects.requireNonNull(
+                Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+                        .apply(ResourceLocationHelper.prefix("block/alfheim_portal_swirl"))
+        );
+    }
     @Override
     public void doRender(@Nonnull BlockEntityAlfheimMarket tile, float partialTick, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
         if (!LibXClientConfig.AdvancedRendering.all || !LibXClientConfig.AdvancedRendering.alfheimMarket)
@@ -49,10 +59,10 @@ public class AlfheimMarketRenderer extends RotatedBlockRenderer<BlockEntityAlfhe
             poseStack.translate(-1.0D, 1.0D, 0.25D);
             float alpha = (float) Math.min(1.0D, (Math.sin((double) ((float) ClientTickHandler.ticksInGame + partialTick) / 8.0D) + 1.0D) / 7.0D + 0.7D);
 
-            this.renderPortal(poseStack, buffer, MiscellaneousModels.INSTANCE.alfPortalTex.sprite(), 0, 0, 3, 3, alpha, overlay);
+            this.renderPortal(poseStack, buffer, this.portalSprite, 0, 0, 3, 3, alpha, overlay);
             poseStack.translate(3.0D, 0.0D, 0.5D);
-            poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
-            this.renderPortal(poseStack, buffer, MiscellaneousModels.INSTANCE.alfPortalTex.sprite(), 0, 0, 3, 3, alpha, overlay);
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+            this.renderPortal(poseStack, buffer, this.portalSprite, 0, 0, 3, 3, alpha, overlay);
 
             poseStack.popPose();
         }
@@ -72,7 +82,7 @@ public class AlfheimMarketRenderer extends RotatedBlockRenderer<BlockEntityAlfhe
                 poseStack.scale(-1, 1, -1);
                 poseStack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
 
-                Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, (int) tile.getBlockPos().asLong());
+                Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, light, OverlayTexture.NO_OVERLAY, poseStack, buffer, tile.getLevel(), (int) tile.getBlockPos().asLong());
                 poseStack.popPose();
             }
         }

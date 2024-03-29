@@ -3,11 +3,12 @@ package de.melanx.botanicalmachinery.helper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 
 public class SoundHelper {
 
-    public static void playSound(SoundEvent sound) {
+    public static void playSound(Holder<SoundEvent> sound) {
         playSound(SimpleSoundInstance.forUI(sound, 1));
     }
 

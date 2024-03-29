@@ -1,6 +1,6 @@
 {
   "name": "lexicon.botanicalmachinery.industrial_agglomeration_factory",
-  "category": "botanicalmachinery:botanicalmachinery",
+  "category": "botania:botanicalmachinery",
   "icon": "botanicalmachinery:industrial_agglomeration_factory",
   "entry_color": "aa00aa",
   "advancement": "botania:main/terrasteel_pickup",

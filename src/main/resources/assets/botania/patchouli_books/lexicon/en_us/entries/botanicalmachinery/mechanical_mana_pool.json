@@ -1,6 +1,6 @@
 {
   "name": "lexicon.botanicalmachinery.mechanical_mana_pool",
-  "category": "botanicalmachinery:botanicalmachinery",
+  "category": "botania:botanicalmachinery",
   "icon": "botanicalmachinery:mechanical_mana_pool",
   "entry_color": "aa00aa",
   "advancement": "botania:main/mana_pool_pickup",

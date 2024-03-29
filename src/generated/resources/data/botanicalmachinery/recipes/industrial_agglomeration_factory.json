@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "a": {
       "item": "botania:aura_ring_greater"
@@ -27,5 +28,6 @@
   ],
   "result": {
     "item": "botanicalmachinery:industrial_agglomeration_factory"
-  }
+  },
+  "show_notification": true
 }

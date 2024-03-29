@@ -10,10 +10,10 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -50,8 +50,8 @@ public abstract class BotanicalBlock<T extends BotanicalTile, C extends BlockEnt
 
     public BotanicalBlock(ModX mod, Class<T> teClass, MenuType<C> menu, boolean fullCube, boolean specialRender) {
         super(mod, teClass, menu, fullCube ?
-                        Properties.of(Material.STONE).strength(2, 10)
-                        : Properties.of(Material.STONE).strength(2, 10).dynamicShape().noOcclusion(),
+                        Properties.copy(Blocks.STONE).strength(2, 10)
+                        : Properties.copy(Blocks.STONE).strength(2, 10).dynamicShape().noOcclusion(),
                 new Item.Properties());
         this.fullCube = fullCube;
         this.specialRender = specialRender;

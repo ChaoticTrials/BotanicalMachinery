@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "botania:elementium_ingots"
+            "tag": "botania:dragonstone_gems"
           }
         ]
       },
@@ -16,7 +16,7 @@
         "items": [
           {
             "items": [
-              "botania:aura_ring_greater"
+              "botania:gaia_ingot"
             ]
           }
         ]
@@ -28,7 +28,7 @@
         "items": [
           {
             "items": [
-              "botania:terra_plate"
+              "botania:mana_ring_greater"
             ]
           }
         ]
@@ -39,28 +39,8 @@
       "conditions": {
         "items": [
           {
-            "tag": "botania:mana_diamond_gems"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "criterion4": {
-      "conditions": {
-        "items": [
-          {
-            "tag": "botania:manasteel_ingots"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "criterion5": {
-      "conditions": {
-        "items": [
-          {
             "items": [
-              "botania:mana_pearl"
+              "botanicalmachinery:mana_emerald_block"
             ]
           }
         ]
@@ -69,7 +49,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "botanicalmachinery:industrial_agglomeration_factory"
+        "recipe": "botanicalmachinery:mana_battery"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -80,14 +60,13 @@
       "criterion1",
       "criterion2",
       "criterion3",
-      "criterion4",
-      "criterion5",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "botanicalmachinery:industrial_agglomeration_factory"
+      "botanicalmachinery:mana_battery"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -28,7 +28,7 @@
         "items": [
           {
             "items": [
-              "botania:runic_altar"
+              "botania:terra_plate"
             ]
           }
         ]
@@ -39,9 +39,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "botania:rune_lust"
-            ]
+            "tag": "botania:mana_diamond_gems"
           }
         ]
       },
@@ -51,9 +49,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "botania:rune_gluttony"
-            ]
+            "tag": "botania:manasteel_ingots"
           }
         ]
       },
@@ -64,55 +60,7 @@
         "items": [
           {
             "items": [
-              "botania:rune_greed"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "criterion6": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "botania:rune_sloth"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "criterion7": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "botania:rune_wrath"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "criterion8": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "botania:rune_envy"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "criterion9": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "botania:rune_pride"
+              "botania:mana_pearl"
             ]
           }
         ]
@@ -121,7 +69,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "botanicalmachinery:mechanical_runic_altar"
+        "recipe": "botanicalmachinery:industrial_agglomeration_factory"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -134,16 +82,13 @@
       "criterion3",
       "criterion4",
       "criterion5",
-      "criterion6",
-      "criterion7",
-      "criterion8",
-      "criterion9",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "botanicalmachinery:mechanical_runic_altar"
+      "botanicalmachinery:industrial_agglomeration_factory"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

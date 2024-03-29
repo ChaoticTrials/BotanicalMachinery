@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.moddingx.libx.base.tile.TickingBlock;
-import org.moddingx.libx.crafting.recipe.RecipeHelper;
+import org.moddingx.libx.crafting.RecipeHelper;
 import org.moddingx.libx.inventory.BaseItemStackHandler;
 import vazkii.botania.api.recipe.CustomApothecaryColor;
 import vazkii.botania.api.recipe.PetalApothecaryRecipe;
@@ -68,7 +68,7 @@ public class BlockEntityMechanicalApothecary extends WorkingTile<PetalApothecary
         if (this.level != null && !this.level.isClientSide) {
             this.runRecipeTick();
             if (this.recipe != null) {
-                this.currentOutput = this.recipe.getResultItem().copy();
+                this.currentOutput = this.recipe.getResultItem(this.level.registryAccess()).copy();
                 this.setChanged();
                 this.setDispatchable();
             } else if (!this.currentOutput.isEmpty()) {

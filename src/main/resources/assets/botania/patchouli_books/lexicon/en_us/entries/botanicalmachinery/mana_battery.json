@@ -1,6 +1,6 @@
 {
   "name": "lexicon.botanicalmachinery.mana_battery",
-  "category": "botanicalmachinery:botanicalmachinery",
+  "category": "botania:botanicalmachinery",
   "icon": "botanicalmachinery:mana_battery",
   "entry_color": "aa00aa",
   "advancement": "botania:main/gaia_guardian_kill",

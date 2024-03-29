@@ -2,9 +2,9 @@ package de.melanx.botanicalmachinery.blocks.base;
 
 import com.google.common.base.Predicates;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import de.melanx.botanicalmachinery.core.TileTags;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -36,6 +36,7 @@ import vazkii.botania.api.mana.KeyLocked;
 import vazkii.botania.api.mana.ManaPool;
 import vazkii.botania.api.mana.spark.ManaSpark;
 import vazkii.botania.api.mana.spark.SparkAttachable;
+import vazkii.botania.client.core.helper.RenderHelper;
 import vazkii.botania.client.gui.HUDHandler;
 import vazkii.botania.common.block.block_entity.mana.ThrottledPacket;
 
@@ -145,17 +146,17 @@ public abstract class BotanicalTile extends BlockEntityBase implements ManaPool,
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void renderHUD(PoseStack poseStack, Minecraft minecraft) {
+    public void renderHUD(GuiGraphics guiGraphics, Minecraft minecraft) {
         ItemStack block = new ItemStack(this.getBlockState().getBlock());
         String name = block.getHoverName().getString();
-        int color = 0x4444FF;
-        HUDHandler.drawSimpleManaHUD(poseStack, color, this.getCurrentMana(), this.getMaxMana(), name);
+        int centerX = minecraft.getWindow().getGuiScaledWidth() / 2;
+        int centerY = minecraft.getWindow().getGuiScaledHeight() / 2;
+        int width = Math.max(102, minecraft.font.width(name)) + 4;
+        RenderHelper.renderHUDBox(guiGraphics, centerX - width / 2, centerY + 8, centerX + width / 2, centerY + 28);
+        HUDHandler.drawSimpleManaHUD(guiGraphics, 0x4444FF, this.getCurrentMana(), this.getMaxMana(), name);
 
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-        RenderSystem.setShaderTexture(0, HUDHandler.manaBar);
 
         RenderSystem.disableBlend();
     }
