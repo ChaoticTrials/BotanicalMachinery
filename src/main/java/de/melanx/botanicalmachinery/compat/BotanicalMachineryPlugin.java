@@ -1,6 +1,5 @@
 package de.melanx.botanicalmachinery.compat;
 
-import de.melanx.botanicalmachinery.BotanicalMachinery;
 import de.melanx.botanicalmachinery.ModBlocks;
 import de.melanx.botanicalmachinery.blocks.screens.*;
 import mezz.jei.api.IModPlugin;
@@ -19,7 +18,7 @@ public class BotanicalMachineryPlugin implements IModPlugin {
     @Nonnull
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(BotanicalMachinery.getInstance().modid, "jei_plugin");
+        return new ResourceLocation("botanicalmachinery", "jei_plugin");
     }
     
     @Override
