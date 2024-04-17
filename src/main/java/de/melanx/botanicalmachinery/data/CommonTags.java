@@ -6,6 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import org.moddingx.libx.datagen.DatagenContext;
 import org.moddingx.libx.datagen.provider.tags.CommonTagsProviderBase;
@@ -22,7 +23,11 @@ public class CommonTags extends CommonTagsProviderBase {
     public void setup() {
         this.item(MECHANICAL_APOTHECARY_CATALYSTS).addTag(Tags.Items.SEEDS);
 
-        this.block(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.manaEmeraldBlock);
         this.block(BlockTags.NEEDS_IRON_TOOL).add(ModBlocks.manaEmeraldBlock);
+    }
+
+    @Override
+    public void defaultBlockTags(Block block) {
+        this.block(BlockTags.MINEABLE_WITH_PICKAXE).add(block);
     }
 }
