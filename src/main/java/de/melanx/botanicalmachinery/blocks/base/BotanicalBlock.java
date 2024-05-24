@@ -51,7 +51,7 @@ public abstract class BotanicalBlock<T extends BotanicalTile, C extends BlockEnt
     public BotanicalBlock(ModX mod, Class<T> teClass, MenuType<C> menu, boolean fullCube, boolean specialRender) {
         super(mod, teClass, menu, fullCube ?
                         Properties.copy(Blocks.STONE).strength(2, 10)
-                        : Properties.copy(Blocks.STONE).strength(2, 10).dynamicShape().noOcclusion(),
+                        : Properties.copy(Blocks.STONE).strength(2, 10).dynamicShape().noOcclusion().forceSolidOn(),
                 new Item.Properties());
         this.fullCube = fullCube;
         this.specialRender = specialRender;
