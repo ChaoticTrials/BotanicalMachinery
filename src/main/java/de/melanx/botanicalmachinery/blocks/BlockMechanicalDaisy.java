@@ -40,7 +40,7 @@ public class BlockMechanicalDaisy extends MenuBlockBE<BlockEntityMechanicalDaisy
     private static final VoxelShape SHAPE = box(0, 0, 0, 16, 11.4, 16);
 
     public BlockMechanicalDaisy(ModX mod, Class<BlockEntityMechanicalDaisy> teClass, MenuType<ContainerMenuMechanicalDaisy> menu) {
-        super(mod, teClass, menu, Properties.copy(Blocks.STONE).strength(2, 10).dynamicShape(),
+        super(mod, teClass, menu, Properties.copy(Blocks.STONE).strength(2, 10).dynamicShape().forceSolidOn(),
                 new Item.Properties());
     }
 

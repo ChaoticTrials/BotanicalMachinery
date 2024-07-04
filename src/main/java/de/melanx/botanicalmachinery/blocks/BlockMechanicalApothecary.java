@@ -68,7 +68,7 @@ public class BlockMechanicalApothecary extends MenuBlockBE<BlockEntityMechanical
     ));
 
     public BlockMechanicalApothecary(ModX mod, Class<BlockEntityMechanicalApothecary> teClass, MenuType<ContainerMenuMechanicalApothecary> menu) {
-        super(mod, teClass, menu, Properties.copy(Blocks.STONE).strength(2, 10).dynamicShape(), new Item.Properties());
+        super(mod, teClass, menu, Properties.copy(Blocks.STONE).strength(2, 10).dynamicShape().forceSolidOn(), new Item.Properties());
     }
 
     @OnlyIn(Dist.CLIENT)
