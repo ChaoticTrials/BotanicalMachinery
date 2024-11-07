@@ -80,12 +80,10 @@ public class BlockEntityMechanicalRunicAltar extends WorkingTile<RunicAltarRecip
         return !this.inventory.getStackInSlot(0).isEmpty();
     }
 
+
     @Override
     protected List<ItemStack> resultItems(RunicAltarRecipe recipe, List<ItemStack> stacks) {
-        return Streams.concat(
-                stacks.stream().filter(s -> s.is(BotaniaTags.Items.RUNES)).map(ItemStack::copy),
-                super.resultItems(recipe, stacks).stream()
-        ).toList();
+        return super.resultItems(recipe, stacks);
     }
 
     @Override
