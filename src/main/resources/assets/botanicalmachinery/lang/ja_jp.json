@@ -1,0 +1,63 @@
+{
+  "itemGroup.botanicalmachinery": "Botanical Machinery",
+
+  "item.botanicalmachinery.mana_emerald": "マナエメラルド",
+
+  "block.botanicalmachinery.mana_emerald_block": "マナエメラルドブロック",
+  "block.botanicalmachinery.alfheim_market": "アルフヘイムマーケット",
+  "block.botanicalmachinery.industrial_agglomeration_factory": "工業性集結ファクトリー",
+  "block.botanicalmachinery.mana_battery": "マナバッテリー",
+  "block.botanicalmachinery.mana_battery_creative": "クリエイティブマナバッテリー",
+  "block.botanicalmachinery.mechanical_brewery": "工業的醸造台",
+  "block.botanicalmachinery.mechanical_apothecary": "工業的調合所",
+  "block.botanicalmachinery.mechanical_daisy": "メカニカルデイジー",
+  "block.botanicalmachinery.mechanical_mana_pool": "工業的マナプール",
+  "block.botanicalmachinery.mechanical_runic_altar": "技術の祭壇",
+
+  "screen.botanicalmachinery.alfheim_market": "アルフヘイムマーケット",
+  "screen.botanicalmachinery.industrial_agglomeration_factory": "工業性集結ファクトリー",
+  "screen.botanicalmachinery.mana_battery": "マナバッテリー",
+  "screen.botanicalmachinery.mana_battery_creative": "クリエイティブマナバッテリー",
+  "screen.botanicalmachinery.mechanical_apothecary": "工業的調合所",
+  "screen.botanicalmachinery.mechanical_brewery": "工業的醸造台",
+  "screen.botanicalmachinery.mechanical_daisy": "メカニカルデイジー",
+  "screen.botanicalmachinery.mechanical_mana_pool": "工業的マナプール",
+  "screen.botanicalmachinery.mechanical_runic_altar": "技術の祭壇",
+
+  "lexicon.botanicalmachinery.title": "Botanical Machinery",
+  "lexicon.botanicalmachinery.description": "自動化設備をよりコンパクトに。Botanical Machineryのチャプターになります。製作者：$(item)MelanX$()",
+  "lexicon.botanicalmachinery.introduction": "新たな発見",
+  "lexicon.botanicalmachinery.introduction.page1": "$(d)エレメンチウム$(0)は不思議な力を持っており、その多くがまだ解明されていません。$(l:botania:baubles/aura_ring)優れたオーラバンド$()を使うと、$(d)エレメンチウム$(0)を絶えぬマナの流れに落とし込むことができました。新たな技術が広まり、ボタニストの設備の効率が格段に向上しました。しかしながらエルフはこの技術を有しておらず、安全性は保障されていません。",
+
+  "lexicon.botanicalmachinery.mana_battery": "マナバッテリー",
+  "lexicon.botanicalmachinery.mana_battery.recipe": "これが欲しかったでしょう",
+  "lexicon.botanicalmachinery.mana_battery.page1": "$(l:botania:alfhomancy/gaia_ritual)ガイア$()の力により、$(l:botania:baubles/mana_ring)優れたマナバンド$()を強化してマナプールの10倍の貯蔵量をもつブロックを作ることができます。ホッパーを使用し、マナタブレットへのマナの出し入れを自動化することができます。",
+
+  "lexicon.botanicalmachinery.alfheim_market": "アルフヘイムマーケット",
+  "lexicon.botanicalmachinery.alfheim_market.recipe": "市場作成",
+  "lexicon.botanicalmachinery.alfheim_market.page1": "この1ブロックにアルフヘイムのポータルが収まっています。大きなポータルを設置せずにエルフとの取引が可能です。変なものを入れないよう、注意しましょう…",
+
+  "lexicon.botanicalmachinery.industrial_agglomeration_factory": "工業性集結ファクトリー",
+  "lexicon.botanicalmachinery.industrial_agglomeration_factory.recipe": "グリーンなエネルギーを使おう",
+  "lexicon.botanicalmachinery.industrial_agglomeration_factory.page1": "$(l:botania:basics/terrasteel)大地性集結プレート$()は安定した基盤が必要です。それはこのブロックには必要ありません。一般ボタニストには見慣れないものでしょうが、とにかく試してみましょう!",
+
+  "lexicon.botanicalmachinery.mechanical_mana_pool": "工業的マナプール",
+  "lexicon.botanicalmachinery.mechanical_mana_pool.recipe": "メカニカルなマナプール",
+  "lexicon.botanicalmachinery.mechanical_mana_pool.page1": "Just like a regular 普通の$(l:botania:mana/pool)マナプール$()のようにマナを貯蔵することができます。マナ注入をしたり、触媒の使用もできます。触媒は下に設置するのではなく、マナプールのインベントリに置くことで効果を発揮します。",
+
+  "lexicon.botanicalmachinery.mechanical_runic_altar": "技術の祭壇",
+  "lexicon.botanicalmachinery.mechanical_runic_altar.recipe": "どこでもルーン",
+  "lexicon.botanicalmachinery.mechanical_runic_altar.page1": "このブロックではルーンをより簡単に作成することができます。機能は普通の$(l:botania:basics/rune_altar)ルーンの祭壇$()と同じですが、ホッパーでアイテムの出し入れが可能です。",
+
+  "lexicon.botanicalmachinery.mechanical_daisy": "メカニカルデイジー",
+  "lexicon.botanicalmachinery.mechanical_daisy.recipe": "可愛らしい",
+  "lexicon.botanicalmachinery.mechanical_daisy.page1": "浮遊する$(l:botania:basics/pure_daisy)ピュアデイジー$()を$(d)エレメンチウム$(0)で作られた土台に植えることで、1ブロック内で8つのブロックを変換できるようになりました。液体も同様に変換できます。",
+
+  "lexicon.botanicalmachinery.mechanical_brewery": "工業的醸造台",
+  "lexicon.botanicalmachinery.mechanical_brewery.recipe": "It brews",
+  "lexicon.botanicalmachinery.mechanical_brewery.page1": "$(l:botania:devices/brewery)ボタニア醸造台$()を強化することで、スパークからマナを受け取り、醸造の自動化を容易にできるようになりました。",
+
+  "lexicon.botanicalmachinery.mechanical_apothecary": "工業的調合所",
+  "lexicon.botanicalmachinery.mechanical_apothecary.recipe": "花のことならおまかせ",
+  "lexicon.botanicalmachinery.mechanical_apothecary.page1": "$(l:botania:basics/apothecary)花びらの調合所$()の強化版です。水、種、素材を入れて欲望のままに花を作成しましょう。"
+}
