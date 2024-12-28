@@ -1,8 +1,10 @@
 {
-  "parent": "block/block",
-  "ambientocclusion": false,
-  "textures": {
-    "frame": "botania:block/dragonstone_block",
-    "particle": "#frame"
-  }
+	"parent": "block/block",
+	"render_type": "minecraft:translucent",
+	"ambientocclusion": true,
+	"textures": {
+		"particle": "botania:block/dragonstone_block",
+		"frame": "botania:block/dragonstone_block",
+		"glass": "botania:block/mana_glass"
+	}
 }

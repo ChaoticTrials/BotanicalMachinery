@@ -15,9 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
@@ -32,18 +29,6 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public abstract class BotanicalBlock<T extends BotanicalTile, C extends BlockEntityMenu<T>> extends MenuBlockBE<T, C> {
-
-    public static final VoxelShape FRAME_SHAPE = Shapes.or(
-            box(0, 0, 0, 16, 1, 16),
-            box(0, 0, 0, 1, 16, 1),
-            box(15, 0, 0, 16, 16, 1),
-            box(0, 0, 15, 1, 16, 16),
-            box(15, 0, 15, 16, 16, 16),
-            box(0, 15, 0, 1, 16, 16),
-            box(0, 15, 0, 16, 16, 1),
-            box(15, 15, 0, 16, 16, 16),
-            box(0, 15, 15, 16, 16, 16)
-    );
 
     public final boolean fullCube;
     public final boolean specialRender;
@@ -121,12 +106,12 @@ public abstract class BotanicalBlock<T extends BotanicalTile, C extends BlockEnt
         return !this.fullCube;
     }
 
-    @Nonnull
-    @Override
-    @SuppressWarnings("deprecation")
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
-        return (!this.fullCube) ? FRAME_SHAPE : super.getShape(state, level, pos, context);
-    }
+//    @Nonnull
+//    @Override
+//    @SuppressWarnings("deprecation")
+//    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
+//        return (!this.fullCube) ? FRAME_SHAPE : super.getShape(state, level, pos, context);
+//    }
 
     @Override
     protected boolean shouldDropInventory(Level level, BlockPos pos, BlockState state) {
