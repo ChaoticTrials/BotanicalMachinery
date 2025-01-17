@@ -75,4 +75,16 @@ public class LibXServerConfig {
         @IntRange(min = 1, max = 100)
         public static int mechanicalRunicAltar = 1;
     }
+
+    @Group("The default number of slots in machine, only supported for Industrial Agglomeration Factory.")
+    public static class SlotCount {
+
+        @Config("The number of input slots in Industrial Agglomeration Factory.")
+        @IntRange(min = 1, max = 64)
+        public static int industrialAgglomerationFactoryInput = 3;
+
+        @Config("The number of output slots in Industrial Agglomeration Factory.")
+        @IntRange(min = 1, max = 9)
+        public static int industrialAgglomerationFactoryOutput = 1;
+    }
 }

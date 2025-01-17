@@ -16,6 +16,7 @@ import vazkii.botania.common.crafting.BotaniaRecipeTypes;
 import javax.annotation.Nonnull;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 public class BlockEntityIndustrialAgglomerationFactory extends WorkingTile<TerrestrialAgglomerationRecipe> {
 
@@ -23,11 +24,26 @@ public class BlockEntityIndustrialAgglomerationFactory extends WorkingTile<Terre
 
     private final BaseItemStackHandler inventory;
 
+    private final int[] itemOutputSlots;
+
     public BlockEntityIndustrialAgglomerationFactory(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, BotaniaRecipeTypes.TERRA_PLATE_TYPE, pos, state, LibXServerConfig.MaxManaCapacity.industrialAgglomerationFactory, 0, 3);
-        this.inventory = BaseItemStackHandler.builder(4)
-                .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), BotaniaRecipeTypes.TERRA_PLATE_TYPE, stack), 0, 1, 2)
-                .output(3)
+        super(type, BotaniaRecipeTypes.TERRA_PLATE_TYPE, pos, state, LibXServerConfig.MaxManaCapacity.industrialAgglomerationFactory, 0, LibXServerConfig.SlotCount.industrialAgglomerationFactoryInput);
+
+        int itemInputSlotSize = LibXServerConfig.SlotCount.industrialAgglomerationFactoryInput;
+        int itemOutputSlotSize = LibXServerConfig.SlotCount.industrialAgglomerationFactoryOutput;
+        int itemSlotSize = itemInputSlotSize + itemOutputSlotSize;
+        int[] itemInputSlots = new int[itemInputSlotSize];
+        for (int i = 0; i < itemInputSlotSize; i++) {
+            itemInputSlots[i] = i;
+        }
+        itemOutputSlots = new int[itemOutputSlotSize];
+        for (int i = 0; i < itemOutputSlotSize; i++) {
+            itemOutputSlots[i] = i + itemInputSlotSize;
+        }
+
+        this.inventory = BaseItemStackHandler.builder(itemSlotSize)
+                .validator(stack -> this.level != null && RecipeHelper.isItemValidInput(this.level.getRecipeManager(), BotaniaRecipeTypes.TERRA_PLATE_TYPE, stack), itemInputSlots)
+                .output(itemOutputSlots)
                 .contentsChanged(() -> {
                     this.setChanged();
                     this.setDispatchable();
@@ -62,7 +78,7 @@ public class BlockEntityIndustrialAgglomerationFactory extends WorkingTile<Terre
 
     @Override
     protected Predicate<Integer> getExtracts(Supplier<IItemHandlerModifiable> inventory) {
-        return slot -> slot == 3;
+        return slot -> IntStream.of(itemOutputSlots).anyMatch(outputSlot -> outputSlot == slot);
     }
 
     @Nonnull
