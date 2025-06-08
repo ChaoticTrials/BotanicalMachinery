@@ -35,7 +35,8 @@ public class BlockEntityManaBattery extends BotanicalTile {
         super(type, pos, state, LibXServerConfig.MaxManaCapacity.manaBattery);
         this.inventory = BaseItemStackHandler.builder(2)
                 .validator(stack -> !this.slot1Locked && stack.getCapability(BotaniaForgeCapabilities.MANA_ITEM).resolve().map(manaItem -> manaItem.getMana() < manaItem.getMaxMana() && manaItem.canReceiveManaFromPool(this)).orElse(false), 0)
-                .validator(stack -> !this.slot2Locked && stack.getCapability(BotaniaForgeCapabilities.MANA_ITEM).resolve().map(manaItem -> manaItem.getMana() > 0 && manaItem.canExportManaToPool(this)).orElse(false), 1)
+                .validator(stack -> !this.slot2Locked && stack.getCapability(BotaniaForgeCapabilities.MANA_ITEM).resolve().map(manaItem -> manaItem.getMana() > 0 && manaItem.canExportManaToPool(this))
+                        .orElse(stack.getItem() instanceof BlackLotusItem), 1)
                 .contentsChanged(() -> {
                     this.setChanged();
                     this.setDispatchable();
