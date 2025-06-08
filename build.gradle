@@ -59,6 +59,7 @@ publishing {
     }
     repositories {
         maven {
+            name 'melanx'
             url mod.remote_maven
             credentials(PasswordCredentials)
         }
