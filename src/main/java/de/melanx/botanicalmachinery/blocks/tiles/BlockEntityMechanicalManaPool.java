@@ -63,6 +63,7 @@ public class BlockEntityMechanicalManaPool extends RecipeTile<ManaInfusionRecipe
             if (this.cooldown <= 0 && this.recipe != null) {
                 this.craftRecipe();
             }
+            this.tryAutoOutput();
         } else if (this.level != null && LibXClientConfig.AdvancedRendering.all && LibXClientConfig.AdvancedRendering.industrialAgglomerationFactory) {
             double particleChance = (this.getCurrentMana() / (double) this.getMaxMana()) * 0.1D;
             if (Math.random() < particleChance) {

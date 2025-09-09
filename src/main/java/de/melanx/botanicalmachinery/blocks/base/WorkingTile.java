@@ -51,6 +51,7 @@ public abstract class WorkingTile<T extends Recipe<Container>> extends RecipeTil
                 this.setChanged();
                 this.setDispatchable();
             }
+            this.tryAutoOutput();
         }
     }
 

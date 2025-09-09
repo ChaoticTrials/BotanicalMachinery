@@ -1,6 +1,7 @@
 package de.melanx.botanicalmachinery.blocks.base;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -8,10 +9,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.moddingx.libx.crafting.RecipeHelper;
 import org.moddingx.libx.inventory.IAdvancedItemHandlerModifiable;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -149,6 +155,29 @@ public abstract class RecipeTile<T extends Recipe<Container>> extends BotanicalT
         if (!left.isEmpty()) {
             ItemEntity ie = new ItemEntity(this.level, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.7, this.worldPosition.getZ() + 0.5, left.copy());
             this.level.addFreshEntity(ie);
+        }
+    }
+
+    protected void tryAutoOutput() {
+        if (this.level == null || this.level.isClientSide) return;
+        IAdvancedItemHandlerModifiable inventory = this.getInventory().getUnrestricted();
+        for (int slot = this.firstOutputSlot; slot < inventory.getSlots(); slot++) {
+            ItemStack stack = inventory.getStackInSlot(slot);
+            if (stack.isEmpty()) continue;
+            ItemStack remaining = stack;
+            for (Direction dir : Direction.values()) {
+                if (remaining.isEmpty()) break;
+                BlockEntity be = this.level.getBlockEntity(this.worldPosition.relative(dir));
+                if (be == null) continue;
+                LazyOptional<IItemHandler> opt = be.getCapability(ForgeCapabilities.ITEM_HANDLER, dir.getOpposite());
+                if (!opt.isPresent()) continue;
+                IItemHandler handler = opt.orElse(null);
+                if (handler == null) continue;
+                remaining = ItemHandlerHelper.insertItem(handler, remaining, false);
+            }
+            if (remaining.getCount() != stack.getCount()) {
+                inventory.setStackInSlot(slot, remaining);
+            }
         }
     }
 
