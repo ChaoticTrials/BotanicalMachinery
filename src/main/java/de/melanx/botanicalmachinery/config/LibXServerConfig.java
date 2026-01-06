@@ -24,6 +24,10 @@ public class LibXServerConfig {
         public static int industrialAgglomerationFactory = 1000000;
 
         @Config
+        @IntRange(min = 2500000)
+        public static int mechanicalManaInfuser = 5000000;
+
+        @Config
         @IntRange(min = 1)
         public static int mechanicalBrewery = 100000;
 
@@ -50,6 +54,10 @@ public class LibXServerConfig {
         @Config
         @IntRange(min = 1, max = 5000)
         public static int industrialAgglomerationFactory = 1;
+
+        @Config
+        @IntRange(min = 1, max = 5000)
+        public static int mechanicalManaInfuser = 1;
 
         @Config
         @IntRange(min = 1)

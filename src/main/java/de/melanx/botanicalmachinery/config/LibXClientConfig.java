@@ -20,6 +20,9 @@ public class LibXClientConfig {
         public static boolean industrialAgglomerationFactory = true;
 
         @Config
+        public static boolean mechanicalManaInfuser = true;
+
+        @Config
         public static boolean mechanicalDaisy = true;
 
         @Config

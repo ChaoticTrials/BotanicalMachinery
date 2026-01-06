@@ -18,6 +18,7 @@ public class BlockStates extends BlockStateProviderBase {
         this.manualModel(ModBlocks.mechanicalManaPool);
         this.manualModel(ModBlocks.mechanicalRunicAltar);
         this.manualModel(ModBlocks.industrialAgglomerationFactory);
+        this.manualModel(ModBlocks.mechanicalManaInfuser);
         this.manualModel(ModBlocks.mechanicalBrewery);
         this.manualModel(ModBlocks.mechanicalApothecary);
 

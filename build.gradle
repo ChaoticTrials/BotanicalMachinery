@@ -18,6 +18,7 @@ repositories {
     maven { url 'https://maven.blamejared.com/' }
     maven { url 'https://maven.theillusivec4.top/' }
     maven { url 'https://maven.terraformersmc.com/' }
+    maven { url "https://cursemaven.com" }
 }
 
 dependencies {
@@ -25,14 +26,15 @@ dependencies {
 
     implementation fg.deobf('org.moddingx:LibX:1.20.1-5.0.12')
     implementation fg.deobf('vazkii.botania:Botania:1.20.1-444-FORGE')
-    implementation fg.deobf('vazkii.patchouli:Patchouli:1.20.1-83-FORGE')
-    implementation fg.deobf('top.theillusivec4.curios:curios-forge:5.4.5+1.20.1')
+    implementation fg.deobf("curse.maven:mythicbotany-400058:6702112")
+    implementation fg.deobf('vazkii.patchouli:Patchouli:1.20.1-84.1-FORGE')
+    implementation fg.deobf('top.theillusivec4.curios:curios-forge:5.14.1+1.20.1')
 
     compileOnly fg.deobf('dev.emi:emi-forge:1.1.20+1.20.1:api')
-    runtimeOnly fg.deobf('dev.emi:emi-forge:1.1.20+1.20.1')
+//    runtimeOnly fg.deobf('dev.emi:emi-forge:1.1.20+1.20.1')
 
     compileOnly fg.deobf('mezz.jei:jei-1.20.1-common-api:15.20.0.106')
-//    runtimeOnly fg.deobf('mezz.jei:jei-1.20.1-forge:15.20.0.106')
+    runtimeOnly fg.deobf('mezz.jei:jei-1.20.1-forge:15.20.0.106')
 }
 
 publishing {

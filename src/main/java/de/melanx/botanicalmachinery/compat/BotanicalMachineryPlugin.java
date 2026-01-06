@@ -6,6 +6,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mythicbotany.jei.InfusionCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import vazkii.botania.client.integration.jei.*;
@@ -30,6 +31,7 @@ public class BotanicalMachineryPlugin implements IModPlugin {
         registration.addRecipeClickArea(ScreenMechanicalManaPool.class, 77, 36, 22, 15, ManaPoolRecipeCategory.TYPE);
         registration.addRecipeClickArea(ScreenMechanicalRunicAltar.class, 87, 65, 22, 15, RunicAltarRecipeCategory.TYPE);
         registration.addRecipeClickArea(ScreenIndustrialAgglomerationFactory.class, 73, 51, 30, 25, TerrestrialAgglomerationRecipeCategory.TYPE);
+        registration.addRecipeClickArea(ScreenMechanicalManaInfuser.class, 73, 51, 30, 25, InfusionCategory.TYPE);
     }
 
     @Override
@@ -41,5 +43,6 @@ public class BotanicalMachineryPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalManaPool), ManaPoolRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalRunicAltar), RunicAltarRecipeCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.industrialAgglomerationFactory), TerrestrialAgglomerationRecipeCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.mechanicalManaInfuser), InfusionCategory.TYPE);
     }
 }

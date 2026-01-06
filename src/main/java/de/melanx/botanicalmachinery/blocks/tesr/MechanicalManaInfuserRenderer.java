@@ -1,39 +1,27 @@
 package de.melanx.botanicalmachinery.blocks.tesr;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityIndustrialAgglomerationFactory;
+import de.melanx.botanicalmachinery.blocks.tiles.BlockEntityMechanicalManaInfuser;
 import de.melanx.botanicalmachinery.config.LibXClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.moddingx.libx.render.block.RotatedBlockRenderer;
 import vazkii.botania.client.core.handler.ClientTickHandler;
-import vazkii.botania.client.core.helper.RenderHelper;
-import vazkii.botania.common.lib.ResourceLocationHelper;
 
 import javax.annotation.Nonnull;
-import java.util.Objects;
 
-public class IndustrialAgglomerationFactoryRenderer extends RotatedBlockRenderer<BlockEntityIndustrialAgglomerationFactory> {
 
-    private final TextureAtlasSprite overlaySprite;
+public class MechanicalManaInfuserRenderer extends RotatedBlockRenderer<BlockEntityMechanicalManaInfuser> {
 
-    public IndustrialAgglomerationFactoryRenderer() {
-        this.overlaySprite = Objects.requireNonNull(
-                Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                        .apply(ResourceLocationHelper.prefix("block/terra_plate_overlay"))
-        );
-    }
+    public MechanicalManaInfuserRenderer() {}
 
     @Override
-    protected void doRender(@Nonnull BlockEntityIndustrialAgglomerationFactory tile, float partialTick, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
-        if (!LibXClientConfig.AdvancedRendering.all || !LibXClientConfig.AdvancedRendering.industrialAgglomerationFactory)
+    protected void doRender(@Nonnull BlockEntityMechanicalManaInfuser tile, float partialTick, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
+        if (!LibXClientConfig.AdvancedRendering.all || !LibXClientConfig.AdvancedRendering.mechanicalManaInfuser)
             return;
 
         double progressLeft = 1 - (tile.getProgress() / (double) tile.getMaxProgress());
@@ -63,8 +51,6 @@ public class IndustrialAgglomerationFactoryRenderer extends RotatedBlockRenderer
 
             poseStack.mulPose(Axis.XP.rotationDegrees(90));
             poseStack.translate(0, 0, -0.18850000202655792);
-            VertexConsumer vertex = buffer.getBuffer(vazkii.botania.client.core.helper.RenderHelper.TERRA_PLATE);
-            RenderHelper.renderIconFullBright(poseStack, vertex, this.overlaySprite, 1);
 
             poseStack.popPose();
         }

@@ -6,6 +6,7 @@
   "block.botanicalmachinery.mana_emerald_block": "Mana Emerald Block",
   "block.botanicalmachinery.alfheim_market": "Alfheim Market",
   "block.botanicalmachinery.industrial_agglomeration_factory": "Industrial Agglomeration Factory",
+  "block.botanicalmachinery.mechanical_mana_infuser": "Mechanical Mana Infuser",
   "block.botanicalmachinery.mana_battery": "Mana Battery",
   "block.botanicalmachinery.mana_battery_creative": "Creative Mana Battery",
   "block.botanicalmachinery.mechanical_brewery": "Mechanical Brewery",
@@ -16,6 +17,7 @@
 
   "screen.botanicalmachinery.alfheim_market": "Alfheim Market",
   "screen.botanicalmachinery.industrial_agglomeration_factory": "Industrial Agglomeration Factory",
+  "screen.botanicalmachinery.mechanical_mana_infuser": "Mechanical Mana Infuser",
   "screen.botanicalmachinery.mana_battery": "Mana Battery",
   "screen.botanicalmachinery.mana_battery_creative": "Creative Mana Battery",
   "screen.botanicalmachinery.mechanical_apothecary": "Mechanical Apothecary",
@@ -40,6 +42,10 @@
   "lexicon.botanicalmachinery.industrial_agglomeration_factory": "I.A. Factory",
   "lexicon.botanicalmachinery.industrial_agglomeration_factory.recipe": "Can only be powered by green energy",
   "lexicon.botanicalmachinery.industrial_agglomeration_factory.page1": "The $(l:botania:basics/terrasteel)terra plate$() usually requires a stabilising platform underneath it. Not anymore with this device. This machine is pretty unknown to the regular botanist, so give it a shot!",
+
+  "lexicon.botanicalmachinery.mechanical_mana_infuser": "Mechanical Mana Infuser",
+  "lexicon.botanicalmachinery.mechanical_mana_infuser.recipe": "Can only be powered by green energy",
+  "lexicon.botanicalmachinery.mechanical_mana_infuser.page1": "The Alfsteel usually requires a stabilising platform underneath it. Not anymore with this device. This machine is pretty unknown to the regular botanist, so give it a shot!",
 
   "lexicon.botanicalmachinery.mechanical_mana_pool": "Mechanical Mana Pool",
   "lexicon.botanicalmachinery.mechanical_mana_pool.recipe": "Making a mechanical mana pool",

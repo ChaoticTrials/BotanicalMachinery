@@ -1,90 +1,127 @@
 {
   "parent": "botanicalmachinery:block/botanical_block",
   "textures": {
-    "bottom": "botania:block/apothecary_default_bottom",
-    "side": "botania:block/apothecary_default_side",
-    "top": "botania:block/apothecary_default_top"
+    "shimmerrock": "botania:block/shimmerrock",
+    "gold": "minecraft:block/gold_block",
+    "mana_infuser_top": "mythicbotany:block/mana_infuser_top",
+    "mana_infuser_side": "mythicbotany:block/mana_infuser_bottom"
   },
   "elements": [
     {
-      "name": "base_plate",
-      "from": [ 3, 1, 3 ],
-      "to": [ 13, 2, 13 ],
+      "name": "block_n",
+      "from": [ 6.2, 1, 2.6 ],
+      "to": [ 9.8, 4.6, 6.2 ],
       "faces": {
-        "north": { "uv": [ 3, 14, 13, 15 ], "texture": "#side" },
-        "east": { "uv": [ 3, 14, 13, 15 ], "texture": "#side" },
-        "south": { "uv": [ 3, 14, 13, 15 ], "texture": "#side" },
-        "west": { "uv": [ 3, 14, 13, 15 ], "texture": "#side" },
-        "up": { "uv": [ 3, 3, 13, 13 ], "texture": "#top" },
-        "down": { "uv": [ 3, 3, 13, 13 ], "texture": "#bottom", "cullface": "down" }
+        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "up": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "down": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" }
       }
     },
     {
-      "name": "stem",
-      "from": [ 5, 2, 5 ],
-      "to": [ 11, 9, 11 ],
+      "name": "block_ne",
+      "from": [ 9.8, 1, 2.6 ],
+      "to": [ 13.4, 4.6, 6.2 ],
       "faces": {
-        "north": { "uv": [ 5, 6, 11, 13 ], "texture": "#side" },
-        "east": { "uv": [ 5, 6, 11, 13 ], "texture": "#side" },
-        "south": { "uv": [ 5, 6, 11, 13 ], "texture": "#side" },
-        "west": { "uv": [ 5, 6, 11, 13 ], "texture": "#side" }
+        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "up": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "down": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" }
       }
     },
     {
-      "name": "top_plate",
-      "from": [ 3, 9, 3 ],
-      "to": [ 13, 10, 13 ],
+      "name": "block_e",
+      "from": [ 9.8, 1, 6.2 ],
+      "to": [ 13.4, 4.6, 9.8 ],
       "faces": {
-        "north": { "uv": [ 3, 4, 13, 5 ], "texture": "#side" },
-        "east": { "uv": [ 3, 4, 13, 5 ], "texture": "#side" },
-        "south": { "uv": [ 3, 4, 13, 5 ], "texture": "#side" },
-        "west": { "uv": [ 3, 4, 13, 5 ], "texture": "#side" },
-        "up": { "uv": [ 3, 3, 13, 13 ], "texture": "#top" },
-        "down": { "uv": [ 3, 3, 13, 13 ], "texture": "#bottom" }
+        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "up": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "down": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" }
       }
     },
     {
-      "name": "wall_n",
-      "from": [ 3, 10, 3 ],
-      "to": [ 13, 13, 4 ],
+      "name": "block_se",
+      "from": [ 9.8, 1, 9.8 ],
+      "to": [ 13.4, 4.6, 13.4 ],
       "faces": {
-        "north": { "uv": [ 3, 1, 13, 4 ], "texture": "#side" },
-        "east": { "uv": [ 12, 1, 13, 4 ], "texture": "#side" },
-        "south": { "uv": [ 3, 1, 13, 4 ], "texture": "#side" },
-        "west": { "uv": [ 3, 1, 4, 4 ], "texture": "#side" },
-        "up": { "uv": [ 3, 3, 13, 4 ], "texture": "#top" }
+        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "up": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "down": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" }
       }
     },
     {
-      "name": "wall_e",
-      "from": [ 12, 10, 4 ],
-      "to": [ 13, 13, 12 ],
+      "name": "block_s",
+      "from": [ 6.2, 1, 9.8 ],
+      "to": [ 9.8, 4.6, 13.4 ],
       "faces": {
-        "east": { "uv": [ 4, 1, 12, 4 ], "texture": "#side" },
-        "west": { "uv": [ 4, 1, 12, 4 ], "texture": "#side" },
-        "up": { "uv": [ 12, 4, 13, 12 ], "texture": "#top", "cullface": "up" }
+        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "up": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "down": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" }
       }
     },
     {
-      "name": "wall_s",
-      "from": [ 3, 10, 12 ],
-      "to": [ 13, 13, 13 ],
+      "name": "block_sw",
+      "from": [ 2.6, 1, 9.8 ],
+      "to": [ 6.2, 4.6, 13.4 ],
       "faces": {
-        "north": { "uv": [ 3, 1, 13, 4 ], "texture": "#side" },
-        "east": { "uv": [ 3, 1, 4, 4 ], "texture": "#side" },
-        "south": { "uv": [ 3, 1, 13, 4 ], "texture": "#side" },
-        "west": { "uv": [ 12, 1, 13, 4 ], "texture": "#side" },
-        "up": { "uv": [ 3, 12, 13, 13 ], "texture": "#top", "cullface": "up" }
+        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "up": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "down": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" }
       }
     },
     {
-      "name": "wall_w",
-      "from": [ 3, 10, 4 ],
-      "to": [ 4, 13, 12 ],
+      "name": "block_w",
+      "from": [ 2.6, 1, 6.2 ],
+      "to": [ 6.2, 4.6, 9.8 ],
       "faces": {
-        "east": { "uv": [ 4, 1, 12, 4 ], "texture": "#side" },
-        "west": { "uv": [ 4, 1, 12, 4 ], "texture": "#side" },
-        "up": { "uv": [ 3, 4, 4, 12 ], "texture": "#top", "cullface": "up" }
+        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "up": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" },
+        "down": { "uv": [ 0, 0, 16, 16 ], "texture": "#gold" }
+      }
+    },
+    {
+      "name": "block_nw",
+      "from": [ 2.6, 1, 2.6 ],
+      "to": [ 6.2, 4.6, 6.2 ],
+      "faces": {
+        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "up": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" },
+        "down": { "uv": [ 0, 0, 16, 16 ], "texture": "#shimmerrock" }
+      }
+    },
+    {
+      "name": "magic_plate",
+      "from": [ 6.2, 4.6, 6.2 ],
+      "to": [ 9.8, 5.3, 9.8 ],
+      "faces": {
+        "north": { "uv": [ 0, 13, 16, 16 ], "texture": "#mana_infuser_side" },
+        "east": { "uv": [ 0, 13, 16, 16 ], "texture": "#mana_infuser_side" },
+        "south": { "uv": [ 0, 13, 16, 16 ], "texture": "#mana_infuser_side" },
+        "west": { "uv": [ 0, 13, 16, 16 ], "texture": "#mana_infuser_side" },
+        "up": { "uv": [ 0, 0, 16, 16 ], "texture": "#mana_infuser_top" },
+        "down": { "uv": [ 0, 0, 16, 16 ], "texture": "#mana_infuser_top" }
       }
     },
 

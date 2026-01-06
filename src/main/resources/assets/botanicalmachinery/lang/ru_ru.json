@@ -6,6 +6,7 @@
   "block.botanicalmachinery.mana_emerald_block": "Блок манаизумрудов",
   "block.botanicalmachinery.alfheim_market": "Обменник Альфхейма",
   "block.botanicalmachinery.industrial_agglomeration_factory": "Завод промышленной агломерации",
+  "block.botanicalmachinery.mechanical_mana_infuser": "Механический инфьюзер маны",
   "block.botanicalmachinery.mana_battery": "Манабатарея",
   "block.botanicalmachinery.mana_battery_creative": "Креативная манабатарея",
   "block.botanicalmachinery.mechanical_brewery": "Механическая варочная стойка",
@@ -16,6 +17,7 @@
 
   "screen.botanicalmachinery.alfheim_market": "Обменник Альфхейма",
   "screen.botanicalmachinery.industrial_agglomeration_factory": "Завод промышленной агломерации",
+  "screen.botanicalmachinery.mechanical_mana_infuser": "Механический инфьюзер маны",
   "screen.botanicalmachinery.mana_battery": "Манабатарея",
   "screen.botanicalmachinery.mana_battery_creative": "Креативная манабатарея",
   "screen.botanicalmachinery.mechanical_apothecary": "Механический аптекарь",
@@ -40,6 +42,10 @@
   "lexicon.botanicalmachinery.industrial_agglomeration_factory": "Завод П.А.",
   "lexicon.botanicalmachinery.industrial_agglomeration_factory.recipe": "Может работать только на зеленой энергии",
   "lexicon.botanicalmachinery.industrial_agglomeration_factory.page1": "Для $(l:botania:basics/terrasteel)пластины$() обычно требуется стабилизирующая платформа под ней. Это устройство избавит вас от этого. Эта машина практически неизвестна обычному ботанику, так что попробуйте!",
+
+  "lexicon.botanicalmachinery.mechanical_mana_infuser": "Механический инфьюзер маны",
+  "lexicon.botanicalmachinery.mechanical_mana_infuser.recipe": "Может работать только на зеленой энергии",
+  "lexicon.botanicalmachinery.mechanical_mana_infuser.page1": "Для Альфстали обычно требуется стабилизирующая платформа под ней. Это устройство избавит вас от этого. Эта машина практически неизвестна обычному ботанику, так что попробуйте!",
 
   "lexicon.botanicalmachinery.mechanical_mana_pool": "Механический бассейн маны",
   "lexicon.botanicalmachinery.mechanical_mana_pool.recipe": "Механическое хранение",
