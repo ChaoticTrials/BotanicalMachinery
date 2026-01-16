@@ -1,0 +1,56 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "mythicbotany"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "a": {
+            "item": "botania:aura_ring_greater"
+          },
+          "e": {
+            "tag": "botania:elementium_ingots"
+          },
+          "s": {
+            "item": "mythicbotany:alfsteel_ingot"
+          },
+          "x": {
+            "tag": "botania:elementium_ingots"
+          },
+          "y": {
+            "tag": "botania:dragonstone_gems"
+          },
+          "z": {
+            "item": "botania:pixie_dust"
+          }
+        },
+        "pattern": [
+          "eye",
+          "xaz",
+          "ese"
+        ],
+        "result": {
+          "item": "botanicalmachinery:mechanical_mana_infuser"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:true"
+        }
+      ],
+      "recipe": {
+        "type": "libx:empty"
+      }
+    }
+  ]
+}

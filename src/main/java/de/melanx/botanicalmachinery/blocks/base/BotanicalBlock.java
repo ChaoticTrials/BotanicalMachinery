@@ -34,10 +34,15 @@ public abstract class BotanicalBlock<T extends BotanicalTile, C extends BlockEnt
     public final boolean specialRender;
 
     public BotanicalBlock(ModX mod, Class<T> teClass, MenuType<C> menu, boolean fullCube, boolean specialRender) {
+        this(mod, teClass, menu, fullCube, specialRender, new Item.Properties());
+    }
+
+    public BotanicalBlock(ModX mod, Class<T> teClass, MenuType<C> menu, boolean fullCube, boolean specialRender, @Nullable Item.Properties itemProperties) {
         super(mod, teClass, menu, fullCube ?
                         Properties.copy(Blocks.STONE).strength(2, 10)
                         : Properties.copy(Blocks.STONE).strength(2, 10).dynamicShape().noOcclusion().forceSolidOn(),
-                new Item.Properties());
+                itemProperties
+        );
         this.fullCube = fullCube;
         this.specialRender = specialRender;
     }
@@ -105,13 +110,6 @@ public abstract class BotanicalBlock<T extends BotanicalTile, C extends BlockEnt
     public boolean useShapeForLightOcclusion(@Nonnull BlockState state) {
         return !this.fullCube;
     }
-
-//    @Nonnull
-//    @Override
-//    @SuppressWarnings("deprecation")
-//    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
-//        return (!this.fullCube) ? FRAME_SHAPE : super.getShape(state, level, pos, context);
-//    }
 
     @Override
     protected boolean shouldDropInventory(Level level, BlockPos pos, BlockState state) {

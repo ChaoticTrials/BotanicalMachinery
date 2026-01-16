@@ -18,7 +18,6 @@ repositories {
     maven { url 'https://maven.blamejared.com/' }
     maven { url 'https://maven.theillusivec4.top/' }
     maven { url 'https://maven.terraformersmc.com/' }
-    maven { url "https://cursemaven.com" }
 }
 
 dependencies {
@@ -26,7 +25,7 @@ dependencies {
 
     implementation fg.deobf('org.moddingx:LibX:1.20.1-5.0.12')
     implementation fg.deobf('vazkii.botania:Botania:1.20.1-444-FORGE')
-    implementation fg.deobf("curse.maven:mythicbotany-400058:6702112")
+    implementation fg.deobf("io.github.noeppi_noeppi.mods:MythicBotany:1.20.1-4.0.4")
     implementation fg.deobf('vazkii.patchouli:Patchouli:1.20.1-84.1-FORGE')
     implementation fg.deobf('top.theillusivec4.curios:curios-forge:5.14.1+1.20.1')
 

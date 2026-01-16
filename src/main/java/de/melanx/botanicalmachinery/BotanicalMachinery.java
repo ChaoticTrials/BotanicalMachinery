@@ -29,6 +29,7 @@ public final class BotanicalMachinery extends ModXRegistration {
             system.addDataProvider(ItemModels::new);
             system.addDataProvider(LootTables::new);
             system.addDataProvider(Recipes::new);
+            system.addDataProvider(MythicRecipes::new);
         });
     }
 

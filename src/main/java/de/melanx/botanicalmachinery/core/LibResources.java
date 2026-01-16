@@ -20,16 +20,11 @@ public class LibResources {
     public static final ResourceLocation MECHANICAL_MANA_POOL_GUI = gui(LibNames.MECHANICAL_MANA_POOL);
     public static final ResourceLocation MECHANICAL_RUNIC_ALTAR_GUI = gui(LibNames.MECHANICAL_RUNIC_ALTAR);
 
-    public static ResourceLocation prefix(String path) {
-        return new ResourceLocation(BotanicalMachinery.getInstance().modid, path);
-    }
-
     private static ResourceLocation gui(String id) {
         return loc(GUI_PREFIX + id);
     }
 
     private static ResourceLocation loc(String id) {
-        return new ResourceLocation(BotanicalMachinery.getInstance().modid, id + ".png");
+        return BotanicalMachinery.getInstance().resource(id + ".png");
     }
-
 }

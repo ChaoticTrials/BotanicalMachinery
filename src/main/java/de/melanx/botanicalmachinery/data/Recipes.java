@@ -28,7 +28,6 @@ public class Recipes extends RecipeProviderBase implements CraftingExtension, Co
         this.shaped(ModBlocks.mechanicalDaisy, " d ", "eae", 'e', BotaniaTags.Items.BLOCKS_ELEMENTIUM, 'a', BotaniaItems.auraRingGreater, 'd', BotaniaFlowerBlocks.pureDaisyFloating);
         this.defaultMachine(ModBlocks.alfheimMarket, BotaniaBlocks.alfPortal, BotaniaBlocks.livingwoodGlimmering, BotaniaBlocks.dreamwood, BotaniaBlocks.livingwoodGlimmering);
         this.defaultMachine(ModBlocks.industrialAgglomerationFactory, BotaniaBlocks.terraPlate, BotaniaTags.Items.GEMS_MANA_DIAMOND, BotaniaTags.Items.INGOTS_MANASTEEL, BotaniaItems.manaPearl);
-        this.defaultMachine(ModBlocks.mechanicalManaInfuser, mythicbotany.register.ModItems.alfsteelIngot, BotaniaTags.Items.INGOTS_ELEMENTIUM, BotaniaTags.Items.GEMS_DRAGONSTONE, BotaniaItems.pixieDust);
         this.defaultMachine(ModBlocks.mechanicalManaPool, BotaniaBlocks.fabulousPool, BotaniaBlocks.alchemyCatalyst, BotaniaBlocks.dilutedPool, BotaniaBlocks.conjurationCatalyst);
         this.defaultMachine(ModBlocks.mechanicalRunicAltar, BotaniaBlocks.runeAltar, Ingredient.of(
                 BotaniaItems.runeLust,
@@ -44,10 +43,30 @@ public class Recipes extends RecipeProviderBase implements CraftingExtension, Co
     }
 
     private void defaultMachine(Object output, Object special1, Object special2, Object special3, Object special4) {
-        this.shaped(output, "eye", "xaz", "ese", 'e', BotaniaTags.Items.INGOTS_ELEMENTIUM, 'a', BotaniaItems.auraRingGreater, 's', special1, 'x', special2, 'y', special3, 'z', special4);
+        this.shaped(
+                output,
+                "eye",
+                "xaz",
+                "ese",
+                'e', BotaniaTags.Items.INGOTS_ELEMENTIUM,
+                'a', BotaniaItems.auraRingGreater,
+                's', special1,
+                'x', special2,
+                'y', special3,
+                'z', special4
+        );
     }
 
     private void defaultMachine(Object output, Object special1, Object special2) {
-        this.shaped(output, "exe", "xax", "ese", 'e', BotaniaTags.Items.INGOTS_ELEMENTIUM, 'a', BotaniaItems.auraRingGreater, 's', special1, 'x', special2);
+        this.shaped(
+                output,
+                "exe",
+                "xax",
+                "ese",
+                'e', BotaniaTags.Items.INGOTS_ELEMENTIUM,
+                'a', BotaniaItems.auraRingGreater,
+                's', special1,
+                'x', special2
+        );
     }
 }
