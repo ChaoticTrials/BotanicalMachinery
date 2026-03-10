@@ -6,17 +6,18 @@
   "block.botanicalmachinery.mana_emerald_block": "魔力绿宝石块",
   "block.botanicalmachinery.alfheim_market": "微型精灵门",
   "block.botanicalmachinery.industrial_agglomeration_factory": "工业凝聚板",
+  "block.botanicalmachinery.mechanical_mana_infuser": "机械注魔板",
   "block.botanicalmachinery.mana_battery": "魔力储存盒",
   "block.botanicalmachinery.mana_battery_creative": "创造魔力储存盒",
   "block.botanicalmachinery.mechanical_brewery": "机械植物酿造台",
   "block.botanicalmachinery.mechanical_apothecary": "机械花药台",
   "block.botanicalmachinery.mechanical_daisy": "机械白雏菊",
   "block.botanicalmachinery.mechanical_mana_pool": "机械魔力池",
-  "block.botanicalmachinery.mechanical_mana_infuser": "机械注魔板",
   "block.botanicalmachinery.mechanical_runic_altar": "机械符文祭坛",
 
   "screen.botanicalmachinery.alfheim_market": "微型精灵门",
   "screen.botanicalmachinery.industrial_agglomeration_factory": "工业凝聚板",
+  "screen.botanicalmachinery.mechanical_mana_infuser": "机械注魔板",
   "screen.botanicalmachinery.mana_battery": "魔力储存盒",
   "screen.botanicalmachinery.mana_battery_creative": "创造魔力储存盒",
   "screen.botanicalmachinery.mechanical_apothecary": "机械花药台",
@@ -40,7 +41,11 @@
 
   "lexicon.botanicalmachinery.industrial_agglomeration_factory": "工业凝聚板",
   "lexicon.botanicalmachinery.industrial_agglomeration_factory.recipe": "仅限绿色能量",
-  "lexicon.botanicalmachinery.industrial_agglomeration_factory.page1": "$(l:botania:basics/terrasteel)泰拉凝聚板$()的下方通常需要一个稳定的支持平台。有这个设备就不用了。一般的植物学家对这台机器知之甚少，所以试试看吧!",
+  "lexicon.botanicalmachinery.industrial_agglomeration_factory.page1": "通常来说，你需要在$(l:botania:basics/terrasteel)泰拉凝聚板$()的下方建造一个稳定平台。不过这个设备就不用了。一般的植物学家对这台机器知之甚少，所以试试看吧!",
+  
+  "lexicon.botanicalmachinery.mechanical_mana_infuser": "机械注魔板",
+  "lexicon.botanicalmachinery.mechanical_mana_infuser.page1": "仅限绿色能量",
+  "lexicon.botanicalmachinery.mechanical_mana_infuser.recipe": "通常来说制作精灵钢前需要为其建造一个稳定平台。不过这个设备就不用了。一般的植物学家对这台机器知之甚少，所以试试看吧!",
 
   "lexicon.botanicalmachinery.mechanical_mana_pool": "机械魔力池",
   "lexicon.botanicalmachinery.mechanical_mana_pool.recipe": "制作机械魔力池",
