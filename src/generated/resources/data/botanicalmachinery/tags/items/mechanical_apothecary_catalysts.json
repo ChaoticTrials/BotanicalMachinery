@@ -1,5 +1,8 @@
 {
   "values": [
-    "#forge:seeds"
+    {
+      "id": "#botania:seed_apothecary_reagent",
+      "required": false
+    }
   ]
 }
